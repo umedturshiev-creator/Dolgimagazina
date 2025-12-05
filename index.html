@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>SmartTax</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h2>SmartTax – Онлайн форма</h2>
+
+<label>ИНН</label>
+<input id="inn" type="text"/>
+<div id="fio"></div>
+
+<label>Сумма расходов</label>
+<input id="expenses" type="number"/>
+
+<button id="send">Отправить</button>
+<div id="status"></div>
+
+<script>
+const WEBAPP_URL = "YOUR_WEBAPP_URL_HERE";
+const SECRET_KEY = "s3cr3t_123";
+
+// Автоподтягивание ФИО
+document.getElementById('inn').addEventListener('input', function(){
+  const inn = this.value;
+  if(inn.length < 3){
+    document.getElementById('fio').textContent = "";
+    return;
+  }
+  fetch(WEBAPP_URL + "?action=lookup&inn=" + inn)
+    .then(r=>r.json())
+    .then(d=>{
+      document.getElementById('fio').textContent = d.ok ? ("ФИО: " + d.data.fio) : "ФИО не найдено";
+    })
+});
+
+// Отправка формы
+document.getElementById('send').onclick = function(){
+  let inn = document.getElementById('inn').value;
+  let expenses = document.getElementById('expenses').value;
+
+  fetch(WEBAPP_URL, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({inn, expenses, source:"web", secret:SECRET_KEY})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    document.getElementById('status').textContent = d.ok ? "Отправлено" : "Ошибка";
+  });
+};
+</script>
+</body>
+</html>
