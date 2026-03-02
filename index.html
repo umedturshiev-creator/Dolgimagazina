@@ -8,13 +8,29 @@
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f9;}
 
+/* HEADER */
 .header{
 background:#000;
 color:white;
 text-align:center;
 padding:14px;
+position:relative;
 }
 
+.logout-btn{
+position:absolute;
+right:10px;
+top:10px;
+background:red;
+color:white;
+border:none;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+cursor:pointer;
+}
+
+/* LOGIN */
 .login{
 position:fixed;
 inset:0;
@@ -32,6 +48,7 @@ width:120px;
 margin-bottom:20px;
 }
 
+/* CONTENT */
 .container{padding:12px;}
 
 .card{
@@ -72,39 +89,52 @@ font-size:14px;
 label.date-label{color:red;font-weight:bold;}
 
 .modal{
-position:fixed;inset:0;background:rgba(0,0,0,0.6);
-display:none;align-items:center;justify-content:center;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+display:none;
+align-items:center;
+justify-content:center;
 }
 
 .modal-content{
-background:white;padding:20px;border-radius:14px;width:90%;max-width:320px;text-align:center;
+background:white;
+padding:20px;
+border-radius:14px;
+width:90%;
+max-width:320px;
+text-align:center;
 }
 
-.loader{font-weight:bold;}
+.fade-out{
+animation: fadeOut 0.4s forwards;
+}
+
+@keyframes fadeOut{
+from{opacity:1;}
+to{opacity:0;}
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div id="loginScreen" class="login">
-
 <img src="logo.png" alt="Logo">
-
 <h2>Вход</h2>
-
 <input type="tel" inputmode="numeric" pattern="[0-9]*" id="pinInput" placeholder="Введите PIN">
-
 <button onclick="login()">Войти</button>
-
 </div>
 
 <!-- HEADER -->
 <div class="header" id="mainHeader" style="display:none;">
 <h2>Fashion&StyleLife - Долги</h2>
 <div id="userInfo"></div>
+<button class="logout-btn" onclick="logout()">Выйти</button>
 </div>
 
+<!-- CONTENT -->
 <div class="container" id="appContent" style="display:none;">
 
 <div id="statsBox"></div>
@@ -137,16 +167,25 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 </div>
 </div>
 
-<!-- LOADING -->
+<!-- МОДАЛКА ЗАГРУЗКИ -->
 <div class="modal" id="loadingModal">
 <div class="modal-content">
-<div class="loader">⏳ Идет сохранение записи...</div>
+⏳ Идет сохранение записи...
+</div>
+</div>
+
+<!-- МОДАЛКА ВЫХОДА -->
+<div class="modal" id="logoutModal">
+<div class="modal-content">
+<h3>Выйти из системы?</h3>
+<button style="background:red;color:white;" onclick="confirmLogout()">Да, выйти</button>
+<button onclick="closeLogout()">Отмена</button>
 </div>
 </div>
 
 <script>
 
-const VERSION="12.3";
+const VERSION="12.5";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzblKRGaz7DW0TCkBFc4dzpK4JCPWhba1aLksGeMt3gxVAIDBtoVw6_vS1dFe1tJv7iUA/exec";
 
 const USERS={
@@ -172,26 +211,43 @@ function openApp(){
 loginScreen.style.display="none";
 mainHeader.style.display="block";
 appContent.style.display="block";
-
 userInfo.innerHTML="👤 "+currentSeller+" | Версия: v"+VERSION;
-
 loadDebts();
 }
 
 window.onload=function(){
 let saved=sessionStorage.getItem("seller");
-if(saved){
-currentSeller=saved;
-openApp();
-}
+if(saved){currentSeller=saved;openApp();}
 };
 
-function validateForm(){
-if(client.value && phone.value.length===9 && amount.value && dueDate.value){
-saveBtn.disabled=false;
-}else{
-saveBtn.disabled=true;
+// LOGOUT
+function logout(){
+logoutModal.style.display="flex";
 }
+
+function closeLogout(){
+logoutModal.style.display="none";
+}
+
+function confirmLogout(){
+logoutModal.style.display="none";
+appContent.classList.add("fade-out");
+mainHeader.classList.add("fade-out");
+
+setTimeout(()=>{
+sessionStorage.removeItem("seller");
+appContent.style.display="none";
+mainHeader.style.display="none";
+loginScreen.style.display="flex";
+appContent.classList.remove("fade-out");
+mainHeader.classList.remove("fade-out");
+pinInput.value="";
+},400);
+}
+
+// VALIDATION
+function validateForm(){
+saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
 }
 
 client.addEventListener("input",validateForm);
@@ -199,6 +255,7 @@ phone.addEventListener("input",validateForm);
 amount.addEventListener("input",validateForm);
 dueDate.addEventListener("input",validateForm);
 
+// ADD
 function addDebt(){
 loadingModal.style.display="flex";
 fetch(SCRIPT_URL,{
@@ -210,14 +267,30 @@ amount:amount.value,
 dueDate:dueDate.value,
 seller:currentSeller
 })
-})
-.then(()=>location.reload());
+}).then(()=>location.reload());
 }
 
+// LOAD
 function loadDebts(){
 fetch(SCRIPT_URL)
 .then(res=>res.json())
 .then(data=>{
+
+// ===== СТАТИСТИКА =====
+statsBox.innerHTML=`
+<div class="card">
+<div onclick="toggleStats()" style="cursor:pointer;font-weight:bold;">
+📊 Статистика
+</div>
+<div id="statsContent" style="display:none;margin-top:8px;">
+Активные долги: ${data.activeTotal} сомони от ${data.activeCount} клиентов<br>
+Оплаченные долги: ${data.paidTotal} сомони от ${data.paidCount} клиентов<br><br>
+<b style="color:red;">
+Просроченные долги: ${data.overdueTotal} сомони от ${data.overdueCount} клиента
+</b>
+</div>
+</div>
+`;
 
 let debts=data.debts;
 
@@ -263,6 +336,12 @@ debtList.innerHTML=html;
 });
 }
 
+function toggleStats(){
+let el=document.getElementById("statsContent");
+el.style.display = el.style.display==="none" ? "block" : "none";
+}
+
+// PAYMENT
 function openPayment(row,remainder){
 currentRow=row;
 currentRemainder=remainder;
@@ -276,7 +355,6 @@ paymentModal.style.display="none";
 function confirmPayment(){
 loadingModal.style.display="flex";
 let pay=Number(partialAmount.value);
-
 fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+pay+"&seller="+currentSeller)
 .then(()=>location.reload());
 }
