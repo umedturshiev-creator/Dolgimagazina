@@ -6,24 +6,11 @@
 <title>Fashion&StyleLife - Долги</title>
 
 <style>
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#f4f6f9;
-}
+body{margin:0;font-family:Arial;background:#f4f6f9;}
 
-.header{
-background:#000;
-color:white;
-text-align:center;
-padding:18px 10px;
-}
+.header{background:#000;color:white;text-align:center;padding:18px;}
 
-.container{
-max-width:100%;
-margin:auto;
-padding:15px;
-}
+.container{max-width:100%;padding:15px;margin:auto;}
 
 .card{
 background:white;
@@ -31,26 +18,10 @@ padding:18px;
 border-radius:16px;
 margin-bottom:14px;
 box-shadow:0 6px 14px rgba(0,0,0,0.08);
-font-size:16px;
 }
 
-.overdue{
-background:#ffe5e5;
-border-left:6px solid red;
-}
-
-.overdue b{
-color:#d60000;
-}
-
-.warning{
-background:#fff8e1;
-border-left:6px solid #ff9800;
-}
-
-.warning b{
-color:#ff9800;
-}
+.overdue{background:#ffe5e5;border-left:6px solid red;}
+.warning{background:#fff8e1;border-left:6px solid #ff9800;}
 
 button{
 width:100%;
@@ -64,65 +35,75 @@ font-weight:bold;
 font-size:16px;
 }
 
+input{
+width:100%;
+padding:14px;
+margin:8px 0;
+border-radius:12px;
+border:1px solid #ddd;
+font-size:16px;
+}
+
+.login{
+position:fixed;inset:0;background:#000;color:white;
+display:flex;flex-direction:column;justify-content:center;align-items:center;
+}
+
 .modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.6);
-display:none;
-align-items:center;
-justify-content:center;
+position:fixed;inset:0;background:rgba(0,0,0,0.6);
+display:none;align-items:center;justify-content:center;
 }
 
 .modal-content{
-background:white;
-padding:20px;
-border-radius:16px;
-width:90%;
-max-width:350px;
-position:relative;
-}
-
-.close-btn{
-position:absolute;
-right:12px;
-top:10px;
-cursor:pointer;
-font-size:20px;
+background:white;padding:20px;border-radius:16px;width:90%;max-width:350px;
 }
 
 .toast{
-position:fixed;
-bottom:30px;
-left:50%;
-transform:translateX(-50%);
-background:#28a745;
-color:white;
-padding:14px 22px;
-border-radius:12px;
-box-shadow:0 4px 12px rgba(0,0,0,0.2);
-z-index:9999;
-font-weight:bold;
+position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+background:#28a745;color:white;padding:14px 22px;
+border-radius:12px;font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
+<div id="loginScreen" class="login">
+<h2>Вход</h2>
+<input type="tel" inputmode="numeric" pattern="[0-9]*" id="pinInput" placeholder="Введите PIN">
+<button onclick="login()">Войти</button>
+</div>
+
 <div class="header">
 <h2>Fashion&StyleLife - Долги</h2>
+<div id="sellerName"></div>
 </div>
 
-<div class="container">
+<div class="container" id="appContent" style="display:none;">
+
+<div id="statsBox"></div>
+
+<h3>Добавить долг</h3>
+<input id="client" placeholder="Имя клиента">
+<input id="phone" placeholder="Телефон (9 цифр)" maxlength="9"
+inputmode="numeric" pattern="[0-9]*"
+oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+<input id="amount" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Сумма">
+<label>Дата оплаты</label>
+<input id="dueDate" type="date">
+<button onclick="addDebt()">Сохранить</button>
+
+<h3>Список должников</h3>
 <div id="debtList"></div>
+
 </div>
 
-<!-- МОДАЛКА ОПЛАТЫ -->
 <div class="modal" id="paymentModal">
 <div class="modal-content">
-<div class="close-btn" onclick="closeModal()">✖</div>
 <h3>Введите сумму оплаты</h3>
-<input type="tel" inputmode="numeric" pattern="[0-9]*" id="partialAmount" style="width:100%;padding:12px;font-size:18px;">
+<input type="tel" inputmode="numeric" pattern="[0-9]*" id="partialAmount">
 <button onclick="confirmPayment()">Подтвердить</button>
+<button onclick="closeModal()" style="background:#ccc;color:black;">Отмена</button>
 </div>
 </div>
 
@@ -130,15 +111,46 @@ font-weight:bold;
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzblKRGaz7DW0TCkBFc4dzpK4JCPWhba1aLksGeMt3gxVAIDBtoVw6_vS1dFe1tJv7iUA/exec";
 
+const USERS={
+"1111":"Умед",
+"0000":"Тахмина"
+};
+
+let currentSeller=null;
 let currentRow=null;
 let currentRemainder=0;
+
+function login(){
+let pin=pinInput.value.trim();
+if(!USERS[pin]){alert("Неверный PIN");return;}
+currentSeller=USERS[pin];
+sessionStorage.setItem("seller",currentSeller);
+openApp();
+}
+
+function openApp(){
+loginScreen.style.display="none";
+appContent.style.display="block";
+sellerName.innerHTML="👤 "+currentSeller;
+loadDebts();
+}
+
+window.onload=function(){
+let saved=sessionStorage.getItem("seller");
+if(saved){currentSeller=saved;openApp();}
+};
 
 function showToast(text){
 let div=document.createElement("div");
 div.className="toast";
 div.innerText=text;
 document.body.appendChild(div);
-setTimeout(()=>{div.remove();},2000);
+setTimeout(()=>div.remove(),2000);
+}
+
+function toggleStats(){
+let el=document.getElementById("statsContent");
+el.style.display = el.style.display==="none" ? "block" : "none";
 }
 
 function loadDebts(){
@@ -146,6 +158,22 @@ fetch(SCRIPT_URL)
 .then(res=>res.json())
 .then(data=>{
 
+// ===== СТАТИСТИКА =====
+statsBox.innerHTML=`
+<div class="card">
+<div onclick="toggleStats()" style="font-weight:bold;cursor:pointer;">
+📊 Статистика
+</div>
+<div id="statsContent" style="display:none;margin-top:10px;">
+💰 Всего: ${data.allTotal} сомони<br>
+🟢 Активные: ${data.activeTotal} (${data.activeCount})<br>
+🔵 Оплаченные: ${data.paidTotal} (${data.paidCount})<br>
+🔴 Просроченные: ${data.overdueTotal} (${data.overdueCount})
+</div>
+</div>
+`;
+
+// ===== СОРТИРОВКА =====
 let debts=data.debts;
 
 debts.sort((a,b)=>{
@@ -155,77 +183,83 @@ return new Date(a.dueDate) - new Date(b.dueDate);
 });
 
 let html="";
-let today=new Date();
-today.setHours(0,0,0,0);
+let today=new Date(); today.setHours(0,0,0,0);
 
 debts.forEach(d=>{
 
-let due=new Date(d.dueDate);
-due.setHours(0,0,0,0);
-
+let due=new Date(d.dueDate); due.setHours(0,0,0,0);
 let diffDays=Math.ceil((due - today)/(1000*60*60*24));
 
-let cardClass="";
+let cls="";
 let extra="";
-let name=`<b>${d.client}</b>`;
+let name=d.client;
 
 if(d.isOverdue){
-cardClass="overdue";
-let daysOver=Math.abs(diffDays);
-name=`<b>⚠ ${d.client}</b>`;
-extra=`<div>⚠ Просрочено на ${daysOver} дн.</div>`;
+cls="overdue";
+let days=Math.abs(diffDays);
+name="⚠ "+name;
+extra=`<div>Просрочено на ${days} дн.</div>`;
 }
 else if(diffDays<=2 && diffDays>=0){
-cardClass="warning";
-extra=`<div>⏳ Осталось ${diffDays} дн.</div>`;
+cls="warning";
+extra=`<div>Осталось ${diffDays} дн.</div>`;
 }
 
 html+=`
-<div class="card ${cardClass}">
-${name} <span style="font-size:13px;color:#666;">(до ${d.dueDate})</span><br>
+<div class="card ${cls}">
+<b>${name}</b> (до ${d.dueDate})<br>
 Телефон: ${d.phone}<br>
 Всего: ${d.total} сомони<br>
 Остаток: <b>${d.remainder}</b> сомони
 ${extra}
-<button onclick="openPayment(${d.row},${d.remainder})">
-Оплатить
-</button>
-</div>`;
+<button onclick="openPayment(${d.row},${d.remainder})">Оплатить</button>
+</div>
+`;
 });
 
-document.getElementById("debtList").innerHTML=html;
+debtList.innerHTML=html;
 
+});
+}
+
+function addDebt(){
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+client:client.value,
+phone:phone.value,
+amount:amount.value,
+dueDate:dueDate.value,
+seller:currentSeller
+})
+})
+.then(()=>{
+showToast("Запись долга сохранена");
+setTimeout(()=>location.reload(),1000);
 });
 }
 
 function openPayment(row,remainder){
 currentRow=row;
 currentRemainder=remainder;
-document.getElementById("partialAmount").value="";
-document.getElementById("paymentModal").style.display="flex";
+partialAmount.value="";
+paymentModal.style.display="flex";
 }
 
 function closeModal(){
-document.getElementById("paymentModal").style.display="none";
+paymentModal.style.display="none";
 }
 
 function confirmPayment(){
+let pay=Number(partialAmount.value);
+if(pay<=0 || pay>currentRemainder){alert("Неверная сумма");return;}
 
-let pay=Number(document.getElementById("partialAmount").value);
-
-if(pay<=0 || pay>currentRemainder){
-alert("Неверная сумма");
-return;
-}
-
-fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+pay+"&seller=Система")
+fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+pay+"&seller="+currentSeller)
 .then(()=>{
 showToast("Долг оплачен");
 setTimeout(()=>location.reload(),1000);
 });
 }
-
-loadDebts();
 
 </script>
 </body>
