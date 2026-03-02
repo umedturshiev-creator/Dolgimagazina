@@ -34,9 +34,22 @@ box-shadow:0 6px 14px rgba(0,0,0,0.08);
 font-size:16px;
 }
 
-.red{
+.overdue{
+background:#ffe5e5;
 border-left:6px solid red;
-background:#ffecec;
+}
+
+.overdue b{
+color:#d60000;
+}
+
+.warning{
+background:#fff8e1;
+border-left:6px solid #ff9800;
+}
+
+.warning b{
+color:#ff9800;
 }
 
 button{
@@ -50,9 +63,6 @@ margin-top:10px;
 font-weight:bold;
 font-size:16px;
 }
-
-button:disabled{opacity:0.6;}
-button:active{transform:scale(0.97);}
 
 input{
 width:100%;
@@ -77,32 +87,6 @@ align-items:center;
 z-index:9999;
 padding:20px;
 text-align:center;
-}
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.6);
-display:none;
-align-items:center;
-justify-content:center;
-}
-
-.modal-content{
-background:white;
-padding:20px;
-border-radius:16px;
-width:90%;
-max-width:350px;
-position:relative;
-}
-
-.close-btn{
-position:absolute;
-right:12px;
-top:10px;
-cursor:pointer;
-font-size:20px;
 }
 
 .toast{
@@ -145,24 +129,15 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 <input id="amount" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Сумма">
 <label style="font-size:14px;">Выберите дату оплаты</label>
 <input id="dueDate" type="date">
-<button id="saveBtn" onclick="addDebt()" disabled>Сохранить</button>
+<button id="saveBtn" onclick="addDebt()">Сохранить</button>
 
 <h3>Список должников</h3>
 <div id="debtList"></div>
 </div>
 
-<div class="modal" id="paymentModal">
-<div class="modal-content">
-<div class="close-btn" onclick="closeModal()">✖</div>
-<h3>Введите сумму оплаты</h3>
-<input type="tel" inputmode="numeric" pattern="[0-9]*" id="partialAmount">
-<button id="confirmBtn" onclick="confirmPayment()">Подтвердить</button>
-</div>
-</div>
-
 <script>
 
-const VERSION="11.1";
+const VERSION="11.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxhtHEObrEOpemPBRYFvX7NuUvtUUkmQVbKUl5gfanFIyIMVy5j0BEA5uW70fb1l7OYOA/exec";
 
 const USERS={
@@ -173,8 +148,6 @@ const USERS={
 };
 
 let currentSeller=null;
-let currentRow=null;
-let currentRemainder=0;
 
 function login(){
 let pin=pinInput.value.trim();
@@ -204,6 +177,11 @@ document.body.appendChild(div);
 setTimeout(()=>{div.remove();},2000);
 }
 
+function toggleStats(){
+let el=document.getElementById("statsContent");
+el.style.display = el.style.display==="none" ? "block" : "none";
+}
+
 function loadDebts(){
 fetch(SCRIPT_URL)
 .then(res=>res.json())
@@ -211,29 +189,56 @@ fetch(SCRIPT_URL)
 
 statsBox.innerHTML=`
 <div class="card">
-💰 <b>Всего долгов:</b> ${data.allTotal} сомони (${data.activeCount + data.paidCount} должников)<br><br>
-🟢 Активные долги: ${data.activeTotal} сомони (${data.activeCount} должника)<br>
-🔵 Оплаченные долги: ${data.paidTotal} сомони (${data.paidCount} должника)<br>
-<div class="red">
-🔴 Просроченные долги: ${data.overdueTotal} сомони (${data.overdueCount} должника)
+<div style="cursor:pointer;font-weight:bold;" onclick="toggleStats()">
+📊 Статистика (нажмите чтобы развернуть)
+</div>
+<div id="statsContent" style="display:none;margin-top:10px;">
+💰 Всего долгов: ${data.allTotal} сомони (${data.activeCount + data.paidCount} должников)<br>
+🟢 Активные: ${data.activeTotal} сомони (${data.activeCount})<br>
+🔵 Оплаченные: ${data.paidTotal} сомони (${data.paidCount})<br>
+🔴 Просроченные: ${data.overdueTotal} сомони (${data.overdueCount})
 </div>
 </div>
 `;
 
-let html="";
+let debts=data.debts;
 
-data.debts.reverse().forEach(d=>{
-let overdueClass = d.isOverdue ? "red" : "";
+debts.sort((a,b)=>{
+if(a.isOverdue && !b.isOverdue) return -1;
+if(!a.isOverdue && b.isOverdue) return 1;
+return new Date(a.dueDate) - new Date(b.dueDate);
+});
+
+let html="";
+let today=new Date();
+
+debts.forEach(d=>{
+
+let due=new Date(d.dueDate);
+let diffDays=Math.ceil((due - today)/(1000*60*60*24));
+
+let cardClass="";
+let extra="";
+let name=`<b>${d.client}</b>`;
+
+if(d.isOverdue){
+cardClass="overdue";
+let daysOver=Math.abs(diffDays);
+name=`<b>⚠ ${d.client}</b>`;
+extra=`<div>⚠ Просрочено на ${daysOver} дн.</div>`;
+}
+else if(diffDays<=2 && diffDays>=0){
+cardClass="warning";
+extra=`<div>⏳ Осталось ${diffDays} дн.</div>`;
+}
 
 html+=`
-<div class="card ${overdueClass}">
-<b>${d.client}</b><br>
+<div class="card ${cardClass}">
+${name} <span style="font-size:13px;color:#666;">(до ${d.dueDate})</span><br>
 Телефон: ${d.phone}<br>
 Всего: ${d.total} сомони<br>
 Остаток: <b>${d.remainder}</b> сомони
-<button onclick="openPayment(${d.row},${d.remainder})">
-Оплатить
-</button>
+${extra}
 </div>`;
 });
 
@@ -242,10 +247,6 @@ debtList.innerHTML=html;
 }
 
 function addDebt(){
-if(!client.value || phone.value.length!==9 || !amount.value || !dueDate.value){return;}
-saveBtn.disabled=true;
-saveBtn.innerText="⏳ Сохранение...";
-
 fetch(SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
@@ -258,34 +259,7 @@ seller:currentSeller
 })
 .then(()=>{
 showToast("Запись долга сохранена");
-setTimeout(()=>{location.reload();},1000);
-});
-}
-
-function openPayment(row,remainder){
-currentRow=row;
-currentRemainder=remainder;
-partialAmount.value="";
-paymentModal.style.display="flex";
-}
-
-function closeModal(){
-paymentModal.style.display="none";
-}
-
-function confirmPayment(){
-let pay=Number(partialAmount.value);
-if(pay<=0 || pay>currentRemainder){alert("Неверная сумма");return;}
-
-confirmBtn.disabled=true;
-confirmBtn.innerText="⏳ Обработка...";
-
-fetch(SCRIPT_URL+"?paid="+currentRow+
-"&seller="+currentSeller+
-"&amount="+pay)
-.then(()=>{
-showToast("Долг оплачен");
-setTimeout(()=>{location.reload();},1000);
+setTimeout(()=>location.reload(),1000);
 });
 }
 
