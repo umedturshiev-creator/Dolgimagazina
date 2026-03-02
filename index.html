@@ -5,49 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fashion&StyleLife - Долги</title>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
 body {margin:0;font-family:Arial;background:#f4f6f9;}
 .header {background:#000;color:white;padding:15px;text-align:center;}
-.logo {width:100px;margin-bottom:5px;}
-.version {font-size:12px;opacity:0.7;}
 .container {padding:15px;max-width:500px;margin:auto;}
 .card {background:white;padding:15px;border-radius:12px;margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,0.05);}
-.total {font-weight:bold;text-align:center;}
-.overdue {background:#ffe6e6;color:#c40000;padding:10px;border-radius:10px;margin-bottom:10px;text-align:center;font-weight:bold;}
+.summary {font-size:14px;line-height:1.6;}
+.overdue {background:#ffe6e6;color:#c40000;padding:10px;border-radius:10px;margin-bottom:10px;}
 button {width:100%;padding:10px;border:none;border-radius:8px;background:#28a745;color:white;margin-top:8px;}
-button:disabled {opacity:0.6;}
+button:disabled {opacity:0.5;}
 input {width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;}
-.loader {display:none;text-align:center;margin-top:10px;}
+.small {font-size:12px;color:#666;}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-  <img src="logo.png" class="logo">
   <div>Fashion&StyleLife - Долги</div>
-  <div class="version" id="versionBox">v4.0</div>
+  <div class="small" id="versionBox">v4.5</div>
 </div>
 
 <div class="container">
 
-<div class="card total" id="totalBox">Загрузка...</div>
+<div class="card summary" id="summaryBox">Загрузка...</div>
 <div class="overdue" id="overdueBox"></div>
-
-<div class="card">
-📈 Процент возврата: <b id="returnPercent">0%</b>
-</div>
-
-<div class="card">
-<canvas id="monthlyChart"></canvas>
-</div>
 
 <h3>Добавить долг</h3>
 
 <input type="text" id="client" placeholder="Имя клиента">
-
 <input type="text" id="phone" placeholder="Телефон (9 цифр)"
 maxlength="9"
 oninput="this.value=this.value.replace(/[^0-9]/g,'')">
@@ -55,10 +41,10 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 <input type="number" id="amount" placeholder="Сумма"
 oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
+<label class="small">Выберите дату возврата</label>
 <input type="date" id="dueDate">
 
-<button id="saveBtn" onclick="addDebt()">Сохранить</button>
-<div class="loader" id="saveLoader">⏳ Сохранение...</div>
+<button id="saveBtn" disabled onclick="addDebt()">Сохранить</button>
 
 <h3>Список должников</h3>
 <div id="debtList"></div>
@@ -67,9 +53,21 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <script>
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylD9_yAK75DqVzK_UXjva1hFfo3BxA3cqoRFdYytJajtQN1dHBMDkNVOlWkfaHM_jy4A/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxA31fIygDnl2L4P0-7zAccaB54w7SyKvEGkPnJtgELzsmWF-SAXUUvGat4MI_hOTcPfw/exec";
 
-let chart;
+const client = document.getElementById("client");
+const phone = document.getElementById("phone");
+const amount = document.getElementById("amount");
+const dueDate = document.getElementById("dueDate");
+const saveBtn = document.getElementById("saveBtn");
+
+[client, phone, amount, dueDate].forEach(el => {
+  el.addEventListener("input", checkForm);
+});
+
+function checkForm() {
+  saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
+}
 
 function loadDebts() {
 
@@ -79,15 +77,14 @@ function loadDebts() {
 
     document.getElementById("versionBox").innerText = "v" + data.version;
 
-    document.getElementById("totalBox").innerHTML =
-      "💰 Общая сумма: " + data.total +
-      " сомони | 📄 Активных: " + data.count;
+    document.getElementById("summaryBox").innerHTML =
+      "💰 Всего долгов: " + data.allTotal + " сомони<br>" +
+      "🟢 Активные: " + data.activeTotal + " (" + data.activeCount + ")<br>" +
+      "🔵 Оплаченные: " + data.paidTotal + " (" + data.paidCount + ")";
 
     document.getElementById("overdueBox").innerHTML =
-      "Просрочено: " + data.overdue;
-
-    document.getElementById("returnPercent").innerText =
-      data.returnPercent + "%";
+      "🔴 Просрочено: " + data.overdueCount +
+      " на сумму " + data.overdueTotal + " сомони";
 
     let html = "";
 
@@ -97,81 +94,41 @@ function loadDebts() {
         <b>${d.client}</b><br>
         Телефон: ${d.phone}<br>
         Сумма: ${d.amount} сомони<br>
-        <button onclick="markPaid(${d.row}, this)">Оплачено</button>
+        <button onclick="markPaid(${d.row})">Оплачено</button>
       </div>`;
     });
 
     document.getElementById("debtList").innerHTML = html;
-
-    renderChart(data.monthlyStats);
   });
 }
 
 function addDebt() {
 
-  let phone = phoneInput.value;
-
-  if (phone.length !== 9) {
-    alert("Номер телефона должен содержать ровно 9 цифр");
-    return;
-  }
-
-  saveBtn.disabled = true;
-  saveLoader.style.display = "block";
-
   fetch(SCRIPT_URL, {
     method: "POST",
     body: JSON.stringify({
       client: client.value,
-      phone: phone,
+      phone: phone.value,
       amount: amount.value,
       dueDate: dueDate.value
     })
   })
   .then(() => {
+    client.value="";
+    phone.value="";
+    amount.value="";
+    dueDate.value="";
+    saveBtn.disabled=true;
     loadDebts();
-    client.value = "";
-    phone.value = "";
-    amount.value = "";
-    dueDate.value = "";
-    saveLoader.style.display = "none";
-    saveBtn.disabled = false;
   });
 }
 
-function markPaid(row, btn) {
-  btn.disabled = true;
-  btn.innerText = "⏳ Обработка...";
+function markPaid(row) {
+
+  if (!confirm("Подтвердить оплату долга?")) return;
+
   fetch(SCRIPT_URL + "?paid=" + row)
   .then(() => loadDebts());
-}
-
-function renderChart(stats) {
-
-  const ctx = document.getElementById('monthlyChart').getContext('2d');
-
-  const labels = Object.keys(stats);
-  const values = Object.values(stats);
-
-  if (chart) chart.destroy();
-
-  chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Долги по дням (сомони)',
-        data: values,
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: { beginAtZero: true }
-      }
-    }
-  });
 }
 
 loadDebts();
