@@ -5,112 +5,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fashion&StyleLife - Долги</title>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body {
-  margin:0;
-  font-family:Arial;
-  background:#f4f6f9;
-}
-
-.header {
-  background:#000;
-  color:white;
-  padding:15px;
-  text-align:center;
-}
-
-.logo {
-  width:120px;
-  margin-bottom:5px;
-}
-
-.version {
-  font-size:12px;
-  opacity:0.7;
-}
-
-.container {
-  padding:15px;
-  max-width:500px;
-  margin:auto;
-}
-
-.card {
-  background:white;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.05);
-}
-
-.total {
-  background:white;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:10px;
-  font-weight:bold;
-  text-align:center;
-}
-
-.overdue {
-  background:#ffe6e6;
-  color:#c40000;
-  padding:10px;
-  border-radius:10px;
-  margin-bottom:10px;
-  text-align:center;
-  font-weight:bold;
-}
-
-button {
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  background:#28a745;
-  color:white;
-  margin-top:8px;
-}
-
-button:disabled {
-  opacity:0.6;
-}
-
-input {
-  width:100%;
-  padding:10px;
-  margin:6px 0;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
-
-.loader {
-  display:none;
-  text-align:center;
-  margin-top:10px;
-}
+body {margin:0;font-family:Arial;background:#f4f6f9;}
+.header {background:#000;color:white;padding:15px;text-align:center;}
+.logo {width:100px;margin-bottom:5px;}
+.version {font-size:12px;opacity:0.7;}
+.container {padding:15px;max-width:500px;margin:auto;}
+.card {background:white;padding:15px;border-radius:12px;margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,0.05);}
+.total {font-weight:bold;text-align:center;}
+.overdue {background:#ffe6e6;color:#c40000;padding:10px;border-radius:10px;margin-bottom:10px;text-align:center;font-weight:bold;}
+button {width:100%;padding:10px;border:none;border-radius:8px;background:#28a745;color:white;margin-top:8px;}
+button:disabled {opacity:0.6;}
+input {width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;}
+.loader {display:none;text-align:center;margin-top:10px;}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-  <img src="LOGO_URL_СЮДА" class="logo">
+  <img src="logo.png" class="logo">
   <div>Fashion&StyleLife - Долги</div>
-  <div class="version" id="versionBox">v3.0</div>
+  <div class="version" id="versionBox">v4.0</div>
 </div>
 
 <div class="container">
 
-<div class="total" id="totalBox">Загрузка...</div>
+<div class="card total" id="totalBox">Загрузка...</div>
 <div class="overdue" id="overdueBox"></div>
+
+<div class="card">
+📈 Процент возврата: <b id="returnPercent">0%</b>
+</div>
+
+<div class="card">
+<canvas id="monthlyChart"></canvas>
+</div>
 
 <h3>Добавить долг</h3>
 
 <input type="text" id="client" placeholder="Имя клиента">
 
 <input type="text" id="phone" placeholder="Телефон (9 цифр)"
-pattern="[0-9]{9}" maxlength="9"
+maxlength="9"
 oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <input type="number" id="amount" placeholder="Сумма"
@@ -122,14 +61,15 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 <div class="loader" id="saveLoader">⏳ Сохранение...</div>
 
 <h3>Список должников</h3>
-
 <div id="debtList"></div>
 
 </div>
 
 <script>
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyh9jFwWsAqtVVauHS0l_rCy6hzOR5a834GvccRzrJxvIne2vPQ-5eV4IsUsIhOYU566Q/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylD9_yAK75DqVzK_UXjva1hFfo3BxA3cqoRFdYytJajtQN1dHBMDkNVOlWkfaHM_jy4A/exec";
+
+let chart;
 
 function loadDebts() {
 
@@ -138,41 +78,46 @@ function loadDebts() {
   .then(data => {
 
     document.getElementById("versionBox").innerText = "v" + data.version;
+
     document.getElementById("totalBox").innerHTML =
-      "Общая сумма: " + data.total + " сомони";
+      "💰 Общая сумма: " + data.total +
+      " сомони | 📄 Активных: " + data.count;
 
     document.getElementById("overdueBox").innerHTML =
       "Просрочено: " + data.overdue;
 
+    document.getElementById("returnPercent").innerText =
+      data.returnPercent + "%";
+
     let html = "";
 
     data.debts.forEach(d => {
-
       html += `
       <div class="card" style="${d.overdue ? 'border-left:5px solid red' : ''}">
         <b>${d.client}</b><br>
         Телефон: ${d.phone}<br>
         Сумма: ${d.amount} сомони<br>
         <button onclick="markPaid(${d.row}, this)">Оплачено</button>
-      </div>
-      `;
+      </div>`;
     });
 
     document.getElementById("debtList").innerHTML = html;
+
+    renderChart(data.monthlyStats);
   });
 }
 
 function addDebt() {
 
-  let phone = document.getElementById("phone").value;
+  let phone = phoneInput.value;
 
   if (phone.length !== 9) {
     alert("Номер телефона должен содержать ровно 9 цифр");
     return;
   }
 
-  document.getElementById("saveBtn").disabled = true;
-  document.getElementById("saveLoader").style.display = "block";
+  saveBtn.disabled = true;
+  saveLoader.style.display = "block";
 
   fetch(SCRIPT_URL, {
     method: "POST",
@@ -189,18 +134,44 @@ function addDebt() {
     phone.value = "";
     amount.value = "";
     dueDate.value = "";
-    document.getElementById("saveLoader").style.display = "none";
-    document.getElementById("saveBtn").disabled = false;
+    saveLoader.style.display = "none";
+    saveBtn.disabled = false;
   });
 }
 
 function markPaid(row, btn) {
-
   btn.disabled = true;
   btn.innerText = "⏳ Обработка...";
-
   fetch(SCRIPT_URL + "?paid=" + row)
   .then(() => loadDebts());
+}
+
+function renderChart(stats) {
+
+  const ctx = document.getElementById('monthlyChart').getContext('2d');
+
+  const labels = Object.keys(stats);
+  const values = Object.values(stats);
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Долги по дням (сомони)',
+        data: values,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
 }
 
 loadDebts();
