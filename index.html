@@ -64,29 +64,30 @@ font-weight:bold;
 font-size:16px;
 }
 
-input{
-width:100%;
-padding:14px;
-margin:8px 0;
-border-radius:12px;
-border:1px solid #ddd;
-font-size:18px;
-height:50px;
-box-sizing:border-box;
-}
-
-.login{
+.modal{
 position:fixed;
 inset:0;
-background:#000;
-color:white;
-display:flex;
-flex-direction:column;
-justify-content:center;
+background:rgba(0,0,0,0.6);
+display:none;
 align-items:center;
-z-index:9999;
+justify-content:center;
+}
+
+.modal-content{
+background:white;
 padding:20px;
-text-align:center;
+border-radius:16px;
+width:90%;
+max-width:350px;
+position:relative;
+}
+
+.close-btn{
+position:absolute;
+right:12px;
+top:10px;
+cursor:pointer;
+font-size:20px;
 }
 
 .toast{
@@ -107,67 +108,30 @@ font-weight:bold;
 
 <body>
 
-<div id="loginScreen" class="login">
-<h2>Вход</h2>
-<input type="tel" inputmode="numeric" pattern="[0-9]*" id="pinInput" placeholder="Введите PIN">
-<button onclick="login()">Войти</button>
-</div>
-
 <div class="header">
 <h2>Fashion&StyleLife - Долги</h2>
-<div id="sellerName"></div>
 </div>
 
-<div class="container" id="appContent" style="display:none;">
-<div id="statsBox"></div>
-
-<h3>Добавить долг</h3>
-<input id="client" placeholder="Имя клиента">
-<input id="phone" placeholder="Телефон (9 цифр)" maxlength="9"
-inputmode="numeric" pattern="[0-9]*"
-oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-<input id="amount" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Сумма">
-<label style="font-size:14px;">Выберите дату оплаты</label>
-<input id="dueDate" type="date">
-<button id="saveBtn" onclick="addDebt()">Сохранить</button>
-
-<h3>Список должников</h3>
+<div class="container">
 <div id="debtList"></div>
+</div>
+
+<!-- МОДАЛКА ОПЛАТЫ -->
+<div class="modal" id="paymentModal">
+<div class="modal-content">
+<div class="close-btn" onclick="closeModal()">✖</div>
+<h3>Введите сумму оплаты</h3>
+<input type="tel" inputmode="numeric" pattern="[0-9]*" id="partialAmount" style="width:100%;padding:12px;font-size:18px;">
+<button onclick="confirmPayment()">Подтвердить</button>
+</div>
 </div>
 
 <script>
 
-const VERSION="11.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzblKRGaz7DW0TCkBFc4dzpK4JCPWhba1aLksGeMt3gxVAIDBtoVw6_vS1dFe1tJv7iUA/exec";
 
-const USERS={
-"0000":"Тахмина",
-"5301":"Гульчехра",
-"1602":"Махфират",
-"1111":"Умед"
-};
-
-let currentSeller=null;
-
-function login(){
-let pin=pinInput.value.trim();
-if(!USERS[pin]){alert("Неверный пароль");return;}
-currentSeller=USERS[pin];
-sessionStorage.setItem("seller",currentSeller);
-openApp();
-}
-
-function openApp(){
-loginScreen.style.display="none";
-appContent.style.display="block";
-sellerName.innerHTML="👤 Вошёл: <b>"+currentSeller+"</b><br>Версия: v"+VERSION;
-loadDebts();
-}
-
-window.onload=function(){
-let saved=sessionStorage.getItem("seller");
-if(saved){currentSeller=saved;openApp();}
-};
+let currentRow=null;
+let currentRemainder=0;
 
 function showToast(text){
 let div=document.createElement("div");
@@ -177,29 +141,10 @@ document.body.appendChild(div);
 setTimeout(()=>{div.remove();},2000);
 }
 
-function toggleStats(){
-let el=document.getElementById("statsContent");
-el.style.display = el.style.display==="none" ? "block" : "none";
-}
-
 function loadDebts(){
 fetch(SCRIPT_URL)
 .then(res=>res.json())
 .then(data=>{
-
-statsBox.innerHTML=`
-<div class="card">
-<div style="cursor:pointer;font-weight:bold;" onclick="toggleStats()">
-📊 Статистика (нажмите чтобы развернуть)
-</div>
-<div id="statsContent" style="display:none;margin-top:10px;">
-💰 Всего долгов: ${data.allTotal} сомони (${data.activeCount + data.paidCount} должников)<br>
-🟢 Активные: ${data.activeTotal} сомони (${data.activeCount})<br>
-🔵 Оплаченные: ${data.paidTotal} сомони (${data.paidCount})<br>
-🔴 Просроченные: ${data.overdueTotal} сомони (${data.overdueCount})
-</div>
-</div>
-`;
 
 let debts=data.debts;
 
@@ -211,10 +156,13 @@ return new Date(a.dueDate) - new Date(b.dueDate);
 
 let html="";
 let today=new Date();
+today.setHours(0,0,0,0);
 
 debts.forEach(d=>{
 
 let due=new Date(d.dueDate);
+due.setHours(0,0,0,0);
+
 let diffDays=Math.ceil((due - today)/(1000*60*60*24));
 
 let cardClass="";
@@ -239,29 +187,45 @@ ${name} <span style="font-size:13px;color:#666;">(до ${d.dueDate})</span><br>
 Всего: ${d.total} сомони<br>
 Остаток: <b>${d.remainder}</b> сомони
 ${extra}
+<button onclick="openPayment(${d.row},${d.remainder})">
+Оплатить
+</button>
 </div>`;
 });
 
-debtList.innerHTML=html;
+document.getElementById("debtList").innerHTML=html;
+
 });
 }
 
-function addDebt(){
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-client:client.value,
-phone:phone.value,
-amount:amount.value,
-dueDate:dueDate.value,
-seller:currentSeller
-})
-})
+function openPayment(row,remainder){
+currentRow=row;
+currentRemainder=remainder;
+document.getElementById("partialAmount").value="";
+document.getElementById("paymentModal").style.display="flex";
+}
+
+function closeModal(){
+document.getElementById("paymentModal").style.display="none";
+}
+
+function confirmPayment(){
+
+let pay=Number(document.getElementById("partialAmount").value);
+
+if(pay<=0 || pay>currentRemainder){
+alert("Неверная сумма");
+return;
+}
+
+fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+pay+"&seller=Система")
 .then(()=>{
-showToast("Запись долга сохранена");
+showToast("Долг оплачен");
 setTimeout(()=>location.reload(),1000);
 });
 }
+
+loadDebts();
 
 </script>
 </body>
