@@ -34,26 +34,10 @@ font-weight:bold;
 font-size:14px;
 }
 
-.save-btn{
-background:#28a745;
-color:white;
-}
+.save-btn{background:#28a745;color:white;}
+.save-btn:disabled{opacity:0.5;}
 
-.save-btn:disabled{
-opacity:0.5;
-}
-
-.pay-btn{
-background:#28a745;
-color:white;
-}
-
-.date-btn{
-background:#fff;
-border:2px solid red;
-color:red;
-font-weight:bold;
-}
+.pay-btn{background:#28a745;color:white;}
 
 input{
 width:100%;
@@ -62,6 +46,11 @@ margin:6px 0;
 border-radius:10px;
 border:1px solid #ddd;
 font-size:14px;
+}
+
+label.date-label{
+color:red;
+font-weight:bold;
 }
 
 .modal{
@@ -73,10 +62,7 @@ display:none;align-items:center;justify-content:center;
 background:white;padding:20px;border-radius:14px;width:90%;max-width:320px;text-align:center;
 }
 
-.loader{
-font-weight:bold;
-color:#333;
-}
+.loader{font-weight:bold;}
 </style>
 </head>
 
@@ -97,8 +83,8 @@ inputmode="numeric" pattern="[0-9]*"
 oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 <input id="amount" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Сумма">
 
-<button class="date-btn" onclick="document.getElementById('dueDate').showPicker()">Выберите дату оплаты</button>
-<input id="dueDate" type="date" style="display:none">
+<label class="date-label">Выберите дату оплаты</label>
+<input id="dueDate" type="date">
 
 <button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
 
@@ -141,18 +127,34 @@ fetch(SCRIPT_URL)
 .then(res=>res.json())
 .then(data=>{
 
+// ===== СТАТИСТИКА =====
 statsBox.innerHTML=`
 <div class="card">
 <b onclick="toggleStats()" style="cursor:pointer;">📊 Статистика</b>
 <div id="statsContent" style="display:none;margin-top:8px;">
 Активные долги: ${data.activeTotal} сомони от ${data.activeCount} клиентов<br>
 Оплаченные долги: ${data.paidTotal} сомони от ${data.paidCount} клиентов<br><br>
-<b style="color:red;">Просроченные долги: ${data.overdueTotal} сомони от ${data.overdueCount} клиента</b>
+<b style="color:red;">
+Просроченные долги: ${data.overdueTotal} сомони от ${data.overdueCount} клиента
+</b>
 </div>
 </div>
 `;
 
+// ===== СОРТИРОВКА =====
 let debts=data.debts;
+
+debts.sort((a,b)=>{
+
+// 1. Сначала просроченные
+if(a.isOverdue && !b.isOverdue) return -1;
+if(!a.isOverdue && b.isOverdue) return 1;
+
+// 2. Потом по ближайшей дате
+return new Date(a.dueDate) - new Date(b.dueDate);
+
+});
+
 let html="";
 let today=new Date(); today.setHours(0,0,0,0);
 
@@ -203,7 +205,7 @@ amount.addEventListener("input",validateForm);
 dueDate.addEventListener("input",validateForm);
 
 function addDebt(){
-document.getElementById("loadingModal").style.display="flex";
+loadingModal.style.display="flex";
 
 fetch(SCRIPT_URL,{
 method:"POST",
@@ -215,9 +217,7 @@ dueDate:dueDate.value,
 seller:"Система"
 })
 })
-.then(()=>{
-location.reload();
-});
+.then(()=>location.reload());
 }
 
 function openPayment(row,remainder){
@@ -231,13 +231,18 @@ paymentModal.style.display="none";
 }
 
 function confirmPayment(){
-document.getElementById("loadingModal").style.display="flex";
+loadingModal.style.display="flex";
 
 let pay=Number(partialAmount.value);
+
+if(pay<=0 || pay>currentRemainder){
+alert("Неверная сумма");
+loadingModal.style.display="none";
+return;
+}
+
 fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+pay+"&seller=Система")
-.then(()=>{
-location.reload();
-});
+.then(()=>location.reload());
 }
 
 loadDebts();
