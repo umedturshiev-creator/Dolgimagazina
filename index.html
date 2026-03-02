@@ -10,37 +10,21 @@
 
 <style>
 body {margin:0;font-family:Arial;background:#f4f6f9;}
-.header {background:#000;color:white;padding:15px;text-align:center;font-weight:600;}
-.container {padding:15px;max-width:500px;margin:auto;}
-button {width:100%;padding:12px;border:none;border-radius:10px;font-weight:600;margin-top:10px;cursor:pointer;}
-.install-btn {background:#007bff;color:white;}
-.login-btn {background:#28a745;color:white;}
-.bio-btn {background:#444;color:white;}
-.login {
-  position:fixed;
-  inset:0;
-  background:#000;
-  color:white;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-  padding:20px;
-  text-align:center;
+.header {background:#000;color:white;padding:15px;text-align:center;}
+.logo {height:50px;margin-bottom:5px;}
+.container {padding:15px;max-width:600px;margin:auto;}
+.card {background:white;padding:15px;border-radius:12px;margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,0.05);}
+button {width:100%;padding:10px;border:none;border-radius:8px;background:#28a745;color:white;margin-top:8px;font-weight:600;}
+button:disabled {opacity:0.5;}
+input {width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;}
+.login, .lock-screen {
+  position:fixed;inset:0;background:#000;color:white;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  z-index:9999;padding:20px;text-align:center;
 }
-input {width:100%;padding:12px;border-radius:8px;border:none;margin-top:10px;font-size:16px;}
-.lock-screen {
-  position:fixed;
-  inset:0;
-  background:#000;
-  color:white;
-  display:none;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-}
+.lock-screen {display:none;}
+.install-btn {background:#007bff;}
+.overdue {background:#ffe6e6;color:#b00000;padding:10px;border-radius:10px;margin-bottom:10px;font-weight:bold;}
 </style>
 </head>
 
@@ -49,193 +33,174 @@ input {width:100%;padding:12px;border-radius:8px;border:none;margin-top:10px;fon
 <div id="loginScreen" class="login">
   <h2>Вход в систему</h2>
   <input type="password" id="pinInput" placeholder="Введите PIN">
-  <button class="login-btn" onclick="login()">Войти</button>
-  <button class="bio-btn" onclick="enableBiometric()">🔐 Включить биометрию</button>
+  <button onclick="login()">Войти</button>
+  <button style="background:#444;" onclick="enableBiometric()">🔐 Включить биометрию</button>
 </div>
 
 <div id="lockScreen" class="lock-screen">
   <h2>Система заблокирована</h2>
-  <button class="login-btn" onclick="unlock()">🔐 Разблокировать</button>
+  <button onclick="unlock()">🔐 Разблокировать</button>
 </div>
 
 <div class="header">
-  Fashion&StyleLife - Долги
+  <img src="logo.png" class="logo">
+  <div><b>Fashion&StyleLife - Долги</b></div>
 </div>
 
 <div class="container">
 
 <button id="installBtn" class="install-btn" style="display:none;">
-  📲 Создать приложение
+📲 Создать приложение
 </button>
 
-<div id="content" style="display:none;margin-top:20px;">
-  <h3>CRM активна ✅</h3>
-  <p>PWA + Биометрическая защита включены.</p>
-</div>
+<div id="appContent" style="display:none;">
 
+<div id="summaryBox" class="card"></div>
+<div id="overdueBox"></div>
+
+<h3>Добавить долг</h3>
+<input type="text" id="client" placeholder="Имя клиента">
+<input type="text" id="phone" maxlength="9"
+oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+placeholder="Телефон (9 цифр)">
+<input type="number" id="amount"
+oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+placeholder="Сумма">
+<label>Выберите дату возврата</label>
+<input type="date" id="dueDate">
+<button id="saveBtn" disabled onclick="addDebt()">Сохранить</button>
+
+<h3>Список должников</h3>
+<div id="debtList"></div>
+
+</div>
 </div>
 
 <script>
 
 // ================= PWA =================
 let deferredPrompt;
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById("installBtn").style.display = "block";
+window.addEventListener("beforeinstallprompt",(e)=>{
+ e.preventDefault(); deferredPrompt=e;
+ installBtn.style.display="block";
 });
 
-document.getElementById("installBtn").addEventListener("click", async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt = null;
-  }
-});
+installBtn.onclick=async()=>{
+ if(deferredPrompt){deferredPrompt.prompt(); deferredPrompt=null;}
+};
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
+if("serviceWorker" in navigator){
+ navigator.serviceWorker.register("service-worker.js");
 }
 
 // ================= USERS =================
-const USERS = {
-  "0000": "Тахмина",
-  "5301": "Мама",
-  "1602": "Махфират"
-};
+const USERS={"1111":"Умед","2222":"Фарзона","3333":"Шахром"};
 
 // ================= BIOMETRIC =================
-function isBiometricAvailable() {
-  return window.PublicKeyCredential !== undefined;
+function isBiometricAvailable(){return window.PublicKeyCredential!==undefined;}
+
+async function enableBiometric(){
+ if(!isBiometricAvailable()){alert("Не поддерживается");return;}
+ try{
+  const publicKey={challenge:new Uint8Array(32),
+    rp:{name:"Fashion&StyleLife"},
+    user:{id:new Uint8Array(16),name:"user",displayName:"CRM User"},
+    pubKeyCredParams:[{type:"public-key",alg:-7}],
+    authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required"},
+    timeout:60000,attestation:"none"};
+  await navigator.credentials.create({publicKey});
+  localStorage.setItem("biometricEnabled","true");
+  alert("Биометрия включена");
+ }catch(e){alert("Ошибка");}
 }
 
-async function enableBiometric() {
-
-  if (!isBiometricAvailable()) {
-    alert("Биометрия не поддерживается");
-    return;
-  }
-
-  try {
-    const publicKey = {
-      challenge: new Uint8Array(32),
-      rp: { name: "Fashion&StyleLife" },
-      user: {
-        id: new Uint8Array(16),
-        name: "user",
-        displayName: "CRM User"
-      },
-      pubKeyCredParams: [{ type: "public-key", alg: -7 }],
-      authenticatorSelection: {
-        authenticatorAttachment: "platform",
-        userVerification: "required"
-      },
-      timeout: 60000,
-      attestation: "none"
-    };
-
-    await navigator.credentials.create({ publicKey });
-
-    localStorage.setItem("biometricEnabled", "true");
-    alert("Биометрия включена");
-
-  } catch (err) {
-    alert("Ошибка активации");
-  }
-}
-
-async function verifyBiometric() {
-
-  if (localStorage.getItem("biometricEnabled") !== "true")
-    return false;
-
-  try {
-    const publicKey = {
-      challenge: new Uint8Array(32),
-      timeout: 60000,
-      userVerification: "required"
-    };
-
-    await navigator.credentials.get({ publicKey });
-    return true;
-
-  } catch (err) {
-    return false;
-  }
+async function verifyBiometric(){
+ if(localStorage.getItem("biometricEnabled")!=="true")return true;
+ try{
+  const publicKey={challenge:new Uint8Array(32),timeout:60000,userVerification:"required"};
+  await navigator.credentials.get({publicKey});
+  return true;
+ }catch(e){return false;}
 }
 
 // ================= LOGIN =================
 async function login(){
-
-  const pin = document.getElementById("pinInput").value;
-
-  if (!USERS[pin]) {
-    alert("Неверный PIN");
-    return;
-  }
-
-  localStorage.setItem("seller", USERS[pin]);
-
-  if (localStorage.getItem("biometricEnabled") === "true") {
-    const ok = await verifyBiometric();
-    if (!ok) {
-      alert("Биометрия не подтверждена");
-      return;
-    }
-  }
-
-  openApp();
+ const pin=pinInput.value;
+ if(!USERS[pin]){alert("Неверный PIN");return;}
+ localStorage.setItem("seller",USERS[pin]);
+ const ok=await verifyBiometric();
+ if(!ok){alert("Биометрия не подтверждена");return;}
+ openApp();
 }
 
-// ================= AUTO LOGIN =================
-window.onload = async function(){
+window.onload=async()=>{
+ if(localStorage.getItem("seller")){
+  const ok=await verifyBiometric();
+  if(ok)openApp();
+ }
+};
 
-  if(localStorage.getItem("seller") &&
-     localStorage.getItem("biometricEnabled") === "true"){
-
-     const ok = await verifyBiometric();
-     if(ok){
-        openApp();
-     }
-  }
-}
-
-// ================= OPEN APP =================
 function openApp(){
-  loginScreen.style.display="none";
-  content.style.display="block";
-  resetInactivityTimer();
+ loginScreen.style.display="none";
+ appContent.style.display="block";
+ resetTimer();
+ loadDebts();
 }
 
-// ================= AUTO LOCK (5 мин) =================
-let inactivityTimer;
+// ================= AUTO LOCK =================
+let timer;
+function resetTimer(){clearTimeout(timer);timer=setTimeout(lockApp,5*60*1000);}
+function lockApp(){appContent.style.display="none";lockScreen.style.display="flex";}
+async function unlock(){if(await verifyBiometric()){lockScreen.style.display="none";appContent.style.display="block";resetTimer();}}
+["click","keydown","mousemove","touchstart"].forEach(e=>document.addEventListener(e,resetTimer));
 
-function resetInactivityTimer(){
-  clearTimeout(inactivityTimer);
-  inactivityTimer = setTimeout(lockApp, 5 * 60 * 1000);
-}
+// ================= CRM =================
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbygSj1FHcHUQPmNfndfYv_qhbAsSvaacl65quErOVKDKuaepPc7mkrGbmIW5GpwqJjD-Q/exec";
 
-function lockApp(){
-  content.style.display="none";
-  lockScreen.style.display="flex";
-}
-
-async function unlock(){
-  const ok = await verifyBiometric();
-  if(ok){
-    lockScreen.style.display="none";
-    content.style.display="block";
-    resetInactivityTimer();
-  } else {
-    alert("Биометрия не подтверждена");
-  }
-}
-
-["click","touchstart","mousemove","keydown"].forEach(event=>{
-  document.addEventListener(event, resetInactivityTimer);
+[client,phone,amount,dueDate].forEach(el=>{
+ el.addEventListener("input",()=>{
+  saveBtn.disabled=!(client.value && phone.value.length===9 && amount.value && dueDate.value);
+ });
 });
 
-</script>
+function loadDebts(){
+ fetch(SCRIPT_URL).then(r=>r.json()).then(data=>{
+  summaryBox.innerHTML=`💰 Всего: ${data.allTotal} сомони |
+  🟢 Активные: ${data.activeTotal} (${data.activeCount}) |
+  🔵 Оплаченные: ${data.paidTotal} (${data.paidCount})`;
+  overdueBox.innerHTML=`<div class="overdue">Просрочено: ${data.overdueCount} на ${data.overdueTotal} сомони</div>`;
+  let html="";
+  data.debts.forEach(d=>{
+   html+=`<div class="card" id="row-${d.row}">
+   <b>${d.client}</b><br>
+   Телефон: ${d.phone}<br>
+   Сумма: ${d.amount} сомони
+   <button onclick="markPaid(${d.row})">Оплачено</button>
+   </div>`;
+  });
+  debtList.innerHTML=html;
+ });
+}
 
+function addDebt(){
+ fetch(SCRIPT_URL,{
+  method:"POST",
+  body:JSON.stringify({
+   client:client.value,
+   phone:phone.value,
+   amount:amount.value,
+   dueDate:dueDate.value,
+   seller:localStorage.getItem("seller")
+  })
+ }).then(()=>{loadDebts();client.value="";phone.value="";amount.value="";dueDate.value="";saveBtn.disabled=true;});
+}
+
+function markPaid(row){
+ if(!confirm("Подтвердить оплату?"))return;
+ fetch(SCRIPT_URL+"?paid="+row+"&seller="+localStorage.getItem("seller"))
+ .then(()=>{document.getElementById("row-"+row).remove();loadDebts();});
+}
+
+</script>
 </body>
 </html>
