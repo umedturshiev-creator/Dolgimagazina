@@ -5,84 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fashion&StyleLife - Долги</title>
 
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+
 <style>
 body {margin:0;font-family:Arial;background:#f4f6f9;}
 .header {background:#000;color:white;padding:15px;text-align:center;font-weight:600;}
 .container {padding:15px;max-width:500px;margin:auto;}
-
-.stats-card {
-  background:white;
-  padding:15px;
-  border-radius:14px;
-  margin-bottom:12px;
-  box-shadow:0 6px 15px rgba(0,0,0,0.05);
-}
-
-.stat-line {
-  display:flex;
-  align-items:flex-start;
-  margin-bottom:14px;
-  font-size:14px;
-}
-
-.stat-icon {font-size:20px;margin-right:10px;}
-.stat-bold {font-weight:600;}
-
-.overdue-card {
-  background:#ffe6e6;
-  color:#b00000;
-  padding:15px;
-  border-radius:14px;
-  margin-bottom:15px;
-  font-weight:600;
-  box-shadow:0 6px 15px rgba(0,0,0,0.05);
-}
-
-.card {
-  background:white;
-  padding:15px;
-  border-radius:14px;
-  margin-bottom:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.05);
-  transition: all 0.35s ease;
-}
-
-.slide-out {
-  opacity:0;
-  transform: translateX(-100%) translateY(-10px);
-  height:0;
-  margin:0;
-  padding-top:0;
-  padding-bottom:0;
-}
-
-button {
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  background:#28a745;
-  color:white;
-  margin-top:8px;
-  font-weight:600;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-button:active {
-  transform: scale(0.96);
-  box-shadow:0 2px 6px rgba(0,0,0,0.2);
-}
-
-button:disabled {opacity:0.5;}
-
-input {
-  width:100%;
-  padding:10px;
-  margin:6px 0;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
-
+button {width:100%;padding:12px;border:none;border-radius:10px;font-weight:600;margin-top:10px;cursor:pointer;}
+.install-btn {background:#007bff;color:white;}
+.login-btn {background:#28a745;color:white;}
+.bio-btn {background:#444;color:white;}
 .login {
   position:fixed;
   inset:0;
@@ -93,32 +26,20 @@ input {
   justify-content:center;
   align-items:center;
   z-index:9999;
+  padding:20px;
+  text-align:center;
 }
-
-#globalLoader {
+input {width:100%;padding:12px;border-radius:8px;border:none;margin-top:10px;font-size:16px;}
+.lock-screen {
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.4);
+  background:#000;
+  color:white;
   display:none;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
-  z-index:99999;
-  color:white;
-  font-weight:600;
-  font-size:16px;
-}
-
-#toast {
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#28a745;
-  color:white;
-  padding:10px 20px;
-  border-radius:8px;
-  display:none;
-  font-size:14px;
+  z-index:9999;
 }
 </style>
 </head>
@@ -128,201 +49,193 @@ input {
 <div id="loginScreen" class="login">
   <h2>Вход в систему</h2>
   <input type="password" id="pinInput" placeholder="Введите PIN">
-  <button onclick="login()">Войти</button>
+  <button class="login-btn" onclick="login()">Войти</button>
+  <button class="bio-btn" onclick="enableBiometric()">🔐 Включить биометрию</button>
+</div>
+
+<div id="lockScreen" class="lock-screen">
+  <h2>Система заблокирована</h2>
+  <button class="login-btn" onclick="unlock()">🔐 Разблокировать</button>
 </div>
 
 <div class="header">
   Fashion&StyleLife - Долги
-  <div id="versionBox"></div>
 </div>
 
 <div class="container">
-<div id="summaryBox"></div>
-<div id="overdueBox"></div>
 
-<h3>Добавить долг</h3>
+<button id="installBtn" class="install-btn" style="display:none;">
+  📲 Создать приложение
+</button>
 
-<input type="text" id="client" placeholder="Имя клиента">
-<input type="text" id="phone" maxlength="9"
-oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-placeholder="Телефон (9 цифр)">
-<input type="number" id="amount"
-oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-placeholder="Сумма">
-<label>Выберите дату возврата</label>
-<input type="date" id="dueDate">
-<button id="saveBtn" disabled onclick="addDebt()">Сохранить</button>
-
-<h3>Список должников</h3>
-<div id="debtList"></div>
+<div id="content" style="display:none;margin-top:20px;">
+  <h3>CRM активна ✅</h3>
+  <p>PWA + Биометрическая защита включены.</p>
 </div>
 
-<div id="globalLoader">⏳ Обработка...</div>
-<div id="toast"></div>
-
-<audio id="successSound">
-  <source src="https://assets.mixkit.co/sfx/preview/mixkit-cash-register-purchase-873.mp3" type="audio/mpeg">
-</audio>
+</div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygSj1FHcHUQPmNfndfYv_qhbAsSvaacl65quErOVKDKuaepPc7mkrGbmIW5GpwqJjD-Q/exec";
 
-const USERS = {"1111":"Умед","2222":"Фарзона","3333":"Шахром"};
+// ================= PWA =================
+let deferredPrompt;
 
-function login(){
-  const pin=pinInput.value;
-  if(USERS[pin]){
-    localStorage.setItem("seller",USERS[pin]);
-    loginScreen.style.display="none";
-    loadDebts();
-  }else alert("Неверный PIN");
-}
-
-if(localStorage.getItem("seller")){
-  loginScreen.style.display="none";
-  loadDebts();
-}
-
-const client=document.getElementById("client");
-const phone=document.getElementById("phone");
-const amount=document.getElementById("amount");
-const dueDate=document.getElementById("dueDate");
-const saveBtn=document.getElementById("saveBtn");
-
-[client,phone,amount,dueDate].forEach(el=>{
-  el.addEventListener("input",()=>{
-    saveBtn.disabled=!(client.value && phone.value.length===9 && amount.value && dueDate.value);
-  });
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById("installBtn").style.display = "block";
 });
 
-function showLoader(text="Обработка..."){
-  globalLoader.innerHTML="⏳ "+text;
-  globalLoader.style.display="flex";
-}
-function hideLoader(){globalLoader.style.display="none";}
-function showToast(message,color="#28a745"){
-  toast.innerText=message;
-  toast.style.background=color;
-  toast.style.display="block";
-  setTimeout(()=>toast.style.display="none",2000);
-}
-
-function animateNumber(el,start,end,duration=600){
-  let startTime=null;
-  function animation(currentTime){
-    if(!startTime) startTime=currentTime;
-    const progress=Math.min((currentTime-startTime)/duration,1);
-    el.innerText=Math.floor(progress*(end-start)+start);
-    if(progress<1) requestAnimationFrame(animation);
+document.getElementById("installBtn").addEventListener("click", async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt = null;
   }
-  requestAnimationFrame(animation);
+});
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
 }
 
-function loadDebts(){
-  fetch(SCRIPT_URL).then(res=>res.json()).then(data=>{
-    versionBox.innerText="v"+data.version;
+// ================= USERS =================
+const USERS = {
+  "1111": "Умед",
+  "2222": "Фарзона",
+  "3333": "Шахром"
+};
 
-    summaryBox.innerHTML=`
-      <div class="stats-card">
-        <div class="stat-line">
-          <span class="stat-icon">💰</span>
-          <div>
-            <span class="stat-bold">Всего долгов на сумму:</span>
-            <span id="allTotal"></span> сомони<br>
-            Общее количество должников: <span id="allCount"></span>
-          </div>
-        </div>
-        <div class="stat-line">
-          <span class="stat-icon">🟢</span>
-          <div>
-            <span class="stat-bold">Активные:</span>
-            <span id="activeTotal"></span> сомони
-            (<span id="activeCount"></span>)
-          </div>
-        </div>
-        <div class="stat-line">
-          <span class="stat-icon">🔵</span>
-          <div>
-            <span class="stat-bold">Оплаченные:</span>
-            <span id="paidTotal"></span> сомони
-            (<span id="paidCount"></span>)
-          </div>
-        </div>
-      </div>
-    `;
-
-    overdueBox.innerHTML=`
-      <div class="overdue-card">
-        🔴 Просроченные: ${data.overdueCount}
-        на сумму ${data.overdueTotal} сомони
-      </div>
-    `;
-
-    animateNumber(allTotal,0,data.allTotal);
-    animateNumber(allCount,0,data.activeCount+data.paidCount);
-    animateNumber(activeTotal,0,data.activeTotal);
-    animateNumber(activeCount,0,data.activeCount);
-    animateNumber(paidTotal,0,data.paidTotal);
-    animateNumber(paidCount,0,data.paidCount);
-
-    let html="";
-    data.debts.forEach(d=>{
-      html+=`
-      <div class="card" id="debt-${d.row}" style="${d.overdue?'border-left:5px solid red':''}">
-        <b>${d.client}</b><br>
-        Телефон: ${d.phone}<br>
-        Сумма: ${d.amount} сомони<br>
-        <button onclick="markPaid(${d.row})">Оплачено</button>
-      </div>`;
-    });
-    debtList.innerHTML=html;
-  });
+// ================= BIOMETRIC =================
+function isBiometricAvailable() {
+  return window.PublicKeyCredential !== undefined;
 }
 
-function addDebt(){
-  showLoader("Отправляются данные...");
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      client:client.value,
-      phone:phone.value,
-      amount:amount.value,
-      dueDate:dueDate.value,
-      seller:localStorage.getItem("seller")
-    })
-  }).then(()=>{
-    client.value="";
-    phone.value="";
-    amount.value="";
-    dueDate.value="";
-    saveBtn.disabled=true;
-    hideLoader();
-    showToast("✅ Долг добавлен");
-    loadDebts();
-  });
+async function enableBiometric() {
+
+  if (!isBiometricAvailable()) {
+    alert("Биометрия не поддерживается");
+    return;
+  }
+
+  try {
+    const publicKey = {
+      challenge: new Uint8Array(32),
+      rp: { name: "Fashion&StyleLife" },
+      user: {
+        id: new Uint8Array(16),
+        name: "user",
+        displayName: "CRM User"
+      },
+      pubKeyCredParams: [{ type: "public-key", alg: -7 }],
+      authenticatorSelection: {
+        authenticatorAttachment: "platform",
+        userVerification: "required"
+      },
+      timeout: 60000,
+      attestation: "none"
+    };
+
+    await navigator.credentials.create({ publicKey });
+
+    localStorage.setItem("biometricEnabled", "true");
+    alert("Биометрия включена");
+
+  } catch (err) {
+    alert("Ошибка активации");
+  }
 }
 
-function markPaid(row){
-  if(!confirm("Подтвердить оплату?")) return;
+async function verifyBiometric() {
 
-  const seller=localStorage.getItem("seller");
-  const card=document.getElementById("debt-"+row);
-  const button=card.querySelector("button");
+  if (localStorage.getItem("biometricEnabled") !== "true")
+    return false;
 
-  button.disabled=true;
-  button.innerText="⏳ Обработка...";
+  try {
+    const publicKey = {
+      challenge: new Uint8Array(32),
+      timeout: 60000,
+      userVerification: "required"
+    };
 
-  fetch(SCRIPT_URL+"?paid="+row+"&seller="+seller)
-  .then(()=>{
-    document.getElementById("successSound").play();
-    showToast("💸 Долг оплачен");
-    card.classList.add("slide-out");
-    setTimeout(()=>{
-      card.remove();
-      loadDebts();
-    },350);
-  });
+    await navigator.credentials.get({ publicKey });
+    return true;
+
+  } catch (err) {
+    return false;
+  }
 }
+
+// ================= LOGIN =================
+async function login(){
+
+  const pin = document.getElementById("pinInput").value;
+
+  if (!USERS[pin]) {
+    alert("Неверный PIN");
+    return;
+  }
+
+  localStorage.setItem("seller", USERS[pin]);
+
+  if (localStorage.getItem("biometricEnabled") === "true") {
+    const ok = await verifyBiometric();
+    if (!ok) {
+      alert("Биометрия не подтверждена");
+      return;
+    }
+  }
+
+  openApp();
+}
+
+// ================= AUTO LOGIN =================
+window.onload = async function(){
+
+  if(localStorage.getItem("seller") &&
+     localStorage.getItem("biometricEnabled") === "true"){
+
+     const ok = await verifyBiometric();
+     if(ok){
+        openApp();
+     }
+  }
+}
+
+// ================= OPEN APP =================
+function openApp(){
+  loginScreen.style.display="none";
+  content.style.display="block";
+  resetInactivityTimer();
+}
+
+// ================= AUTO LOCK (5 мин) =================
+let inactivityTimer;
+
+function resetInactivityTimer(){
+  clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(lockApp, 5 * 60 * 1000);
+}
+
+function lockApp(){
+  content.style.display="none";
+  lockScreen.style.display="flex";
+}
+
+async function unlock(){
+  const ok = await verifyBiometric();
+  if(ok){
+    lockScreen.style.display="none";
+    content.style.display="block";
+    resetInactivityTimer();
+  } else {
+    alert("Биометрия не подтверждена");
+  }
+}
+
+["click","touchstart","mousemove","keydown"].forEach(event=>{
+  document.addEventListener(event, resetInactivityTimer);
+});
+
 </script>
+
 </body>
 </html>
