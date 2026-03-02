@@ -10,38 +10,41 @@ body {margin:0;font-family:Arial;background:#f4f6f9;}
 .header {background:#000;color:white;padding:15px;text-align:center;}
 .container {padding:15px;max-width:500px;margin:auto;}
 .card {background:white;padding:15px;border-radius:12px;margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,0.05);}
-.summary {font-size:14px;line-height:1.6;}
-.overdue {background:#ffe6e6;color:#c40000;padding:10px;border-radius:10px;margin-bottom:10px;}
 button {width:100%;padding:10px;border:none;border-radius:8px;background:#28a745;color:white;margin-top:8px;}
 button:disabled {opacity:0.5;}
 input {width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;}
-.small {font-size:12px;color:#666;}
+.login {position:fixed;inset:0;background:#000;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;}
 </style>
 </head>
 
 <body>
 
+<div id="loginScreen" class="login">
+  <h2>Вход в систему</h2>
+  <input type="password" id="pinInput" placeholder="Введите PIN">
+  <button onclick="login()">Войти</button>
+</div>
+
 <div class="header">
-  <div>Fashion&StyleLife - Долги</div>
-  <div class="small" id="versionBox">v4.5</div>
+  Fashion&StyleLife - Долги
+  <div id="versionBox">v6.0</div>
 </div>
 
 <div class="container">
 
-<div class="card summary" id="summaryBox">Загрузка...</div>
-<div class="overdue" id="overdueBox"></div>
+<div class="card" id="summaryBox"></div>
+<div class="card" id="overdueBox"></div>
 
 <h3>Добавить долг</h3>
 
 <input type="text" id="client" placeholder="Имя клиента">
-<input type="text" id="phone" placeholder="Телефон (9 цифр)"
-maxlength="9"
-oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-
-<input type="number" id="amount" placeholder="Сумма"
-oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-
-<label class="small">Выберите дату возврата</label>
+<input type="text" id="phone" maxlength="9"
+oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+placeholder="Телефон (9 цифр)">
+<input type="number" id="amount"
+oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+placeholder="Сумма">
+<label>Выберите дату возврата</label>
 <input type="date" id="dueDate">
 
 <button id="saveBtn" disabled onclick="addDebt()">Сохранить</button>
@@ -53,7 +56,27 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <script>
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyYQaX9Ei_oeDnRjw0JgQa7iJQUKObv258i-IxexKxoD1TF0lAAc3eCoHedJ1DI0BO5Q/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygSj1FHcHUQPmNfndfYv_qhbAsSvaacl65quErOVKDKuaepPc7mkrGbmIW5GpwqJjD-Q/exec";
+
+const USERS = {
+  "1111": "Umed",
+  "0000": "Tasya",
+  "3333": "Mahfirat"
+};
+
+function login() {
+  const pin = pinInput.value;
+  if (USERS[pin]) {
+    localStorage.setItem("seller", USERS[pin]);
+    loginScreen.style.display = "none";
+    loadDebts();
+  } else alert("Неверный PIN");
+}
+
+if (localStorage.getItem("seller")) {
+  loginScreen.style.display = "none";
+  loadDebts();
+}
 
 const client = document.getElementById("client");
 const phone = document.getElementById("phone");
@@ -62,12 +85,10 @@ const dueDate = document.getElementById("dueDate");
 const saveBtn = document.getElementById("saveBtn");
 
 [client, phone, amount, dueDate].forEach(el => {
-  el.addEventListener("input", checkForm);
+  el.addEventListener("input", () => {
+    saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
+  });
 });
-
-function checkForm() {
-  saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
-}
 
 function loadDebts() {
 
@@ -75,49 +96,55 @@ function loadDebts() {
   .then(res => res.json())
   .then(data => {
 
-    document.getElementById("versionBox").innerText = "v" + data.version;
+    versionBox.innerText = "v" + data.version;
 
-document.getElementById("summaryBox").innerHTML =
-  "💰 <b>Всего долгов на сумму:</b> " + data.allTotal + " сомони<br><br>" +
+    summaryBox.innerHTML =
+      "Всего: " + data.allTotal + " сомони<br>" +
+      "Активные: " + data.activeTotal + " — " + data.activeCount + "<br>" +
+      "Оплаченные: " + data.paidTotal + " — " + data.paidCount;
 
-  "🟢 <b>Активные:</b> " + data.activeTotal +
-  " сомони — " + data.activeCount + " должников<br>" +
+    overdueBox.innerHTML =
+      "Просрочено: " + data.overdueCount +
+      " на сумму " + data.overdueTotal;
 
-  "🔵 <b>Оплаченные:</b> " + data.paidTotal +
-  " сомони — оплачено от " + data.paidCount + " должников";
+    let stats = "<br><b>По продавцам:</b><br>";
 
-    document.getElementById("overdueBox").innerHTML =
-      "🔴 Просрочено: " + data.overdueCount +
-      " на сумму " + data.overdueTotal + " сомони";
+    for (let s in data.sellerStats) {
+      stats += s + ": " +
+        data.sellerStats[s].total +
+        " (" + data.sellerStats[s].count + ")<br>";
+    }
+
+    summaryBox.innerHTML += stats;
 
     let html = "";
 
     data.debts.forEach(d => {
       html += `
-      <div class="card" style="${d.overdue ? 'border-left:5px solid red' : ''}">
+      <div class="card" style="${d.overdue?'border-left:5px solid red':''}">
         <b>${d.client}</b><br>
         Телефон: ${d.phone}<br>
-        Сумма: ${d.amount} сомони<br>
+        Сумма: ${d.amount}<br>
         <button onclick="markPaid(${d.row})">Оплачено</button>
       </div>`;
     });
 
-    document.getElementById("debtList").innerHTML = html;
+    debtList.innerHTML = html;
   });
 }
 
 function addDebt() {
 
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      client: client.value,
-      phone: phone.value,
-      amount: amount.value,
-      dueDate: dueDate.value
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      client:client.value,
+      phone:phone.value,
+      amount:amount.value,
+      dueDate:dueDate.value,
+      seller:localStorage.getItem("seller")
     })
-  })
-  .then(() => {
+  }).then(()=>{
     client.value="";
     phone.value="";
     amount.value="";
@@ -129,13 +156,12 @@ function addDebt() {
 
 function markPaid(row) {
 
-  if (!confirm("Подтвердить оплату долга?")) return;
+  if (!confirm("Подтвердить оплату?")) return;
 
-  fetch(SCRIPT_URL + "?paid=" + row)
-  .then(() => loadDebts());
+  fetch(SCRIPT_URL+"?paid="+row+
+  "&seller="+localStorage.getItem("seller"))
+  .then(()=>loadDebts());
 }
-
-loadDebts();
 
 </script>
 
