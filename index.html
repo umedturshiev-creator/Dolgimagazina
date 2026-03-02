@@ -19,15 +19,25 @@ position:relative;
 
 .logout-btn{
 position:absolute;
-right:10px;
-top:10px;
-background:red;
-color:white;
+right:12px;
+top:12px;
+width:34px;
+height:34px;
+border-radius:50%;
 border:none;
-padding:6px 10px;
-border-radius:8px;
-font-size:12px;
+background:rgba(255,255,255,0.15);
+color:white;
+font-size:16px;
 cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:0.2s;
+}
+
+.logout-btn:hover{
+background:rgba(255,255,255,0.3);
+transform:scale(1.05);
 }
 
 /* LOGIN */
@@ -131,7 +141,9 @@ to{opacity:0;}
 <div class="header" id="mainHeader" style="display:none;">
 <h2>Fashion&StyleLife - Долги</h2>
 <div id="userInfo"></div>
-<button class="logout-btn" onclick="logout()">Выйти</button>
+<button class="logout-btn" onclick="logout()" title="Выйти">
+🚪
+</button>
 </div>
 
 <!-- CONTENT -->
@@ -189,7 +201,7 @@ const VERSION="12.5";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwcJEZEKu8wATiUimWszvykTrPK_8fLixlnMNZV61Rqc3Ij8o634rRz-vOmVBcHFZmQnQ/exec";
 
 const USERS={
-"1111":"Умед",
+"1602":"Махфират",
 "0000":"Тахмина",
 "5301":"Гульчехра"
 };
