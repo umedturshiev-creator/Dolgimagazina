@@ -7,13 +7,89 @@
 
 <style>
 body {margin:0;font-family:Arial;background:#f4f6f9;}
-.header {background:#000;color:white;padding:15px;text-align:center;}
+
+.header {
+  background:#000;
+  color:white;
+  padding:15px;
+  text-align:center;
+  font-weight:600;
+}
+
 .container {padding:15px;max-width:500px;margin:auto;}
-.card {background:white;padding:15px;border-radius:12px;margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,0.05);}
-button {width:100%;padding:10px;border:none;border-radius:8px;background:#28a745;color:white;margin-top:8px;}
+
+.stats-card {
+  background:white;
+  padding:15px;
+  border-radius:14px;
+  margin-bottom:12px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.05);
+}
+
+.stat-line {
+  display:flex;
+  align-items:flex-start;
+  margin-bottom:14px;
+  font-size:14px;
+}
+
+.stat-icon {
+  font-size:20px;
+  margin-right:10px;
+}
+
+.stat-bold {font-weight:600;}
+
+.overdue-card {
+  background:#ffe6e6;
+  color:#b00000;
+  padding:15px;
+  border-radius:14px;
+  margin-bottom:15px;
+  font-weight:600;
+  box-shadow:0 6px 15px rgba(0,0,0,0.05);
+}
+
+.card {
+  background:white;
+  padding:15px;
+  border-radius:14px;
+  margin-bottom:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+button {
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#28a745;
+  color:white;
+  margin-top:8px;
+  font-weight:600;
+}
+
 button:disabled {opacity:0.5;}
-input {width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;}
-.login {position:fixed;inset:0;background:#000;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+
+input {
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+
+.login {
+  position:fixed;
+  inset:0;
+  background:#000;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
 </style>
 </head>
 
@@ -27,23 +103,27 @@ input {width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #
 
 <div class="header">
   Fashion&StyleLife - Долги
-  <div id="versionBox">v6.0</div>
+  <div id="versionBox"></div>
 </div>
 
 <div class="container">
 
-<div class="card" id="summaryBox"></div>
-<div class="card" id="overdueBox"></div>
+<div id="summaryBox"></div>
+<div id="overdueBox"></div>
 
 <h3>Добавить долг</h3>
 
 <input type="text" id="client" placeholder="Имя клиента">
-<input type="text" id="phone" maxlength="9"
+
+<input type="text" id="phone"
+maxlength="9"
 oninput="this.value=this.value.replace(/[^0-9]/g,'')"
 placeholder="Телефон (9 цифр)">
+
 <input type="number" id="amount"
 oninput="this.value=this.value.replace(/[^0-9]/g,'')"
 placeholder="Сумма">
+
 <label>Выберите дату возврата</label>
 <input type="date" id="dueDate">
 
@@ -59,9 +139,9 @@ placeholder="Сумма">
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygSj1FHcHUQPmNfndfYv_qhbAsSvaacl65quErOVKDKuaepPc7mkrGbmIW5GpwqJjD-Q/exec";
 
 const USERS = {
-  "1111": "Umed",
-  "0000": "Tasya",
-  "3333": "Mahfirat"
+  "0000": "Тахмина",
+  "5301": "Мама",
+  "1602": "Махфират"
 };
 
 function login() {
@@ -98,24 +178,45 @@ function loadDebts() {
 
     versionBox.innerText = "v" + data.version;
 
-    summaryBox.innerHTML =
-      "Всего: " + data.allTotal + " сомони<br>" +
-      "Активные: " + data.activeTotal + " — " + data.activeCount + "<br>" +
-      "Оплаченные: " + data.paidTotal + " — " + data.paidCount;
+    summaryBox.innerHTML = `
+      <div class="stats-card">
 
-    overdueBox.innerHTML =
-      "Просрочено: " + data.overdueCount +
-      " на сумму " + data.overdueTotal;
+        <div class="stat-line">
+          <span class="stat-icon">💰</span>
+          <div>
+            <span class="stat-bold">Всего долгов на сумму:</span>
+            ${data.allTotal} сомони<br>
+            Общее количество должников: ${data.activeCount + data.paidCount}
+          </div>
+        </div>
 
-    let stats = "<br><b>По продавцам:</b><br>";
+        <div class="stat-line">
+          <span class="stat-icon">🟢</span>
+          <div>
+            <span class="stat-bold">Активные должники на сумму:</span>
+            ${data.activeTotal} сомони
+            (${data.activeCount} должника)
+          </div>
+        </div>
 
-    for (let s in data.sellerStats) {
-      stats += s + ": " +
-        data.sellerStats[s].total +
-        " (" + data.sellerStats[s].count + ")<br>";
-    }
+        <div class="stat-line">
+          <span class="stat-icon">🔵</span>
+          <div>
+            <span class="stat-bold">Оплаченные долги на сумму:</span>
+            ${data.paidTotal} сомони
+            от ${data.paidCount} должников
+          </div>
+        </div>
 
-    summaryBox.innerHTML += stats;
+      </div>
+    `;
+
+    overdueBox.innerHTML = `
+      <div class="overdue-card">
+        🔴 Просроченные: ${data.overdueCount}
+        на сумму ${data.overdueTotal} сомони
+      </div>
+    `;
 
     let html = "";
 
@@ -124,7 +225,7 @@ function loadDebts() {
       <div class="card" style="${d.overdue?'border-left:5px solid red':''}">
         <b>${d.client}</b><br>
         Телефон: ${d.phone}<br>
-        Сумма: ${d.amount}<br>
+        Сумма: ${d.amount} сомони<br>
         <button onclick="markPaid(${d.row})">Оплачено</button>
       </div>`;
     });
