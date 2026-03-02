@@ -6,19 +6,106 @@
 <title>Fashion&StyleLife - Долги</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#f4f6f9;}
-.header{background:#000;color:white;text-align:center;padding:15px;}
-.container{max-width:500px;margin:auto;padding:15px;}
-.card{background:white;padding:15px;border-radius:12px;margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,0.05);}
-.red{border-left:5px solid red;background:#ffecec;}
-button{width:100%;padding:10px;border:none;border-radius:8px;background:#28a745;color:white;margin-top:8px;font-weight:bold;transition:0.2s;}
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#f4f6f9;
+-webkit-text-size-adjust:100%;
+}
+
+.header{
+background:#000;
+color:white;
+text-align:center;
+padding:18px 10px;
+}
+
+.container{
+max-width:100%;
+margin:auto;
+padding:15px;
+}
+
+.card{
+background:white;
+padding:18px;
+border-radius:16px;
+margin-bottom:14px;
+box-shadow:0 6px 14px rgba(0,0,0,0.08);
+font-size:16px;
+}
+
+.red{
+border-left:6px solid red;
+background:#ffecec;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#28a745;
+color:white;
+margin-top:10px;
+font-weight:bold;
+font-size:16px;
+transition:0.2s;
+}
+
 button:disabled{opacity:0.6;}
 button:active{transform:scale(0.97);}
-input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;}
-.login{position:fixed;inset:0;background:#000;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;padding:20px;text-align:center;}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;}
-.modal-content{background:white;padding:20px;border-radius:12px;width:90%;max-width:350px;position:relative;}
-.close-btn{position:absolute;right:10px;top:10px;cursor:pointer;font-size:18px;}
+
+input{
+width:100%;
+padding:14px;
+margin:8px 0;
+border-radius:12px;
+border:1px solid #ddd;
+font-size:18px;
+height:50px;
+box-sizing:border-box;
+}
+
+.login{
+position:fixed;
+inset:0;
+background:#000;
+color:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:9999;
+padding:20px;
+text-align:center;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+display:none;
+align-items:center;
+justify-content:center;
+}
+
+.modal-content{
+background:white;
+padding:20px;
+border-radius:16px;
+width:90%;
+max-width:350px;
+position:relative;
+}
+
+.close-btn{
+position:absolute;
+right:12px;
+top:10px;
+cursor:pointer;
+font-size:20px;
+}
 </style>
 </head>
 
@@ -26,7 +113,7 @@ input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #d
 
 <div id="loginScreen" class="login">
 <h2>Вход</h2>
-<input type="password" id="pinInput" placeholder="Введите PIN">
+<input type="tel" inputmode="numeric" pattern="[0-9]*" id="pinInput" placeholder="Введите PIN">
 <button onclick="login()">Войти</button>
 </div>
 
@@ -42,6 +129,8 @@ input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #d
 <h3>Добавить долг</h3>
 <input id="client" placeholder="Имя клиента">
 <input id="phone" placeholder="Телефон (9 цифр)" maxlength="9"
+inputmode="numeric"
+pattern="[0-9]*"
 oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 <input id="amount" type="number" placeholder="Сумма">
 <label style="font-size:14px;">Выберите дату оплаты</label>
@@ -64,7 +153,7 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <script>
 
-const VERSION="10.2";
+const VERSION="11.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxhtHEObrEOpemPBRYFvX7NuUvtUUkmQVbKUl5gfanFIyIMVy5j0BEA5uW70fb1l7OYOA/exec";
 
 const USERS={
@@ -78,7 +167,6 @@ let currentSeller=null;
 let currentRow=null;
 let currentRemainder=0;
 
-// LOGIN
 function login(){
 let pin=pinInput.value.trim();
 if(!USERS[pin]){alert("Неверный пароль");return;}
@@ -92,6 +180,7 @@ loginScreen.style.display="none";
 appContent.style.display="block";
 sellerName.innerHTML="👤 Вошёл: <b>"+currentSeller+"</b><br>Версия: v"+VERSION;
 loadDebts();
+checkUpdate();
 }
 
 window.onload=function(){
@@ -99,7 +188,17 @@ let saved=sessionStorage.getItem("seller");
 if(saved){currentSeller=saved;openApp();}
 };
 
-// LOAD DATA
+function checkUpdate(){
+fetch(SCRIPT_URL + "?version=1")
+.then(res=>res.json())
+.then(data=>{
+if(data.version && data.version !== VERSION){
+location.reload(true);
+}
+})
+.catch(()=>{});
+}
+
 function loadDebts(){
 fetch(SCRIPT_URL)
 .then(res=>res.json())
@@ -111,21 +210,24 @@ statsBox.innerHTML=`
 📊 Статистика (нажмите для раскрытия)
 </div>
 <div id="statsContent" style="display:none;margin-top:10px;">
-💰 <b>Всего долгов:</b> ${data.allTotal} сомони<br>
-👥 Общее количество должников: ${data.activeCount + data.paidCount}<br><br>
-🟢 Активные: ${data.activeTotal} (${data.activeCount})<br>
-🔵 Оплаченные: ${data.paidTotal} (${data.paidCount})<br>
+💰 <b>Всего долгов:</b> ${data.allTotal} сомони (${data.activeCount + data.paidCount} должников)<br><br>
+🟢 Активные долги: ${data.activeTotal} сомони (${data.activeCount} должника)<br>
+🔵 Оплаченные долги: ${data.paidTotal} сомони (${data.paidCount} должника)<br>
 <div class="red">
-🔴 Просроченные: ${data.overdueTotal} (${data.overdueCount})
+🔴 Просроченные долги: ${data.overdueTotal} сомони (${data.overdueCount} должника)
 </div>
 </div>
 </div>
 `;
 
 let html="";
-data.debts.forEach(d=>{
+
+data.debts.reverse().forEach(d=>{
+
+let overdueClass = d.isOverdue ? "red" : "";
+
 html+=`
-<div class="card">
+<div class="card ${overdueClass}">
 <b>${d.client}</b><br>
 Телефон: ${d.phone}<br>
 Всего: ${d.total} сомони<br>
@@ -135,8 +237,8 @@ html+=`
 </button>
 </div>`;
 });
-debtList.innerHTML=html;
 
+debtList.innerHTML=html;
 });
 }
 
@@ -145,7 +247,6 @@ let el=document.getElementById("statsContent");
 el.style.display=el.style.display==="none"?"block":"none";
 }
 
-// ADD DEBT
 function addDebt(){
 if(!client.value || phone.value.length!==9 || !amount.value || !dueDate.value){return;}
 saveBtn.disabled=true;
@@ -161,12 +262,9 @@ dueDate:dueDate.value,
 seller:currentSeller
 })
 })
-.then(()=>{
-location.reload();
-});
+.then(()=>{location.reload();});
 }
 
-// PAYMENT
 function openPayment(row,remainder){
 currentRow=row;
 currentRemainder=remainder;
@@ -188,12 +286,9 @@ confirmBtn.innerText="⏳ Обработка...";
 fetch(SCRIPT_URL+"?paid="+currentRow+
 "&seller="+currentSeller+
 "&amount="+pay)
-.then(()=>{
-location.reload();
-});
+.then(()=>{location.reload();});
 }
 
-// FORM VALIDATION
 function checkForm(){
 if(client.value && phone.value.length===9 && amount.value && dueDate.value){
 saveBtn.disabled=false;
