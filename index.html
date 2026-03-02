@@ -10,7 +10,6 @@ body{
 margin:0;
 font-family:Arial, sans-serif;
 background:#f4f6f9;
--webkit-text-size-adjust:100%;
 }
 
 .header{
@@ -50,7 +49,6 @@ color:white;
 margin-top:10px;
 font-weight:bold;
 font-size:16px;
-transition:0.2s;
 }
 
 button:disabled{opacity:0.6;}
@@ -106,6 +104,20 @@ top:10px;
 cursor:pointer;
 font-size:20px;
 }
+
+.toast{
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:#28a745;
+color:white;
+padding:14px 22px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.2);
+z-index:9999;
+font-weight:bold;
+}
 </style>
 </head>
 
@@ -123,37 +135,34 @@ font-size:20px;
 </div>
 
 <div class="container" id="appContent" style="display:none;">
-
 <div id="statsBox"></div>
 
 <h3>Добавить долг</h3>
 <input id="client" placeholder="Имя клиента">
 <input id="phone" placeholder="Телефон (9 цифр)" maxlength="9"
-inputmode="numeric"
-pattern="[0-9]*"
+inputmode="numeric" pattern="[0-9]*"
 oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-<input id="amount" type="number" placeholder="Сумма">
+<input id="amount" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Сумма">
 <label style="font-size:14px;">Выберите дату оплаты</label>
 <input id="dueDate" type="date">
 <button id="saveBtn" onclick="addDebt()" disabled>Сохранить</button>
 
 <h3>Список должников</h3>
 <div id="debtList"></div>
-
 </div>
 
 <div class="modal" id="paymentModal">
 <div class="modal-content">
 <div class="close-btn" onclick="closeModal()">✖</div>
 <h3>Введите сумму оплаты</h3>
-<input type="number" id="partialAmount">
+<input type="tel" inputmode="numeric" pattern="[0-9]*" id="partialAmount">
 <button id="confirmBtn" onclick="confirmPayment()">Подтвердить</button>
 </div>
 </div>
 
 <script>
 
-const VERSION="11.0";
+const VERSION="11.1";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxhtHEObrEOpemPBRYFvX7NuUvtUUkmQVbKUl5gfanFIyIMVy5j0BEA5uW70fb1l7OYOA/exec";
 
 const USERS={
@@ -180,7 +189,6 @@ loginScreen.style.display="none";
 appContent.style.display="block";
 sellerName.innerHTML="👤 Вошёл: <b>"+currentSeller+"</b><br>Версия: v"+VERSION;
 loadDebts();
-checkUpdate();
 }
 
 window.onload=function(){
@@ -188,15 +196,12 @@ let saved=sessionStorage.getItem("seller");
 if(saved){currentSeller=saved;openApp();}
 };
 
-function checkUpdate(){
-fetch(SCRIPT_URL + "?version=1")
-.then(res=>res.json())
-.then(data=>{
-if(data.version && data.version !== VERSION){
-location.reload(true);
-}
-})
-.catch(()=>{});
+function showToast(text){
+let div=document.createElement("div");
+div.className="toast";
+div.innerText=text;
+document.body.appendChild(div);
+setTimeout(()=>{div.remove();},2000);
 }
 
 function loadDebts(){
@@ -206,10 +211,6 @@ fetch(SCRIPT_URL)
 
 statsBox.innerHTML=`
 <div class="card">
-<div style="cursor:pointer;font-weight:bold;" onclick="toggleStats()">
-📊 Статистика (нажмите для раскрытия)
-</div>
-<div id="statsContent" style="display:none;margin-top:10px;">
 💰 <b>Всего долгов:</b> ${data.allTotal} сомони (${data.activeCount + data.paidCount} должников)<br><br>
 🟢 Активные долги: ${data.activeTotal} сомони (${data.activeCount} должника)<br>
 🔵 Оплаченные долги: ${data.paidTotal} сомони (${data.paidCount} должника)<br>
@@ -217,13 +218,11 @@ statsBox.innerHTML=`
 🔴 Просроченные долги: ${data.overdueTotal} сомони (${data.overdueCount} должника)
 </div>
 </div>
-</div>
 `;
 
 let html="";
 
 data.debts.reverse().forEach(d=>{
-
 let overdueClass = d.isOverdue ? "red" : "";
 
 html+=`
@@ -242,11 +241,6 @@ debtList.innerHTML=html;
 });
 }
 
-function toggleStats(){
-let el=document.getElementById("statsContent");
-el.style.display=el.style.display==="none"?"block":"none";
-}
-
 function addDebt(){
 if(!client.value || phone.value.length!==9 || !amount.value || !dueDate.value){return;}
 saveBtn.disabled=true;
@@ -262,7 +256,10 @@ dueDate:dueDate.value,
 seller:currentSeller
 })
 })
-.then(()=>{location.reload();});
+.then(()=>{
+showToast("Запись долга сохранена");
+setTimeout(()=>{location.reload();},1000);
+});
 }
 
 function openPayment(row,remainder){
@@ -286,23 +283,12 @@ confirmBtn.innerText="⏳ Обработка...";
 fetch(SCRIPT_URL+"?paid="+currentRow+
 "&seller="+currentSeller+
 "&amount="+pay)
-.then(()=>{location.reload();});
+.then(()=>{
+showToast("Долг оплачен");
+setTimeout(()=>{location.reload();},1000);
+});
 }
-
-function checkForm(){
-if(client.value && phone.value.length===9 && amount.value && dueDate.value){
-saveBtn.disabled=false;
-}else{
-saveBtn.disabled=true;
-}
-}
-
-client.addEventListener("input",checkForm);
-phone.addEventListener("input",checkForm);
-amount.addEventListener("input",checkForm);
-dueDate.addEventListener("input",checkForm);
 
 </script>
-
 </body>
 </html>
