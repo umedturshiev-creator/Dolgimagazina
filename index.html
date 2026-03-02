@@ -77,10 +77,14 @@ function loadDebts() {
 
     document.getElementById("versionBox").innerText = "v" + data.version;
 
-    document.getElementById("summaryBox").innerHTML =
-      "💰 Всего долгов: " + data.allTotal + " сомони<br>" +
-      "🟢 Активные: " + data.activeTotal + " (" + data.activeCount + ")<br>" +
-      "🔵 Оплаченные: " + data.paidTotal + " (" + data.paidCount + ")";
+document.getElementById("summaryBox").innerHTML =
+  "💰 <b>Всего долгов:</b> " + data.allTotal + " сомони<br><br>" +
+
+  "🟢 <b>Активные:</b> " + data.activeTotal +
+  " сомони — " + data.activeCount + " должников<br>" +
+
+  "🔵 <b>Оплаченные:</b> " + data.paidTotal +
+  " сомони — оплачено от " + data.paidCount + " должников";
 
     document.getElementById("overdueBox").innerHTML =
       "🔴 Просрочено: " + data.overdueCount +
