@@ -11,12 +11,14 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
 .container{max-width:500px;margin:auto;padding:15px;}
 .card{background:white;padding:15px;border-radius:12px;margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,0.05);}
 .red{border-left:5px solid red;background:#ffecec;}
-button{width:100%;padding:10px;border:none;border-radius:8px;background:#28a745;color:white;margin-top:8px;font-weight:bold;}
+button{width:100%;padding:10px;border:none;border-radius:8px;background:#28a745;color:white;margin-top:8px;font-weight:bold;transition:0.2s;}
 button:disabled{opacity:0.6;}
+button:active{transform:scale(0.97);}
 input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;}
 .login{position:fixed;inset:0;background:#000;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;padding:20px;text-align:center;}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;}
-.modal-content{background:white;padding:20px;border-radius:12px;width:90%;max-width:350px;}
+.modal-content{background:white;padding:20px;border-radius:12px;width:90%;max-width:350px;position:relative;}
+.close-btn{position:absolute;right:10px;top:10px;cursor:pointer;font-size:18px;}
 </style>
 </head>
 
@@ -42,6 +44,7 @@ input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #d
 <input id="phone" placeholder="Телефон (9 цифр)" maxlength="9"
 oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 <input id="amount" type="number" placeholder="Сумма">
+<label style="font-size:14px;">Выберите дату оплаты</label>
 <input id="dueDate" type="date">
 <button id="saveBtn" onclick="addDebt()" disabled>Сохранить</button>
 
@@ -52,6 +55,7 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <div class="modal" id="paymentModal">
 <div class="modal-content">
+<div class="close-btn" onclick="closeModal()">✖</div>
 <h3>Введите сумму оплаты</h3>
 <input type="number" id="partialAmount">
 <button id="confirmBtn" onclick="confirmPayment()">Подтвердить</button>
@@ -60,8 +64,8 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <script>
 
-const VERSION="10.1";
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycby_o-7MYXstH16EJFflAoVTKrA1TGt7vKitbuD-EaSyyWcDcoWIPt1twnv8dlm8pdX96g/exec";
+const VERSION="10.2";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxhtHEObrEOpemPBRYFvX7NuUvtUUkmQVbKUl5gfanFIyIMVy5j0BEA5uW70fb1l7OYOA/exec";
 
 const USERS={
 "0000":"Тахмина",
@@ -74,6 +78,7 @@ let currentSeller=null;
 let currentRow=null;
 let currentRemainder=0;
 
+// LOGIN
 function login(){
 let pin=pinInput.value.trim();
 if(!USERS[pin]){alert("Неверный пароль");return;}
@@ -94,6 +99,7 @@ let saved=sessionStorage.getItem("seller");
 if(saved){currentSeller=saved;openApp();}
 };
 
+// LOAD DATA
 function loadDebts(){
 fetch(SCRIPT_URL)
 .then(res=>res.json())
@@ -101,23 +107,18 @@ fetch(SCRIPT_URL)
 
 statsBox.innerHTML=`
 <div class="card">
+<div style="cursor:pointer;font-weight:bold;" onclick="toggleStats()">
+📊 Статистика (нажмите для раскрытия)
+</div>
+<div id="statsContent" style="display:none;margin-top:10px;">
 💰 <b>Всего долгов:</b> ${data.allTotal} сомони<br>
-👥 Общее количество должников: ${data.activeCount + data.paidCount}
+👥 Общее количество должников: ${data.activeCount + data.paidCount}<br><br>
+🟢 Активные: ${data.activeTotal} (${data.activeCount})<br>
+🔵 Оплаченные: ${data.paidTotal} (${data.paidCount})<br>
+<div class="red">
+🔴 Просроченные: ${data.overdueTotal} (${data.overdueCount})
 </div>
-
-<div class="card">
-🟢 <b>Активные:</b> ${data.activeTotal} сомони<br>
-👥 ${data.activeCount} должников
 </div>
-
-<div class="card">
-🔵 <b>Оплаченные:</b> ${data.paidTotal} сомони<br>
-👥 ${data.paidCount} должников
-</div>
-
-<div class="card red">
-🔴 <b>Просроченные:</b> ${data.overdueTotal} сомони<br>
-👥 ${data.overdueCount} должников
 </div>
 `;
 
@@ -139,10 +140,17 @@ debtList.innerHTML=html;
 });
 }
 
+function toggleStats(){
+let el=document.getElementById("statsContent");
+el.style.display=el.style.display==="none"?"block":"none";
+}
+
+// ADD DEBT
 function addDebt(){
 if(!client.value || phone.value.length!==9 || !amount.value || !dueDate.value){return;}
 saveBtn.disabled=true;
 saveBtn.innerText="⏳ Сохранение...";
+
 fetch(SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
@@ -154,16 +162,11 @@ seller:currentSeller
 })
 })
 .then(()=>{
-client.value="";
-phone.value="";
-amount.value="";
-dueDate.value="";
-saveBtn.innerText="Сохранить";
-saveBtn.disabled=true;
-loadDebts();
+location.reload();
 });
 }
 
+// PAYMENT
 function openPayment(row,remainder){
 currentRow=row;
 currentRemainder=remainder;
@@ -171,22 +174,26 @@ partialAmount.value="";
 paymentModal.style.display="flex";
 }
 
+function closeModal(){
+paymentModal.style.display="none";
+}
+
 function confirmPayment(){
 let pay=Number(partialAmount.value);
 if(pay<=0 || pay>currentRemainder){alert("Неверная сумма");return;}
+
 confirmBtn.disabled=true;
 confirmBtn.innerText="⏳ Обработка...";
+
 fetch(SCRIPT_URL+"?paid="+currentRow+
 "&seller="+currentSeller+
 "&amount="+pay)
 .then(()=>{
-paymentModal.style.display="none";
-confirmBtn.disabled=false;
-confirmBtn.innerText="Подтвердить";
-loadDebts();
+location.reload();
 });
 }
 
+// FORM VALIDATION
 function checkForm(){
 if(client.value && phone.value.length===9 && amount.value && dueDate.value){
 saveBtn.disabled=false;
