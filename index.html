@@ -146,6 +146,24 @@ margin-top:10px;
 </style>
 </head>
 
+<!-- МОДАЛКА ВЫХОДА -->
+<div class="modal" id="logoutModal">
+  <div class="modal-content" style="text-align:center;">
+    <h3>Подтверждение выхода</h3>
+    <p>Вы действительно хотите выйти?</p>
+
+    <button onclick="confirmLogout()" 
+            style="background:#dc3545;color:white;">
+      Выйти
+    </button>
+
+    <button onclick="closeLogout()" 
+            style="background:#ccc;color:black;">
+      Отмена
+    </button>
+  </div>
+</div>
+  
 <body>
 
 <div id="loginScreen" class="login">
@@ -252,8 +270,7 @@ if(saved){currentSeller=saved;openApp();}
 };
 
 function logout(){
-sessionStorage.removeItem("seller");
-location.reload();
+logoutModal.style.display="flex";
 }
 
 /* ---------- ДОБАВЛЕНИЕ ---------- */
@@ -492,6 +509,24 @@ function closeHistory(){
 historyModal.style.display="none";
 }
 
+  /* ---------- ВЫХОД ---------- */
+
+function closeLogout(){
+logoutModal.style.display="none";
+}
+
+function confirmLogout(){
+
+document.body.style.transition="0.3s";
+document.body.style.opacity="0.5";
+
+setTimeout(()=>{
+sessionStorage.removeItem("seller");
+location.reload();
+},300);
+
+}
+  
 </script>
 </body>
 </html>
