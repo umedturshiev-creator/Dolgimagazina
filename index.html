@@ -67,9 +67,6 @@ box-shadow:0 4px 10px rgba(0,0,0,0.07);
 font-size:14px;
 }
 
-.overdue{background:#ffe5e5;border-left:5px solid red;}
-.warning{background:#fff8e1;border-left:5px solid orange;}
-
 button{
 width:100%;
 padding:10px;
@@ -80,8 +77,6 @@ font-weight:bold;
 font-size:14px;
 }
 
-.save-btn{background:#28a745;color:white;}
-.save-btn:disabled{opacity:0.5;}
 .pay-btn{background:#28a745;color:white;}
 
 .action-row{
@@ -119,8 +114,6 @@ border-radius:12px;
 margin-bottom:12px;
 }
 
-label.date-label{color:red;font-weight:bold;}
-
 .modal{
 position:fixed;
 inset:0;
@@ -140,12 +133,23 @@ text-align:left;
 max-height:70vh;
 overflow:auto;
 }
+
+.loader-anim{
+animation: pulse 1s infinite;
+font-weight:bold;
+text-align:center;
+}
+
+@keyframes pulse{
+0%{opacity:0.4;}
+50%{opacity:1;}
+100%{opacity:0.4;}
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginScreen" class="login">
 <img src="logo.png" alt="Logo">
 <h2>Вход</h2>
@@ -153,7 +157,6 @@ overflow:auto;
 <button onclick="login()">Войти</button>
 </div>
 
-<!-- HEADER -->
 <div class="header" id="mainHeader" style="display:none;">
 <h2>Fashion&StyleLife - Долги</h2>
 <div id="userInfo"></div>
@@ -164,33 +167,24 @@ overflow:auto;
 
 <div id="statsBox"></div>
 
-<!-- ПОИСК -->
 <div class="search-box">
 <input id="searchInput" placeholder="🔍 Поиск по имени или номеру">
 </div>
-
-<h3>Добавить долг</h3>
-
-<input id="client" placeholder="Имя клиента">
-<input id="phone" placeholder="Телефон" maxlength="9"
-inputmode="numeric"
-oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-<input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
-
-<label class="date-label">Выберите дату оплаты</label>
-<input id="dueDate" type="date">
-
-<button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
 
 <h3>Список должников</h3>
 <div id="debtList"></div>
 
 </div>
 
-<!-- ИСТОРИЯ -->
+<!-- История -->
 <div class="modal" id="historyModal">
 <div class="modal-content">
 <h3>История оплат</h3>
+
+<div id="historyLoader" style="display:none;" class="loader-anim">
+⏳ Загрузка истории...
+</div>
+
 <div id="historyContent"></div>
 <button onclick="closeHistory()">Закрыть</button>
 </div>
@@ -198,9 +192,8 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <script>
 
-const VERSION="14.0";
+const VERSION="14.1";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxAQMrSq8RtxwsPCGavwQLOT2ir5H0XGC3GkdWFb1vtBGOtbbJy6i8483dmhsl0SgSflg/exec";
-
 const USERS={"1111":"Умед","0000":"Тахмина","5301":"Гульчехра","1602":"Махфират"};
 
 let currentSeller=null;
@@ -227,39 +220,31 @@ let saved=sessionStorage.getItem("seller");
 if(saved){currentSeller=saved;openApp();}
 };
 
-function validateForm(){
-saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
-}
-client.addEventListener("input",validateForm);
-phone.addEventListener("input",validateForm);
-amount.addEventListener("input",validateForm);
-dueDate.addEventListener("input",validateForm);
-
-function addDebt(){
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-client:client.value,
-phone:phone.value,
-amount:amount.value,
-dueDate:dueDate.value,
-seller:currentSeller
-})
-}).then(()=>location.reload());
+function logout(){
+sessionStorage.removeItem("seller");
+location.reload();
 }
 
 function loadDebts(){
 fetch(SCRIPT_URL)
 .then(res=>res.json())
 .then(data=>{
-
 data=data||{};
 allDebts=data.debts||[];
+renderDebts(allDebts);
+});
+}
+
+function renderDebts(list){
 
 let html="";
-allDebts.forEach(d=>{
 
-let waText=encodeURIComponent("Салом алейкум напоминаем вам о задолженности "+d.remainder+" сомони");
+list.forEach(d=>{
+
+let waText=encodeURIComponent(
+"Салом алейкум напоминаем вам о задолженности "+d.remainder+" сомони"
+);
+
 let phoneFull="992"+d.phone;
 
 html+=`
@@ -269,7 +254,9 @@ html+=`
 Всего: ${d.total} сомони<br>
 Остаток: <b>${d.remainder}</b> сомони
 
-<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">Оплатить</button>
+<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
+Оплатить
+</button>
 
 <div class="action-row">
 <a class="call-btn" href="tel:+${phoneFull}">📞 Позвонить</a>
@@ -279,48 +266,95 @@ href="https://wa.me/${phoneFull}?text=${waText}">
 </a>
 </div>
 
-<button onclick="showHistory('${d.client}')">📂 История оплат</button>
+<button onclick="showHistory('${d.client}')">
+📂 История оплат
+</button>
 
 </div>
 `;
 });
 
-debtList.innerHTML=html;
+if(list.length===0){
+html=`<div class="card">Ничего не найдено</div>`;
+}
 
-});
+debtList.innerHTML=html;
 }
 
 document.getElementById("searchInput").addEventListener("input",function(){
-let val=this.value.toLowerCase();
-let filtered=allDebts.filter(d=>
-d.client.toLowerCase().includes(val) ||
-d.phone.includes(val)
+
+let val=this.value.toLowerCase().trim();
+
+if(val===""){
+renderDebts(allDebts);
+return;
+}
+
+let filtered=allDebts.filter(d =>
+(d.client && d.client.toLowerCase().includes(val)) ||
+(d.phone && d.phone.includes(val))
 );
-renderFiltered(filtered);
+
+renderDebts(filtered);
+
 });
 
-function renderFiltered(list){
-let html="";
-list.forEach(d=>{
-html+=`<div class="card"><b>${d.client}</b> (${d.phone})</div>`;
-});
-debtList.innerHTML=html;
+function openPayment(row,remainder){
+
+let amount=prompt("Введите сумму оплаты:");
+
+if(!amount) return;
+
+amount=Number(amount);
+
+if(amount<=0 || amount>remainder){
+alert("Неверная сумма");
+return;
+}
+
+fetch(SCRIPT_URL+"?paid="+row+
+"&amount="+amount+
+"&seller="+currentSeller)
+.then(()=>loadDebts());
 }
 
 function showHistory(name){
-fetch(SCRIPT_URL+"?history="+name)
+
+historyModal.style.display="flex";
+historyContent.innerHTML="";
+historyLoader.style.display="block";
+
+fetch(SCRIPT_URL+"?history="+encodeURIComponent(name))
 .then(res=>res.json())
 .then(data=>{
+
+historyLoader.style.display="none";
+
 let html="";
+
 if(data.history && data.history.length>0){
+
 data.history.forEach(h=>{
-html+=`<div>${h.date} — ${h.amount} сомони (${h.seller})</div>`;
+html+=`
+<div style="margin-bottom:8px;">
+📅 ${h.date}<br>
+💰 ${h.amount} сомони<br>
+👤 ${h.seller}
+</div>
+<hr>
+`;
 });
+
 }else{
-html="Нет оплат";
+html="<div>Оплат пока нет</div>";
 }
+
 historyContent.innerHTML=html;
-historyModal.style.display="flex";
+
+})
+.catch(()=>{
+historyLoader.style.display="none";
+historyContent.innerHTML="<div style='color:red;'>Ошибка загрузки</div>";
 });
 }
 
