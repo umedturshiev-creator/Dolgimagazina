@@ -7,31 +7,163 @@
 
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f9;}
-.header{background:#000;color:white;text-align:center;padding:14px;position:relative;}
-.logout-btn{position:absolute;right:12px;top:12px;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,0.15);color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.login{position:fixed;inset:0;background:#000;color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+
+.header{
+background:#000;
+color:white;
+text-align:center;
+padding:14px;
+position:relative;
+}
+
+.logout-btn{
+position:absolute;
+right:12px;
+top:12px;
+width:34px;
+height:34px;
+border-radius:50%;
+border:none;
+background:rgba(255,255,255,0.15);
+color:white;
+font-size:16px;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.login{
+position:fixed;
+inset:0;
+background:#000;
+color:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+
 .login img{width:120px;margin-bottom:20px;}
+
 .container{padding:12px;}
-.card{background:white;padding:14px;border-radius:14px;margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,0.07);font-size:14px;}
-.overdue{background:#ffe5e5;border-left:5px solid red;}
-.warning{background:#fff8e1;border-left:5px solid orange;}
-button{width:100%;padding:10px;border:none;border-radius:10px;margin-top:6px;font-weight:bold;font-size:14px;}
+
+.card{
+background:white;
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.07);
+font-size:14px;
+}
+
+.overdue{
+background:#ffe5e5;
+border-left:5px solid red;
+}
+
+.warning{
+background:#fff8e1;
+border-left:5px solid orange;
+}
+
+button{
+width:100%;
+padding:10px;
+border:none;
+border-radius:10px;
+margin-top:6px;
+font-weight:bold;
+font-size:14px;
+}
+
 .save-btn{background:#28a745;color:white;}
 .save-btn:disabled{opacity:0.5;}
 .pay-btn{background:#28a745;color:white;}
+
 .action-row{display:flex;gap:6px;margin-top:6px;}
-.action-row a{flex:1;text-align:center;padding:8px;border-radius:8px;font-size:13px;text-decoration:none;color:white;}
+.action-row a{
+flex:1;
+text-align:center;
+padding:8px;
+border-radius:8px;
+font-size:13px;
+text-decoration:none;
+color:white;
+}
 .call-btn{background:#007bff;}
 .wa-btn{background:#25D366;}
-input{width:100%;padding:10px;margin:6px 0;border-radius:10px;border:1px solid #ddd;font-size:14px;}
-.search-box{background:white;padding:10px;border-radius:12px;margin-bottom:12px;}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;}
-.modal-content{background:white;padding:20px;border-radius:14px;width:90%;max-width:350px;max-height:80vh;overflow:auto;}
-.loader{animation:pulse 1s infinite;text-align:center;font-weight:bold;margin-top:10px;}
-@keyframes pulse{0%{opacity:0.4;}50%{opacity:1;}100%{opacity:0.4;}}
+
+input{
+width:100%;
+padding:10px;
+margin:6px 0;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+.search-box{
+background:white;
+padding:10px;
+border-radius:12px;
+margin-bottom:12px;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+display:none;
+align-items:center;
+justify-content:center;
+}
+
+.modal-content{
+background:white;
+padding:20px;
+border-radius:14px;
+width:90%;
+max-width:350px;
+text-align:left;
+max-height:80vh;
+overflow:auto;
+}
+
+.loader{
+animation:pulse 1s infinite;
+text-align:center;
+font-weight:bold;
+margin-top:10px;
+}
+
+@keyframes pulse{
+0%{opacity:0.4;}
+50%{opacity:1;}
+100%{opacity:0.4;}
+}
 </style>
 </head>
 
+<!-- МОДАЛКА ВЫХОДА -->
+<div class="modal" id="logoutModal">
+  <div class="modal-content" style="text-align:center;">
+    <h3>Подтверждение выхода</h3>
+    <p>Вы действительно хотите выйти?</p>
+
+    <button onclick="confirmLogout()" 
+            style="background:#dc3545;color:white;">
+      Выйти
+    </button>
+
+    <button onclick="closeLogout()" 
+            style="background:#ccc;color:black;">
+      Отмена
+    </button>
+  </div>
+</div>
+  
 <body>
 
 <div id="loginScreen" class="login">
@@ -53,7 +185,9 @@ input{width:100%;padding:10px;margin:6px 0;border-radius:10px;border:1px solid #
 
 <h3>Добавить долг</h3>
 <input id="client" placeholder="Имя клиента">
-<input id="phone" placeholder="Телефон" maxlength="9" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+<input id="phone" placeholder="Телефон" maxlength="9"
+inputmode="numeric"
+oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
 <label style="color:red;font-weight:bold;">Выберите дату оплаты</label>
 <input id="dueDate" type="date">
@@ -69,6 +203,7 @@ input{width:100%;padding:10px;margin:6px 0;border-radius:10px;border:1px solid #
 
 </div>
 
+<!-- МОДАЛКА ОПЛАТЫ -->
 <div class="modal" id="paymentModal">
 <div class="modal-content">
 <h3>Оплата долга</h3>
@@ -76,22 +211,28 @@ input{width:100%;padding:10px;margin:6px 0;border-radius:10px;border:1px solid #
 <input type="tel" inputmode="numeric" id="paymentAmount" placeholder="Введите сумму">
 <button class="pay-btn" onclick="confirmPayment()">Подтвердить оплату</button>
 <button onclick="closePayment()" style="background:#ccc;color:black;">Отмена</button>
-<div id="paymentLoader" class="loader" style="display:none;">⏳ Обработка...</div>
+<div id="paymentLoader" class="loader" style="display:none;">
+⏳ Обработка...
+</div>
 </div>
 </div>
 
-<div class="modal" id="logoutModal">
-<div class="modal-content" style="text-align:center;">
-<h3>Подтверждение выхода</h3>
-<p>Вы действительно хотите выйти?</p>
-<button onclick="confirmLogout()" style="background:#dc3545;color:white;">Выйти</button>
-<button onclick="closeLogout()" style="background:#ccc;color:black;">Отмена</button>
+<!-- ИСТОРИЯ -->
+<div class="modal" id="historyModal">
+<div class="modal-content">
+<h3>История оплат</h3>
+<div id="historyLoader" class="loader" style="display:none;">
+⏳ Загрузка истории...
+</div>
+<div id="historyContent"></div>
+<button onclick="closeHistory()">Закрыть</button>
 </div>
 </div>
 
 <script>
-const VERSION="18.0";
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxw1cOhmGn7CbW4GGrsKf2tS9S2K0X2l_ZLg2ZzEC7NJLlvcgz7M1EJnIcVohZerLL6WQ/exec";
+
+const VERSION="15.2";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxAQMrSq8RtxwsPCGavwQLOT2ir5H0XGC3GkdWFb1vtBGOtbbJy6i8483dmhsl0SgSflg/exec";
 
 const USERS={
 "1111":"Умед",
@@ -104,6 +245,8 @@ let currentSeller=null;
 let allDebts=[];
 let currentRow=null;
 let currentRemainder=0;
+
+/* ---------- LOGIN ---------- */
 
 function login(){
 let pin=pinInput.value.trim();
@@ -126,9 +269,11 @@ let saved=sessionStorage.getItem("seller");
 if(saved){currentSeller=saved;openApp();}
 };
 
-function logout(){logoutModal.style.display="flex";}
-function closeLogout(){logoutModal.style.display="none";}
-function confirmLogout(){sessionStorage.removeItem("seller");location.reload();}
+function logout(){
+logoutModal.style.display="flex";
+}
+
+/* ---------- ДОБАВЛЕНИЕ ---------- */
 
 function validateForm(){
 saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
@@ -139,7 +284,12 @@ amount.addEventListener("input",validateForm);
 dueDate.addEventListener("input",validateForm);
 
 function addDebt(){
+
+if(saveBtn.disabled) return;
+
 saveLoader.style.display="block";
+saveBtn.disabled=true;
+
 fetch(SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
@@ -149,90 +299,234 @@ amount:amount.value,
 dueDate:dueDate.value,
 seller:currentSeller
 })
-}).then(()=>{
+})
+.then(()=>{
 saveLoader.style.display="none";
-client.value="";phone.value="";amount.value="";dueDate.value="";
+client.value="";
+phone.value="";
+amount.value="";
+dueDate.value="";
 saveBtn.disabled=true;
 loadDebts();
 });
 }
 
+/* ---------- ЗАГРУЗКА ---------- */
+
 function loadDebts(){
 fetch(SCRIPT_URL)
 .then(res=>res.json())
 .then(data=>{
+data=data||{};
 allDebts=data.debts||[];
 renderStats(data);
 renderDebts(allDebts);
 });
 }
 
+/* ---------- СТАТИСТИКА ---------- */
+
 function renderStats(data){
+
+let activeTotal = Number(data.activeTotal||0);
+let paidTotal = Number(data.paidTotal||0);
+let overdueTotal = Number(data.overdueTotal||0);
+let activeCount = Number(data.activeCount||0);
+let paidCount = Number(data.paidCount||0);
+let overdueCount = Number(data.overdueCount||0);
+
 statsBox.innerHTML=`
 <div class="card">
 <div onclick="toggleStats()" style="cursor:pointer;font-weight:bold;">
 📊 Статистика (нажмите для раскрытия)
 </div>
-<div id="statsContent" style="display:none;margin-top:10px;line-height:1.6;">
-Активные долги: ${data.activeTotal} сомони от ${data.activeCount} клиентов;<br>
-Частично оплачено долгов: ${data.partialTotal} сомони от ${data.partialCount} должников;<br>
-Оплаченные долги: ${data.paidTotal} сомони от ${data.paidCount} клиентов;<br><br>
-<div style="background:#ffe5e5;padding:8px;border-radius:8px;color:red;font-weight:bold;">
-Просроченные долги: ${data.overdueTotal} сомони от ${data.overdueCount} клиентов
+
+<div id="statsContent" style="display:none;margin-top:10px;">
+Активные долги: ${activeTotal} сомони от ${activeCount} клиентов<br>
+Оплаченные долги: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
+<b style="color:red;">
+Просроченные долги: ${overdueTotal} сомони от ${overdueCount} клиента
+</b>
 </div>
 </div>
-</div>`;
+`;
 }
 
 function toggleStats(){
 let el=document.getElementById("statsContent");
+if(!el) return;
 el.style.display = el.style.display==="none" ? "block" : "none";
 }
 
+/* ---------- ОТРИСОВКА ---------- */
+
 function renderDebts(list){
-list.sort((a,b)=>a.isOverdue?-1:1);
+
+list.sort((a,b)=>{
+if(a.isOverdue && !b.isOverdue) return -1;
+if(!a.isOverdue && b.isOverdue) return 1;
+return new Date(a.dueDate||0) - new Date(b.dueDate||0);
+});
+
 let html="";
+let today=new Date(); today.setHours(0,0,0,0);
+
 list.forEach(d=>{
-let paidAmount=d.total-d.remainder;
-let cardClass="card"+(d.isOverdue?" overdue":"");
+
+let due=new Date(d.dueDate); due.setHours(0,0,0,0);
+let diffDays=Math.ceil((due-today)/(1000*60*60*24));
+
+let cardClass="card";
+let extra="";
+
+if(d.isOverdue || diffDays<0){
+cardClass+=" overdue";
+extra=`<div style="color:red;font-weight:bold;">
+⚠ Просрочено на ${Math.abs(diffDays)} дн.
+</div>`;
+}
+else if(diffDays<=2){
+cardClass+=" warning";
+extra=`<div style="color:orange;">
+Осталось ${diffDays} дн.
+</div>`;
+}
+
+let waText=encodeURIComponent("Салом алейкум напоминаем вам о задолженности "+d.remainder+" сомони");
+let phoneFull="992"+d.phone;
+
 html+=`
 <div class="${cardClass}">
 <b>${d.client}</b> (до ${d.dueDate})<br>
 Телефон: ${d.phone}<br>
 Всего: ${d.total} сомони<br>
-${paidAmount>0?`Оплатили: ${paidAmount} сомони<br>`:""}
 Остаток: <b>${d.remainder}</b> сомони
-<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">Оплатить</button>
-</div>`;
+${extra}
+
+<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
+Оплатить
+</button>
+
+<div class="action-row">
+<a class="call-btn" href="tel:+${phoneFull}">📞 Позвонить</a>
+<a class="wa-btn" target="_blank"
+href="https://wa.me/${phoneFull}?text=${waText}">
+💬 WhatsApp
+</a>
+</div>
+
+<button onclick="showHistory('${d.client}')">
+📂 История оплат
+</button>
+</div>
+`;
 });
+
 debtList.innerHTML=html||`<div class="card">Нет данных</div>`;
 }
 
-document.getElementById("searchInput").addEventListener("input",function(){
-let val=this.value.toLowerCase().trim();
-if(!val){renderDebts(allDebts);return;}
-let filtered=allDebts.filter(d=>{
-let name=(d.client||"").toLowerCase();
-let phone=(d.phone||"");
-return name.includes(val)||phone.includes(val);
-});
-renderDebts(filtered);
+/* ---------- ПОИСК ---------- */
+
+function applySearch(){
+
+let val = searchInput.value.toLowerCase().trim();
+
+if(val === ""){
+renderDebts([...allDebts]); // возвращаем всё
+return;
+}
+
+let filtered = allDebts.filter(d => {
+
+let nameMatch = d.client && 
+d.client.toLowerCase().includes(val);
+
+let phoneMatch = d.phone &&
+d.phone.toString().includes(val);
+
+return nameMatch || phoneMatch;
+
 });
 
+renderDebts(filtered);
+
+}
+
+// Живой поиск
+searchInput.addEventListener("input", applySearch);
+
+/* ---------- ОПЛАТА ---------- */
+
 function openPayment(row,remainder){
-currentRow=row;currentRemainder=remainder;
+currentRow=row;
+currentRemainder=remainder;
 paymentAmount.value="";
 paymentInfo.innerHTML="Остаток: <b>"+remainder+" сомони</b>";
 paymentModal.style.display="flex";
 }
-function closePayment(){paymentModal.style.display="none";}
+
+function closePayment(){
+paymentModal.style.display="none";
+}
+
 function confirmPayment(){
 let amount=Number(paymentAmount.value);
-if(amount<=0||amount>currentRemainder){alert("Неверная сумма");return;}
+if(!amount||amount<=0){alert("Введите корректную сумму");return;}
+if(amount>currentRemainder){alert("Сумма больше остатка");return;}
+
 paymentLoader.style.display="block";
+
 fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+amount+"&seller="+currentSeller)
-.then(()=>{paymentLoader.style.display="none";paymentModal.style.display="none";loadDebts();});
+.then(()=>{
+paymentLoader.style.display="none";
+paymentModal.style.display="none";
+loadDebts();
+});
 }
+
+/* ---------- ИСТОРИЯ ---------- */
+
+function showHistory(name){
+historyModal.style.display="flex";
+historyContent.innerHTML="";
+historyLoader.style.display="block";
+
+fetch(SCRIPT_URL+"?history="+encodeURIComponent(name))
+.then(res=>res.json())
+.then(data=>{
+historyLoader.style.display="none";
+let html="";
+if(data.history && data.history.length>0){
+data.history.forEach(h=>{
+html+=`📅 ${h.date}<br>💰 ${h.amount} сомони<br>👤 ${h.seller}<hr>`;
+});
+}else{html="Оплат пока нет";}
+historyContent.innerHTML=html;
+});
+}
+
+function closeHistory(){
+historyModal.style.display="none";
+}
+
+  /* ---------- ВЫХОД ---------- */
+
+function closeLogout(){
+logoutModal.style.display="none";
+}
+
+function confirmLogout(){
+
+document.body.style.transition="0.3s";
+document.body.style.opacity="0.5";
+
+setTimeout(()=>{
+sessionStorage.removeItem("seller");
+location.reload();
+},300);
+
+}
+  
 </script>
 </body>
 </html>
