@@ -410,15 +410,33 @@ debtList.innerHTML=html||`<div class="card">Нет данных</div>`;
 
 /* ---------- ПОИСК ---------- */
 
-document.getElementById("searchInput").addEventListener("input",function(){
-let val=this.value.toLowerCase().trim();
-if(val===""){renderDebts(allDebts);return;}
-let filtered=allDebts.filter(d =>
-(d.client && d.client.toLowerCase().includes(val)) ||
-(d.phone && d.phone.includes(val))
-);
-renderDebts(filtered);
+function applySearch(){
+
+let val = searchInput.value.toLowerCase().trim();
+
+if(val === ""){
+renderDebts([...allDebts]); // возвращаем всё
+return;
+}
+
+let filtered = allDebts.filter(d => {
+
+let nameMatch = d.client && 
+d.client.toLowerCase().includes(val);
+
+let phoneMatch = d.phone &&
+d.phone.toString().includes(val);
+
+return nameMatch || phoneMatch;
+
 });
+
+renderDebts(filtered);
+
+}
+
+// Живой поиск
+searchInput.addEventListener("input", applySearch);
 
 /* ---------- ОПЛАТА ---------- */
 
