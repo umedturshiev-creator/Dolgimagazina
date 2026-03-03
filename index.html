@@ -31,12 +31,6 @@ cursor:pointer;
 display:flex;
 align-items:center;
 justify-content:center;
-transition:0.2s;
-}
-
-.logout-btn:hover{
-background:rgba(255,255,255,0.3);
-transform:scale(1.05);
 }
 
 .login{
@@ -51,10 +45,7 @@ align-items:center;
 text-align:center;
 }
 
-.login img{
-width:120px;
-margin-bottom:20px;
-}
+.login img{width:120px;margin-bottom:20px;}
 
 .container{padding:12px;}
 
@@ -77,14 +68,11 @@ font-weight:bold;
 font-size:14px;
 }
 
+.save-btn{background:#28a745;color:white;}
+.save-btn:disabled{opacity:0.5;}
 .pay-btn{background:#28a745;color:white;}
 
-.action-row{
-display:flex;
-gap:6px;
-margin-top:6px;
-}
-
+.action-row{display:flex;gap:6px;margin-top:6px;}
 .action-row a{
 flex:1;
 text-align:center;
@@ -94,7 +82,6 @@ font-size:13px;
 text-decoration:none;
 color:white;
 }
-
 .call-btn{background:#007bff;}
 .wa-btn{background:#25D366;}
 
@@ -130,14 +117,15 @@ border-radius:14px;
 width:90%;
 max-width:350px;
 text-align:left;
-max-height:70vh;
+max-height:80vh;
 overflow:auto;
 }
 
-.loader-anim{
-animation: pulse 1s infinite;
-font-weight:bold;
+.loader{
+animation:pulse 1s infinite;
 text-align:center;
+font-weight:bold;
+margin-top:10px;
 }
 
 @keyframes pulse{
@@ -151,7 +139,7 @@ text-align:center;
 <body>
 
 <div id="loginScreen" class="login">
-<img src="logo.png" alt="Logo">
+<img src="logo.png">
 <h2>Вход</h2>
 <input type="tel" inputmode="numeric" id="pinInput" placeholder="Введите PIN">
 <button onclick="login()">Войти</button>
@@ -160,12 +148,22 @@ text-align:center;
 <div class="header" id="mainHeader" style="display:none;">
 <h2>Fashion&StyleLife - Долги</h2>
 <div id="userInfo"></div>
-<button class="logout-btn" onclick="logout()" title="Выйти">🚪</button>
+<button class="logout-btn" onclick="logout()">🚪</button>
 </div>
 
 <div class="container" id="appContent" style="display:none;">
 
 <div id="statsBox"></div>
+
+<h3>Добавить долг</h3>
+<input id="client" placeholder="Имя клиента">
+<input id="phone" placeholder="Телефон" maxlength="9"
+inputmode="numeric"
+oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+<input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
+<label style="color:red;font-weight:bold;">Выберите дату оплаты</label>
+<input id="dueDate" type="date">
+<button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
 
 <div class="search-box">
 <input id="searchInput" placeholder="🔍 Поиск по имени или номеру">
@@ -176,15 +174,27 @@ text-align:center;
 
 </div>
 
-<!-- История -->
+<!-- МОДАЛКА ОПЛАТЫ -->
+<div class="modal" id="paymentModal">
+<div class="modal-content">
+<h3>Оплата долга</h3>
+<div id="paymentInfo"></div>
+<input type="tel" inputmode="numeric" id="paymentAmount" placeholder="Введите сумму">
+<button class="pay-btn" onclick="confirmPayment()">Подтвердить оплату</button>
+<button onclick="closePayment()" style="background:#ccc;color:black;">Отмена</button>
+<div id="paymentLoader" class="loader" style="display:none;">
+⏳ Обработка...
+</div>
+</div>
+</div>
+
+<!-- ИСТОРИЯ -->
 <div class="modal" id="historyModal">
 <div class="modal-content">
 <h3>История оплат</h3>
-
-<div id="historyLoader" style="display:none;" class="loader-anim">
+<div id="historyLoader" class="loader" style="display:none;">
 ⏳ Загрузка истории...
 </div>
-
 <div id="historyContent"></div>
 <button onclick="closeHistory()">Закрыть</button>
 </div>
@@ -192,12 +202,20 @@ text-align:center;
 
 <script>
 
-const VERSION="14.1";
+const VERSION="15.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxAQMrSq8RtxwsPCGavwQLOT2ir5H0XGC3GkdWFb1vtBGOtbbJy6i8483dmhsl0SgSflg/exec";
-const USERS={"1111":"Умед","0000":"Тахмина","5301":"Гульчехра","1602":"Махфират"};
+
+const USERS={
+"1111":"Умед",
+"0000":"Тахмина",
+"5301":"Гульчехра",
+"1602":"Махфират"
+};
 
 let currentSeller=null;
 let allDebts=[];
+let currentRow=null;
+let currentRemainder=0;
 
 function login(){
 let pin=pinInput.value.trim();
@@ -225,26 +243,55 @@ sessionStorage.removeItem("seller");
 location.reload();
 }
 
+function validateForm(){
+saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
+}
+client.addEventListener("input",validateForm);
+phone.addEventListener("input",validateForm);
+amount.addEventListener("input",validateForm);
+dueDate.addEventListener("input",validateForm);
+
+function addDebt(){
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+client:client.value,
+phone:phone.value,
+amount:amount.value,
+dueDate:dueDate.value,
+seller:currentSeller
+})
+}).then(()=>loadDebts());
+}
+
 function loadDebts(){
 fetch(SCRIPT_URL)
 .then(res=>res.json())
 .then(data=>{
 data=data||{};
 allDebts=data.debts||[];
+renderStats(data);
 renderDebts(allDebts);
 });
 }
 
+function renderStats(data){
+statsBox.innerHTML=`
+<div class="card">
+<b>📊 Статистика</b><br><br>
+Активные долги: ${Number(data.activeTotal||0)} сомони от ${Number(data.activeCount||0)} клиентов<br>
+Оплаченные долги: ${Number(data.paidTotal||0)} сомони от ${Number(data.paidCount||0)} клиентов<br><br>
+<b style="color:red;">
+Просроченные долги: ${Number(data.overdueTotal||0)} сомони от ${Number(data.overdueCount||0)} клиента
+</b>
+</div>
+`;
+}
+
 function renderDebts(list){
-
 let html="";
-
 list.forEach(d=>{
-
-let waText=encodeURIComponent(
-"Салом алейкум напоминаем вам о задолженности "+d.remainder+" сомони"
-);
-
+let waText=encodeURIComponent("Салом алейкум напоминаем вам о задолженности "+d.remainder+" сомони");
 let phoneFull="992"+d.phone;
 
 html+=`
@@ -254,9 +301,7 @@ html+=`
 Всего: ${d.total} сомони<br>
 Остаток: <b>${d.remainder}</b> сомони
 
-<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
-Оплатить
-</button>
+<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">Оплатить</button>
 
 <div class="action-row">
 <a class="call-btn" href="tel:+${phoneFull}">📞 Позвонить</a>
@@ -266,60 +311,51 @@ href="https://wa.me/${phoneFull}?text=${waText}">
 </a>
 </div>
 
-<button onclick="showHistory('${d.client}')">
-📂 История оплат
-</button>
-
+<button onclick="showHistory('${d.client}')">📂 История оплат</button>
 </div>
 `;
 });
-
-if(list.length===0){
-html=`<div class="card">Ничего не найдено</div>`;
-}
-
-debtList.innerHTML=html;
+debtList.innerHTML=html||`<div class="card">Нет данных</div>`;
 }
 
 document.getElementById("searchInput").addEventListener("input",function(){
-
 let val=this.value.toLowerCase().trim();
-
-if(val===""){
-renderDebts(allDebts);
-return;
-}
-
+if(val===""){renderDebts(allDebts);return;}
 let filtered=allDebts.filter(d =>
 (d.client && d.client.toLowerCase().includes(val)) ||
 (d.phone && d.phone.includes(val))
 );
-
 renderDebts(filtered);
-
 });
 
 function openPayment(row,remainder){
-
-let amount=prompt("Введите сумму оплаты:");
-
-if(!amount) return;
-
-amount=Number(amount);
-
-if(amount<=0 || amount>remainder){
-alert("Неверная сумма");
-return;
+currentRow=row;
+currentRemainder=remainder;
+paymentAmount.value="";
+paymentInfo.innerHTML="Остаток: <b>"+remainder+" сомони</b>";
+paymentModal.style.display="flex";
 }
 
-fetch(SCRIPT_URL+"?paid="+row+
-"&amount="+amount+
-"&seller="+currentSeller)
-.then(()=>loadDebts());
+function closePayment(){
+paymentModal.style.display="none";
+}
+
+function confirmPayment(){
+let amount=Number(paymentAmount.value);
+if(!amount||amount<=0){alert("Введите корректную сумму");return;}
+if(amount>currentRemainder){alert("Сумма больше остатка");return;}
+
+paymentLoader.style.display="block";
+
+fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+amount+"&seller="+currentSeller)
+.then(()=>{
+paymentLoader.style.display="none";
+paymentModal.style.display="none";
+loadDebts();
+});
 }
 
 function showHistory(name){
-
 historyModal.style.display="flex";
 historyContent.innerHTML="";
 historyLoader.style.display="block";
@@ -327,34 +363,14 @@ historyLoader.style.display="block";
 fetch(SCRIPT_URL+"?history="+encodeURIComponent(name))
 .then(res=>res.json())
 .then(data=>{
-
 historyLoader.style.display="none";
-
 let html="";
-
 if(data.history && data.history.length>0){
-
 data.history.forEach(h=>{
-html+=`
-<div style="margin-bottom:8px;">
-📅 ${h.date}<br>
-💰 ${h.amount} сомони<br>
-👤 ${h.seller}
-</div>
-<hr>
-`;
+html+=`📅 ${h.date}<br>💰 ${h.amount} сомони<br>👤 ${h.seller}<hr>`;
 });
-
-}else{
-html="<div>Оплат пока нет</div>";
-}
-
+}else{html="Оплат пока нет";}
 historyContent.innerHTML=html;
-
-})
-.catch(()=>{
-historyLoader.style.display="none";
-historyContent.innerHTML="<div style='color:red;'>Ошибка загрузки</div>";
 });
 }
 
