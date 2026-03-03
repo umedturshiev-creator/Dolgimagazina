@@ -58,6 +58,16 @@ box-shadow:0 4px 10px rgba(0,0,0,0.07);
 font-size:14px;
 }
 
+.overdue{
+background:#ffe5e5;
+border-left:5px solid red;
+}
+
+.warning{
+background:#fff8e1;
+border-left:5px solid orange;
+}
+
 button{
 width:100%;
 padding:10px;
@@ -164,6 +174,7 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 <label style="color:red;font-weight:bold;">Выберите дату оплаты</label>
 <input id="dueDate" type="date">
 <button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
+<div id="saveLoader" class="loader" style="display:none;">⏳ Сохранение...</div>
 
 <div class="search-box">
 <input id="searchInput" placeholder="🔍 Поиск по имени или номеру">
@@ -202,7 +213,7 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <script>
 
-const VERSION="15.0";
+const VERSION="15.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxAQMrSq8RtxwsPCGavwQLOT2ir5H0XGC3GkdWFb1vtBGOtbbJy6i8483dmhsl0SgSflg/exec";
 
 const USERS={
@@ -216,6 +227,8 @@ let currentSeller=null;
 let allDebts=[];
 let currentRow=null;
 let currentRemainder=0;
+
+/* ---------- LOGIN ---------- */
 
 function login(){
 let pin=pinInput.value.trim();
@@ -243,6 +256,8 @@ sessionStorage.removeItem("seller");
 location.reload();
 }
 
+/* ---------- ДОБАВЛЕНИЕ ---------- */
+
 function validateForm(){
 saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
 }
@@ -252,6 +267,12 @@ amount.addEventListener("input",validateForm);
 dueDate.addEventListener("input",validateForm);
 
 function addDebt(){
+
+if(saveBtn.disabled) return;
+
+saveLoader.style.display="block";
+saveBtn.disabled=true;
+
 fetch(SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
@@ -261,8 +282,19 @@ amount:amount.value,
 dueDate:dueDate.value,
 seller:currentSeller
 })
-}).then(()=>loadDebts());
+})
+.then(()=>{
+saveLoader.style.display="none";
+client.value="";
+phone.value="";
+amount.value="";
+dueDate.value="";
+saveBtn.disabled=true;
+loadDebts();
+});
 }
+
+/* ---------- ЗАГРУЗКА ---------- */
 
 function loadDebts(){
 fetch(SCRIPT_URL)
@@ -275,33 +307,88 @@ renderDebts(allDebts);
 });
 }
 
+/* ---------- СТАТИСТИКА ---------- */
+
 function renderStats(data){
+
+let activeTotal = Number(data.activeTotal||0);
+let paidTotal = Number(data.paidTotal||0);
+let overdueTotal = Number(data.overdueTotal||0);
+let activeCount = Number(data.activeCount||0);
+let paidCount = Number(data.paidCount||0);
+let overdueCount = Number(data.overdueCount||0);
+
 statsBox.innerHTML=`
 <div class="card">
-<b>📊 Статистика</b><br><br>
-Активные долги: ${Number(data.activeTotal||0)} сомони от ${Number(data.activeCount||0)} клиентов<br>
-Оплаченные долги: ${Number(data.paidTotal||0)} сомони от ${Number(data.paidCount||0)} клиентов<br><br>
+<div onclick="toggleStats()" style="cursor:pointer;font-weight:bold;">
+📊 Статистика (нажмите для раскрытия)
+</div>
+
+<div id="statsContent" style="display:none;margin-top:10px;">
+Активные долги: ${activeTotal} сомони от ${activeCount} клиентов<br>
+Оплаченные долги: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
 <b style="color:red;">
-Просроченные долги: ${Number(data.overdueTotal||0)} сомони от ${Number(data.overdueCount||0)} клиента
+Просроченные долги: ${overdueTotal} сомони от ${overdueCount} клиента
 </b>
+</div>
 </div>
 `;
 }
 
+function toggleStats(){
+let el=document.getElementById("statsContent");
+if(!el) return;
+el.style.display = el.style.display==="none" ? "block" : "none";
+}
+
+/* ---------- ОТРИСОВКА ---------- */
+
 function renderDebts(list){
+
+list.sort((a,b)=>{
+if(a.isOverdue && !b.isOverdue) return -1;
+if(!a.isOverdue && b.isOverdue) return 1;
+return new Date(a.dueDate||0) - new Date(b.dueDate||0);
+});
+
 let html="";
+let today=new Date(); today.setHours(0,0,0,0);
+
 list.forEach(d=>{
+
+let due=new Date(d.dueDate); due.setHours(0,0,0,0);
+let diffDays=Math.ceil((due-today)/(1000*60*60*24));
+
+let cardClass="card";
+let extra="";
+
+if(d.isOverdue || diffDays<0){
+cardClass+=" overdue";
+extra=`<div style="color:red;font-weight:bold;">
+⚠ Просрочено на ${Math.abs(diffDays)} дн.
+</div>`;
+}
+else if(diffDays<=2){
+cardClass+=" warning";
+extra=`<div style="color:orange;">
+Осталось ${diffDays} дн.
+</div>`;
+}
+
 let waText=encodeURIComponent("Салом алейкум напоминаем вам о задолженности "+d.remainder+" сомони");
 let phoneFull="992"+d.phone;
 
 html+=`
-<div class="card">
+<div class="${cardClass}">
 <b>${d.client}</b> (до ${d.dueDate})<br>
 Телефон: ${d.phone}<br>
 Всего: ${d.total} сомони<br>
 Остаток: <b>${d.remainder}</b> сомони
+${extra}
 
-<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">Оплатить</button>
+<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
+Оплатить
+</button>
 
 <div class="action-row">
 <a class="call-btn" href="tel:+${phoneFull}">📞 Позвонить</a>
@@ -311,12 +398,17 @@ href="https://wa.me/${phoneFull}?text=${waText}">
 </a>
 </div>
 
-<button onclick="showHistory('${d.client}')">📂 История оплат</button>
+<button onclick="showHistory('${d.client}')">
+📂 История оплат
+</button>
 </div>
 `;
 });
+
 debtList.innerHTML=html||`<div class="card">Нет данных</div>`;
 }
+
+/* ---------- ПОИСК ---------- */
 
 document.getElementById("searchInput").addEventListener("input",function(){
 let val=this.value.toLowerCase().trim();
@@ -327,6 +419,8 @@ let filtered=allDebts.filter(d =>
 );
 renderDebts(filtered);
 });
+
+/* ---------- ОПЛАТА ---------- */
 
 function openPayment(row,remainder){
 currentRow=row;
@@ -354,6 +448,8 @@ paymentModal.style.display="none";
 loadDebts();
 });
 }
+
+/* ---------- ИСТОРИЯ ---------- */
 
 function showHistory(name){
 historyModal.style.display="flex";
