@@ -231,7 +231,7 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <script>
 
-const VERSION="1.0";
+const VERSION="2.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyGzROoOKFcWL_LnTZLz9HFP6n6zKNQIrCwvC9Zaes-c2Y-C0goNyxqJVDOlAihlIVGOA/exec";
 
 const USERS={
@@ -328,40 +328,40 @@ renderDebts(allDebts);
 
 function renderStats(data){
 
-let activeTotal = Number(data.activeTotal||0);
-let paidTotal = Number(data.paidTotal||0);
-let overdueTotal = Number(data.overdueTotal||0);
-let partialTotal = Number(data.partialTotal||0);
+let activeTotal = Number(data.activeTotal || 0);
+let paidTotal = Number(data.paidTotal || 0);
+let overdueTotal = Number(data.overdueTotal || 0);
+let partialTotal = Number(data.partialTotal || 0);
 
-let activeCount = Number(data.activeCount||0);
-let paidCount = Number(data.paidCount||0);
-let overdueCount = Number(data.overdueCount||0);
-let partialCount = Number(data.partialCount||0);
+let activeCount = Number(data.activeCount || 0);
+let paidCount = Number(data.paidCount || 0);
+let overdueCount = Number(data.overdueCount || 0);
+let partialCount = Number(data.partialCount || 0);
 
-statsBox.innerHTML=`
+// Общая сумма выданных долгов
+let totalGiven = activeTotal + partialTotal + paidTotal;
+
+statsBox.innerHTML = `
 <div class="card">
 <div onclick="toggleStats()" style="cursor:pointer;font-weight:bold;">
 📊 Статистика (нажмите для раскрытия)
 </div>
 
 <div id="statsContent" style="display:none;margin-top:10px;">
-let totalGiven = activeTotal + partialTotal + paidTotal;
-Общий выданный долг: ${totalGiven} сомони<br>
-Остаток активных долгов: ${activeTotal} сомони от ${activeCount} клиентов<br>
-Сколько уже оплачено: ${partialTotal} сомони от ${partialCount} клиентов<br>
-Полностью закрыто: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
+
+💰 <b>Общий выданный долг:</b> ${totalGiven} сомони<br><br>
+
+📉 Остаток активных долгов: ${activeTotal} сомони от ${activeCount} клиентов<br>
+💸 Уже оплачено: ${partialTotal} сомони от ${partialCount} клиентов<br>
+✅ Полностью закрыто: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
+
 <b style="color:red;">
-Просроченный остаток: ${overdueTotal} сомони от ${overdueCount} клиентов
+🔴 Просроченный остаток: ${overdueTotal} сомони от ${overdueCount} клиентов
 </b>
+
 </div>
 </div>
 `;
-}
-
-function toggleStats(){
-let el=document.getElementById("statsContent");
-if(!el) return;
-el.style.display = el.style.display==="none" ? "block" : "none";
 }
 
 /* ---------- ОТРИСОВКА ---------- */
