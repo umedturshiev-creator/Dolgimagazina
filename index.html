@@ -338,7 +338,6 @@ let paidCount = Number(data.paidCount || 0);
 let overdueCount = Number(data.overdueCount || 0);
 let partialCount = Number(data.partialCount || 0);
 
-// Общая сумма выданных долгов
 let totalGiven = activeTotal + partialTotal + paidTotal;
 
 statsBox.innerHTML = `
@@ -348,20 +347,27 @@ statsBox.innerHTML = `
 </div>
 
 <div id="statsContent" style="display:none;margin-top:10px;">
-
 💰 <b>Общий выданный долг:</b> ${totalGiven} сомони<br><br>
-
 📉 Остаток активных долгов: ${activeTotal} сомони от ${activeCount} клиентов<br>
 💸 Уже оплачено: ${partialTotal} сомони от ${partialCount} клиентов<br>
 ✅ Полностью закрыто: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
-
 <b style="color:red;">
 🔴 Просроченный остаток: ${overdueTotal} сомони от ${overdueCount} клиентов
 </b>
-
 </div>
 </div>
 `;
+}
+
+function toggleStats(){
+  let el = document.getElementById("statsContent");
+  if (!el) return;
+
+  if (el.style.display === "none" || el.style.display === "") {
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
 }
 
 /* ---------- ОТРИСОВКА ---------- */
