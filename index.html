@@ -345,11 +345,11 @@ statsBox.innerHTML=`
 </div>
 
 <div id="statsContent" style="display:none;margin-top:10px;">
-Активные долги: ${activeTotal} сомони от ${activeCount} клиентов<br>
-Частично оплачено: ${partialTotal} сомони от ${partialCount} клиентов<br>
-Оплаченные долги: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
+Остаток активных долгов: ${activeTotal} сомони от ${activeCount} клиентов<br>
+Сколько уже оплачено: ${partialTotal} сомони от ${partialCount} клиентов<br>
+Полностью закрыто: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
 <b style="color:red;">
-Просроченные долги: ${overdueTotal} сомони от ${overdueCount} клиента
+Просроченный остаток: ${overdueTotal} сомони от ${overdueCount} клиентов
 </b>
 </div>
 </div>
@@ -403,10 +403,11 @@ html+=`
 <div class="${cardClass}">
 <b>${d.client}</b> (до ${d.dueDate})<br>
 Телефон: ${d.phone}<br>
-Всего: ${d.total} сомони<br>
-Оплачено: ${d.paid||0} сомони<br>
+Сумма долга: ${d.total} сомони<br>
+Сколько оплачено: ${d.paid||0} сомони<br>
+Последняя оплата: ${d.partialPayment||0} сомони<br>
 Остаток: <b>${d.remainder}</b> сомони<br>
-${d.isPartial ? '<div style="color:#28a745;font-weight:bold;">Частичная оплата</div>' : ''}
+${d.isPartial ? '<div style="color:#28a745;font-weight:bold;">Есть оплата</div>' : ''}
 ${extra}
 
 <button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
