@@ -345,6 +345,8 @@ statsBox.innerHTML=`
 </div>
 
 <div id="statsContent" style="display:none;margin-top:10px;">
+let totalGiven = activeTotal + partialTotal + paidTotal;
+Общий выданный долг: ${totalGiven} сомони<br>
 Остаток активных долгов: ${activeTotal} сомони от ${activeCount} клиентов<br>
 Сколько уже оплачено: ${partialTotal} сомони от ${partialCount} клиентов<br>
 Полностью закрыто: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
