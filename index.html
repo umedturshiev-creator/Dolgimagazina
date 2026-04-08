@@ -404,7 +404,9 @@ html+=`
 <b>${d.client}</b> (до ${d.dueDate})<br>
 Телефон: ${d.phone}<br>
 Всего: ${d.total} сомони<br>
-Остаток: <b>${d.remainder}</b> сомони
+Оплачено: ${d.paid||0} сомони<br>
+Остаток: <b>${d.remainder}</b> сомони<br>
+${d.isPartial ? '<div style="color:#28a745;font-weight:bold;">Частичная оплата</div>' : ''}
 ${extra}
 
 <button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
