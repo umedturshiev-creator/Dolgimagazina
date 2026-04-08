@@ -331,9 +331,12 @@ function renderStats(data){
 let activeTotal = Number(data.activeTotal||0);
 let paidTotal = Number(data.paidTotal||0);
 let overdueTotal = Number(data.overdueTotal||0);
+let partialTotal = Number(data.partialTotal||0);
+
 let activeCount = Number(data.activeCount||0);
 let paidCount = Number(data.paidCount||0);
 let overdueCount = Number(data.overdueCount||0);
+let partialCount = Number(data.partialCount||0);
 
 statsBox.innerHTML=`
 <div class="card">
@@ -343,6 +346,7 @@ statsBox.innerHTML=`
 
 <div id="statsContent" style="display:none;margin-top:10px;">
 Активные долги: ${activeTotal} сомони от ${activeCount} клиентов<br>
+Частично оплачено: ${partialTotal} сомони от ${partialCount} клиентов<br>
 Оплаченные долги: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
 <b style="color:red;">
 Просроченные долги: ${overdueTotal} сомони от ${overdueCount} клиента
