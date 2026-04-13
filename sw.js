@@ -1,10 +1,10 @@
 const CACHE_NAME = "fsl-debts-v2";
 const ASSETS = [
   "./",
-  "./index_fixed.html",
+  "./index.html",
   "./manifest.json",
-  "./app_icon_192x192.png",
-  "./app_icon_512x512.png",
+  "./icon-192x192.png",
+  "./icon-512x512.png",
   "./logo.png"
 ];
 
@@ -38,7 +38,7 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(req).then((cached) => {
       if (cached) return cached;
-      return fetch(req).catch(() => caches.match("./index_fixed.html"));
+      return fetch(req).catch(() => caches.match("./index.html"));
     })
   );
 });
