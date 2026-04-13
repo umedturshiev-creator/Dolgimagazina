@@ -1,8 +1,7 @@
-const CACHE_NAME = "fsl-debts-v1";
-
-const urlsToCache = [
+const CACHE_NAME = "fsl-debts-v2";
+const ASSETS = [
   "./",
-  "./index.html",
+  "./index_fixed.html",
   "./manifest.json",
   "./app_icon_192x192.png",
   "./app_icon_512x512.png",
@@ -11,30 +10,35 @@ const urlsToCache = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
           }
         })
-      );
-    })
+      )
+    )
   );
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
+  const req = event.request;
+
+  if (req.method !== "GET") return;
+
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
+    caches.match(req).then((cached) => {
+      if (cached) return cached;
+      return fetch(req).catch(() => caches.match("./index_fixed.html"));
     })
   );
 });
