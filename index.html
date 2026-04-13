@@ -127,41 +127,92 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
 }
 
 .pdf-report{
-  width:1400px;
-  background:white;
+  width:1120px;
+  background:#fff;
   color:#000;
-  padding:24px;
+  padding:16px;
   font-family:Arial, sans-serif;
   box-sizing:border-box;
 }
 
 .pdf-report h1{
-  margin:0 0 12px 0;
-  font-size:24px;
+  margin:0 0 10px 0;
+  font-size:20px;
 }
 
 .pdf-meta{
-  margin-bottom:18px;
-  font-size:14px;
-  line-height:1.6;
+  margin-bottom:14px;
+  font-size:12px;
+  line-height:1.5;
 }
 
 .pdf-table{
   width:100%;
   border-collapse:collapse;
-  font-size:13px;
+  table-layout:fixed;
+  font-size:10px;
 }
 
 .pdf-table th,
 .pdf-table td{
   border:1px solid #ccc;
-  padding:8px;
+  padding:5px;
   text-align:left;
   vertical-align:top;
+  word-break:break-word;
+  overflow-wrap:break-word;
 }
 
 .pdf-table th{
   background:#f3f4f6;
+}
+
+.pdf-table th:nth-child(1),
+.pdf-table td:nth-child(1){
+  width:4%;
+}
+
+.pdf-table th:nth-child(2),
+.pdf-table td:nth-child(2){
+  width:20%;
+}
+
+.pdf-table th:nth-child(3),
+.pdf-table td:nth-child(3){
+  width:12%;
+}
+
+.pdf-table th:nth-child(4),
+.pdf-table td:nth-child(4){
+  width:12%;
+}
+
+.pdf-table th:nth-child(5),
+.pdf-table td:nth-child(5){
+  width:13%;
+}
+
+.pdf-table th:nth-child(6),
+.pdf-table td:nth-child(6){
+  width:13%;
+}
+
+.pdf-table th:nth-child(7),
+.pdf-table td:nth-child(7){
+  width:13%;
+}
+
+.pdf-table th:nth-child(8),
+.pdf-table td:nth-child(8){
+  width:13%;
+}
+
+.pdf-table thead{
+  display:table-header-group;
+}
+
+.pdf-table tr{
+  page-break-inside:avoid;
 }
 
 .pdf-status-overdue{
@@ -423,7 +474,7 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <script>
 
-const VERSION="3.1";
+const VERSION="3.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwv6pw508YyK5EYnlClEkMK52115ahT8iC_j0brU-7KUsn_JLFYdHeoBO16JpTnoUmzag/exec";
 
 const USERS={
@@ -1166,7 +1217,7 @@ function exportPdf(type){
   wrapper.style.position = "fixed";
   wrapper.style.left = "0";
   wrapper.style.top = "0";
-  wrapper.style.width = "1400px";
+  wrapper.style.width = "1120px";
   wrapper.style.background = "#fff";
   wrapper.style.zIndex = "9999";
   wrapper.style.opacity = "0.01";
@@ -1180,7 +1231,7 @@ function exportPdf(type){
   setTimeout(() => {
     html2pdf()
       .set({
-        margin: 8,
+        margin: [6, 6, 6, 6],
         filename: getPdfFileName(type),
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: {
@@ -1192,6 +1243,9 @@ function exportPdf(type){
           unit: "mm",
           format: "a4",
           orientation: "landscape"
+        },
+        pagebreak: {
+          mode: ["css", "legacy"]
         }
       })
       .from(reportElement)
