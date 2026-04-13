@@ -22,28 +22,81 @@
 body{margin:0;font-family:Arial;background:#f4f6f9;}
 
 .header{
-background:#000;
-color:white;
-text-align:center;
-padding:14px;
-position:relative;
+  background:#1f3b8f;
+  color:white;
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.header-left,
+.header-right{
+  min-width:70px;
+  display:flex;
+  align-items:center;
+}
+
+.header-center{
+  flex:1;
+  text-align:center;
+}
+
+.header-center h2{
+  margin:0;
+  font-size:20px;
+}
+
+#userInfo{
+  margin-top:4px;
+  font-size:13px;
+}
+
+.lang-switch{
+  display:flex;
+  align-items:center;
+  background:#1d2f63;
+  border-radius:20px;
+  overflow:hidden;
+  height:40px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+
+.lang-btn{
+  width:auto;
+  margin-top:0;
+  border:none;
+  background:transparent;
+  color:white;
+  padding:0 18px;
+  height:40px;
+  min-width:58px;
+  font-size:16px;
+  font-weight:500;
+  cursor:pointer;
+  border-radius:0;
+}
+
+.lang-btn.active{
+  background:#22c55e;
+  color:white;
 }
 
 .logout-btn{
-position:absolute;
-right:12px;
-top:12px;
-width:34px;
-height:34px;
-border-radius:50%;
-border:none;
-background:rgba(255,255,255,0.15);
-color:white;
-font-size:16px;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
+  width:40px;
+  height:40px;
+  margin-top:0;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,0.15);
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-left:auto;
 }
 
 .login{
@@ -187,9 +240,21 @@ margin-top:10px;
 </div>
 
 <div class="header" id="mainHeader" style="display:none;">
-<h2>Fashion&StyleLife - Долги</h2>
-<div id="userInfo"></div>
-<button class="logout-btn" onclick="logout()">🚪</button>
+  <div class="header-left">
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="ru" onclick="setLanguage('ru')">RU</button>
+      <button class="lang-btn" data-lang="tj" onclick="setLanguage('tj')">TJ</button>
+    </div>
+  </div>
+
+  <div class="header-center">
+    <h2>Fashion&StyleLife - Долги</h2>
+    <div id="userInfo"></div>
+  </div>
+
+  <div class="header-right">
+    <button class="logout-btn" onclick="logout()">🚪</button>
+  </div>
 </div>
 
 <div class="container" id="appContent" style="display:none;">
@@ -259,27 +324,262 @@ let allDebts=[];
 let currentRow=null;
 let currentRemainder=0;
 
+let currentLanguage = localStorage.getItem("lang") || "ru";
+let lastStatsData = {};
+
+const translations = {
+  ru: {
+    appTitle: "Fashion&StyleLife - Долги",
+    loginTitle: "Вход",
+    loginBtn: "Войти",
+    pinPlaceholder: "Введите PIN",
+    wrongPin: "Неверный PIN",
+    userInfo: "👤 {name} | Версия: v{version}",
+
+    logoutTitle: "Подтверждение выхода",
+    logoutText: "Вы действительно хотите выйти?",
+    logoutBtn: "Выйти",
+    cancelBtn: "Отмена",
+
+    addDebt: "Добавить долг",
+    clientPlaceholder: "Имя клиента",
+    phonePlaceholder: "Телефон",
+    amountPlaceholder: "Сумма",
+    choosePayDate: "Выберите дату оплаты",
+    saveBtn: "Сохранить",
+    saveLoader: "⏳ Сохранение...",
+    searchPlaceholder: "🔍 Поиск по имени или номеру",
+    debtorsList: "Список должников",
+
+    statsTitle: "Статистика (нажмите для раскрытия)",
+    totalGiven: "Общий выданный долг",
+    activeDebts: "Остаток активных долгов",
+    alreadyPaid: "Уже оплачено",
+    fullyClosed: "Полностью закрыто",
+    overdueLeft: "Просроченный остаток",
+    clients: "клиентов",
+    somoni: "сомони",
+
+    paymentTitle: "Оплата долга",
+    paymentPlaceholder: "Введите сумму",
+    confirmPayment: "Подтвердить оплату",
+    paymentLoader: "⏳ Обработка...",
+    historyTitle: "История оплат",
+    historyLoader: "⏳ Загрузка истории...",
+    closeBtn: "Закрыть",
+
+    debtAmount: "Сумма долга",
+    paidAmount: "Сколько оплачено",
+    lastPayment: "Последняя оплата",
+    remainder: "Остаток",
+    hasPayment: "Есть оплата",
+    payBtn: "Оплатить",
+    callBtn: "Позвонить",
+    whatsappBtn: "WhatsApp",
+    historyBtn: "История оплат",
+    noData: "Нет данных",
+    noPayments: "Оплат пока нет",
+
+    dueDateText: "до {date}",
+    overdueDays: "⚠ Просрочено на {days} дн.",
+    leftDays: "Осталось {days} дн.",
+    paymentRemainder: "Остаток: <b>{amount} сомони</b>",
+
+    invalidAmount: "Введите корректную сумму",
+    amountTooBig: "Сумма больше остатка",
+
+    fromWord: "от",
+
+    waReminder: "Салом алейкум 😊, напоминаем вам о не оплаченной сумме: {amount} сомони. Будем признательны за оплату🙏. Сообщение отправлено автоматически."
+  },
+
+  tj: {
+    appTitle: "Fashion&StyleLife - Қарзҳо",
+    loginTitle: "Вуруд",
+    loginBtn: "Даромадан",
+    pinPlaceholder: "PIN-ро ворид кунед",
+    wrongPin: "PIN нодуруст аст",
+    userInfo: "👤 {name} | Версия: v{version}",
+
+    logoutTitle: "Тасдиқи баромад",
+    logoutText: "Оё воқеан мехоҳед бароед?",
+    logoutBtn: "Баромадан",
+    cancelBtn: "Бекор кардан",
+
+    addDebt: "Иловаи қарз",
+    clientPlaceholder: "Номи муштарӣ",
+    phonePlaceholder: "Телефон",
+    amountPlaceholder: "Маблағ",
+    choosePayDate: "Санаи пардохтро интихоб кунед",
+    saveBtn: "Захира кардан",
+    saveLoader: "⏳ Захира шуда истодааст...",
+    searchPlaceholder: "🔍 Ҷустуҷӯ аз рӯйи ном ё рақам",
+    debtorsList: "Рӯйхати қарздорон",
+
+    statsTitle: "Омор (барои кушодан пахш кунед)",
+    totalGiven: "Ҳаҷми умумии қарзи додашуда",
+    activeDebts: "Бақияи қарзҳои фаъол",
+    alreadyPaid: "Аллакай пардохт шудааст",
+    fullyClosed: "Пурра баста шудааст",
+    overdueLeft: "Бақияи муҳлатгузашта",
+    clients: "муштарӣ",
+    somoni: "сомонӣ",
+
+    paymentTitle: "Пардохти қарз",
+    paymentPlaceholder: "Маблағро ворид кунед",
+    confirmPayment: "Пардохтро тасдиқ кунед",
+    paymentLoader: "⏳ Коркард...",
+    historyTitle: "Таърихи пардохтҳо",
+    historyLoader: "⏳ Боркунии таърих...",
+    closeBtn: "Пӯшидан",
+
+    debtAmount: "Ҳаҷми қарз",
+    paidAmount: "Пардохтшуда",
+    lastPayment: "Пардохти охирин",
+    remainder: "Бақия",
+    hasPayment: "Пардохт мавҷуд аст",
+    payBtn: "Пардохт кардан",
+    callBtn: "Занг задан",
+    whatsappBtn: "WhatsApp",
+    historyBtn: "Таърихи пардохтҳо",
+    noData: "Маълумот нест",
+    noPayments: "Ҳоло пардохт нест",
+
+    dueDateText: "то {date}",
+    overdueDays: "⚠ {days} рӯз гузаштааст",
+    leftDays: "{days} рӯз монд",
+    paymentRemainder: "Бақия: <b>{amount} сомонӣ</b>",
+
+    invalidAmount: "Маблағи дурустро ворид кунед",
+    amountTooBig: "Маблағ аз бақия зиёд аст",
+
+    fromWord: "аз",
+
+    waReminder: "Салом алейкум 😊, ба шумо дар бораи маблағи пардохтнашуда ёдрас мекунем: {amount} сомонӣ. Барои пардохт пешакӣ ташаккур🙏. Паём автоматӣ фиристода шуд."
+  }
+};
+
+function t(key, vars = {}) {
+  let text = translations[currentLanguage]?.[key] || translations.ru[key] || key;
+  Object.keys(vars).forEach(k => {
+    text = text.replaceAll(`{${k}}`, vars[k]);
+  });
+  return text;
+}
+
+function setLanguage(lang){
+  currentLanguage = lang;
+  localStorage.setItem("lang", lang);
+
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  });
+
+  applyTranslations();
+}
+
+function applyTranslations(){
+  document.documentElement.lang = currentLanguage;
+
+  const loginTitle = document.querySelector("#loginScreen h2");
+  const loginBtn = document.querySelector('#loginScreen button[onclick="login()"]');
+  const pinInputEl = document.getElementById("pinInput");
+
+  if (loginTitle) loginTitle.textContent = t("loginTitle");
+  if (loginBtn) loginBtn.textContent = t("loginBtn");
+  if (pinInputEl) pinInputEl.placeholder = t("pinPlaceholder");
+
+  const mainTitle = document.querySelector(".header-center h2");
+  if (mainTitle) mainTitle.textContent = t("appTitle");
+
+  const logoutTitle = document.querySelector("#logoutModal h3");
+  const logoutText = document.querySelector("#logoutModal p");
+  const logoutBtns = document.querySelectorAll("#logoutModal button");
+  if (logoutTitle) logoutTitle.textContent = t("logoutTitle");
+  if (logoutText) logoutText.textContent = t("logoutText");
+  if (logoutBtns[0]) logoutBtns[0].textContent = t("logoutBtn");
+  if (logoutBtns[1]) logoutBtns[1].textContent = t("cancelBtn");
+
+  const appHeadings = document.querySelectorAll("#appContent h3");
+  if (appHeadings[0]) appHeadings[0].textContent = t("addDebt");
+  if (appHeadings[1]) appHeadings[1].textContent = t("debtorsList");
+
+  const clientEl = document.getElementById("client");
+  const phoneEl = document.getElementById("phone");
+  const amountEl = document.getElementById("amount");
+  const dueLabel = document.querySelector('label[style*="color:red"]');
+  const saveBtnEl = document.getElementById("saveBtn");
+  const saveLoaderEl = document.getElementById("saveLoader");
+  const searchEl = document.getElementById("searchInput");
+
+  if (clientEl) clientEl.placeholder = t("clientPlaceholder");
+  if (phoneEl) phoneEl.placeholder = t("phonePlaceholder");
+  if (amountEl) amountEl.placeholder = t("amountPlaceholder");
+  if (dueLabel) dueLabel.textContent = t("choosePayDate");
+  if (saveBtnEl) saveBtnEl.textContent = t("saveBtn");
+  if (saveLoaderEl) saveLoaderEl.textContent = t("saveLoader");
+  if (searchEl) searchEl.placeholder = t("searchPlaceholder");
+
+  const paymentTitle = document.querySelector("#paymentModal h3");
+  const paymentInput = document.getElementById("paymentAmount");
+  const paymentBtns = document.querySelectorAll("#paymentModal button");
+  const paymentLoaderEl = document.getElementById("paymentLoader");
+
+  if (paymentTitle) paymentTitle.textContent = t("paymentTitle");
+  if (paymentInput) paymentInput.placeholder = t("paymentPlaceholder");
+  if (paymentBtns[0]) paymentBtns[0].textContent = t("confirmPayment");
+  if (paymentBtns[1]) paymentBtns[1].textContent = t("cancelBtn");
+  if (paymentLoaderEl) paymentLoaderEl.textContent = t("paymentLoader");
+
+  const historyTitle = document.querySelector("#historyModal h3");
+  const historyLoaderEl = document.getElementById("historyLoader");
+  const historyCloseBtn = document.querySelector('#historyModal button[onclick="closeHistory()"]');
+
+  if (historyTitle) historyTitle.textContent = t("historyTitle");
+  if (historyLoaderEl) historyLoaderEl.textContent = t("historyLoader");
+  if (historyCloseBtn) historyCloseBtn.textContent = t("closeBtn");
+
+  if (currentSeller) {
+    userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
+  }
+
+  renderStats(lastStatsData || {});
+  renderDebts([...allDebts]);
+}
+
 /* ---------- LOGIN ---------- */
 
 function login(){
-let pin=pinInput.value.trim();
-if(!USERS[pin]){alert("Неверный PIN");return;}
-currentSeller=USERS[pin];
-sessionStorage.setItem("seller",currentSeller);
-openApp();
+  let pin = pinInput.value.trim();
+  if(!USERS[pin]){
+    alert(t("wrongPin"));
+    return;
+  }
+  currentSeller = USERS[pin];
+  sessionStorage.setItem("seller", currentSeller);
+  openApp();
 }
 
 function openApp(){
-loginScreen.style.display="none";
-mainHeader.style.display="block";
-appContent.style.display="block";
-userInfo.innerHTML="👤 "+currentSeller+" | Версия: v"+VERSION;
-loadDebts();
+  loginScreen.style.display = "none";
+  mainHeader.style.display = "flex";
+  appContent.style.display = "block";
+  userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
+  loadDebts();
 }
 
-window.onload=function(){
-let saved=sessionStorage.getItem("seller");
-if(saved){currentSeller=saved;openApp();}
+window.onload = function(){
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === currentLanguage);
+  });
+
+  let saved = sessionStorage.getItem("seller");
+  if(saved){
+    currentSeller = saved;
+    openApp();
+  }
+
+  applyTranslations();
 };
 
 function logout(){
@@ -340,36 +640,37 @@ renderDebts(allDebts);
 /* ---------- СТАТИСТИКА ---------- */
 
 function renderStats(data){
+  lastStatsData = data || {};
 
-let activeTotal = Number(data.activeTotal || 0);
-let paidTotal = Number(data.paidTotal || 0);
-let overdueTotal = Number(data.overdueTotal || 0);
-let partialTotal = Number(data.partialTotal || 0);
+  let activeTotal = Number(data.activeTotal || 0);
+  let paidTotal = Number(data.paidTotal || 0);
+  let overdueTotal = Number(data.overdueTotal || 0);
+  let partialTotal = Number(data.partialTotal || 0);
 
-let activeCount = Number(data.activeCount || 0);
-let paidCount = Number(data.paidCount || 0);
-let overdueCount = Number(data.overdueCount || 0);
-let partialCount = Number(data.partialCount || 0);
+  let activeCount = Number(data.activeCount || 0);
+  let paidCount = Number(data.paidCount || 0);
+  let overdueCount = Number(data.overdueCount || 0);
+  let partialCount = Number(data.partialCount || 0);
 
-let totalGiven = activeTotal + partialTotal + paidTotal;
+  let totalGiven = activeTotal + partialTotal + paidTotal;
 
-statsBox.innerHTML = `
-<div class="card">
-<div onclick="toggleStats()" style="cursor:pointer;font-weight:bold;">
-📊 Статистика (нажмите для раскрытия)
-</div>
+  statsBox.innerHTML = `
+  <div class="card">
+    <div onclick="toggleStats()" style="cursor:pointer;font-weight:bold;">
+      📊 ${t("statsTitle")}
+    </div>
 
 <div id="statsContent" style="display:none;margin-top:10px;">
-💰 <b>Общий выданный долг:</b> ${totalGiven} сомони<br><br>
-📉 Остаток активных долгов: ${activeTotal} сомони от ${activeCount} клиентов<br>
-💸 Уже оплачено: ${partialTotal} сомони от ${partialCount} клиентов<br>
-✅ Полностью закрыто: ${paidTotal} сомони от ${paidCount} клиентов<br><br>
-<b style="color:red;">
-🔴 Просроченный остаток: ${overdueTotal} сомони от ${overdueCount} клиентов
-</b>
+  💰 <b>${t("totalGiven")}:</b> ${totalGiven} ${t("somoni")}<br><br>
+  📉 ${t("activeDebts")}: ${activeTotal} ${t("somoni")} ${t("fromWord")} ${activeCount} ${t("clients")}<br>
+  💸 ${t("alreadyPaid")}: ${partialTotal} ${t("somoni")} ${t("fromWord")} ${partialCount} ${t("clients")}<br>
+  ✅ ${t("fullyClosed")}: ${paidTotal} ${t("somoni")} ${t("fromWord")} ${paidCount} ${t("clients")}<br><br>
+  <b style="color:red;">
+    🔴 ${t("overdueLeft")}: ${overdueTotal} ${t("somoni")} ${t("fromWord")} ${overdueCount} ${t("clients")}
+  </b>
 </div>
-</div>
-`;
+  </div>
+  `;
 }
 
 function toggleStats(){
@@ -386,71 +687,65 @@ function toggleStats(){
 /* ---------- ОТРИСОВКА ---------- */
 
 function renderDebts(list){
+  list.sort((a,b)=>{
+    if(a.isOverdue && !b.isOverdue) return -1;
+    if(!a.isOverdue && b.isOverdue) return 1;
+    return new Date(a.dueDate||0) - new Date(b.dueDate||0);
+  });
 
-list.sort((a,b)=>{
-if(a.isOverdue && !b.isOverdue) return -1;
-if(!a.isOverdue && b.isOverdue) return 1;
-return new Date(a.dueDate||0) - new Date(b.dueDate||0);
-});
+  let html = "";
+  let today = new Date();
+  today.setHours(0,0,0,0);
 
-let html="";
-let today=new Date(); today.setHours(0,0,0,0);
+  list.forEach(d=>{
+    let due = new Date(d.dueDate);
+    due.setHours(0,0,0,0);
+    let diffDays = Math.ceil((due-today)/(1000*60*60*24));
 
-list.forEach(d=>{
+    let cardClass = "card";
+    let extra = "";
 
-let due=new Date(d.dueDate); due.setHours(0,0,0,0);
-let diffDays=Math.ceil((due-today)/(1000*60*60*24));
+    if(d.isOverdue || diffDays < 0){
+      cardClass += " overdue";
+      extra = `<div style="color:red;font-weight:bold;">${t("overdueDays",{days:Math.abs(diffDays)})}</div>`;
+    } else if(diffDays <= 2){
+      cardClass += " warning";
+      extra = `<div style="color:orange;">${t("leftDays",{days:diffDays})}</div>`;
+    }
 
-let cardClass="card";
-let extra="";
+    let waText = encodeURIComponent(t("waReminder", { amount: d.remainder }));
+    let phoneFull = "992" + d.phone;
 
-if(d.isOverdue || diffDays<0){
-cardClass+=" overdue";
-extra=`<div style="color:red;font-weight:bold;">
-⚠ Просрочено на ${Math.abs(diffDays)} дн.
-</div>`;
-}
-else if(diffDays<=2){
-cardClass+=" warning";
-extra=`<div style="color:orange;">
-Осталось ${diffDays} дн.
-</div>`;
-}
+    html += `
+    <div class="${cardClass}">
+      <b>${d.client}</b> (${t("dueDateText",{date:d.dueDate})})<br>
+      ${t("phonePlaceholder")}: ${d.phone}<br>
+      ${t("debtAmount")}: ${d.total} ${t("somoni")}<br>
+      ${t("paidAmount")}: ${d.paid || 0} ${t("somoni")}<br>
+      ${t("lastPayment")}: ${d.partialPayment || 0} ${t("somoni")}<br>
+      ${t("remainder")}: <b>${d.remainder}</b> ${t("somoni")}<br>
+      ${d.isPartial ? `<div style="color:#28a745;font-weight:bold;">${t("hasPayment")}</div>` : ""}
+      ${extra}
 
-let waText=encodeURIComponent("Салом алейкум 😊, напоминаем вам о не оплаченной сумме: "+d.remainder+" сомони. Будем признательны за оплату🙏. Сообщение отправлено автоматически.");
-let phoneFull="992"+d.phone;
+      <button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
+        ${t("payBtn")}
+      </button>
 
-html+=`
-<div class="${cardClass}">
-<b>${d.client}</b> (до ${d.dueDate})<br>
-Телефон: ${d.phone}<br>
-Сумма долга: ${d.total} сомони<br>
-Сколько оплачено: ${d.paid||0} сомони<br>
-Последняя оплата: ${d.partialPayment||0} сомони<br>
-Остаток: <b>${d.remainder}</b> сомони<br>
-${d.isPartial ? '<div style="color:#28a745;font-weight:bold;">Есть оплата</div>' : ''}
-${extra}
+      <div class="action-row">
+        <a class="call-btn" href="tel:+${phoneFull}">📞 ${t("callBtn")}</a>
+        <a class="wa-btn" target="_blank" href="https://wa.me/${phoneFull}?text=${waText}">
+          💬 ${t("whatsappBtn")}
+        </a>
+      </div>
 
-<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
-Оплатить
-</button>
+      <button onclick="showHistory('${d.client}')">
+        📂 ${t("historyBtn")}
+      </button>
+    </div>
+    `;
+  });
 
-<div class="action-row">
-<a class="call-btn" href="tel:+${phoneFull}">📞 Позвонить</a>
-<a class="wa-btn" target="_blank"
-href="https://wa.me/${phoneFull}?text=${waText}">
-💬 WhatsApp
-</a>
-</div>
-
-<button onclick="showHistory('${d.client}')">
-📂 История оплат
-</button>
-</div>
-`;
-});
-
-debtList.innerHTML=html||`<div class="card">Нет данных</div>`;
+  debtList.innerHTML = html || `<div class="card">${t("noData")}</div>`;
 }
 
 /* ---------- ПОИСК ---------- */
@@ -486,11 +781,11 @@ searchInput.addEventListener("input", applySearch);
 /* ---------- ОПЛАТА ---------- */
 
 function openPayment(row,remainder){
-currentRow=row;
-currentRemainder=remainder;
-paymentAmount.value="";
-paymentInfo.innerHTML="Остаток: <b>"+remainder+" сомони</b>";
-paymentModal.style.display="flex";
+  currentRow = row;
+  currentRemainder = remainder;
+  paymentAmount.value = "";
+  paymentInfo.innerHTML = t("paymentRemainder", { amount: remainder });
+  paymentModal.style.display = "flex";
 }
 
 function closePayment(){
@@ -498,43 +793,45 @@ paymentModal.style.display="none";
 }
 
 function confirmPayment(){
-let amount=Number(paymentAmount.value);
-if(!amount||amount<=0){alert("Введите корректную сумму");return;}
-if(amount>currentRemainder){alert("Сумма больше остатка");return;}
+  let amount = Number(paymentAmount.value);
+  if(!amount || amount <= 0){ alert(t("invalidAmount")); return; }
+  if(amount > currentRemainder){ alert(t("amountTooBig")); return; }
 
-paymentLoader.style.display="block";
+  paymentLoader.style.display = "block";
 
-fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+amount+"&seller="+currentSeller)
-.then(()=>{
-paymentLoader.style.display="none";
-paymentModal.style.display="none";
-loadDebts();
-});
+  fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+amount+"&seller="+currentSeller)
+  .then(()=>{
+    paymentLoader.style.display = "none";
+    paymentModal.style.display = "none";
+    loadDebts();
+  });
 }
 
 /* ---------- ИСТОРИЯ ---------- */
 
 function showHistory(name){
-historyModal.style.display="flex";
-historyContent.innerHTML="";
-historyLoader.style.display="block";
+  historyModal.style.display = "flex";
+  historyContent.innerHTML = "";
+  historyLoader.style.display = "block";
 
-fetch(SCRIPT_URL+"?history="+encodeURIComponent(name))
-.then(res=>res.json())
-.then(data=>{
-historyLoader.style.display="none";
-let html="";
-if(data.history && data.history.length>0){
-data.history.forEach(h=>{
-html+=`📅 ${h.date}<br>💰 ${h.amount} сомони<br>👤 ${h.seller}<hr>`;
-});
-}else{html="Оплат пока нет";}
-historyContent.innerHTML=html;
-});
+  fetch(SCRIPT_URL+"?history="+encodeURIComponent(name))
+  .then(res=>res.json())
+  .then(data=>{
+    historyLoader.style.display = "none";
+    let html = "";
+    if(data.history && data.history.length>0){
+      data.history.forEach(h=>{
+        html += `📅 ${h.date}<br>💰 ${h.amount} ${t("somoni")}<br>👤 ${h.seller}<hr>`;
+      });
+    } else {
+      html = t("noPayments");
+    }
+    historyContent.innerHTML = html;
+  });
 }
 
 function closeHistory(){
-historyModal.style.display="none";
+  historyModal.style.display = "none";
 }
 
   /* ---------- ВЫХОД ---------- */
