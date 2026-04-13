@@ -1,7 +1,7 @@
 {
   "name": "Fashion&StyleLife - Долги",
   "short_name": "FSL Долги",
-  "start_url": "./index_fixed.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#000000",
