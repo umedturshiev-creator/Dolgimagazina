@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fashion&StyleLife - Долги</title>
 
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#000000">
+<meta name="background-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fashion&StyleLife">
+
+<link rel="icon" type="image/png" sizes="192x192" href="app_icon_192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="app_icon_512x512.png">
+<link rel="apple-touch-icon" href="app_icon_192x192.png">  
+
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f9;}
 
@@ -541,7 +554,16 @@ location.reload();
 },300);
 
 }
+</script>
   
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("Service Worker зарегистрирован"))
+      .catch((err) => console.log("Ошибка Service Worker:", err));
+  });
+}
 </script>
 </body>
 </html>
