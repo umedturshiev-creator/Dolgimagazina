@@ -26,7 +26,7 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
 .header{
   background:#1f3b8f;
   color:white;
-  padding:14px 16px;
+  padding:12px 16px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -69,46 +69,58 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
 .lang-switch{
   display:flex;
   align-items:center;
-  background:#1d2f63;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+  background:#ffffff;
+  border-radius:18px;
+  padding:3px;
+  gap:3px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.12);
 }
 
 .compact-lang{
-  height:34px;
+  height:36px;
 }
 
-.compact-lang .lang-btn{
+.lang-btn{
+  border:none;
+  background:transparent;
+  color:#1f3b8f;
   padding:0 12px;
-  height:34px;
-  min-width:44px;
+  height:30px;
+  min-width:42px;
   font-size:13px;
-  font-weight:600;
+  font-weight:700;
+  border-radius:14px;
+  cursor:pointer;
+  margin:0;
+}
+
+.lang-btn.active{
+  background:#1f3b8f;
+  color:#ffffff;
 }
 
 .mini-refresh-btn{
-  width:30px;
-  height:30px;
-  min-width:30px;
-  margin-top:0;
+  margin:0;
   border:none;
-  border-radius:50%;
+  border-radius:10px;
   background:rgba(255,255,255,0.18);
   color:white;
-  font-size:16px;
+  font-size:12px;
   font-weight:bold;
   cursor:pointer;
+  padding:0 10px;
+  height:28px;
+  min-width:auto;
+  width:auto;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:0;
 }
 
 .export-btn{
-  width:48px;
+  width:52px;
   height:38px;
-  margin-top:0;
+  margin:0;
   border-radius:10px;
   border:none;
   background:rgba(255,255,255,0.15);
@@ -124,7 +136,7 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
 .logout-btn{
   width:38px;
   height:38px;
-  margin-top:0;
+  margin:0;
   border-radius:50%;
   border:none;
   background:rgba(255,255,255,0.15);
@@ -529,7 +541,9 @@ margin-top:10px;
   <h2>Fashion&StyleLife - Долги</h2>
   <div class="user-meta">
     <div id="userInfo"></div>
-    <button class="mini-refresh-btn" onclick="forceAppUpdate()" title="Обновить">⟳</button>
+    <button id="refreshBtn" class="mini-refresh-btn" onclick="forceAppUpdate()">
+  Обновить
+</button>
   </div>
 </div>
 
@@ -748,7 +762,13 @@ const translations = {
     appendSuccessToast: "Сумма добавлена в существующий долг",
     newDebtSuccessToast: "Новая запись успешно сохранена",
     cancelActionToast: "Действие отменено",
-    errorSaveToast: "Ошибка при сохранении"
+    errorSaveToast: "Ошибка при сохранении",
+    
+    refreshBtn: "Обновить",
+
+    updatingToast: "Проверка обновления...",
+    updateFailedToast: "Не удалось обновить приложение",
+  
   },
 
   tj: {
@@ -856,7 +876,13 @@ const translations = {
     appendSuccessToast: "Маблағ ба қарзи мавҷуда илова шуд",
     newDebtSuccessToast: "Сабти нав бомуваффақият захира шуд",
     cancelActionToast: "Амал бекор карда шуд",
-    errorSaveToast: "Ҳангоми захиракунӣ хато рӯй дод"
+    errorSaveToast: "Ҳангоми захиракунӣ хато рӯй дод",
+
+    refreshBtn: "Навсозӣ",
+
+    updatingToast: "Санҷиши навсозӣ...",
+    updateFailedToast: "Навсозии барнома иҷро нашуд",
+    
   }
 };
 
@@ -970,6 +996,9 @@ function applyTranslations(){
 
   renderStats(lastStatsData || {});
   renderDebts([...allDebts]);
+
+  const refreshBtnEl = document.getElementById("refreshBtn");
+  if (refreshBtnEl) refreshBtnEl.textContent = t("refreshBtn");
 }
 
 function showToast(message, type = "success"){
@@ -1623,7 +1652,7 @@ function confirmLogout(){
 <script>
 async function forceAppUpdate() {
   try {
-    showToast("🔄 Проверка обновления...", "success");
+    showToast(`🔄 ${t("updatingToast")}`, "success");
 
     if ("serviceWorker" in navigator) {
       const registration = await navigator.serviceWorker.getRegistration();
@@ -1643,7 +1672,7 @@ async function forceAppUpdate() {
 
   } catch (e) {
     console.error("Ошибка обновления:", e);
-    showToast("❌ Не удалось обновить приложение", "error");
+    showToast(`❌ ${t("updateFailedToast")}`, "error");
   }
 }
 
