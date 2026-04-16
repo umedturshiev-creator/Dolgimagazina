@@ -35,7 +35,7 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
 
 .header-left,
 .header-right{
-  min-width:70px;
+  min-width:60px;
   display:flex;
   align-items:center;
 }
@@ -43,51 +43,87 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
 .header-center{
   flex:1;
   text-align:center;
+  min-width:0;
 }
 
 .header-center h2{
   margin:0;
-  font-size:20px;
+  font-size:18px;
+  line-height:1.2;
+}
+
+.user-meta{
+  margin-top:4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
 }
 
 #userInfo{
-  margin-top:4px;
-  font-size:13px;
+  margin-top:0;
+  font-size:12px;
 }
 
 .lang-switch{
   display:flex;
   align-items:center;
   background:#1d2f63;
-  border-radius:20px;
+  border-radius:16px;
   overflow:hidden;
-  height:40px;
   box-shadow:0 2px 8px rgba(0,0,0,0.15);
 }
 
-.lang-btn{
-  width:auto;
-  margin-top:0;
-  border:none;
-  background:transparent;
-  color:white;
-  padding:0 18px;
-  height:40px;
-  min-width:58px;
-  font-size:16px;
-  font-weight:500;
-  cursor:pointer;
-  border-radius:0;
+.compact-lang{
+  height:34px;
 }
 
-.lang-btn.active{
-  background:#22c55e;
+.compact-lang .lang-btn{
+  padding:0 12px;
+  height:34px;
+  min-width:44px;
+  font-size:13px;
+  font-weight:600;
+}
+
+.mini-refresh-btn{
+  width:30px;
+  height:30px;
+  min-width:30px;
+  margin-top:0;
+  border:none;
+  border-radius:50%;
+  background:rgba(255,255,255,0.18);
   color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+}
+
+.export-btn{
+  width:48px;
+  height:38px;
+  margin-top:0;
+  border-radius:10px;
+  border:none;
+  background:rgba(255,255,255,0.15);
+  color:white;
+  font-size:12px;
+  font-weight:bold;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .logout-btn{
-  width:40px;
-  height:40px;
+  width:38px;
+  height:38px;
   margin-top:0;
   border-radius:50%;
   border:none;
@@ -99,14 +135,6 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   align-items:center;
   justify-content:center;
   margin-left:auto;
-}
-
-.header-right{
-  min-width:120px;
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:8px;
 }
 
 .export-btn{
@@ -490,21 +518,23 @@ margin-top:10px;
 </div>
 
 <div class="header" id="mainHeader" style="display:none;">
-  <div class="header-left">
-    <div class="lang-switch">
-      <button class="lang-btn active" data-lang="ru" onclick="setLanguage('ru')">RU</button>
-      <button class="lang-btn" data-lang="tj" onclick="setLanguage('tj')">TJ</button>
-    </div>
+<div class="header-left">
+  <div class="lang-switch compact-lang">
+    <button class="lang-btn active" data-lang="ru" onclick="setLanguage('ru')">RU</button>
+    <button class="lang-btn" data-lang="tj" onclick="setLanguage('tj')">TJ</button>
   </div>
+</div>
 
-  <div class="header-center">
-    <h2>Fashion&StyleLife - Долги</h2>
+<div class="header-center">
+  <h2>Fashion&StyleLife - Долги</h2>
+  <div class="user-meta">
     <div id="userInfo"></div>
+    <button class="mini-refresh-btn" onclick="forceAppUpdate()" title="Обновить">⟳</button>
   </div>
+</div>
 
 <div class="header-right">
   <button class="export-btn" onclick="openExportMenu()">PDF</button>
-  <button class="export-btn" onclick="forceAppUpdate()">⟳</button>
   <button class="logout-btn" onclick="logout()">🚪</button>
 </div>
 </div>
