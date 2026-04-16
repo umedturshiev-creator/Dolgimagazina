@@ -1,4 +1,4 @@
-const CACHE_NAME = "fsl-debts-v3";
+const CACHE_NAME = "fsl-debts-v4";
 const ASSETS = [
   "./",
   "./index.html",
@@ -52,12 +52,11 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     fetch(req)
       .then((response) => {
-        if (!response || response.status !== 200 || response.type !== "basic") {
+        if (!response || response.status !== 200) {
           return response;
         }
 
         const responseClone = response.clone();
-
         caches.open(CACHE_NAME).then((cache) => {
           cache.put(req, responseClone);
         });
