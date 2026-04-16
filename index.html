@@ -472,9 +472,29 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
   </div>
 </div>
 
+
+<div class="modal" id="duplicateDebtModal">
+  <div class="modal-content">
+    <h3 id="duplicateDebtTitle">Найден существующий долг</h3>
+    <div id="duplicateDebtInfo" style="margin-bottom:12px;font-size:14px;line-height:1.5;"></div>
+
+    <button id="duplicateAppendBtn" class="save-btn" onclick="chooseDuplicateDebtAction('append')">
+      Записать в существующий
+    </button>
+
+    <button id="duplicateCreateBtn" onclick="chooseDuplicateDebtAction('new')" style="background:#1f3b8f;color:white;">
+      Создать новую запись
+    </button>
+
+    <button id="duplicateCancelBtn" onclick="chooseDuplicateDebtAction('cancel')" style="background:#ccc;color:black;">
+      Отмена
+    </button>
+  </div>
+</div>
+
 <script>
 
-const VERSION="3.2";
+const VERSION="3.3";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwv6pw508YyK5EYnlClEkMK52115ahT8iC_j0brU-7KUsn_JLFYdHeoBO16JpTnoUmzag/exec";
 
 const USERS={
@@ -488,6 +508,8 @@ let currentSeller=null;
 let allDebts=[];
 let currentRow=null;
 let currentRemainder=0;
+let pendingDebtPayload=null;
+let duplicateDebtResolver=null;
 
 let currentLanguage = localStorage.getItem("lang") || "ru";
 let lastStatsData = {};
@@ -584,6 +606,20 @@ statusColumn: "Статус",
 pdfFileAll: "all-debts-report",
 pdfFileMonth: "month-debts-report",
 pdfFileOverdue: "overdue-debts-report",
+
+    duplicateDebtTitle: "Найден существующий долг",
+    duplicateDebtFound: "У этого номера уже есть активный долг.",
+    duplicateDebtPhone: "Телефон",
+    duplicateDebtClient: "Клиент",
+    duplicateDebtCurrent: "Текущий остаток",
+    duplicateDebtNewAmount: "Новая сумма",
+    duplicateDebtAppend: "Записать в существующий",
+    duplicateDebtCreate: "Создать новую запись",
+    duplicateDebtCancel: "Отмена",
+    duplicateDebtMerged: "Сумма добавлена к существующему долгу",
+    duplicateDebtCreated: "Новая запись сохранена",
+    duplicateDebtNote: "Долг суммирован: +{amount} ({date})",
+
   },
 
   tj: {
@@ -676,7 +712,20 @@ statusColumn: "Ҳолат",
 
 pdfFileAll: "all-debts-report",
 pdfFileMonth: "month-debts-report",
-pdfFileOverdue: "overdue-debts-report"
+pdfFileOverdue: "overdue-debts-report",
+
+    duplicateDebtTitle: "Қарзи мавҷуда ёфт шуд",
+    duplicateDebtFound: "Барои ин рақам аллакай қарзи фаъол мавҷуд аст.",
+    duplicateDebtPhone: "Телефон",
+    duplicateDebtClient: "Муштарӣ",
+    duplicateDebtCurrent: "Бақияи ҷорӣ",
+    duplicateDebtNewAmount: "Маблағи нав",
+    duplicateDebtAppend: "Ба қарзи мавҷуда илова кардан",
+    duplicateDebtCreate: "Сабти нав эҷод кардан",
+    duplicateDebtCancel: "Бекор кардан",
+    duplicateDebtMerged: "Маблағ ба қарзи мавҷуда илова шуд",
+    duplicateDebtCreated: "Сабти нав нигоҳ дошта шуд",
+    duplicateDebtNote: "Қарз ҷамъ карда шуд: +{amount} ({date})",
   }
 };
 
@@ -778,6 +827,16 @@ if (exportOverdueBtnEl) exportOverdueBtnEl.textContent = t("exportOverdue");
 if (exportMonthLabelEl) exportMonthLabelEl.textContent = t("exportChooseMonth");
 if (exportCancelBtnEl) exportCancelBtnEl.textContent = t("cancelBtn");
   
+  const duplicateTitleEl = document.getElementById("duplicateDebtTitle");
+  const duplicateAppendBtnEl = document.getElementById("duplicateAppendBtn");
+  const duplicateCreateBtnEl = document.getElementById("duplicateCreateBtn");
+  const duplicateCancelBtnEl = document.getElementById("duplicateCancelBtn");
+
+  if (duplicateTitleEl) duplicateTitleEl.textContent = t("duplicateDebtTitle");
+  if (duplicateAppendBtnEl) duplicateAppendBtnEl.textContent = t("duplicateDebtAppend");
+  if (duplicateCreateBtnEl) duplicateCreateBtnEl.textContent = t("duplicateDebtCreate");
+  if (duplicateCancelBtnEl) duplicateCancelBtnEl.textContent = t("duplicateDebtCancel");
+
   renderStats(lastStatsData || {});
   renderDebts([...allDebts]);
 }
@@ -831,32 +890,124 @@ phone.addEventListener("input",validateForm);
 amount.addEventListener("input",validateForm);
 dueDate.addEventListener("input",validateForm);
 
-function addDebt(){
+async function addDebt(){
 
 if(saveBtn.disabled) return;
+
+const payload = {
+client:client.value.trim(),
+phone:phone.value.trim(),
+amount:Number(amount.value),
+dueDate:dueDate.value,
+seller:currentSeller
+};
+
+const existingDebt = findActiveDebtByPhone(allDebts, payload.phone);
+
+if(existingDebt){
+  const action = await askDuplicateDebtAction(existingDebt, payload);
+
+  if(action === "cancel"){
+    return;
+  }
+
+  if(action === "append"){
+    payload.mode = "append";
+    payload.targetRow = existingDebt.row;
+    payload.noteText = t("duplicateDebtNote", {
+      amount: payload.amount,
+      date: formatDateTime()
+    });
+  }
+}
 
 saveLoader.style.display="block";
 saveBtn.disabled=true;
 
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-client:client.value,
-phone:phone.value,
-amount:amount.value,
-dueDate:dueDate.value,
-seller:currentSeller
-})
-})
-.then(()=>{
-saveLoader.style.display="none";
-client.value="";
-phone.value="";
-amount.value="";
-dueDate.value="";
-saveBtn.disabled=true;
-loadDebts();
-});
+try{
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify(payload)
+  });
+
+  saveLoader.style.display="none";
+  client.value="";
+  phone.value="";
+  amount.value="";
+  dueDate.value="";
+  saveBtn.disabled=true;
+
+  alert(payload.mode === "append" ? t("duplicateDebtMerged") : t("duplicateDebtCreated"));
+  loadDebts();
+}catch(error){
+  console.error("Save error:", error);
+  saveLoader.style.display="none";
+  validateForm();
+  alert("Ошибка сохранения");
+}
+}
+
+
+function normalizePhone(phone){
+  return String(phone || "").replace(/\D/g, "");
+}
+
+function formatDateTime(date = new Date()){
+  return (
+    String(date.getDate()).padStart(2, "0") + "." +
+    String(date.getMonth() + 1).padStart(2, "0") + "." +
+    date.getFullYear() + " " +
+    String(date.getHours()).padStart(2, "0") + ":" +
+    String(date.getMinutes()).padStart(2, "0")
+  );
+}
+
+function getDebtStatusValue(debt){
+  return String(debt.status || "").trim().toLowerCase();
+}
+
+function isDebtActive(debt){
+  const status = getDebtStatusValue(debt);
+  return status === "активный" || status === "фаъол" || (!debt.isOverdue && Number(debt.remainder || 0) > 0);
+}
+
+function findActiveDebtByPhone(list, phoneNumber){
+  const normalizedPhone = normalizePhone(phoneNumber);
+  return (list || []).find(item => normalizePhone(item.phone) === normalizedPhone && isDebtActive(item));
+}
+
+function openDuplicateDebtModal(existingDebt, newDebt){
+  const info = document.getElementById("duplicateDebtInfo");
+  if(info){
+    info.innerHTML = `
+      <div>${t("duplicateDebtFound")}</div>
+      <div><b>${t("duplicateDebtClient")}:</b> ${existingDebt.client || "-"}</div>
+      <div><b>${t("duplicateDebtPhone")}:</b> ${existingDebt.phone || "-"}</div>
+      <div><b>${t("duplicateDebtCurrent")}:</b> ${existingDebt.remainder || 0} ${t("somoni")}</div>
+      <div><b>${t("duplicateDebtNewAmount")}:</b> ${newDebt.amount || 0} ${t("somoni")}</div>
+    `;
+  }
+
+  duplicateDebtModal.style.display = "flex";
+}
+
+function closeDuplicateDebtModal(){
+  duplicateDebtModal.style.display = "none";
+}
+
+function chooseDuplicateDebtAction(action){
+  closeDuplicateDebtModal();
+  if(typeof duplicateDebtResolver === "function"){
+    duplicateDebtResolver(action);
+    duplicateDebtResolver = null;
+  }
+}
+
+function askDuplicateDebtAction(existingDebt, newDebt){
+  return new Promise((resolve) => {
+    duplicateDebtResolver = resolve;
+    openDuplicateDebtModal(existingDebt, newDebt);
+  });
 }
 
 /* ---------- ЗАГРУЗКА ---------- */
@@ -1285,7 +1436,22 @@ location.reload();
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js")
-      .then(() => console.log("Service Worker зарегистрирован"))
+      .then((registration) => {
+        console.log("Service Worker зарегистрирован");
+
+        registration.addEventListener("updatefound", () => {
+          const newWorker = registration.installing;
+          if (!newWorker) return;
+
+          newWorker.addEventListener("statechange", () => {
+            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+              if (confirm("Доступно обновление программы. Обновить сейчас?")) {
+                window.location.reload();
+              }
+            }
+          });
+        });
+      })
       .catch((err) => console.log("Ошибка Service Worker:", err));
   });
 }
