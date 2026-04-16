@@ -101,7 +101,6 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   margin-left:auto;
 }
 
-/* --- ВСТАВИТЬ СЮДА --- */
 .header-right{
   min-width:120px;
   display:flex;
@@ -234,7 +233,6 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   color:#374151;
   font-weight:bold;
 }
-/* --- ДО СЮДА --- */
 
 .login{
 position:fixed;
@@ -321,6 +319,7 @@ background:rgba(0,0,0,0.6);
 display:none;
 align-items:center;
 justify-content:center;
+z-index:9998;
 }
 
 .modal-content{
@@ -346,34 +345,148 @@ margin-top:10px;
 50%{opacity:1;}
 100%{opacity:0.4;}
 }
-</style>
-</head><body>
 
-<!-- МОДАЛКА ВЫХОДА -->
+.merge-modal{
+  max-width:420px;
+  border-radius:18px;
+  padding:22px;
+}
+
+.merge-modal h3{
+  margin:0 0 14px 0;
+  font-size:18px;
+  color:#111827;
+}
+
+.merge-info{
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:16px;
+  line-height:1.6;
+  font-size:14px;
+  color:#111827;
+}
+
+.merge-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.merge-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.append-btn{
+  background:#16a34a;
+  color:white;
+}
+
+.create-btn{
+  background:#2563eb;
+  color:white;
+}
+
+.cancel-btn{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+.sum-history-box{
+  margin-top:10px;
+  padding:10px 12px;
+  background:#faf5ff;
+  border-left:4px solid #9333ea;
+  border-radius:10px;
+}
+
+.sum-history-title{
+  font-size:13px;
+  font-weight:bold;
+  color:#6b21a8;
+  margin-bottom:6px;
+}
+
+.sum-history-item{
+  font-size:12px;
+  color:#4b5563;
+  margin-bottom:4px;
+  line-height:1.4;
+  white-space:pre-wrap;
+}
+
+.sum-history-item:last-child{
+  margin-bottom:0;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  transform:translateX(-50%) translateY(20px);
+  min-width:280px;
+  max-width:90%;
+  background:#111827;
+  color:#fff;
+  padding:14px 16px;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  font-size:14px;
+  line-height:1.5;
+  z-index:99999;
+  opacity:0;
+  pointer-events:none;
+  transition:all 0.3s ease;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+.toast.success{
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+}
+
+.toast.append{
+  background:linear-gradient(135deg,#7c3aed,#a855f7);
+}
+
+.toast.error{
+  background:linear-gradient(135deg,#dc2626,#ef4444);
+}
+</style>
+</head>
+<body>
+
 <div class="modal" id="logoutModal">
   <div class="modal-content" style="text-align:center;">
     <h3>Подтверждение выхода</h3>
     <p>Вы действительно хотите выйти?</p>
 
-    <button onclick="confirmLogout()" 
-            style="background:#dc3545;color:white;">
+    <button onclick="confirmLogout()" style="background:#dc3545;color:white;">
       Выйти
     </button>
 
-    <button onclick="closeLogout()" 
-            style="background:#ccc;color:black;">
+    <button onclick="closeLogout()" style="background:#ccc;color:black;">
       Отмена
     </button>
   </div>
 </div>
 
-
-
 <div id="loginScreen" class="login">
-<img src="logo.png">
-<h2>Вход</h2>
-<input type="tel" inputmode="numeric" id="pinInput" placeholder="Введите PIN">
-<button onclick="login()">Войти</button>
+  <img src="logo.png">
+  <h2>Вход</h2>
+  <input type="tel" inputmode="numeric" id="pinInput" placeholder="Введите PIN">
+  <button onclick="login()">Войти</button>
 </div>
 
 <div class="header" id="mainHeader" style="display:none;">
@@ -396,53 +509,43 @@ margin-top:10px;
 </div>
 
 <div class="container" id="appContent" style="display:none;">
+  <div id="statsBox"></div>
 
-<div id="statsBox"></div>
+  <h3>Добавить долг</h3>
+  <input id="client" placeholder="Имя клиента">
+  <input id="phone" placeholder="Телефон" maxlength="9" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+  <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
+  <label style="color:red;font-weight:bold;">Выберите дату оплаты</label>
+  <input id="dueDate" type="date">
+  <button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
+  <div id="saveLoader" class="loader" style="display:none;">⏳ Сохранение...</div>
 
-<h3>Добавить долг</h3>
-<input id="client" placeholder="Имя клиента">
-<input id="phone" placeholder="Телефон" maxlength="9"
-inputmode="numeric"
-oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-<input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
-<label style="color:red;font-weight:bold;">Выберите дату оплаты</label>
-<input id="dueDate" type="date">
-<button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
-<div id="saveLoader" class="loader" style="display:none;">⏳ Сохранение...</div>
+  <div class="search-box">
+    <input id="searchInput" placeholder="🔍 Поиск по имени или номеру">
+  </div>
 
-<div class="search-box">
-<input id="searchInput" placeholder="🔍 Поиск по имени или номеру">
+  <h3>Список должников</h3>
+  <div id="debtList"></div>
 </div>
 
-<h3>Список должников</h3>
-<div id="debtList"></div>
-
-</div>
-
-<!-- МОДАЛКА ОПЛАТЫ -->
 <div class="modal" id="paymentModal">
-<div class="modal-content">
-<h3>Оплата долга</h3>
-<div id="paymentInfo"></div>
-<input type="tel" inputmode="numeric" id="paymentAmount" placeholder="Введите сумму">
-<button class="pay-btn" onclick="confirmPayment()">Подтвердить оплату</button>
-<button onclick="closePayment()" style="background:#ccc;color:black;">Отмена</button>
-<div id="paymentLoader" class="loader" style="display:none;">
-⏳ Обработка...
-</div>
-</div>
+  <div class="modal-content">
+    <h3>Оплата долга</h3>
+    <div id="paymentInfo"></div>
+    <input type="tel" inputmode="numeric" id="paymentAmount" placeholder="Введите сумму">
+    <button class="pay-btn" onclick="confirmPayment()">Подтвердить оплату</button>
+    <button onclick="closePayment()" style="background:#ccc;color:black;">Отмена</button>
+    <div id="paymentLoader" class="loader" style="display:none;">⏳ Обработка...</div>
+  </div>
 </div>
 
-<!-- ИСТОРИЯ -->
 <div class="modal" id="historyModal">
-<div class="modal-content">
-<h3>История оплат</h3>
-<div id="historyLoader" class="loader" style="display:none;">
-⏳ Загрузка истории...
-</div>
-<div id="historyContent"></div>
-<button onclick="closeHistory()">Закрыть</button>
-</div>
+  <div class="modal-content">
+    <h3>История оплат</h3>
+    <div id="historyLoader" class="loader" style="display:none;">⏳ Загрузка истории...</div>
+    <div id="historyContent"></div>
+    <button onclick="closeHistory()">Закрыть</button>
+  </div>
 </div>
 
 <div class="modal" id="exportModal">
@@ -472,44 +575,38 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
   </div>
 </div>
 
+<div class="modal" id="mergeDebtModal">
+  <div class="modal-content merge-modal">
+    <h3 id="mergeDebtTitle">Найден существующий долг</h3>
+    <div class="merge-info" id="mergeDebtInfo"></div>
 
-<div class="modal" id="duplicateDebtModal">
-  <div class="modal-content">
-    <h3 id="duplicateDebtTitle">Найден существующий долг</h3>
-    <div id="duplicateDebtInfo" style="margin-bottom:12px;font-size:14px;line-height:1.5;"></div>
-
-    <button id="duplicateAppendBtn" class="save-btn" onclick="chooseDuplicateDebtAction('append')">
-      Записать в существующий
-    </button>
-
-    <button id="duplicateCreateBtn" onclick="chooseDuplicateDebtAction('new')" style="background:#1f3b8f;color:white;">
-      Создать новую запись
-    </button>
-
-    <button id="duplicateCancelBtn" onclick="chooseDuplicateDebtAction('cancel')" style="background:#ccc;color:black;">
-      Отмена
-    </button>
+    <div class="merge-actions">
+      <button id="mergeAppendBtn" class="merge-btn append-btn">Записать в существующий</button>
+      <button id="mergeCreateBtn" class="merge-btn create-btn">Создать новую запись</button>
+      <button id="mergeCancelBtn" class="merge-btn cancel-btn">Отмена</button>
+    </div>
   </div>
 </div>
 
-<script>
+<div id="toast" class="toast"></div>
 
-const VERSION="3.4";
+<script>
+const VERSION="3.5";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwz8QgFL74NuHCKXfKApALqxzUMKhbVPvzHLKG1axElO5KRgsMZRLO9pHAj_D87oor2/exec";
 
 const USERS={
-"1111":"Умед",
-"0000":"Тахмина",
-"5301":"Гульчехра",
-"1602":"Махфират"
+  "1111":"Умед",
+  "0000":"Тахмина",
+  "5301":"Гульчехра",
+  "1602":"Махфират"
 };
 
 let currentSeller=null;
 let allDebts=[];
 let currentRow=null;
 let currentRemainder=0;
-let pendingDebtPayload=null;
-let duplicateDebtResolver=null;
+let toastTimer=null;
+let mergeDebtResolver=null;
 
 let currentLanguage = localStorage.getItem("lang") || "ru";
 let lastStatsData = {};
@@ -576,50 +673,51 @@ const translations = {
     amountTooBig: "Сумма больше остатка",
 
     fromWord: "от",
-
     statusColumn: "Статус",
 
     waReminder: "Салом алейкум 😊, напоминаем вам о не оплаченной сумме: {amount} сомони. Будем признательны за оплату🙏. Сообщение отправлено автоматически.",
 
-exportBtn: "PDF",
-exportTitle: "Экспорт",
-exportAll: "Экспорт всех данных",
-exportMonth: "Экспорт за месяц",
-exportOverdue: "Экспорт только просроченных",
-exportChooseMonth: "Выберите месяц",
-exportNoMonth: "Выберите месяц для экспорта",
-exportNoData: "Нет данных для экспорта",
+    exportBtn: "PDF",
+    exportTitle: "Экспорт",
+    exportAll: "Экспорт всех данных",
+    exportMonth: "Экспорт за месяц",
+    exportOverdue: "Экспорт только просроченных",
+    exportChooseMonth: "Выберите месяц",
+    exportNoMonth: "Выберите месяц для экспорта",
+    exportNoData: "Нет данных для экспорта",
 
-reportDate: "Дата формирования",
-reportSeller: "Продавец",
-reportLanguage: "Язык интерфейса",
-reportTitleAll: "Отчет: все данные",
-reportTitleMonth: "Отчет за месяц {month}",
-reportTitleOverdue: "Отчет: только просроченные",
+    reportDate: "Дата формирования",
+    reportSeller: "Продавец",
+    reportLanguage: "Язык интерфейса",
+    reportTitleAll: "Отчет: все данные",
+    reportTitleMonth: "Отчет за месяц {month}",
+    reportTitleOverdue: "Отчет: только просроченные",
 
-statusActive: "Активный",
-statusPartial: "Частично оплачен",
-statusOverdue: "Просрочен",
-statusClosed: "Закрыт",
-statusColumn: "Статус",
+    statusActive: "Активный",
+    statusPartial: "Частично оплачен",
+    statusOverdue: "Просрочен",
+    statusClosed: "Закрыт",
 
-pdfFileAll: "all-debts-report",
-pdfFileMonth: "month-debts-report",
-pdfFileOverdue: "overdue-debts-report",
+    pdfFileAll: "all-debts-report",
+    pdfFileMonth: "month-debts-report",
+    pdfFileOverdue: "overdue-debts-report",
 
-    duplicateDebtTitle: "Найден существующий долг",
-    duplicateDebtFound: "У этого номера уже есть активный долг.",
-    duplicateDebtPhone: "Телефон",
-    duplicateDebtClient: "Клиент",
-    duplicateDebtCurrent: "Текущий остаток",
-    duplicateDebtNewAmount: "Новая сумма",
-    duplicateDebtAppend: "Записать в существующий",
-    duplicateDebtCreate: "Создать новую запись",
-    duplicateDebtCancel: "Отмена",
-    duplicateDebtMerged: "Сумма добавлена к существующему долгу",
-    duplicateDebtCreated: "Новая запись сохранена",
-    duplicateDebtNote: "Долг суммирован: +{amount} ({date})",
+    mergeDebtTitle: "Найден существующий долг",
+    mergeDebtText: "У этого номера уже есть активный долг.",
+    mergeClient: "Клиент",
+    mergePhone: "Телефон",
+    mergeCurrentRemainder: "Текущий остаток",
+    mergeNewAmount: "Новая сумма",
+    mergeAppendBtn: "Записать в существующий",
+    mergeCreateBtn: "Создать новую запись",
+    mergeCancelBtn: "Отмена",
 
+    sumHistoryTitle: "История суммирования",
+
+    appendSuccessToast: "Сумма добавлена в существующий долг",
+    newDebtSuccessToast: "Новая запись успешно сохранена",
+    cancelActionToast: "Действие отменено",
+    errorSaveToast: "Ошибка при сохранении"
   },
 
   tj: {
@@ -683,49 +781,51 @@ pdfFileOverdue: "overdue-debts-report",
     amountTooBig: "Маблағ аз бақия зиёд аст",
 
     fromWord: "аз",
-
     statusColumn: "Ҳолат",
 
     waReminder: "Салом алейкум 😊, ба шумо дар бораи маблағи пардохтнашуда ёдрас мекунем: {amount} сомонӣ. Барои пардохт пешакӣ ташаккур🙏. Паём автоматӣ фиристода шуд.",
 
-exportBtn: "PDF",
-exportTitle: "Содирот",
-exportAll: "Содироти ҳамаи маълумот",
-exportMonth: "Содирот барои моҳ",
-exportOverdue: "Содироти танҳо муҳлатгузашта",
-exportChooseMonth: "Моҳро интихоб кунед",
-exportNoMonth: "Барои содирот моҳро интихоб кунед",
-exportNoData: "Барои содирот маълумот нест",
+    exportBtn: "PDF",
+    exportTitle: "Содирот",
+    exportAll: "Содироти ҳамаи маълумот",
+    exportMonth: "Содирот барои моҳ",
+    exportOverdue: "Содироти танҳо муҳлатгузашта",
+    exportChooseMonth: "Моҳро интихоб кунед",
+    exportNoMonth: "Барои содирот моҳро интихоб кунед",
+    exportNoData: "Барои содирот маълумот нест",
 
-reportDate: "Санаи тартиб",
-reportSeller: "Фурӯшанда",
-reportLanguage: "Забони интерфейс",
-reportTitleAll: "Ҳисобот: ҳамаи маълумот",
-reportTitleMonth: "Ҳисобот барои моҳи {month}",
-reportTitleOverdue: "Ҳисобот: танҳо муҳлатгузашта",
+    reportDate: "Санаи тартиб",
+    reportSeller: "Фурӯшанда",
+    reportLanguage: "Забони интерфейс",
+    reportTitleAll: "Ҳисобот: ҳамаи маълумот",
+    reportTitleMonth: "Ҳисобот барои моҳи {month}",
+    reportTitleOverdue: "Ҳисобот: танҳо муҳлатгузашта",
 
-statusActive: "Фаъол",
-statusPartial: "Қисман пардохт шудааст",
-statusOverdue: "Муҳлатгузашта",
-statusClosed: "Пӯшида",
-statusColumn: "Ҳолат",
+    statusActive: "Фаъол",
+    statusPartial: "Қисман пардохт шудааст",
+    statusOverdue: "Муҳлатгузашта",
+    statusClosed: "Пӯшида",
 
-pdfFileAll: "all-debts-report",
-pdfFileMonth: "month-debts-report",
-pdfFileOverdue: "overdue-debts-report",
+    pdfFileAll: "all-debts-report",
+    pdfFileMonth: "month-debts-report",
+    pdfFileOverdue: "overdue-debts-report",
 
-    duplicateDebtTitle: "Қарзи мавҷуда ёфт шуд",
-    duplicateDebtFound: "Барои ин рақам аллакай қарзи фаъол мавҷуд аст.",
-    duplicateDebtPhone: "Телефон",
-    duplicateDebtClient: "Муштарӣ",
-    duplicateDebtCurrent: "Бақияи ҷорӣ",
-    duplicateDebtNewAmount: "Маблағи нав",
-    duplicateDebtAppend: "Ба қарзи мавҷуда илова кардан",
-    duplicateDebtCreate: "Сабти нав эҷод кардан",
-    duplicateDebtCancel: "Бекор кардан",
-    duplicateDebtMerged: "Маблағ ба қарзи мавҷуда илова шуд",
-    duplicateDebtCreated: "Сабти нав нигоҳ дошта шуд",
-    duplicateDebtNote: "Қарз ҷамъ карда шуд: +{amount} ({date})",
+    mergeDebtTitle: "Қарзи мавҷуда ёфт шуд",
+    mergeDebtText: "Барои ин рақам аллакай қарзи фаъол мавҷуд аст.",
+    mergeClient: "Муштарӣ",
+    mergePhone: "Телефон",
+    mergeCurrentRemainder: "Бақияи ҷорӣ",
+    mergeNewAmount: "Маблағи нав",
+    mergeAppendBtn: "Ба қарзи мавҷуда илова кардан",
+    mergeCreateBtn: "Сабти нав сохтан",
+    mergeCancelBtn: "Бекор кардан",
+
+    sumHistoryTitle: "Таърихи ҷамъкунии қарз",
+
+    appendSuccessToast: "Маблағ ба қарзи мавҷуда илова шуд",
+    newDebtSuccessToast: "Сабти нав бомуваффақият захира шуд",
+    cancelActionToast: "Амал бекор карда шуд",
+    errorSaveToast: "Ҳангоми захиракунӣ хато рӯй дод"
   }
 };
 
@@ -813,32 +913,132 @@ function applyTranslations(){
     userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
   }
 
-const exportTitleEl = document.getElementById("exportTitle");
-const exportAllBtnEl = document.getElementById("exportAllBtn");
-const exportMonthBtnEl = document.getElementById("exportMonthBtn");
-const exportOverdueBtnEl = document.getElementById("exportOverdueBtn");
-const exportMonthLabelEl = document.getElementById("exportMonthLabel");
-const exportCancelBtnEl = document.getElementById("exportCancelBtn");
+  const exportTitleEl = document.getElementById("exportTitle");
+  const exportAllBtnEl = document.getElementById("exportAllBtn");
+  const exportMonthBtnEl = document.getElementById("exportMonthBtn");
+  const exportOverdueBtnEl = document.getElementById("exportOverdueBtn");
+  const exportMonthLabelEl = document.getElementById("exportMonthLabel");
+  const exportCancelBtnEl = document.getElementById("exportCancelBtn");
 
-if (exportTitleEl) exportTitleEl.textContent = t("exportTitle");
-if (exportAllBtnEl) exportAllBtnEl.textContent = t("exportAll");
-if (exportMonthBtnEl) exportMonthBtnEl.textContent = t("exportMonth");
-if (exportOverdueBtnEl) exportOverdueBtnEl.textContent = t("exportOverdue");
-if (exportMonthLabelEl) exportMonthLabelEl.textContent = t("exportChooseMonth");
-if (exportCancelBtnEl) exportCancelBtnEl.textContent = t("cancelBtn");
-  
-  const duplicateTitleEl = document.getElementById("duplicateDebtTitle");
-  const duplicateAppendBtnEl = document.getElementById("duplicateAppendBtn");
-  const duplicateCreateBtnEl = document.getElementById("duplicateCreateBtn");
-  const duplicateCancelBtnEl = document.getElementById("duplicateCancelBtn");
+  if (exportTitleEl) exportTitleEl.textContent = t("exportTitle");
+  if (exportAllBtnEl) exportAllBtnEl.textContent = t("exportAll");
+  if (exportMonthBtnEl) exportMonthBtnEl.textContent = t("exportMonth");
+  if (exportOverdueBtnEl) exportOverdueBtnEl.textContent = t("exportOverdue");
+  if (exportMonthLabelEl) exportMonthLabelEl.textContent = t("exportChooseMonth");
+  if (exportCancelBtnEl) exportCancelBtnEl.textContent = t("cancelBtn");
 
-  if (duplicateTitleEl) duplicateTitleEl.textContent = t("duplicateDebtTitle");
-  if (duplicateAppendBtnEl) duplicateAppendBtnEl.textContent = t("duplicateDebtAppend");
-  if (duplicateCreateBtnEl) duplicateCreateBtnEl.textContent = t("duplicateDebtCreate");
-  if (duplicateCancelBtnEl) duplicateCancelBtnEl.textContent = t("duplicateDebtCancel");
+  const mergeDebtTitleEl = document.getElementById("mergeDebtTitle");
+  const mergeAppendBtnEl = document.getElementById("mergeAppendBtn");
+  const mergeCreateBtnEl = document.getElementById("mergeCreateBtn");
+  const mergeCancelBtnEl = document.getElementById("mergeCancelBtn");
+
+  if (mergeDebtTitleEl) mergeDebtTitleEl.textContent = t("mergeDebtTitle");
+  if (mergeAppendBtnEl) mergeAppendBtnEl.textContent = t("mergeAppendBtn");
+  if (mergeCreateBtnEl) mergeCreateBtnEl.textContent = t("mergeCreateBtn");
+  if (mergeCancelBtnEl) mergeCancelBtnEl.textContent = t("mergeCancelBtn");
 
   renderStats(lastStatsData || {});
   renderDebts([...allDebts]);
+}
+
+function showToast(message, type = "success"){
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+
+  toast.className = "toast";
+  toast.classList.add(type);
+  toast.innerHTML = message;
+
+  clearTimeout(toastTimer);
+
+  requestAnimationFrame(() => {
+    toast.classList.add("show");
+  });
+
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2600);
+}
+
+function askDebtSaveMode(existingDebt, newDebt){
+  return new Promise((resolve) => {
+    mergeDebtResolver = resolve;
+
+    const modal = document.getElementById("mergeDebtModal");
+    const info = document.getElementById("mergeDebtInfo");
+    const appendBtn = document.getElementById("mergeAppendBtn");
+    const createBtn = document.getElementById("mergeCreateBtn");
+    const cancelBtn = document.getElementById("mergeCancelBtn");
+
+    const clientName = existingDebt.client || "-";
+    const phone = newDebt.phone || existingDebt.phone || "-";
+    const currentRemainder = Number(existingDebt.remainder || 0);
+    const newAmount = Number(newDebt.amount || 0);
+
+    info.innerHTML = `
+      <div>${t("mergeDebtText")}</div>
+      <div style="margin-top:10px;"><b>${t("mergeClient")}:</b> ${clientName}</div>
+      <div><b>${t("mergePhone")}:</b> ${phone}</div>
+      <div><b>${t("mergeCurrentRemainder")}:</b> ${currentRemainder} ${t("somoni")}</div>
+      <div><b>${t("mergeNewAmount")}:</b> ${newAmount} ${t("somoni")}</div>
+    `;
+
+    modal.style.display = "flex";
+
+    appendBtn.onclick = function () {
+      closeMergeDebtModal("append");
+    };
+
+    createBtn.onclick = function () {
+      closeMergeDebtModal("new");
+    };
+
+    cancelBtn.onclick = function () {
+      closeMergeDebtModal("cancel");
+    };
+  });
+}
+
+function closeMergeDebtModal(result){
+  const modal = document.getElementById("mergeDebtModal");
+  const appendBtn = document.getElementById("mergeAppendBtn");
+  const createBtn = document.getElementById("mergeCreateBtn");
+  const cancelBtn = document.getElementById("mergeCancelBtn");
+
+  modal.style.display = "none";
+  appendBtn.onclick = null;
+  createBtn.onclick = null;
+  cancelBtn.onclick = null;
+
+  if (mergeDebtResolver) {
+    mergeDebtResolver(result);
+    mergeDebtResolver = null;
+  }
+}
+
+function parseSumHistory(notification){
+  if (!notification) return [];
+
+  return String(notification)
+    .split(/\n|\|/)
+    .map(item => item.trim())
+    .filter(item => item && item.toLowerCase().includes("суммирован"));
+}
+
+function renderSumHistory(notification){
+  const items = parseSumHistory(notification);
+  if (!items.length) return "";
+
+  const historyHtml = items.map(item => {
+    return `<div class="sum-history-item">• ${item}</div>`;
+  }).join("");
+
+  return `
+    <div class="sum-history-box">
+      <div class="sum-history-title">➕ ${t("sumHistoryTitle")}</div>
+      ${historyHtml}
+    </div>
+  `;
 }
 
 /* ---------- LOGIN ---------- */
@@ -877,13 +1077,13 @@ window.onload = function(){
 };
 
 function logout(){
-logoutModal.style.display="flex";
+  logoutModal.style.display="flex";
 }
 
 /* ---------- ДОБАВЛЕНИЕ ---------- */
 
 function validateForm(){
-saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
+  saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
 }
 client.addEventListener("input",validateForm);
 phone.addEventListener("input",validateForm);
@@ -891,136 +1091,103 @@ amount.addEventListener("input",validateForm);
 dueDate.addEventListener("input",validateForm);
 
 async function addDebt(){
+  if (saveBtn.disabled) return;
 
-if(saveBtn.disabled) return;
+  const clientName = client.value.trim();
+  const phoneValue = phone.value.trim();
+  const amountValue = Number(amount.value || 0);
+  const dueDateValue = dueDate.value;
 
-const payload = {
-client:client.value.trim(),
-phone:phone.value.trim(),
-amount:Number(amount.value),
-dueDate:dueDate.value,
-seller:currentSeller
-};
+  if (!clientName || !phoneValue || !amountValue || !dueDateValue) return;
 
-const existingDebt = findActiveDebtByPhone(allDebts, payload.phone);
+  const normalizedPhone = phoneValue.replace(/\D/g, "");
 
-if(existingDebt){
-  const action = await askDuplicateDebtAction(existingDebt, payload);
-
-  if(action === "cancel"){
-    return;
-  }
-
-  if(action === "append"){
-    payload.mode = "append";
-    payload.targetRow = existingDebt.row;
-    payload.noteText = t("duplicateDebtNote", {
-      amount: payload.amount,
-      date: formatDateTime()
-    });
-  }
-}
-
-saveLoader.style.display="block";
-saveBtn.disabled=true;
-
-try{
-  await fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify(payload)
+  const existingDebt = allDebts.find(d => {
+    const debtPhone = String(d.phone || "").replace(/\D/g, "");
+    return debtPhone === normalizedPhone && Number(d.remainder || 0) > 0;
   });
 
-  saveLoader.style.display="none";
-  client.value="";
-  phone.value="";
-  amount.value="";
-  dueDate.value="";
+  let payload = {
+    client: clientName,
+    phone: phoneValue,
+    amount: amountValue,
+    dueDate: dueDateValue,
+    seller: currentSeller
+  };
+
+  if (existingDebt) {
+    const action = await askDebtSaveMode(existingDebt, payload);
+
+    if (action === "cancel") {
+      showToast(`ℹ️ ${t("cancelActionToast")}`, "error");
+      return;
+    }
+
+    if (action === "append") {
+      const now = new Date();
+      const formattedDate =
+        String(now.getDate()).padStart(2, "0") + "." +
+        String(now.getMonth() + 1).padStart(2, "0") + "." +
+        now.getFullYear() + " " +
+        String(now.getHours()).padStart(2, "0") + ":" +
+        String(now.getMinutes()).padStart(2, "0");
+
+      payload.mode = "append";
+      payload.targetRow = existingDebt.row;
+      payload.noteText = `Долг суммирован: +${amountValue} (${formattedDate})`;
+    }
+  }
+
+  saveLoader.style.display="block";
   saveBtn.disabled=true;
 
-  alert(payload.mode === "append" ? t("duplicateDebtMerged") : t("duplicateDebtCreated"));
-  loadDebts();
-}catch(error){
-  console.error("Save error:", error);
-  saveLoader.style.display="none";
-  validateForm();
-  alert("Ошибка сохранения");
-}
-}
+  try {
+    const response = await fetch(SCRIPT_URL,{
+      method:"POST",
+      body:JSON.stringify(payload)
+    });
 
+    const result = await response.json();
 
-function normalizePhone(phone){
-  return String(phone || "").replace(/\D/g, "");
-}
+    saveLoader.style.display="none";
+    client.value="";
+    phone.value="";
+    amount.value="";
+    dueDate.value="";
+    saveBtn.disabled=true;
 
-function formatDateTime(date = new Date()){
-  return (
-    String(date.getDate()).padStart(2, "0") + "." +
-    String(date.getMonth() + 1).padStart(2, "0") + "." +
-    date.getFullYear() + " " +
-    String(date.getHours()).padStart(2, "0") + ":" +
-    String(date.getMinutes()).padStart(2, "0")
-  );
-}
+    if (result.success) {
+      if (payload.mode === "append") {
+        showToast(
+          `✅ <b>${t("appendSuccessToast")}</b><br>👤 ${clientName}<br>💰 +${amountValue} ${t("somoni")}`,
+          "append"
+        );
+      } else {
+        showToast(`✅ <b>${t("newDebtSuccessToast")}</b>`, "success");
+      }
 
-function getDebtStatusValue(debt){
-  return String(debt.status || "").trim().toLowerCase();
-}
-
-function isDebtActive(debt){
-  const status = getDebtStatusValue(debt);
-  return status === "активный" || status === "фаъол" || (!debt.isOverdue && Number(debt.remainder || 0) > 0);
-}
-
-function findActiveDebtByPhone(list, phoneNumber){
-  const normalizedPhone = normalizePhone(phoneNumber);
-  return (list || []).find(item => normalizePhone(item.phone) === normalizedPhone && isDebtActive(item));
-}
-
-function openDuplicateDebtModal(existingDebt, newDebt){
-  const info = document.getElementById("duplicateDebtInfo");
-  if(info){
-    info.innerHTML = `
-      <div>${t("duplicateDebtFound")}</div>
-      <div><b>${t("duplicateDebtClient")}:</b> ${existingDebt.client || "-"}</div>
-      <div><b>${t("duplicateDebtPhone")}:</b> ${existingDebt.phone || "-"}</div>
-      <div><b>${t("duplicateDebtCurrent")}:</b> ${existingDebt.remainder || 0} ${t("somoni")}</div>
-      <div><b>${t("duplicateDebtNewAmount")}:</b> ${newDebt.amount || 0} ${t("somoni")}</div>
-    `;
+      loadDebts();
+    } else {
+      showToast(`❌ ${t("errorSaveToast")}`, "error");
+    }
+  } catch(e) {
+    saveLoader.style.display="none";
+    saveBtn.disabled=false;
+    showToast(`❌ ${t("errorSaveToast")}`, "error");
   }
-
-  duplicateDebtModal.style.display = "flex";
-}
-
-function closeDuplicateDebtModal(){
-  duplicateDebtModal.style.display = "none";
-}
-
-function chooseDuplicateDebtAction(action){
-  closeDuplicateDebtModal();
-  if(typeof duplicateDebtResolver === "function"){
-    duplicateDebtResolver(action);
-    duplicateDebtResolver = null;
-  }
-}
-
-function askDuplicateDebtAction(existingDebt, newDebt){
-  return new Promise((resolve) => {
-    duplicateDebtResolver = resolve;
-    openDuplicateDebtModal(existingDebt, newDebt);
-  });
 }
 
 /* ---------- ЗАГРУЗКА ---------- */
 
 function loadDebts(){
-fetch(SCRIPT_URL)
-.then(res=>res.json())
-.then(data=>{
-data=data||{};
-allDebts=data.debts||[];
-renderStats(data);
-renderDebts(allDebts);
-});
+  fetch(SCRIPT_URL)
+  .then(res=>res.json())
+  .then(data=>{
+    data=data||{};
+    allDebts=data.debts||[];
+    renderStats(data);
+    renderDebts(allDebts);
+  });
 }
 
 /* ---------- СТАТИСТИКА ---------- */
@@ -1046,15 +1213,15 @@ function renderStats(data){
       📊 ${t("statsTitle")}
     </div>
 
-<div id="statsContent" style="display:none;margin-top:10px;">
-  💰 <b>${t("totalGiven")}:</b> ${totalGiven} ${t("somoni")}<br><br>
-  📉 ${t("activeDebts")}: ${activeTotal} ${t("somoni")} ${t("fromWord")} ${activeCount} ${t("clients")}<br>
-  💸 ${t("alreadyPaid")}: ${partialTotal} ${t("somoni")} ${t("fromWord")} ${partialCount} ${t("clients")}<br>
-  ✅ ${t("fullyClosed")}: ${paidTotal} ${t("somoni")} ${t("fromWord")} ${paidCount} ${t("clients")}<br><br>
-  <b style="color:red;">
-    🔴 ${t("overdueLeft")}: ${overdueTotal} ${t("somoni")} ${t("fromWord")} ${overdueCount} ${t("clients")}
-  </b>
-</div>
+    <div id="statsContent" style="display:none;margin-top:10px;">
+      💰 <b>${t("totalGiven")}:</b> ${totalGiven} ${t("somoni")}<br><br>
+      📉 ${t("activeDebts")}: ${activeTotal} ${t("somoni")} ${t("fromWord")} ${activeCount} ${t("clients")}<br>
+      💸 ${t("alreadyPaid")}: ${partialTotal} ${t("somoni")} ${t("fromWord")} ${partialCount} ${t("clients")}<br>
+      ✅ ${t("fullyClosed")}: ${paidTotal} ${t("somoni")} ${t("fromWord")} ${paidCount} ${t("clients")}<br><br>
+      <b style="color:red;">
+        🔴 ${t("overdueLeft")}: ${overdueTotal} ${t("somoni")} ${t("fromWord")} ${overdueCount} ${t("clients")}
+      </b>
+    </div>
   </div>
   `;
 }
@@ -1101,6 +1268,7 @@ function renderDebts(list){
 
     let waText = encodeURIComponent(t("waReminder", { amount: d.remainder }));
     let phoneFull = "992" + d.phone;
+    let sumHistoryHtml = renderSumHistory(d.notification);
 
     html += `
     <div class="${cardClass}">
@@ -1111,6 +1279,7 @@ function renderDebts(list){
       ${t("lastPayment")}: ${d.partialPayment || 0} ${t("somoni")}<br>
       ${t("remainder")}: <b>${d.remainder}</b> ${t("somoni")}<br>
       ${d.isPartial ? `<div style="color:#28a745;font-weight:bold;">${t("hasPayment")}</div>` : ""}
+      ${sumHistoryHtml}
       ${extra}
 
       <button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
@@ -1124,7 +1293,7 @@ function renderDebts(list){
         </a>
       </div>
 
-      <button onclick="showHistory('${d.client}')">
+      <button onclick="showHistory('${String(d.client).replace(/'/g,"\\'")}')">
         📂 ${t("historyBtn")}
       </button>
     </div>
@@ -1137,31 +1306,22 @@ function renderDebts(list){
 /* ---------- ПОИСК ---------- */
 
 function applySearch(){
+  let val = searchInput.value.toLowerCase().trim();
 
-let val = searchInput.value.toLowerCase().trim();
+  if(val === ""){
+    renderDebts([...allDebts]);
+    return;
+  }
 
-if(val === ""){
-renderDebts([...allDebts]); // возвращаем всё
-return;
+  let filtered = allDebts.filter(d => {
+    let nameMatch = d.client && d.client.toLowerCase().includes(val);
+    let phoneMatch = d.phone && d.phone.toString().includes(val);
+    return nameMatch || phoneMatch;
+  });
+
+  renderDebts(filtered);
 }
 
-let filtered = allDebts.filter(d => {
-
-let nameMatch = d.client && 
-d.client.toLowerCase().includes(val);
-
-let phoneMatch = d.phone &&
-d.phone.toString().includes(val);
-
-return nameMatch || phoneMatch;
-
-});
-
-renderDebts(filtered);
-
-}
-
-// Живой поиск
 searchInput.addEventListener("input", applySearch);
 
 /* ---------- ОПЛАТА ---------- */
@@ -1175,7 +1335,7 @@ function openPayment(row,remainder){
 }
 
 function closePayment(){
-paymentModal.style.display="none";
+  paymentModal.style.display="none";
 }
 
 function confirmPayment(){
@@ -1186,7 +1346,7 @@ function confirmPayment(){
   paymentLoader.style.display = "block";
 
   fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+amount+"&seller="+currentSeller)
-  .then(()=>{
+  .then(()=> {
     paymentLoader.style.display = "none";
     paymentModal.style.display = "none";
     loadDebts();
@@ -1412,47 +1572,40 @@ function exportPdf(type){
   }, 150);
 }
 
-  /* ---------- ВЫХОД ---------- */
+/* ---------- ВЫХОД ---------- */
 
 function closeLogout(){
-logoutModal.style.display="none";
+  logoutModal.style.display="none";
 }
 
 function confirmLogout(){
+  document.body.style.transition="0.3s";
+  document.body.style.opacity="0.5";
 
-document.body.style.transition="0.3s";
-document.body.style.opacity="0.5";
-
-setTimeout(()=>{
-sessionStorage.removeItem("seller");
-location.reload();
-},300);
-
+  setTimeout(()=>{
+    sessionStorage.removeItem("seller");
+    location.reload();
+  },300);
 }
-  
 </script>
 
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js")
-      .then((registration) => {
-        console.log("Service Worker зарегистрирован");
+    navigator.serviceWorker.register("./sw.js").then((registration) => {
+      console.log("Service Worker зарегистрирован");
 
-        registration.addEventListener("updatefound", () => {
-          const newWorker = registration.installing;
-          if (!newWorker) return;
+      registration.addEventListener("updatefound", () => {
+        const newWorker = registration.installing;
+        if (!newWorker) return;
 
-          newWorker.addEventListener("statechange", () => {
-            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-              if (confirm("Доступно обновление программы. Обновить сейчас?")) {
-                window.location.reload();
-              }
-            }
-          });
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            showToast("🔄 Доступно обновление приложения. Обновите страницу.", "success");
+          }
         });
-      })
-      .catch((err) => console.log("Ошибка Service Worker:", err));
+      });
+    }).catch((err) => console.log("Ошибка Service Worker:", err));
   });
 }
 </script>
