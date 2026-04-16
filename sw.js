@@ -1,4 +1,4 @@
-const CACHE_NAME = "fsl-debts-v1";
+const CACHE_NAME = "fsl-debts-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -10,8 +10,17 @@ const ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(async (cache) => {
+      for (const asset of ASSETS) {
+        try {
+          await cache.add(asset);
+        } catch (error) {
+          console.warn("Не удалось закэшировать:", asset, error);
+        }
+      }
+    })
   );
+
   self.skipWaiting();
 });
 
@@ -27,6 +36,7 @@ self.addEventListener("activate", (event) => {
       )
     )
   );
+
   self.clients.claim();
 });
 
@@ -35,10 +45,30 @@ self.addEventListener("fetch", (event) => {
 
   if (req.method !== "GET") return;
 
+  const isPageRequest =
+    req.mode === "navigate" ||
+    (req.headers.get("accept") || "").includes("text/html");
+
   event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-      return fetch(req).catch(() => caches.match("./index.html"));
-    })
+    fetch(req)
+      .then((response) => {
+        if (!response || response.status !== 200 || response.type !== "basic") {
+          return response;
+        }
+
+        const responseClone = response.clone();
+
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(req, responseClone);
+        });
+
+        return response;
+      })
+      .catch(() => {
+        return caches.match(req).then((cached) => {
+          if (cached) return cached;
+          if (isPageRequest) return caches.match("./index.html");
+        });
+      })
   );
 });
