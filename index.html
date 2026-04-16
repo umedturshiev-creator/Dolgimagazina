@@ -502,10 +502,11 @@ margin-top:10px;
     <div id="userInfo"></div>
   </div>
 
-  <div class="header-right">
-    <button class="export-btn" onclick="openExportMenu()">PDF</button>
-    <button class="logout-btn" onclick="logout()">🚪</button>
-  </div>
+<div class="header-right">
+  <button class="export-btn" onclick="openExportMenu()">PDF</button>
+  <button class="export-btn" onclick="forceAppUpdate()">⟳</button>
+  <button class="logout-btn" onclick="logout()">🚪</button>
+</div>
 </div>
 
 <div class="container" id="appContent" style="display:none;">
@@ -591,7 +592,7 @@ margin-top:10px;
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="3.6";
+const VERSION="3.7";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwz8QgFL74NuHCKXfKApALqxzUMKhbVPvzHLKG1axElO5KRgsMZRLO9pHAj_D87oor2/exec";
 
 const USERS={
@@ -1588,6 +1589,33 @@ function confirmLogout(){
   },300);
 }
 </script>
+  
+<script>
+async function forceAppUpdate() {
+  try {
+    showToast("🔄 Проверка обновления...", "success");
+
+    if ("serviceWorker" in navigator) {
+      const registration = await navigator.serviceWorker.getRegistration();
+
+      if (registration) {
+        await registration.update();
+
+        if (registration.waiting) {
+          registration.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+      }
+    }
+
+    setTimeout(() => {
+      window.location.reload(true);
+    }, 700);
+
+  } catch (e) {
+    console.error("Ошибка обновления:", e);
+    showToast("❌ Не удалось обновить приложение", "error");
+  }
+}
 
 <script>
 if ("serviceWorker" in navigator) {
