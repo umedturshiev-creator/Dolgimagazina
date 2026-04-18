@@ -576,7 +576,9 @@ margin-top:10px;
     <button id="fullCloseBtn" onclick="openFullCloseConfirm()" style="background:#dc2626;color:white;">
       Погасить полностью
     </button>
-    <button onclick="closePayment()" style="background:#ccc;color:black;">Отмена</button>
+    <button id="fullCloseCancelBtn" onclick="closeFullCloseModal()" style="background:#ccc;color:black;">
+  Отмена
+</button>
     <div id="paymentLoader" class="loader" style="display:none;">⏳ Обработка...</div>
   </div>
 </div>
@@ -1026,13 +1028,15 @@ function applyTranslations(){
   const refreshBtnEl = document.getElementById("refreshBtn");
   if (refreshBtnEl) refreshBtnEl.textContent = t("refreshBtn");
 
-  const fullCloseBtnEl = document.getElementById("fullCloseBtn");
-  const fullCloseTitleEl = document.getElementById("fullCloseTitle");
-  const fullCloseYesBtnEl = document.getElementById("fullCloseYesBtn");
+const fullCloseBtnEl = document.getElementById("fullCloseBtn");
+const fullCloseTitleEl = document.getElementById("fullCloseTitle");
+const fullCloseYesBtnEl = document.getElementById("fullCloseYesBtn");
+const fullCloseCancelBtnEl = document.getElementById("fullCloseCancelBtn");
 
-  if (fullCloseBtnEl) fullCloseBtnEl.textContent = t("fullCloseBtn");
-  if (fullCloseTitleEl) fullCloseTitleEl.textContent = t("fullCloseTitle");
-  if (fullCloseYesBtnEl) fullCloseYesBtnEl.textContent = t("fullCloseYes");
+if (fullCloseBtnEl) fullCloseBtnEl.textContent = t("fullCloseBtn");
+if (fullCloseTitleEl) fullCloseTitleEl.textContent = t("fullCloseTitle");
+if (fullCloseYesBtnEl) fullCloseYesBtnEl.textContent = t("fullCloseYes");
+if (fullCloseCancelBtnEl) fullCloseCancelBtnEl.textContent = t("cancelBtn");
   
 }
 
