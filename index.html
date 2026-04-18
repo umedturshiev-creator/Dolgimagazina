@@ -149,22 +149,6 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   margin-left:auto;
 }
 
-.export-btn{
-  width:52px;
-  height:40px;
-  margin-top:0;
-  border-radius:12px;
-  border:none;
-  background:rgba(255,255,255,0.15);
-  color:white;
-  font-size:13px;
-  font-weight:bold;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
 .pdf-report{
   width:1120px;
   background:#fff;
@@ -322,6 +306,16 @@ font-size:14px;
 .save-btn{background:#28a745;color:white;}
 .save-btn:disabled{opacity:0.5;}
 .pay-btn{background:#28a745;color:white;}
+
+#fullCloseBtn{
+  background:#dc2626;
+  color:white;
+  transition:all 0.1s ease;
+}
+
+#fullCloseBtn:active{
+  transform:scale(0.97);
+}
 
 .action-row{display:flex;gap:6px;margin-top:6px;}
 .action-row a{
@@ -579,6 +573,9 @@ margin-top:10px;
     <div id="paymentInfo"></div>
     <input type="tel" inputmode="numeric" id="paymentAmount" placeholder="Введите сумму">
     <button class="pay-btn" onclick="confirmPayment()">Подтвердить оплату</button>
+    <button id="fullCloseBtn" onclick="openFullCloseConfirm()" style="background:#dc2626;color:white;">
+      Погасить полностью
+    </button>
     <button onclick="closePayment()" style="background:#ccc;color:black;">Отмена</button>
     <div id="paymentLoader" class="loader" style="display:none;">⏳ Обработка...</div>
   </div>
@@ -632,11 +629,27 @@ margin-top:10px;
     </div>
   </div>
 </div>
+  
+<div class="modal" id="fullCloseConfirmModal">
+  <div class="modal-content">
+    <h3 id="fullCloseTitle">Полное погашение</h3>
+    <div id="fullCloseText"></div>
+
+    <button id="fullCloseYesBtn" class="pay-btn">
+      Да, погасить
+    </button>
+
+    <button onclick="closeFullCloseModal()" style="background:#ccc;color:black;">
+      Отмена
+    </button>
+  </div>
+</div>
+  
 
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="3.7";
+const VERSION="3.8";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwz8QgFL74NuHCKXfKApALqxzUMKhbVPvzHLKG1axElO5KRgsMZRLO9pHAj_D87oor2/exec";
 
 const USERS={
@@ -768,6 +781,12 @@ const translations = {
 
     updatingToast: "Проверка обновления...",
     updateFailedToast: "Не удалось обновить приложение",
+
+    fullCloseBtn: "Погасить полностью",
+    fullCloseTitle: "Полное погашение",
+    fullCloseText: "Вы действительно хотите полностью погасить долг?",
+    fullCloseYes: "Да, погасить",
+    closeDebtSuccess: "Долг полностью погашен",
   
   },
 
@@ -882,6 +901,12 @@ const translations = {
 
     updatingToast: "Санҷиши навсозӣ...",
     updateFailedToast: "Навсозии барнома иҷро нашуд",
+
+    fullCloseBtn: "Пурра пардохт кардан",
+    fullCloseTitle: "Пардохти пурра",
+    fullCloseText: "Оё воқеан мехоҳед қарзро пурра пардохт кунед?",
+    fullCloseYes: "Бале, пардохт кардан",
+    closeDebtSuccess: "Қарз пурра пардохт шуд",
     
   }
 };
@@ -955,7 +980,8 @@ function applyTranslations(){
   if (paymentTitle) paymentTitle.textContent = t("paymentTitle");
   if (paymentInput) paymentInput.placeholder = t("paymentPlaceholder");
   if (paymentBtns[0]) paymentBtns[0].textContent = t("confirmPayment");
-  if (paymentBtns[1]) paymentBtns[1].textContent = t("cancelBtn");
+  if (paymentBtns[1]) paymentBtns[1].textContent = t("fullCloseBtn");
+  if (paymentBtns[2]) paymentBtns[2].textContent = t("cancelBtn");
   if (paymentLoaderEl) paymentLoaderEl.textContent = t("paymentLoader");
 
   const historyTitle = document.querySelector("#historyModal h3");
@@ -999,6 +1025,15 @@ function applyTranslations(){
 
   const refreshBtnEl = document.getElementById("refreshBtn");
   if (refreshBtnEl) refreshBtnEl.textContent = t("refreshBtn");
+
+  const fullCloseBtnEl = document.getElementById("fullCloseBtn");
+  const fullCloseTitleEl = document.getElementById("fullCloseTitle");
+  const fullCloseYesBtnEl = document.getElementById("fullCloseYesBtn");
+
+  if (fullCloseBtnEl) fullCloseBtnEl.textContent = t("fullCloseBtn");
+  if (fullCloseTitleEl) fullCloseTitleEl.textContent = t("fullCloseTitle");
+  if (fullCloseYesBtnEl) fullCloseYesBtnEl.textContent = t("fullCloseYes");
+  
 }
 
 function showToast(message, type = "success"){
@@ -1131,6 +1166,11 @@ window.onload = function(){
   if(saved){
     currentSeller = saved;
     openApp();
+  }
+
+  const fullCloseYesBtn = document.getElementById("fullCloseYesBtn");
+  if (fullCloseYesBtn) {
+    fullCloseYesBtn.onclick = confirmFullClose;
   }
 
   applyTranslations();
@@ -1391,6 +1431,12 @@ function openPayment(row,remainder){
   currentRemainder = remainder;
   paymentAmount.value = "";
   paymentInfo.innerHTML = t("paymentRemainder", { amount: remainder });
+
+  const fullBtn = document.getElementById("fullCloseBtn");
+  if (fullBtn) {
+    fullBtn.style.display = remainder > 0 ? "block" : "none";
+  }
+
   paymentModal.style.display = "flex";
 }
 
@@ -1412,6 +1458,50 @@ function confirmPayment(){
     loadDebts();
   });
 }
+
+/* ---------- ПОЛНОЕ ПОГАШЕНИЕ ---------- */
+
+function openFullCloseConfirm(){
+  if (!currentRow || !currentRemainder) return;
+
+  const modal = document.getElementById("fullCloseConfirmModal");
+  const text = document.getElementById("fullCloseText");
+
+  text.innerHTML = `
+    <div>${t("fullCloseText")}</div>
+    <div style="margin-top:10px;">
+      <b>${t("remainder")}:</b> ${currentRemainder} ${t("somoni")}
+    </div>
+  `;
+
+  modal.style.display = "flex";
+}
+
+function closeFullCloseModal(){
+  document.getElementById("fullCloseConfirmModal").style.display = "none";
+}
+
+function confirmFullClose(){
+  const modal = document.getElementById("fullCloseConfirmModal");
+
+  modal.style.display = "none";
+  paymentLoader.style.display = "block";
+
+  fetch(SCRIPT_URL + "?paid=" + currentRow + "&amount=" + currentRemainder + "&seller=" + encodeURIComponent(currentSeller || ""))
+    .then(res => res.json())
+    .then(() => {
+      paymentLoader.style.display = "none";
+      paymentModal.style.display = "none";
+
+      showToast(`✅ <b>${t("closeDebtSuccess")}</b>`, "success");
+      loadDebts();
+    })
+    .catch(err => {
+      console.error(err);
+      paymentLoader.style.display = "none";
+      showToast(`❌ ${t("errorSaveToast")}`, "error");
+    });
+}  
 
 /* ---------- ИСТОРИЯ ---------- */
 
@@ -1667,7 +1757,7 @@ async function forceAppUpdate() {
     }
 
     setTimeout(() => {
-      window.location.reload(true);
+      window.location.reload();
     }, 700);
 
   } catch (e) {
@@ -1675,6 +1765,7 @@ async function forceAppUpdate() {
     showToast(`❌ ${t("updateFailedToast")}`, "error");
   }
 }
+</script>
 
 <script>
 if ("serviceWorker" in navigator) {
@@ -1689,19 +1780,15 @@ if ("serviceWorker" in navigator) {
 
         newWorker.addEventListener("statechange", () => {
           if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-            if (confirm("Доступно обновление приложения. Обновить сейчас?")) {
-              window.location.reload();
-            }
+            showToast("🔄 Доступно обновление приложения", "success");
           }
         });
       });
 
       if (registration.waiting) {
-        if (confirm("Доступна новая версия приложения. Обновить сейчас?")) {
-          registration.waiting.postMessage({ type: "SKIP_WAITING" });
-          window.location.reload();
-        }
+        registration.waiting.postMessage({ type: "SKIP_WAITING" });
       }
+
     } catch (err) {
       console.log("Ошибка Service Worker:", err);
     }
