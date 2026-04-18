@@ -307,6 +307,20 @@ font-size:14px;
 .save-btn:disabled{opacity:0.5;}
 .pay-btn{background:#28a745;color:white;}
 
+.half-btn{
+  width:100%;
+  margin-top:0;
+}
+
+.add-debt-btn{
+  background:#2563eb;
+  color:white;
+}
+
+.add-debt-btn:active{
+  transform:scale(0.97);
+}
+
 #fullCloseBtn{
   background:#dc2626;
   color:white;
@@ -646,12 +660,34 @@ margin-top:10px;
 </button>
   </div>
 </div>
-  
+
+<div class="modal" id="addToDebtModal">
+  <div class="modal-content">
+    <h3 id="addToDebtTitle">Добавить к текущему долгу</h3>
+
+    <div id="addToDebtInfo"></div>
+
+    <input
+      type="tel"
+      inputmode="numeric"
+      id="addToDebtAmountInput"
+      placeholder="Сумма добавления"
+    >
+
+    <button id="addToDebtConfirmBtn" class="add-debt-btn">
+      Добавить
+    </button>
+
+    <button id="addToDebtCancelBtn" onclick="closeAddToDebtModal()" style="background:#ccc;color:black;">
+      Отмена
+    </button>
+  </div>
+</div>
 
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="3.9";
+const VERSION="4.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwz8QgFL74NuHCKXfKApALqxzUMKhbVPvzHLKG1axElO5KRgsMZRLO9pHAj_D87oor2/exec";
 
 const USERS={
@@ -667,6 +703,9 @@ let currentRow=null;
 let currentRemainder=0;
 let toastTimer=null;
 let mergeDebtResolver=null;
+let addDebtTargetRow = null;
+let addDebtTargetClient = "";
+let addDebtTargetPhone = "";
 
 let currentLanguage = localStorage.getItem("lang") || "ru";
 let lastStatsData = {};
@@ -789,6 +828,12 @@ const translations = {
     fullCloseText: "Вы действительно хотите полностью погасить долг?",
     fullCloseYes: "Да, погасить",
     closeDebtSuccess: "Долг полностью погашен",
+
+    addToDebtBtn: "Добавить к долгу",
+    addToDebtTitle: "Добавить к текущему долгу",
+    addToDebtAmount: "Сумма добавления",
+    addToDebtConfirm: "Добавить",
+    addToDebtSuccess: "Сумма добавлена к долгу",
   
   },
 
@@ -909,6 +954,12 @@ const translations = {
     fullCloseText: "Оё воқеан мехоҳед қарзро пурра пардохт кунед?",
     fullCloseYes: "Бале, пардохт кардан",
     closeDebtSuccess: "Қарз пурра пардохт шуд",
+
+    addToDebtBtn: "Ба қарз илова кардан",
+    addToDebtTitle: "Ба қарзи ҷорӣ илова кардан",
+    addToDebtAmount: "Маблағи иловагӣ",
+    addToDebtConfirm: "Илова кардан",
+    addToDebtSuccess: "Маблағ ба қарз илова шуд",
     
   }
 };
@@ -1037,6 +1088,16 @@ if (fullCloseBtnEl) fullCloseBtnEl.textContent = t("fullCloseBtn");
 if (fullCloseTitleEl) fullCloseTitleEl.textContent = t("fullCloseTitle");
 if (fullCloseYesBtnEl) fullCloseYesBtnEl.textContent = t("fullCloseYes");
 if (fullCloseCancelBtnEl) fullCloseCancelBtnEl.textContent = t("cancelBtn");
+
+const addToDebtTitleEl = document.getElementById("addToDebtTitle");
+const addToDebtAmountInputEl = document.getElementById("addToDebtAmountInput");
+const addToDebtConfirmBtnEl = document.getElementById("addToDebtConfirmBtn");
+const addToDebtCancelBtnEl = document.getElementById("addToDebtCancelBtn");
+
+if (addToDebtTitleEl) addToDebtTitleEl.textContent = t("addToDebtTitle");
+if (addToDebtAmountInputEl) addToDebtAmountInputEl.placeholder = t("addToDebtAmount");
+if (addToDebtConfirmBtnEl) addToDebtConfirmBtnEl.textContent = t("addToDebtConfirm");
+if (addToDebtCancelBtnEl) addToDebtCancelBtnEl.textContent = t("cancelBtn");
   
 }
 
@@ -1175,6 +1236,11 @@ window.onload = function(){
   const fullCloseYesBtn = document.getElementById("fullCloseYesBtn");
   if (fullCloseYesBtn) {
     fullCloseYesBtn.onclick = confirmFullClose;
+  }
+
+  const addToDebtConfirmBtn = document.getElementById("addToDebtConfirmBtn");
+  if (addToDebtConfirmBtn) {
+    addToDebtConfirmBtn.onclick = confirmAddToDebt;
   }
 
   applyTranslations();
@@ -1386,9 +1452,15 @@ function renderDebts(list){
       ${sumHistoryHtml}
       ${extra}
 
-      <button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">
-        ${t("payBtn")}
-      </button>
+      <div class="action-row">
+  <button class="pay-btn half-btn" onclick="openPayment(${d.row},${d.remainder})">
+    ${t("payBtn")}
+  </button>
+
+  <button class="add-debt-btn half-btn" onclick="openAddToDebtModal(${d.row}, '${String(d.client).replace(/'/g,"\\'")}', '${String(d.phone).replace(/'/g,"\\'")}', ${d.remainder})">
+    ➕ ${t("addToDebtBtn")}
+  </button>
+</div>
 
       <div class="action-row">
         <a class="call-btn" href="tel:+${phoneFull}">📞 ${t("callBtn")}</a>
@@ -1506,6 +1578,85 @@ function confirmFullClose(){
       showToast(`❌ ${t("errorSaveToast")}`, "error");
     });
 }  
+
+function openAddToDebtModal(row, clientName, phone, remainder){
+  addDebtTargetRow = row;
+  addDebtTargetClient = clientName;
+  addDebtTargetPhone = phone;
+
+  const amountInput = document.getElementById("addToDebtAmountInput");
+  const info = document.getElementById("addToDebtInfo");
+  const modal = document.getElementById("addToDebtModal");
+
+  if (amountInput) amountInput.value = "";
+
+  if (info) {
+    info.innerHTML = `
+      <div><b>${t("clientPlaceholder")}:</b> ${clientName}</div>
+      <div><b>${t("phonePlaceholder")}:</b> ${phone}</div>
+      <div><b>${t("remainder")}:</b> ${remainder} ${t("somoni")}</div>
+    `;
+  }
+
+  if (modal) modal.style.display = "flex";
+}
+
+function closeAddToDebtModal(){
+  const modal = document.getElementById("addToDebtModal");
+  if (modal) modal.style.display = "none";
+
+  addDebtTargetRow = null;
+  addDebtTargetClient = "";
+  addDebtTargetPhone = "";
+}
+
+async function confirmAddToDebt(){
+  const amountInput = document.getElementById("addToDebtAmountInput");
+  const amount = Number(amountInput?.value || 0);
+
+  if (!amount || amount <= 0) {
+    alert(t("invalidAmount"));
+    return;
+  }
+
+  const now = new Date();
+  const formattedDate =
+    String(now.getDate()).padStart(2, "0") + "." +
+    String(now.getMonth() + 1).padStart(2, "0") + "." +
+    now.getFullYear() + " " +
+    String(now.getHours()).padStart(2, "0") + ":" +
+    String(now.getMinutes()).padStart(2, "0");
+
+  const payload = {
+    client: addDebtTargetClient,
+    phone: addDebtTargetPhone,
+    amount: amount,
+    seller: currentSeller,
+    mode: "append",
+    targetRow: addDebtTargetRow,
+    noteText: `Долг суммирован: +${amount} (${formattedDate})`
+  };
+
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      closeAddToDebtModal();
+      showToast(`✅ <b>${t("addToDebtSuccess")}</b><br>💰 +${amount} ${t("somoni")}`, "append");
+      loadDebts();
+    } else {
+      showToast(`❌ ${t("errorSaveToast")}`, "error");
+    }
+  } catch (e) {
+    console.error(e);
+    showToast(`❌ ${t("errorSaveToast")}`, "error");
+  }
+}
 
 /* ---------- ИСТОРИЯ ---------- */
 
