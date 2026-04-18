@@ -576,7 +576,7 @@ margin-top:10px;
     <button id="fullCloseBtn" onclick="openFullCloseConfirm()" style="background:#dc2626;color:white;">
       Погасить полностью
     </button>
-    <button id="fullCloseCancelBtn" onclick="closeFullCloseModal()" style="background:#ccc;color:black;">
+    <button id="paymentCancelBtn" onclick="closePayment()" style="background:#ccc;color:black;">
   Отмена
 </button>
     <div id="paymentLoader" class="loader" style="display:none;">⏳ Обработка...</div>
@@ -641,9 +641,9 @@ margin-top:10px;
       Да, погасить
     </button>
 
-    <button onclick="closeFullCloseModal()" style="background:#ccc;color:black;">
-      Отмена
-    </button>
+<button id="fullCloseCancelBtn" onclick="closeFullCloseModal()" style="background:#ccc;color:black;">
+  Отмена
+</button>
   </div>
 </div>
   
@@ -651,7 +651,7 @@ margin-top:10px;
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="3.8";
+const VERSION="3.9";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwz8QgFL74NuHCKXfKApALqxzUMKhbVPvzHLKG1axElO5KRgsMZRLO9pHAj_D87oor2/exec";
 
 const USERS={
