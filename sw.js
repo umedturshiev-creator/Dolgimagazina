@@ -1,4 +1,4 @@
-const CACHE_NAME = "fsl-debts-v6";
+const CACHE_NAME = "fsl-debts-v7";
 const ASSETS = [
   "./",
   "./index.html",
