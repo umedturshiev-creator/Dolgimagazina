@@ -21,16 +21,76 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-body{margin:0;font-family:Arial;background:#f4f6f9;}
+:root{
+  --bg-1:#020617;
+  --bg-2:#0b1120;
+  --bg-3:#111827;
+  --panel-1:rgba(15,23,42,0.88);
+  --panel-2:rgba(30,41,59,0.88);
+  --panel-solid:#111827;
+  --card-border:rgba(148,163,184,0.14);
+  --text-1:#f8fafc;
+  --text-2:#cbd5e1;
+  --text-3:#94a3b8;
+  --primary-1:#2563eb;
+  --primary-2:#1d4ed8;
+  --primary-3:#60a5fa;
+  --success-1:#22c55e;
+  --success-2:#16a34a;
+  --danger-1:#ef4444;
+  --danger-2:#dc2626;
+  --warning-1:#f59e0b;
+  --warning-2:#d97706;
+  --purple-1:#8b5cf6;
+  --purple-2:#7c3aed;
+  --shadow-xl:0 24px 60px rgba(2,6,23,0.5);
+  --shadow-lg:0 16px 40px rgba(2,6,23,0.38);
+  --shadow-md:0 10px 24px rgba(2,6,23,0.28);
+  --radius-xl:22px;
+  --radius-lg:18px;
+  --radius-md:14px;
+  --radius-sm:12px;
+}
+
+*{box-sizing:border-box;}
+
+html{
+  min-height:100%;
+  background:
+    radial-gradient(circle at top left, rgba(37,99,235,0.20), transparent 34%),
+    radial-gradient(circle at top right, rgba(139,92,246,0.16), transparent 28%),
+    linear-gradient(145deg,var(--bg-1),var(--bg-2) 42%,#111827 100%);
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  color:var(--text-1);
+  background:
+    radial-gradient(circle at top left, rgba(37,99,235,0.16), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(139,92,246,0.14), transparent 28%),
+    linear-gradient(145deg,var(--bg-1),var(--bg-2) 42%,#111827 100%);
+  background-attachment:fixed;
+}
 
 .header{
-  background:#1f3b8f;
-  color:white;
-  padding:12px 16px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:
+    linear-gradient(135deg, rgba(15,23,42,0.92), rgba(30,41,59,0.88)),
+    linear-gradient(135deg, rgba(37,99,235,0.16), rgba(139,92,246,0.10));
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  color:var(--text-1);
+  padding:14px 16px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
+  border-bottom:1px solid rgba(148,163,184,0.12);
+  box-shadow:0 14px 40px rgba(2,6,23,0.45);
 }
 
 .header-left,
@@ -50,30 +110,37 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   margin:0;
   font-size:18px;
   line-height:1.2;
+  color:var(--text-1);
+  letter-spacing:0.2px;
 }
 
 .user-meta{
-  margin-top:4px;
+  margin-top:6px;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:8px;
   flex-wrap:wrap;
+  color:var(--text-2);
 }
 
 #userInfo{
   margin-top:0;
   font-size:12px;
+  color:var(--text-2);
 }
 
 .lang-switch{
   display:flex;
   align-items:center;
-  background:#ffffff;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(148,163,184,0.18);
   border-radius:18px;
   padding:3px;
   gap:3px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.12);
+  box-shadow:var(--shadow-md);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
 }
 
 .compact-lang{
@@ -83,7 +150,7 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
 .lang-btn{
   border:none;
   background:transparent;
-  color:#1f3b8f;
+  color:var(--text-2);
   padding:0 12px;
   height:30px;
   min-width:42px;
@@ -92,38 +159,42 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   border-radius:14px;
   cursor:pointer;
   margin:0;
+  transition:all .2s ease;
 }
 
 .lang-btn.active{
-  background:#1f3b8f;
+  background:linear-gradient(135deg,var(--primary-1),var(--primary-2));
   color:#ffffff;
+  box-shadow:0 6px 18px rgba(37,99,235,0.35);
 }
 
 .mini-refresh-btn{
   margin:0;
   border:none;
-  border-radius:10px;
-  background:rgba(255,255,255,0.18);
+  border-radius:12px;
+  background:linear-gradient(135deg, rgba(37,99,235,0.90), rgba(124,58,237,0.90));
   color:white;
   font-size:12px;
   font-weight:bold;
   cursor:pointer;
-  padding:0 10px;
-  height:28px;
+  padding:0 12px;
+  height:30px;
   min-width:auto;
   width:auto;
   display:flex;
   align-items:center;
   justify-content:center;
+  box-shadow:0 12px 24px rgba(37,99,235,0.28);
+  transition:transform .15s ease, box-shadow .2s ease;
 }
 
 .export-btn{
   width:52px;
   height:38px;
   margin:0;
-  border-radius:10px;
-  border:none;
-  background:rgba(255,255,255,0.15);
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,0.12);
+  background:linear-gradient(135deg, rgba(37,99,235,0.92), rgba(29,78,216,0.92));
   color:white;
   font-size:12px;
   font-weight:bold;
@@ -131,6 +202,7 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   display:flex;
   align-items:center;
   justify-content:center;
+  box-shadow:0 12px 24px rgba(37,99,235,0.25);
 }
 
 .logout-btn{
@@ -138,8 +210,8 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   height:38px;
   margin:0;
   border-radius:50%;
-  border:none;
-  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(148,163,184,0.12);
+  background:rgba(255,255,255,0.08);
   color:white;
   font-size:16px;
   cursor:pointer;
@@ -147,6 +219,8 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   align-items:center;
   justify-content:center;
   margin-left:auto;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 }
 
 .pdf-report{
@@ -154,8 +228,9 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
   background:#fff;
   color:#000;
   padding:16px;
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
   box-sizing:border-box;
+  border-radius:18px;
 }
 
 .pdf-report h1{
@@ -191,121 +266,129 @@ body{margin:0;font-family:Arial;background:#f4f6f9;}
 }
 
 .pdf-table th:nth-child(1),
-.pdf-table td:nth-child(1){
-  width:4%;
-}
-
+.pdf-table td:nth-child(1){width:4%;}
 .pdf-table th:nth-child(2),
-.pdf-table td:nth-child(2){
-  width:20%;
-}
-
+.pdf-table td:nth-child(2){width:20%;}
 .pdf-table th:nth-child(3),
-.pdf-table td:nth-child(3){
-  width:12%;
-}
-
+.pdf-table td:nth-child(3){width:12%;}
 .pdf-table th:nth-child(4),
-.pdf-table td:nth-child(4){
-  width:12%;
-}
-
+.pdf-table td:nth-child(4){width:12%;}
 .pdf-table th:nth-child(5),
-.pdf-table td:nth-child(5){
-  width:13%;
-}
-
+.pdf-table td:nth-child(5){width:13%;}
 .pdf-table th:nth-child(6),
-.pdf-table td:nth-child(6){
-  width:13%;
-}
-
+.pdf-table td:nth-child(6){width:13%;}
 .pdf-table th:nth-child(7),
-.pdf-table td:nth-child(7){
-  width:13%;
-}
-
+.pdf-table td:nth-child(7){width:13%;}
 .pdf-table th:nth-child(8),
-.pdf-table td:nth-child(8){
-  width:13%;
-}
+.pdf-table td:nth-child(8){width:13%;}
 
-.pdf-table thead{
-  display:table-header-group;
-}
+.pdf-table thead{display:table-header-group;}
+.pdf-table tr{page-break-inside:avoid;}
 
-.pdf-table tr{
-  page-break-inside:avoid;
-}
-
-.pdf-status-overdue{
-  color:#b91c1c;
-  font-weight:bold;
-}
-
-.pdf-status-partial{
-  color:#15803d;
-  font-weight:bold;
-}
-
-.pdf-status-active{
-  color:#1d4ed8;
-  font-weight:bold;
-}
-
-.pdf-status-closed{
-  color:#374151;
-  font-weight:bold;
-}
+.pdf-status-overdue{color:#b91c1c;font-weight:bold;}
+.pdf-status-partial{color:#15803d;font-weight:bold;}
+.pdf-status-active{color:#1d4ed8;font-weight:bold;}
+.pdf-status-closed{color:#374151;font-weight:bold;}
 
 .login{
-position:fixed;
-inset:0;
-background:#000;
-color:white;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left, rgba(37,99,235,0.18), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(139,92,246,0.16), transparent 28%),
+    linear-gradient(145deg,var(--bg-1),var(--bg-2) 45%,#111827 100%);
+  color:var(--text-1);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:24px;
 }
 
-.login img{width:120px;margin-bottom:20px;}
+.login img{
+  width:120px;
+  margin-bottom:22px;
+  filter:drop-shadow(0 16px 28px rgba(0,0,0,0.38));
+}
 
-.container{padding:12px;}
+.login h2{
+  margin:0 0 10px 0;
+  font-size:26px;
+  letter-spacing:0.3px;
+}
+
+.container{
+  padding:14px;
+  max-width:980px;
+  margin:0 auto;
+}
 
 .card{
-background:white;
-padding:14px;
-border-radius:14px;
-margin-bottom:12px;
-box-shadow:0 4px 10px rgba(0,0,0,0.07);
-font-size:14px;
+  background:
+    linear-gradient(180deg, rgba(30,41,59,0.92), rgba(15,23,42,0.94)),
+    linear-gradient(135deg, rgba(37,99,235,0.08), rgba(139,92,246,0.06));
+  padding:16px;
+  border-radius:20px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow-lg);
+  font-size:14px;
+  color:var(--text-1);
+  border:1px solid var(--card-border);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  line-height:1.55;
+}
+
+.card b{
+  color:#ffffff;
 }
 
 .overdue{
-background:#ffe5e5;
-border-left:5px solid red;
+  background:
+    linear-gradient(180deg, rgba(69,10,10,0.92), rgba(31,10,10,0.95)),
+    linear-gradient(135deg, rgba(239,68,68,0.18), rgba(124,58,237,0.05));
+  border-left:5px solid #ef4444;
 }
 
 .warning{
-background:#fff8e1;
-border-left:5px solid orange;
+  background:
+    linear-gradient(180deg, rgba(66,32,6,0.92), rgba(28,20,5,0.96)),
+    linear-gradient(135deg, rgba(245,158,11,0.16), rgba(37,99,235,0.05));
+  border-left:5px solid #f59e0b;
 }
 
 button{
-width:100%;
-padding:10px;
-border:none;
-border-radius:10px;
-margin-top:6px;
-font-weight:bold;
-font-size:14px;
+  width:100%;
+  padding:11px 14px;
+  border:none;
+  border-radius:14px;
+  margin-top:6px;
+  font-weight:700;
+  font-size:14px;
+  color:white;
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .2s ease, opacity .2s ease;
 }
 
-.save-btn{background:#28a745;color:white;}
+button:active,
+.mini-refresh-btn:active,
+.export-btn:active,
+.logout-btn:active{
+  transform:scale(0.98);
+}
+
+.save-btn{
+  background:linear-gradient(135deg,var(--success-1),var(--success-2));
+  color:white;
+  box-shadow:0 14px 28px rgba(34,197,94,0.22);
+}
 .save-btn:disabled{opacity:0.5;}
-.pay-btn{background:#28a745;color:white;}
+.pay-btn{
+  background:linear-gradient(135deg,var(--success-1),var(--success-2));
+  color:white;
+  box-shadow:0 14px 28px rgba(34,197,94,0.22);
+}
 
 .half-btn{
   width:100%;
@@ -313,8 +396,9 @@ font-size:14px;
 }
 
 .add-debt-btn{
-  background:#2563eb;
+  background:linear-gradient(135deg,var(--primary-1),var(--primary-2));
   color:white;
+  box-shadow:0 14px 28px rgba(37,99,235,0.22);
 }
 
 .add-debt-btn:active{
@@ -322,8 +406,9 @@ font-size:14px;
 }
 
 #fullCloseBtn{
-  background:#dc2626;
+  background:linear-gradient(135deg,var(--danger-1),var(--danger-2));
   color:white;
+  box-shadow:0 14px 28px rgba(239,68,68,0.22);
   transition:all 0.1s ease;
 }
 
@@ -331,90 +416,127 @@ font-size:14px;
   transform:scale(0.97);
 }
 
-.action-row{display:flex;gap:6px;margin-top:6px;}
-.action-row a{
-flex:1;
-text-align:center;
-padding:8px;
-border-radius:8px;
-font-size:13px;
-text-decoration:none;
-color:white;
+.action-row{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
 }
-.call-btn{background:#007bff;}
-.wa-btn{background:#25D366;}
+.action-row a{
+  flex:1;
+  text-align:center;
+  padding:10px;
+  border-radius:14px;
+  font-size:13px;
+  font-weight:700;
+  text-decoration:none;
+  color:white;
+  box-shadow:var(--shadow-md);
+}
+.call-btn{background:linear-gradient(135deg,#3b82f6,#1d4ed8);}
+.wa-btn{background:linear-gradient(135deg,#22c55e,#16a34a);}
 
 input{
-width:100%;
-padding:10px;
-margin:6px 0;
-border-radius:10px;
-border:1px solid #ddd;
-font-size:14px;
+  width:100%;
+  padding:12px 14px;
+  margin:6px 0;
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,0.18);
+  font-size:14px;
+  color:var(--text-1);
+  background:rgba(15,23,42,0.88);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);
+  outline:none;
+}
+
+input::placeholder{
+  color:var(--text-3);
+}
+
+input:focus{
+  border-color:rgba(96,165,250,0.65);
+  box-shadow:0 0 0 4px rgba(59,130,246,0.12);
 }
 
 .search-box{
-background:white;
-padding:10px;
-border-radius:12px;
-margin-bottom:12px;
+  background:rgba(15,23,42,0.74);
+  padding:12px;
+  border-radius:18px;
+  margin-bottom:14px;
+  border:1px solid rgba(148,163,184,0.12);
+  box-shadow:var(--shadow-md);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
 }
 
 .modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.6);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:9998;
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,23,0.72);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9998;
+  padding:16px;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
 }
 
 .modal-content{
-background:white;
-padding:20px;
-border-radius:14px;
-width:90%;
-max-width:350px;
-text-align:left;
-max-height:80vh;
-overflow:auto;
+  background:
+    linear-gradient(180deg, rgba(30,41,59,0.95), rgba(15,23,42,0.97)),
+    linear-gradient(135deg, rgba(37,99,235,0.07), rgba(139,92,246,0.05));
+  padding:22px;
+  border-radius:20px;
+  width:90%;
+  max-width:350px;
+  text-align:left;
+  max-height:80vh;
+  overflow:auto;
+  color:var(--text-1);
+  border:1px solid rgba(148,163,184,0.14);
+  box-shadow:var(--shadow-xl);
+}
+
+.modal-content h3{
+  margin-top:0;
+  color:#fff;
 }
 
 .loader{
-animation:pulse 1s infinite;
-text-align:center;
-font-weight:bold;
-margin-top:10px;
+  animation:pulse 1s infinite;
+  text-align:center;
+  font-weight:bold;
+  margin-top:10px;
+  color:var(--text-2);
 }
 
 @keyframes pulse{
-0%{opacity:0.4;}
-50%{opacity:1;}
-100%{opacity:0.4;}
+  0%{opacity:0.4;}
+  50%{opacity:1;}
+  100%{opacity:0.4;}
 }
 
 .merge-modal{
   max-width:420px;
-  border-radius:18px;
+  border-radius:22px;
   padding:22px;
 }
 
 .merge-modal h3{
   margin:0 0 14px 0;
   font-size:18px;
-  color:#111827;
+  color:#ffffff;
 }
 
 .merge-info{
-  background:#f8fafc;
-  border:1px solid #e5e7eb;
-  border-radius:14px;
+  background:rgba(15,23,42,0.70);
+  border:1px solid rgba(148,163,184,0.14);
+  border-radius:16px;
   padding:14px;
   margin-bottom:16px;
   line-height:1.6;
   font-size:14px;
-  color:#111827;
+  color:var(--text-2);
 }
 
 .merge-actions{
@@ -427,45 +549,46 @@ margin-top:10px;
   width:100%;
   padding:12px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   font-size:15px;
   font-weight:bold;
   cursor:pointer;
 }
 
 .append-btn{
-  background:#16a34a;
+  background:linear-gradient(135deg,var(--success-1),var(--success-2));
   color:white;
 }
 
 .create-btn{
-  background:#2563eb;
+  background:linear-gradient(135deg,var(--primary-1),var(--primary-2));
   color:white;
 }
 
 .cancel-btn{
-  background:#e5e7eb;
-  color:#111827;
+  background:rgba(148,163,184,0.14);
+  color:var(--text-1);
 }
 
 .sum-history-box{
-  margin-top:10px;
-  padding:10px 12px;
-  background:#faf5ff;
-  border-left:4px solid #9333ea;
-  border-radius:10px;
+  margin-top:12px;
+  padding:12px 14px;
+  background:linear-gradient(135deg, rgba(91,33,182,0.22), rgba(30,41,59,0.54));
+  border-left:4px solid #8b5cf6;
+  border-radius:14px;
+  border:1px solid rgba(167,139,250,0.16);
 }
 
 .sum-history-title{
   font-size:13px;
   font-weight:bold;
-  color:#6b21a8;
+  color:#c4b5fd;
   margin-bottom:6px;
 }
 
 .sum-history-item{
   font-size:12px;
-  color:#4b5563;
+  color:var(--text-2);
   margin-bottom:4px;
   line-height:1.4;
   white-space:pre-wrap;
@@ -482,17 +605,18 @@ margin-top:10px;
   transform:translateX(-50%) translateY(20px);
   min-width:280px;
   max-width:90%;
-  background:#111827;
+  background:#0f172a;
   color:#fff;
   padding:14px 16px;
-  border-radius:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  border-radius:16px;
+  box-shadow:0 16px 40px rgba(2,6,23,0.45);
   font-size:14px;
   line-height:1.5;
   z-index:99999;
   opacity:0;
   pointer-events:none;
   transition:all 0.3s ease;
+  border:1px solid rgba(148,163,184,0.12);
 }
 
 .toast.show{
@@ -501,15 +625,48 @@ margin-top:10px;
 }
 
 .toast.success{
-  background:linear-gradient(135deg,#16a34a,#22c55e);
+  background:linear-gradient(135deg,#15803d,#22c55e);
 }
 
 .toast.append{
-  background:linear-gradient(135deg,#7c3aed,#a855f7);
+  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
 }
 
 .toast.error{
-  background:linear-gradient(135deg,#dc2626,#ef4444);
+  background:linear-gradient(135deg,#b91c1c,#ef4444);
+}
+
+h3{
+  color:#ffffff;
+  margin-top:0;
+}
+
+label{
+  color:#fca5a5 !important;
+}
+
+@media (max-width:640px){
+  .header{
+    padding:12px;
+  }
+
+  .container{
+    padding:12px;
+  }
+
+  .card{
+    border-radius:18px;
+    padding:14px;
+  }
+
+  .modal-content{
+    padding:18px;
+    border-radius:18px;
+  }
+
+  .action-row{
+    gap:6px;
+  }
 }
 </style>
 </head>
@@ -520,11 +677,11 @@ margin-top:10px;
     <h3>Подтверждение выхода</h3>
     <p>Вы действительно хотите выйти?</p>
 
-    <button onclick="confirmLogout()" style="background:#dc3545;color:white;">
+    <button onclick="confirmLogout()" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;box-shadow:0 14px 28px rgba(239,68,68,0.22);">
       Выйти
     </button>
 
-    <button onclick="closeLogout()" style="background:#ccc;color:black;">
+    <button onclick="closeLogout()" style="background:rgba(148,163,184,0.16);color:#f8fafc;border:1px solid rgba(148,163,184,0.14);">
       Отмена
     </button>
   </div>
@@ -568,7 +725,7 @@ margin-top:10px;
   <input id="client" placeholder="Имя клиента">
   <input id="phone" placeholder="Телефон" maxlength="9" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
   <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
-  <label style="color:red;font-weight:bold;">Выберите дату оплаты</label>
+  <label style="color:#fca5a5;font-weight:bold;">Выберите дату оплаты</label>
   <input id="dueDate" type="date">
   <button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
   <div id="saveLoader" class="loader" style="display:none;">⏳ Сохранение...</div>
@@ -587,10 +744,10 @@ margin-top:10px;
     <div id="paymentInfo"></div>
     <input type="tel" inputmode="numeric" id="paymentAmount" placeholder="Введите сумму">
     <button class="pay-btn" onclick="confirmPayment()">Подтвердить оплату</button>
-    <button id="fullCloseBtn" onclick="openFullCloseConfirm()" style="background:#dc2626;color:white;">
+    <button id="fullCloseBtn" onclick="openFullCloseConfirm()" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;box-shadow:0 14px 28px rgba(239,68,68,0.22);">
       Погасить полностью
     </button>
-    <button id="paymentCancelBtn" onclick="closePayment()" style="background:#ccc;color:black;">
+    <button id="paymentCancelBtn" onclick="closePayment()" style="background:rgba(148,163,184,0.16);color:#f8fafc;border:1px solid rgba(148,163,184,0.14);">
   Отмена
 </button>
     <div id="paymentLoader" class="loader" style="display:none;">⏳ Обработка...</div>
@@ -610,7 +767,7 @@ margin-top:10px;
   <div class="modal-content">
     <h3 id="exportTitle">Экспорт</h3>
 
-    <button id="exportAllBtn" onclick="exportPdf('all')" style="background:#1f3b8f;color:white;">
+    <button id="exportAllBtn" onclick="exportPdf('all')" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;box-shadow:0 14px 28px rgba(37,99,235,0.22);">
       Экспорт всех данных
     </button>
 
@@ -619,15 +776,15 @@ margin-top:10px;
       <input type="month" id="exportMonth">
     </div>
 
-    <button id="exportMonthBtn" onclick="exportPdf('month')" style="background:#0ea5e9;color:white;">
+    <button id="exportMonthBtn" onclick="exportPdf('month')" style="background:linear-gradient(135deg,#0ea5e9,#2563eb);color:white;box-shadow:0 14px 28px rgba(14,165,233,0.22);">
       Экспорт за месяц
     </button>
 
-    <button id="exportOverdueBtn" onclick="exportPdf('overdue')" style="background:#dc2626;color:white;">
+    <button id="exportOverdueBtn" onclick="exportPdf('overdue')" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;box-shadow:0 14px 28px rgba(239,68,68,0.22);">
       Экспорт только просроченных
     </button>
 
-    <button id="exportCancelBtn" onclick="closeExportMenu()" style="background:#ccc;color:black;">
+    <button id="exportCancelBtn" onclick="closeExportMenu()" style="background:rgba(148,163,184,0.16);color:#f8fafc;border:1px solid rgba(148,163,184,0.14);">
       Отмена
     </button>
   </div>
@@ -655,7 +812,7 @@ margin-top:10px;
       Да, погасить
     </button>
 
-<button id="fullCloseCancelBtn" onclick="closeFullCloseModal()" style="background:#ccc;color:black;">
+<button id="fullCloseCancelBtn" onclick="closeFullCloseModal()" style="background:rgba(148,163,184,0.16);color:#f8fafc;border:1px solid rgba(148,163,184,0.14);">
   Отмена
 </button>
   </div>
@@ -678,7 +835,7 @@ margin-top:10px;
       Добавить
     </button>
 
-    <button id="addToDebtCancelBtn" onclick="closeAddToDebtModal()" style="background:#ccc;color:black;">
+    <button id="addToDebtCancelBtn" onclick="closeAddToDebtModal()" style="background:rgba(148,163,184,0.16);color:#f8fafc;border:1px solid rgba(148,163,184,0.14);">
       Отмена
     </button>
   </div>
@@ -1430,7 +1587,7 @@ function renderDebts(list){
 
     if(d.isOverdue || diffDays < 0){
       cardClass += " overdue";
-      extra = `<div style="color:red;font-weight:bold;">${t("overdueDays",{days:Math.abs(diffDays)})}</div>`;
+      extra = `<div style="color:#fca5a5;font-weight:bold;">${t("overdueDays",{days:Math.abs(diffDays)})}</div>`;
     } else if(diffDays <= 2){
       cardClass += " warning";
       extra = `<div style="color:orange;">${t("leftDays",{days:diffDays})}</div>`;
