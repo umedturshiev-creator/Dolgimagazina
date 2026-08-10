@@ -1890,7 +1890,7 @@ html[data-theme="light"] .stats-detail-head{border-color:rgba(100,116,139,.18);}
 html[data-theme="light"] .stats-detail-summary-item,html[data-theme="light"] .stats-detail-item{background:rgba(248,250,252,.88);border-color:rgba(148,163,184,.24);}
 html[data-theme="light"] .stats-detail-title,html[data-theme="light"] .stats-detail-summary-value,html[data-theme="light"] .stats-detail-item-title,html[data-theme="light"] .stats-detail-item-value{color:#0f172a!important;}
 html[data-theme="light"] .stats-detail-subtitle,html[data-theme="light"] .stats-detail-summary-label,html[data-theme="light"] .stats-detail-item-meta,html[data-theme="light"] .stats-detail-empty,html[data-theme="light"] .stats-detail-loading{color:#475569!important;}
-.stats-debt-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:11px;padding-top:10px;border-top:1px solid var(--glass-border);}
+.stats-debt-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:11px;padding-top:10px;border-top:1px solid var(--glass-border);}
 .stats-debt-action{margin:0!important;min-height:38px;padding:8px 9px!important;border-radius:12px!important;font-size:11px!important;font-weight:850!important;box-shadow:none!important;display:flex!important;align-items:center;justify-content:center;gap:5px;line-height:1.2;text-align:center;text-decoration:none!important;}
 .stats-debt-action.pay{background:linear-gradient(135deg,#16a34a,#22c55e)!important;color:#fff!important;}
 .stats-debt-action.add{background:linear-gradient(135deg,#2563eb,#4f46e5)!important;color:#fff!important;}
@@ -2205,7 +2205,7 @@ html[data-theme="light"] .reduce-debt-info{background:#f8fafc;color:#475569;bord
 </div>
 
 <script>
-const VERSION="5.0";
+const VERSION="5.0.1";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -3455,43 +3455,28 @@ function statsDetailSummaryHtml_(list){
     <div class="stats-detail-summary-item"><div class="stats-detail-summary-label">${statsLocale_('Остаток','Бақия')}</div><div class="stats-detail-summary-value">${statsMoney_(remainder)} ${t('somoni')}</div></div>
   </div>`;
 }
-function statsFindDebtByRow_(row){
-  const target=Number(row||0);
-  return [...allDebts,...paidDebts].find(d=>Number(d.row||0)===target)||null;
-}
-function statsDebtActionByRow_(action,row){
-  const d=statsFindDebtByRow_(row);
-  if(!d)return;
-  const remainder=Number(d.remainder||0);
-  const phone=normalizePhone(d.phone);
-  if(action==='pay'&&remainder>0)return openPayment(Number(d.row),remainder);
-  if(action==='add'&&remainder>0)return openAddToDebtModal(Number(d.row),String(d.client||''),phone,remainder);
-  if(action==='reduce'&&remainder>0)return openReduceDebtModal(Number(d.row),String(d.client||''),phone,remainder);
-  if(action==='full'&&remainder>0)return statsOpenFullClose_(Number(d.row),remainder);
-  if(action==='history')return showHistory(String(d.client||''));
-}
 function statsDebtActionsHtml_(d){
   const row=Number(d.row||0);
   const remainder=Number(d.remainder||0);
   const phone=normalizePhone(d.phone);
   const phoneFull=phone?`992${phone}`:"";
+  const safeClient=escapeHtml(String(d.client||"")).replace(/'/g,"&#39;");
+  const safePhone=escapeHtml(phone).replace(/'/g,"&#39;");
   if(remainder<=0){
     return `<div class="stats-debt-paid-hint">✅ ${statsLocale_('Долг закрыт. Доступны связь с клиентом и история оплат.','Қарз баста шудааст. Тамос ва таърихи пардохтҳо дастрасанд.')}</div>
       <div class="stats-debt-actions">
         ${phoneFull?`<a class="stats-debt-action call" href="tel:+${phoneFull}">📞 ${t('callBtn')}</a>`:''}
         ${phoneFull?`<a class="stats-debt-action wa" target="_blank" href="https://wa.me/${phoneFull}">💬 ${t('whatsappBtn')}</a>`:''}
-        <button class="stats-debt-action history" onclick="statsDebtActionByRow_('history',${row})">📂 ${t('historyBtn')}</button>
+        <button class="stats-debt-action history" onclick="showHistory('${safeClient}')">📂 ${t('historyBtn')}</button>
       </div>`;
   }
   const waText=encodeURIComponent(t('waReminder',{amount:remainder}));
   return `<div class="stats-debt-actions">
-    <button class="stats-debt-action pay" onclick="statsDebtActionByRow_('pay',${row})">💵 ${t('payBtn')}</button>
-    <button class="stats-debt-action add" onclick="statsDebtActionByRow_('add',${row})">➕ ${t('addToDebtBtn')}</button>
-    <button class="stats-debt-action reduce" onclick="statsDebtActionByRow_('reduce',${row})">➖ ${statsLocale_('Уменьшить','Кам кардан')}</button>
-    <button class="stats-debt-action close-debt" onclick="statsDebtActionByRow_('full',${row})">✅ ${statsLocale_('Погасить','Пурра пардохт')}</button>
+    <button class="stats-debt-action add" onclick="openAddToDebtModal(${row},'${safeClient}','${safePhone}',${remainder})">➕ ${t('addToDebtBtn')}</button>
+    <button class="stats-debt-action close-debt" onclick="statsOpenFullClose_(${row},${remainder})">✅ ${statsLocale_('Погасить','Пурра пардохт')}</button>
     ${phoneFull?`<a class="stats-debt-action call" href="tel:+${phoneFull}">📞 ${t('callBtn')}</a>`:''}
     ${phoneFull?`<a class="stats-debt-action wa" target="_blank" href="https://wa.me/${phoneFull}?text=${waText}">💬 ${t('whatsappBtn')}</a>`:''}
-    <button class="stats-debt-action history" onclick="statsDebtActionByRow_('history',${row})">📂 ${t('historyBtn')}</button>
+    <button class="stats-debt-action history" onclick="showHistory('${safeClient}')">📂 ${t('historyBtn')}</button>
   </div>`;
 }
 function statsDebtItemsHtml_(list){
