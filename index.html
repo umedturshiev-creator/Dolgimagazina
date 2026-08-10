@@ -1837,6 +1837,68 @@ html[data-theme="light"] .save-btn:disabled{opacity:.72!important;color:#e2e8f0!
 @media(max-width:720px){.stats-dashboard{gap:12px}.stats-hero-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stats-kpi{padding:13px;min-height:112px}.stats-kpi-value{font-size:20px}.stats-grid-3,.stats-grid-4,.stats-grid-5{grid-template-columns:repeat(2,minmax(0,1fr));}.stats-period-summary{grid-template-columns:repeat(2,minmax(0,1fr));}.stats-two-col{grid-template-columns:1fr}.stats-panel{padding:13px}.stats-list-row{padding:10px}.stats-trend{height:132px}.stats-trend-bars{height:94px}}
 @media(max-width:420px){.stats-kpi-label{font-size:11px}.stats-kpi-value{font-size:18px}.stats-mini-value{font-size:15px}.stats-grid-5{grid-template-columns:1fr 1fr}.stats-trend-day{min-width:25px}}
 
+
+/* ===== v4.9 CLICKABLE STATISTICS ===== */
+.stats-clickable{
+  cursor:pointer;
+  position:relative;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.stats-clickable::after{
+  content:"›";
+  position:absolute;
+  top:10px;
+  right:12px;
+  font-size:20px;
+  line-height:1;
+  color:var(--surface-faint);
+  opacity:.62;
+  transition:transform .18s ease, opacity .18s ease;
+  pointer-events:none;
+}
+.stats-clickable:hover{transform:translateY(-2px);border-color:rgba(96,165,250,.42)!important;box-shadow:0 18px 38px rgba(2,6,23,.16),inset 0 1px 0 rgba(255,255,255,.08);}
+.stats-clickable:hover::after{transform:translateX(2px);opacity:1;color:#60a5fa;}
+.stats-clickable:active{transform:scale(.985);}
+.stats-clickable:focus-visible{outline:none;box-shadow:var(--glass-shadow),var(--focus-ring)!important;}
+html[data-theme="light"] .stats-clickable:hover{box-shadow:0 18px 38px rgba(15,23,42,.12),inset 0 1px 0 rgba(255,255,255,.94);}
+html[data-theme="light"] .stats-clickable::after{color:#64748b;}
+.stats-list-row.stats-clickable::after{top:50%;transform:translateY(-50%);right:9px;}
+.stats-list-row.stats-clickable{padding-right:34px;}
+.stats-detail-modal .modal-content{max-width:760px;width:min(94vw,760px);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;padding:0!important;}
+.stats-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 18px 14px;border-bottom:1px solid var(--glass-border);}
+.stats-detail-head-main{min-width:0;}
+.stats-detail-title{font-size:18px;font-weight:950;color:var(--surface-text);letter-spacing:-.02em;}
+.stats-detail-subtitle{font-size:12px;color:var(--surface-muted);margin-top:5px;line-height:1.45;}
+.stats-detail-close{width:38px;height:38px;min-width:38px;margin:0!important;border-radius:13px!important;padding:0!important;background:rgba(148,163,184,.12)!important;color:var(--surface-text)!important;border:1px solid var(--glass-border)!important;box-shadow:none!important;font-size:20px!important;}
+.stats-detail-body{padding:14px 18px 18px;overflow:auto;overscroll-behavior:contain;}
+.stats-detail-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:12px;}
+.stats-detail-summary-item{padding:12px;border-radius:15px;background:var(--glass-bg-soft);border:1px solid var(--glass-border);}
+.stats-detail-summary-label{font-size:10.5px;font-weight:800;color:var(--surface-muted);}
+.stats-detail-summary-value{font-size:17px;font-weight:950;color:var(--surface-text);margin-top:5px;word-break:break-word;}
+.stats-detail-list{display:flex;flex-direction:column;gap:9px;}
+.stats-detail-item{border-radius:16px;padding:12px 13px;background:var(--glass-bg-soft);border:1px solid var(--glass-border);}
+.stats-detail-item.overdue-item{border-left:3px solid #ef4444;}
+.stats-detail-item.paid-item{border-left:3px solid #22c55e;}
+.stats-detail-item-title{font-size:13.5px;font-weight:900;color:var(--surface-text);padding-right:2px;}
+.stats-detail-item-meta{font-size:11.5px;color:var(--surface-muted);margin-top:5px;line-height:1.55;}
+.stats-detail-item-value{font-size:13px;color:var(--surface-text);font-weight:850;margin-top:7px;display:flex;flex-wrap:wrap;gap:8px 14px;}
+.stats-detail-empty{text-align:center;padding:26px 12px;color:var(--surface-muted);font-weight:750;font-size:13px;}
+.stats-detail-loading{text-align:center;padding:26px 12px;color:var(--surface-muted);font-weight:750;font-size:13px;}
+.stats-detail-hint{padding:10px 12px;border-radius:13px;background:rgba(37,99,235,.09);border:1px solid rgba(96,165,250,.18);font-size:11px;color:var(--surface-muted);line-height:1.5;margin-bottom:12px;}
+html[data-theme="light"] .stats-detail-head{border-color:rgba(100,116,139,.18);}
+html[data-theme="light"] .stats-detail-summary-item,html[data-theme="light"] .stats-detail-item{background:rgba(248,250,252,.88);border-color:rgba(148,163,184,.24);}
+html[data-theme="light"] .stats-detail-title,html[data-theme="light"] .stats-detail-summary-value,html[data-theme="light"] .stats-detail-item-title,html[data-theme="light"] .stats-detail-item-value{color:#0f172a!important;}
+html[data-theme="light"] .stats-detail-subtitle,html[data-theme="light"] .stats-detail-summary-label,html[data-theme="light"] .stats-detail-item-meta,html[data-theme="light"] .stats-detail-empty,html[data-theme="light"] .stats-detail-loading{color:#475569!important;}
+@media(max-width:640px){
+  .stats-detail-modal .modal-content{width:96vw;max-height:86vh;border-radius:22px!important;}
+  .stats-detail-head{padding:15px 14px 12px;}
+  .stats-detail-body{padding:12px 14px 16px;}
+  .stats-detail-summary{grid-template-columns:1fr 1fr;}
+  .stats-detail-title{font-size:16px;}
+  .stats-clickable:hover{transform:none;}
+}
+
 </style>
 </head>
 <body>
@@ -2100,8 +2162,22 @@ html[data-theme="light"] .save-btn:disabled{opacity:.72!important;color:#e2e8f0!
 
 <div id="toast" class="toast"></div>
 
+
+<div class="modal stats-detail-modal" id="statsDetailModal" onclick="statsDetailBackdropClose(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="stats-detail-head">
+      <div class="stats-detail-head-main">
+        <div id="statsDetailTitle" class="stats-detail-title">Детали статистики</div>
+        <div id="statsDetailSubtitle" class="stats-detail-subtitle"></div>
+      </div>
+      <button class="stats-detail-close" onclick="closeStatsDetail()" aria-label="Закрыть">×</button>
+    </div>
+    <div id="statsDetailBody" class="stats-detail-body"></div>
+  </div>
+</div>
+
 <script>
-const VERSION="4.8.1";
+const VERSION="4.9";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -3174,15 +3250,23 @@ function statsMoney_(value){
 }
 function statsPct_(value){ return `${Number(value||0).toFixed(1)}%`; }
 function statsCountText_(count){ return `${Number(count||0)} ${statsLocale_("зап.","сабт")}`; }
-function statsKpi_(cls,icon,label,value,note=""){
-  return `<div class="stats-kpi ${cls}"><div><div class="stats-kpi-icon">${icon}</div><div class="stats-kpi-label">${label}</div></div><div><div class="stats-kpi-value">${value}</div>${note?`<div class="stats-kpi-note">${note}</div>`:""}</div></div>`;
+function statsActionAttrs_(action,label=""){
+  if(!action) return "";
+  const safeAction=escapeHtml(String(action)).replace(/'/g,"&#39;");
+  const safeLabel=escapeHtml(String(label||"")).replace(/'/g,"&#39;");
+  return ` stats-clickable" role="button" tabindex="0" data-stats-action="${safeAction}" onclick="openStatsDetail('${safeAction}','${safeLabel}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('${safeAction}','${safeLabel}')}"`;
 }
-function statsMini_(label,value,sub="",extra=""){
-  return `<div class="stats-mini-card ${extra}"><div class="stats-mini-label">${label}</div><div class="stats-mini-value">${value}</div>${sub?`<div class="stats-mini-sub">${sub}</div>`:""}</div>`;
+function statsKpi_(cls,icon,label,value,note="",action=""){
+  const actionAttrs=statsActionAttrs_(action,label);
+  return `<div class="stats-kpi ${cls}${actionAttrs}"><div><div class="stats-kpi-icon">${icon}</div><div class="stats-kpi-label">${label}</div></div><div><div class="stats-kpi-value">${value}</div>${note?`<div class="stats-kpi-note">${note}</div>`:""}</div></div>`;
+}
+function statsMini_(label,value,sub="",extra="",action=""){
+  const actionAttrs=statsActionAttrs_(action,label);
+  return `<div class="stats-mini-card ${extra}${actionAttrs}"><div class="stats-mini-label">${label}</div><div class="stats-mini-value">${value}</div>${sub?`<div class="stats-mini-sub">${sub}</div>`:""}</div>`;
 }
 function statsDebtorRows_(list,mode){
   if(!Array.isArray(list)||!list.length) return `<div class="stats-empty">${statsLocale_("Нет данных","Маълумот нест")}</div>`;
-  return `<div class="stats-list">${list.map((d,i)=>`<div class="stats-list-row"><div class="stats-list-main"><div class="stats-list-name">${i+1}. ${escapeHtml(String(d.client||"—"))}</div><div class="stats-list-meta">${escapeHtml(String(d.phone||""))}${d.dueDate?` · ${statsLocale_("до","то")} ${escapeHtml(String(d.dueDate))}`:""}${Number(d.daysOverdue||0)>0?` · ${Number(d.daysOverdue)} ${statsLocale_("дн. просрочки","рӯз гузашта")}`:""}</div></div><div class="stats-list-value">${statsMoney_(d.remainder)} ${t("somoni")}</div></div>`).join("")}</div>`;
+  return `<div class="stats-list">${list.map((d,i)=>`<div class="stats-list-row stats-clickable" role="button" tabindex="0" onclick="openStatsDetail('debt-row:${Number(d.row||0)}','${escapeHtml(String(d.client||'' )).replace(/'/g,"&#39;")}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('debt-row:${Number(d.row||0)}','${escapeHtml(String(d.client||'' )).replace(/'/g,"&#39;")}')}"><div class="stats-list-main"><div class="stats-list-name">${i+1}. ${escapeHtml(String(d.client||"—"))}</div><div class="stats-list-meta">${escapeHtml(String(d.phone||""))}${d.dueDate?` · ${statsLocale_("до","то")} ${escapeHtml(String(d.dueDate))}`:""}${Number(d.daysOverdue||0)>0?` · ${Number(d.daysOverdue)} ${statsLocale_("дн. просрочки","рӯз гузашта")}`:""}</div></div><div class="stats-list-value">${statsMoney_(d.remainder)} ${t("somoni")}</div></div>`).join("")}</div>`;
 }
 function statsPeriodData_(key){
   const e=lastStatsData?.analytics?.events||{};
@@ -3196,10 +3280,10 @@ function selectStatsPeriod(key){
   if(!box)return;
   const net=Number(p.issued||0)-Number(p.returned||0);
   box.innerHTML=[
-    statsMini_(statsLocale_("Выдано","Дода шуд"),`${statsMoney_(p.issued)} ${t("somoni")}`,`${Number(p.issuedCount||0)} ${statsLocale_("операций","амалиёт")}`),
-    statsMini_(statsLocale_("Получено оплат","Пардохт гирифта шуд"),`${statsMoney_(p.returned)} ${t("somoni")}`,`${Number(p.paymentCount||0)} ${statsLocale_("платежей","пардохт")}`),
-    statsMini_(statsLocale_("Изменение остатка","Тағйири бақия"),`${net>=0?"+":""}${statsMoney_(net)} ${t("somoni")}`,net>0?statsLocale_("долг вырос","қарз зиёд шуд"):net<0?statsLocale_("долг снизился","қарз кам шуд"):statsLocale_("без изменений","бе тағйир")),
-    statsMini_(statsLocale_("Движений всего","Ҳамаи амалиёт"),String(Number(p.issuedCount||0)+Number(p.paymentCount||0)),statsLocale_("выдачи + оплаты","додан + пардохт"))
+    statsMini_(statsLocale_("Выдано","Дода шуд"),`${statsMoney_(p.issued)} ${t("somoni")}`,`${Number(p.issuedCount||0)} ${statsLocale_("операций","амалиёт")}`,"",`period-issued:${key}`),
+    statsMini_(statsLocale_("Получено оплат","Пардохт гирифта шуд"),`${statsMoney_(p.returned)} ${t("somoni")}`,`${Number(p.paymentCount||0)} ${statsLocale_("платежей","пардохт")}`,"",`period-returned:${key}`),
+    statsMini_(statsLocale_("Изменение остатка","Тағйири бақия"),`${net>=0?"+":""}${statsMoney_(net)} ${t("somoni")}`,net>0?statsLocale_("долг вырос","қарз зиёд шуд"):net<0?statsLocale_("долг снизился","қарз кам шуд"):statsLocale_("без изменений","бе тағйир"),"",`period-all:${key}`),
+    statsMini_(statsLocale_("Движений всего","Ҳамаи амалиёт"),String(Number(p.issuedCount||0)+Number(p.paymentCount||0)),statsLocale_("выдачи + оплаты","додан + пардохт"),"",`period-all:${key}`)
   ].join('');
 }
 function renderStats(data){
@@ -3218,44 +3302,44 @@ function renderStats(data){
 
   const trend=Array.isArray(ev.trend)?ev.trend:[];
   const maxTrend=Math.max(1,...trend.flatMap(x=>[Number(x.issued||0),Number(x.returned||0)]));
-  const trendHtml=trend.length?`<div class="stats-legend"><span><i style="background:#3b82f6"></i>${statsLocale_("Выдано","Дода шуд")}</span><span><i style="background:#22c55e"></i>${statsLocale_("Возвращено","Баргардонида шуд")}</span></div><div class="stats-trend">${trend.map(x=>{const ih=Math.max(2,Math.round(Number(x.issued||0)/maxTrend*100));const rh=Math.max(2,Math.round(Number(x.returned||0)/maxTrend*100));const ds=String(x.date||"");return `<div class="stats-trend-day" title="${ds}: ${statsLocale_("выдано","дода шуд")} ${statsMoney_(x.issued)}, ${statsLocale_("возвращено","баргардонида шуд")} ${statsMoney_(x.returned)}"><div class="stats-trend-bars"><div class="stats-trend-bar issued" style="height:${ih}%"></div><div class="stats-trend-bar returned" style="height:${rh}%"></div></div><div class="stats-trend-label">${ds.slice(5).replace('-', '.')}</div></div>`}).join('')}</div>`:`<div class="stats-empty">${statsLocale_("Динамика начнёт заполняться новыми операциями","Динамика бо амалиёти нав пур мешавад")}</div>`;
+  const trendHtml=trend.length?`<div class="stats-legend"><span><i style="background:#3b82f6"></i>${statsLocale_("Выдано","Дода шуд")}</span><span><i style="background:#22c55e"></i>${statsLocale_("Возвращено","Баргардонида шуд")}</span></div><div class="stats-trend">${trend.map(x=>{const ih=Math.max(2,Math.round(Number(x.issued||0)/maxTrend*100));const rh=Math.max(2,Math.round(Number(x.returned||0)/maxTrend*100));const ds=String(x.date||"");return `<div class="stats-trend-day stats-clickable" role="button" tabindex="0" onclick="openStatsDetail('date:${ds}','${ds}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('date:${ds}','${ds}')}" title="${ds}: ${statsLocale_("выдано","дода шуд")} ${statsMoney_(x.issued)}, ${statsLocale_("возвращено","баргардонида шуд")} ${statsMoney_(x.returned)}"><div class="stats-trend-bars"><div class="stats-trend-bar issued" style="height:${ih}%"></div><div class="stats-trend-bar returned" style="height:${rh}%"></div></div><div class="stats-trend-label">${ds.slice(5).replace('-', '.')}</div></div>`}).join('')}</div>`:`<div class="stats-empty">${statsLocale_("Динамика начнёт заполняться новыми операциями","Динамика бо амалиёти нав пур мешавад")}</div>`;
 
   const staff=Array.isArray(ev.staff)?ev.staff:[];
-  const staffHtml=staff.length?`<div class="stats-list">${staff.map(s=>`<div class="stats-list-row"><div class="stats-list-main"><div class="stats-list-name">👤 ${escapeHtml(String(s.name||"—"))}</div><div class="stats-list-meta">${statsLocale_("Выдано","Дода шуд")}: ${statsMoney_(s.issued)} · ${statsLocale_("Принято оплат","Пардохт қабул шуд")}: ${statsMoney_(s.collected)}</div></div><div class="stats-list-value">${statsMoney_(Number(s.collected||0)-Number(s.issued||0))}</div></div>`).join('')}</div>`:`<div class="stats-empty">${statsLocale_("Статистика сотрудников появится по новым операциям","Омори кормандон аз амалиёти нав пайдо мешавад")}</div>`;
+  const staffHtml=staff.length?`<div class="stats-list">${staff.map(s=>{const sn=String(s.name||"—");const safe=escapeHtml(sn).replace(/'/g,"&#39;");return `<div class="stats-list-row stats-clickable" role="button" tabindex="0" onclick="openStatsDetail('staff:${safe}','${safe}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('staff:${safe}','${safe}')}"><div class="stats-list-main"><div class="stats-list-name">👤 ${escapeHtml(sn)}</div><div class="stats-list-meta">${statsLocale_("Выдано","Дода шуд")}: ${statsMoney_(s.issued)} · ${statsLocale_("Принято оплат","Пардохт қабул шуд")}: ${statsMoney_(s.collected)}</div></div><div class="stats-list-value">${statsMoney_(Number(s.collected||0)-Number(s.issued||0))}</div></div>`}).join('')}</div>`:`<div class="stats-empty">${statsLocale_("Статистика сотрудников появится по новым операциям","Омори кормандон аз амалиёти нав пайдо мешавад")}</div>`;
 
   const periodKey=window.__statsPeriod||'thisMonth';
   statsBox.innerHTML=`<div class="stats-dashboard">
     <div class="stats-hero-grid">
-      ${statsKpi_('primary','💰',statsLocale_('Выдано всего','Ҳамагӣ дода шуд'),`${statsMoney_(totalIssued)} ${t('somoni')}`,`${Number(a.debtRecords||0)} ${statsLocale_('записей','сабт')}`)}
-      ${statsKpi_('success','💵',statsLocale_('Возвращено всего','Ҳамагӣ баргардонида шуд'),`${statsMoney_(totalReturned)} ${t('somoni')}`,statsLocale_('все частичные и полные оплаты','ҳамаи пардохтҳои қисмӣ ва пурра'))}
-      ${statsKpi_('','📉',statsLocale_('Текущий остаток','Бақияи ҷорӣ'),`${statsMoney_(activeTotal)} ${t('somoni')}`,`${activeCount} ${statsLocale_('активных долгов','қарзи фаъол')}`)}
-      ${statsKpi_('danger','🔴',statsLocale_('Просрочено','Муҳлат гузашта'),`${statsMoney_(overdueTotal)} ${t('somoni')}`,`${overdueCount} ${statsLocale_('долгов','қарз')}`)}
-      ${statsKpi_('purple','📈',statsLocale_('Процент возврата','Фоизи баргардонӣ'),statsPct_(a.recoveryRate),`${statsLocale_('доля просрочки','ҳиссаи муҳлатгузашта')}: ${statsPct_(a.overdueShare)}`)}
+      ${statsKpi_('primary','💰',statsLocale_('Выдано всего','Ҳамагӣ дода шуд'),`${statsMoney_(totalIssued)} ${t('somoni')}`,`${Number(a.debtRecords||0)} ${statsLocale_('записей','сабт')}`,'all-records')}
+      ${statsKpi_('success','💵',statsLocale_('Возвращено всего','Ҳамагӣ баргардонида шуд'),`${statsMoney_(totalReturned)} ${t('somoni')}`,statsLocale_('все частичные и полные оплаты','ҳамаи пардохтҳои қисмӣ ва пурра'),'with-payments')}
+      ${statsKpi_('','📉',statsLocale_('Текущий остаток','Бақияи ҷорӣ'),`${statsMoney_(activeTotal)} ${t('somoni')}`,`${activeCount} ${statsLocale_('активных долгов','қарзи фаъол')}`,'active')}
+      ${statsKpi_('danger','🔴',statsLocale_('Просрочено','Муҳлат гузашта'),`${statsMoney_(overdueTotal)} ${t('somoni')}`,`${overdueCount} ${statsLocale_('долгов','қарз')}`,'overdue')}
+      ${statsKpi_('purple','📈',statsLocale_('Процент возврата','Фоизи баргардонӣ'),statsPct_(a.recoveryRate),`${statsLocale_('доля просрочки','ҳиссаи муҳлатгузашта')}: ${statsPct_(a.overdueShare)}`,'recovery')}
     </div>
 
     <div class="stats-panel"><div class="stats-section-title">🧾 ${statsLocale_('Состояние долгов','Ҳолати қарзҳо')}</div><div class="stats-grid-4">
-      ${statsMini_(statsLocale_('Активные должники','Қарздорони фаъол'),String(activeCount),`${statsMoney_(activeTotal)} ${t('somoni')}`)}
-      ${statsMini_(statsLocale_('Частично оплачивают','Қисман пардохт мекунанд'),String(partialCount),`${statsMoney_(data?.partialTotal||0)} ${t('somoni')} ${statsLocale_('внесено','пардохт шуд')}`)}
-      ${statsMini_(statsLocale_('Полностью погашено','Пурра пардохт шуд'),String(paidCount),`${statsMoney_(data?.paidTotal||0)} ${t('somoni')}`)}
-      ${statsMini_(statsLocale_('Без единой оплаты','Бе ягон пардохт'),String(Number(a.noPaymentCount||0)),`${statsMoney_(a.noPaymentTotal)} ${t('somoni')}`)}
-      ${statsMini_(statsLocale_('Средний активный долг','Миёнаи қарзи фаъол'),`${statsMoney_(a.averageActiveDebt)} ${t('somoni')}`,statsLocale_('на одну запись','ба як сабт'))}
-      ${statsMini_(statsLocale_('Уникальных клиентов','Муштарии нодир'),String(Number(a.uniqueClients||0)),statsLocale_('по номеру телефона','аз рӯйи рақам'))}
-      ${statsMini_(statsLocale_('Повторные клиенты','Муштарии такрорӣ'),String(Number(a.repeatClients||0)),statsLocale_('более одной записи','зиёда аз як сабт'))}
-      ${statsMini_(statsLocale_('В срок, не просрочено','Дар муҳлат'),`${statsMoney_(a.currentTotal)} ${t('somoni')}`,`${Number(a.currentCount||0)} ${statsLocale_('долгов','қарз')}`)}
+      ${statsMini_(statsLocale_('Активные должники','Қарздорони фаъол'),String(activeCount),`${statsMoney_(activeTotal)} ${t('somoni')}`,"",'active')}
+      ${statsMini_(statsLocale_('Частично оплачивают','Қисман пардохт мекунанд'),String(partialCount),`${statsMoney_(data?.partialTotal||0)} ${t('somoni')} ${statsLocale_('внесено','пардохт шуд')}`,"",'partial')}
+      ${statsMini_(statsLocale_('Полностью погашено','Пурра пардохт шуд'),String(paidCount),`${statsMoney_(data?.paidTotal||0)} ${t('somoni')}`,"",'paid')}
+      ${statsMini_(statsLocale_('Без единой оплаты','Бе ягон пардохт'),String(Number(a.noPaymentCount||0)),`${statsMoney_(a.noPaymentTotal)} ${t('somoni')}`,"",'no-payment')}
+      ${statsMini_(statsLocale_('Средний активный долг','Миёнаи қарзи фаъол'),`${statsMoney_(a.averageActiveDebt)} ${t('somoni')}`,statsLocale_('на одну запись','ба як сабт'),"",'active')}
+      ${statsMini_(statsLocale_('Уникальных клиентов','Муштарии нодир'),String(Number(a.uniqueClients||0)),statsLocale_('по номеру телефона','аз рӯйи рақам'),"",'unique')}
+      ${statsMini_(statsLocale_('Повторные клиенты','Муштарии такрорӣ'),String(Number(a.repeatClients||0)),statsLocale_('более одной записи','зиёда аз як сабт'),"",'repeat')}
+      ${statsMini_(statsLocale_('В срок, не просрочено','Дар муҳлат'),`${statsMoney_(a.currentTotal)} ${t('somoni')}`,`${Number(a.currentCount||0)} ${statsLocale_('долгов','қарз')}`,"",'current')}
     </div></div>
 
     <div class="stats-panel"><div class="stats-section-title">📅 ${statsLocale_('Ближайшие оплаты','Пардохтҳои наздик')}</div><div class="stats-grid-3">
-      ${statsMini_(statsLocale_('К оплате сегодня','Имрӯз бояд пардохт шавад'),`${statsMoney_(a.dueToday?.total)} ${t('somoni')}`,`${Number(a.dueToday?.count||0)} ${statsLocale_('долгов','қарз')}`)}
-      ${statsMini_(statsLocale_('К оплате завтра','Фардо бояд пардохт шавад'),`${statsMoney_(a.dueTomorrow?.total)} ${t('somoni')}`,`${Number(a.dueTomorrow?.count||0)} ${statsLocale_('долгов','қарз')}`)}
-      ${statsMini_(statsLocale_('Ближайшие 7 дней','7 рӯзи наздик'),`${statsMoney_(a.dueNext7?.total)} ${t('somoni')}`,`${Number(a.dueNext7?.count||0)} ${statsLocale_('долгов','қарз')}`)}
+      ${statsMini_(statsLocale_('К оплате сегодня','Имрӯз бояд пардохт шавад'),`${statsMoney_(a.dueToday?.total)} ${t('somoni')}`,`${Number(a.dueToday?.count||0)} ${statsLocale_('долгов','қарз')}`,"",'due-today')}
+      ${statsMini_(statsLocale_('К оплате завтра','Фардо бояд пардохт шавад'),`${statsMoney_(a.dueTomorrow?.total)} ${t('somoni')}`,`${Number(a.dueTomorrow?.count||0)} ${statsLocale_('долгов','қарз')}`,"",'due-tomorrow')}
+      ${statsMini_(statsLocale_('Ближайшие 7 дней','7 рӯзи наздик'),`${statsMoney_(a.dueNext7?.total)} ${t('somoni')}`,`${Number(a.dueNext7?.count||0)} ${statsLocale_('долгов','қарз')}`,"",'due-next7')}
     </div></div>
 
     <div class="stats-panel"><div class="stats-section-title">🚨 ${statsLocale_('Возраст просрочки','Давомнокии муҳлатгузаронӣ')}</div><div class="stats-grid-5">
-      ${statsMini_('1–7 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d1_7?.total)} ${t('somoni')}`,`${Number(aging.d1_7?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a1')}
-      ${statsMini_('8–30 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d8_30?.total)} ${t('somoni')}`,`${Number(aging.d8_30?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a2')}
-      ${statsMini_('31–60 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d31_60?.total)} ${t('somoni')}`,`${Number(aging.d31_60?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a3')}
-      ${statsMini_('61–90 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d61_90?.total)} ${t('somoni')}`,`${Number(aging.d61_90?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a4')}
-      ${statsMini_('90+ '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d90plus?.total)} ${t('somoni')}`,`${Number(aging.d90plus?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a5')}
+      ${statsMini_('1–7 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d1_7?.total)} ${t('somoni')}`,`${Number(aging.d1_7?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a1','aging-1-7')}
+      ${statsMini_('8–30 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d8_30?.total)} ${t('somoni')}`,`${Number(aging.d8_30?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a2','aging-8-30')}
+      ${statsMini_('31–60 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d31_60?.total)} ${t('somoni')}`,`${Number(aging.d31_60?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a3','aging-31-60')}
+      ${statsMini_('61–90 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d61_90?.total)} ${t('somoni')}`,`${Number(aging.d61_90?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a4','aging-61-90')}
+      ${statsMini_('90+ '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d90plus?.total)} ${t('somoni')}`,`${Number(aging.d90plus?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a5','aging-90plus')}
     </div></div>
 
     <div class="stats-panel"><div class="stats-section-title">🔄 ${statsLocale_('Динамика операций','Динамикаи амалиёт')}</div>
@@ -3279,6 +3363,127 @@ function renderStats(data){
   </div>`;
   selectStatsPeriod(periodKey);
 }
+
+
+function statsAllRecords_(){ return [...(Array.isArray(allDebts)?allDebts:[]), ...(Array.isArray(paidDebts)?paidDebts:[])]; }
+function statsDayDiff_(dateStr){
+  if(!dateStr) return null;
+  const d=new Date(dateStr); if(isNaN(d.getTime())) return null; d.setHours(0,0,0,0);
+  const t=new Date(); t.setHours(0,0,0,0);
+  return Math.round((d-t)/86400000);
+}
+function statsLocalFilter_(action){
+  const all=statsAllRecords_();
+  if(action==='all-records') return all;
+  if(action==='with-payments') return all.filter(d=>Number(d.paid||0)>0);
+  if(action==='active') return allDebts.filter(d=>Number(d.remainder||0)>0);
+  if(action==='overdue') return allDebts.filter(d=>!!d.isOverdue || (statsDayDiff_(d.dueDate)!==null && statsDayDiff_(d.dueDate)<0));
+  if(action==='partial') return allDebts.filter(d=>Number(d.paid||0)>0 && Number(d.remainder||0)>0);
+  if(action==='paid') return paidDebts;
+  if(action==='no-payment') return allDebts.filter(d=>Number(d.paid||0)<=0 && Number(d.remainder||0)>0);
+  if(action==='current') return allDebts.filter(d=>{const x=statsDayDiff_(d.dueDate);return Number(d.remainder||0)>0 && (x===null || x>=0);});
+  if(action==='due-today') return allDebts.filter(d=>statsDayDiff_(d.dueDate)===0);
+  if(action==='due-tomorrow') return allDebts.filter(d=>statsDayDiff_(d.dueDate)===1);
+  if(action==='due-next7') return allDebts.filter(d=>{const x=statsDayDiff_(d.dueDate);return x!==null && x>=0 && x<=7;});
+  if(action==='aging-1-7') return allDebts.filter(d=>Number(d.daysOverdue||Math.max(0,-(statsDayDiff_(d.dueDate)||0)))>=1 && Number(d.daysOverdue||Math.max(0,-(statsDayDiff_(d.dueDate)||0)))<=7);
+  if(action==='aging-8-30') return allDebts.filter(d=>{const x=Number(d.daysOverdue||Math.max(0,-(statsDayDiff_(d.dueDate)||0)));return x>=8&&x<=30;});
+  if(action==='aging-31-60') return allDebts.filter(d=>{const x=Number(d.daysOverdue||Math.max(0,-(statsDayDiff_(d.dueDate)||0)));return x>=31&&x<=60;});
+  if(action==='aging-61-90') return allDebts.filter(d=>{const x=Number(d.daysOverdue||Math.max(0,-(statsDayDiff_(d.dueDate)||0)));return x>=61&&x<=90;});
+  if(action==='aging-90plus') return allDebts.filter(d=>Number(d.daysOverdue||Math.max(0,-(statsDayDiff_(d.dueDate)||0)))>90);
+  if(action==='unique'){
+    const seen=new Set(); return all.filter(d=>{const p=normalizePhone(d.phone);if(!p||seen.has(p))return false;seen.add(p);return true;});
+  }
+  if(action==='repeat'){
+    const counts={}; all.forEach(d=>{const p=normalizePhone(d.phone);if(p)counts[p]=(counts[p]||0)+1;});
+    return all.filter(d=>counts[normalizePhone(d.phone)]>1);
+  }
+  if(action==='recovery') return all;
+  if(action.startsWith('debt-row:')){const row=Number(action.split(':')[1]||0);return all.filter(d=>Number(d.row||0)===row);}
+  return [];
+}
+function statsDetailSummaryHtml_(list){
+  const total=list.reduce((s,d)=>s+Number(d.total||0),0);
+  const paid=list.reduce((s,d)=>s+Number(d.paid||0),0);
+  const remainder=list.reduce((s,d)=>s+Number(d.remainder||0),0);
+  return `<div class="stats-detail-summary">
+    <div class="stats-detail-summary-item"><div class="stats-detail-summary-label">${statsLocale_('Записей','Сабт')}</div><div class="stats-detail-summary-value">${list.length}</div></div>
+    <div class="stats-detail-summary-item"><div class="stats-detail-summary-label">${statsLocale_('Оплачено','Пардохт шуд')}</div><div class="stats-detail-summary-value">${statsMoney_(paid)} ${t('somoni')}</div></div>
+    <div class="stats-detail-summary-item"><div class="stats-detail-summary-label">${statsLocale_('Остаток','Бақия')}</div><div class="stats-detail-summary-value">${statsMoney_(remainder)} ${t('somoni')}</div></div>
+  </div>`;
+}
+function statsDebtItemsHtml_(list){
+  if(!list.length) return `<div class="stats-detail-empty">${statsLocale_('По этому показателю данных нет','Аз рӯйи ин нишондиҳанда маълумот нест')}</div>`;
+  const sorted=[...list].sort((a,b)=>Number(b.remainder||0)-Number(a.remainder||0));
+  return `<div class="stats-detail-list">${sorted.map(d=>{
+    const phone=normalizePhone(d.phone);
+    const days=Number(d.daysOverdue||0);
+    const cls=Number(d.remainder||0)<=0?' paid-item':(d.isOverdue||days>0?' overdue-item':'');
+    return `<div class="stats-detail-item${cls}"><div class="stats-detail-item-title">${escapeHtml(String(d.client||'—'))}</div><div class="stats-detail-item-meta">📞 ${escapeHtml(phone||String(d.phone||''))}${d.dueDate?` · 📅 ${escapeHtml(String(d.dueDate))}`:''}${days>0?` · ⚠️ ${days} ${statsLocale_('дн. просрочки','рӯз гузашта')}`:''}</div><div class="stats-detail-item-value"><span>${statsLocale_('Долг','Қарз')}: ${statsMoney_(d.total)} ${t('somoni')}</span><span>${statsLocale_('Оплачено','Пардохт')}: ${statsMoney_(d.paid)} ${t('somoni')}</span><span>${statsLocale_('Остаток','Бақия')}: ${statsMoney_(d.remainder)} ${t('somoni')}</span></div></div>`;
+  }).join('')}</div>`;
+}
+function showStatsDetailLocal_(action,label){
+  let list=statsLocalFilter_(action);
+  const body=document.getElementById('statsDetailBody');
+  const a=lastStatsData?.analytics||{};
+  let hint='';
+  if(action==='recovery') hint=`${statsLocale_('Процент возврата рассчитывается как возвращено / выдано.','Фоизи баргардонӣ ҳамчун баргардонида / дода ҳисоб мешавад.')} <b>${statsMoney_(a.totalReturned)} / ${statsMoney_(a.totalIssued)} = ${statsPct_(a.recoveryRate)}</b>. ${statsLocale_('Ниже — все записи, участвующие в расчёте.','Дар поён ҳамаи сабтҳое ҳастанд, ки дар ҳисоб иштирок мекунанд.')}`;
+  if(action==='unique') hint=statsLocale_('Показан один актуальный пример записи на каждый уникальный номер телефона.','Барои ҳар рақами телефони нодир як сабти намунавӣ нишон дода шудааст.');
+  if(action==='repeat') hint=statsLocale_('Показаны записи клиентов, у которых один и тот же номер встречается более одного раза.','Сабтҳои муштариёне нишон дода шудаанд, ки як рақам зиёда аз як маротиба омадааст.');
+  body.innerHTML=(hint?`<div class="stats-detail-hint">${hint}</div>`:'')+statsDetailSummaryHtml_(list)+statsDebtItemsHtml_(list);
+}
+function statsPeriodLabel_(key){
+  return {today:statsLocale_('Сегодня','Имрӯз'),last7:statsLocale_('Последние 7 дней','7 рӯзи охир'),thisMonth:statsLocale_('Этот месяц','Ин моҳ'),prevMonth:statsLocale_('Прошлый месяц','Моҳи гузашта')}[key]||key;
+}
+async function fetchStatsEvents_(params){
+  const q=new URLSearchParams({statsEvents:'1',...params});
+  const res=await fetch(`${SCRIPT_URL}?${q.toString()}`);
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  return await res.json();
+}
+function statsEventItemsHtml_(events){
+  if(!Array.isArray(events)||!events.length) return `<div class="stats-detail-empty">${statsLocale_('Операций за выбранный период нет','Дар давраи интихобшуда амалиёт нест')}</div>`;
+  return `<div class="stats-detail-list">${events.map(e=>{
+    const issued=e.type==='DEBT_NEW'||e.type==='DEBT_APPEND';
+    const typeLabel=e.type==='DEBT_NEW'?statsLocale_('Новый долг','Қарзи нав'):e.type==='DEBT_APPEND'?statsLocale_('Добавлено к долгу','Ба қарз илова шуд'):statsLocale_('Оплата','Пардохт');
+    const worker=issued?e.issuer:e.collector;
+    return `<div class="stats-detail-item ${issued?'':'paid-item'}"><div class="stats-detail-item-title">${issued?'➕':'💵'} ${typeLabel}: ${escapeHtml(String(e.client||'—'))}</div><div class="stats-detail-item-meta">🕒 ${escapeHtml(String(e.date||''))} · 📞 ${escapeHtml(String(e.phone||''))}${worker?` · 👤 ${escapeHtml(String(worker))}`:''}</div><div class="stats-detail-item-value"><span>${statsMoney_(e.amount)} ${t('somoni')}</span>${e.note?`<span>${escapeHtml(String(e.note))}</span>`:''}</div></div>`;
+  }).join('')}</div>`;
+}
+async function showStatsEventDetail_(action,label){
+  const body=document.getElementById('statsDetailBody');
+  body.innerHTML=`<div class="stats-detail-loading">⏳ ${statsLocale_('Загрузка данных...','Боркунии маълумот...')}</div>`;
+  let params={}; let subtitle='';
+  if(action.startsWith('period-')){
+    const parts=action.split(':'); const kind=parts[0].replace('period-',''); const period=parts[1]||'thisMonth';
+    params={period:period,kind:kind==='returned'?'returned':kind==='issued'?'issued':'all'};
+    subtitle=statsPeriodLabel_(period);
+  } else if(action.startsWith('date:')){
+    const date=action.slice(5); params={date:date,kind:'all'}; subtitle=date;
+  } else if(action.startsWith('staff:')){
+    const staff=action.slice(6); params={staff:staff,kind:'all'}; subtitle=staff;
+  }
+  document.getElementById('statsDetailSubtitle').textContent=subtitle;
+  try{
+    const data=await fetchStatsEvents_(params); const events=data.events||[];
+    const amount=events.reduce((s,e)=>s+Number(e.amount||0),0);
+    body.innerHTML=`<div class="stats-detail-summary"><div class="stats-detail-summary-item"><div class="stats-detail-summary-label">${statsLocale_('Операций','Амалиёт')}</div><div class="stats-detail-summary-value">${events.length}</div></div><div class="stats-detail-summary-item"><div class="stats-detail-summary-label">${statsLocale_('Сумма движений','Маблағи амалиёт')}</div><div class="stats-detail-summary-value">${statsMoney_(amount)} ${t('somoni')}</div></div></div>`+statsEventItemsHtml_(events);
+  }catch(e){body.innerHTML=`<div class="stats-detail-empty">❌ ${statsLocale_('Не удалось загрузить детали','Боркунии тафсилот имкон нашуд')}</div>`;}
+}
+function openStatsDetail(action,label=''){
+  const modal=document.getElementById('statsDetailModal');
+  const title=document.getElementById('statsDetailTitle');
+  const subtitle=document.getElementById('statsDetailSubtitle');
+  if(!modal||!title)return;
+  title.textContent=label||statsLocale_('Детали статистики','Тафсилоти омор');
+  subtitle.textContent='';
+  modal.style.display='flex'; document.body.style.overflow='hidden';
+  if(action.startsWith('period-')||action.startsWith('date:')||action.startsWith('staff:')) showStatsEventDetail_(action,label);
+  else showStatsDetailLocal_(action,label);
+}
+function closeStatsDetail(){
+  const modal=document.getElementById('statsDetailModal'); if(modal)modal.style.display='none'; document.body.style.overflow='';
+}
+function statsDetailBackdropClose(e){ if(e?.target?.id==='statsDetailModal')closeStatsDetail(); }
 
 function toggleStats(){
   let el = document.getElementById("statsContent");
