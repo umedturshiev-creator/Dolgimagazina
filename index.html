@@ -8,6 +8,9 @@
 <link rel="manifest" href="manifest.json">
 
 <meta name="theme-color" content="#000000">
+<script>
+try { document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark"; } catch(e) { document.documentElement.dataset.theme = "dark"; }
+</script>
 <meta name="background-color" content="#000000">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1018,7 +1021,9 @@ button[onclick*="showHistory"]{
 }
   
 
-/* ===== v4.3 NAVIGATION / SECTIONS ===== */
+}
+
+/* ===== v4.4 NAVIGATION / SECTIONS ===== */
 .app-sidebar{
   position:fixed;
   left:0;
@@ -1105,6 +1110,18 @@ body:not(.app-open) .mobile-bottom-nav{display:none !important;}
 .settings-actions button{margin:0;}
 .settings-lang{display:flex;gap:8px;margin-top:12px;}
 .settings-lang button{margin:0;}
+.settings-lang-btn{
+  background:rgba(148,163,184,.10);
+  color:var(--text-2);
+  border:1px solid rgba(148,163,184,.14);
+  box-shadow:none;
+}
+.settings-lang-btn.active{
+  color:#fff;
+  background:linear-gradient(135deg,#2563eb,#4f46e5);
+  border-color:rgba(96,165,250,.34);
+  box-shadow:0 10px 22px rgba(37,99,235,.20);
+}
 
 .mobile-bottom-nav{display:none;}
 
@@ -1161,6 +1178,191 @@ body:not(.app-open) .mobile-bottom-nav{display:none !important;}
   .section-toolbar{display:block;}
 }
 
+
+
+/* ===== v4.4 DESKTOP SIDEBAR / THEMES ===== */
+:root{color-scheme:dark;}
+html[data-theme="light"]{color-scheme:light;}
+
+@media (min-width:761px){
+  .app-sidebar{
+    left:18px;
+    top:88px;
+    bottom:18px;
+    width:238px;
+    padding:14px;
+    border:1px solid rgba(148,163,184,.14);
+    border-radius:22px;
+    overflow:hidden auto;
+    background:linear-gradient(180deg,rgba(15,23,42,.97),rgba(8,15,28,.97));
+    box-shadow:0 20px 50px rgba(2,6,23,.34);
+  }
+  .app-sidebar::before{
+    content:"Управление долгами";
+    display:block;
+    padding:6px 10px 14px;
+    margin-bottom:4px;
+    color:#94a3b8;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .nav-btn{
+    min-height:50px;
+    padding:11px 12px;
+    border-radius:14px;
+    font-size:14px;
+  }
+  .main-view-container{
+    width:auto !important;
+    max-width:1180px !important;
+    margin:0 auto 0 274px !important;
+    padding:24px 28px 42px !important;
+  }
+  .view-title{font-size:22px;margin-bottom:16px;}
+}
+
+.form-field-label{
+  margin:8px 2px 2px;
+  color:var(--text-2);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.01em;
+}
+.add-debt-form-card input{margin-top:5px;}
+
+.theme-choice{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:12px;
+}
+.theme-choice-btn{
+  margin:0;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:rgba(148,163,184,.10);
+  color:var(--text-2);
+  border:1px solid rgba(148,163,184,.14);
+  box-shadow:none;
+}
+.theme-choice-btn.active{
+  color:#fff;
+  background:linear-gradient(135deg,#2563eb,#4f46e5);
+  border-color:rgba(96,165,250,.34);
+  box-shadow:0 10px 22px rgba(37,99,235,.20);
+}
+
+/* Light theme overrides */
+html[data-theme="light"]{
+  --bg-1:#eef3fb;
+  --bg-2:#f8fafc;
+  --bg-3:#ffffff;
+  --panel-1:rgba(255,255,255,.92);
+  --panel-2:rgba(248,250,252,.94);
+  --panel-solid:#ffffff;
+  --card-border:rgba(15,23,42,.08);
+  --text-1:#0f172a;
+  --text-2:#334155;
+  --text-3:#64748b;
+  --shadow-xl:0 24px 60px rgba(15,23,42,.12);
+  --shadow-lg:0 16px 40px rgba(15,23,42,.10);
+  --shadow-md:0 10px 24px rgba(15,23,42,.08);
+  background:#eef3fb;
+}
+html[data-theme="light"] body{
+  color:#0f172a;
+  background:
+    radial-gradient(circle at top left,rgba(59,130,246,.10),transparent 30%),
+    radial-gradient(circle at bottom right,rgba(139,92,246,.08),transparent 28%),
+    linear-gradient(145deg,#eef3fb,#f8fafc 46%,#ffffff 100%) !important;
+}
+html[data-theme="light"] .header{
+  background:rgba(255,255,255,.88) !important;
+  color:#0f172a;
+  border-bottom:1px solid rgba(15,23,42,.08);
+  box-shadow:0 10px 28px rgba(15,23,42,.08);
+}
+html[data-theme="light"] .header-center h2,
+html[data-theme="light"] #userInfo,
+html[data-theme="light"] h3,
+html[data-theme="light"] .card b{color:#0f172a !important;}
+html[data-theme="light"] .user-meta{color:#475569;}
+html[data-theme="light"] .logout-btn{background:#f1f5f9;color:#334155;border-color:#e2e8f0;}
+html[data-theme="light"] .app-sidebar{
+  background:rgba(255,255,255,.94);
+  border-color:rgba(15,23,42,.08);
+  box-shadow:0 18px 46px rgba(15,23,42,.10);
+}
+html[data-theme="light"] .app-sidebar::before{color:#64748b;}
+html[data-theme="light"] .nav-btn{color:#475569;}
+html[data-theme="light"] .nav-btn:hover{background:#f1f5f9;}
+html[data-theme="light"] .nav-btn.active{color:#fff;}
+html[data-theme="light"] .card,
+html[data-theme="light"] .search-box,
+html[data-theme="light"] .settings-card{
+  background:rgba(255,255,255,.92) !important;
+  color:#1e293b;
+  border-color:rgba(15,23,42,.08);
+  box-shadow:0 12px 30px rgba(15,23,42,.08);
+}
+html[data-theme="light"] input{
+  background:#f8fafc !important;
+  color:#0f172a !important;
+  border-color:#dbe3ee !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+}
+html[data-theme="light"] input::placeholder{color:#94a3b8;}
+html[data-theme="light"] label{color:#b45309 !important;}
+html[data-theme="light"] .form-field-label{color:#475569;}
+html[data-theme="light"] .overdue{
+  background:linear-gradient(135deg,#fff1f2,#fff7f7) !important;
+  color:#4c0519;
+  border-left-color:#ef4444;
+}
+html[data-theme="light"] .warning{
+  background:linear-gradient(135deg,#fffbeb,#fffdf5) !important;
+  color:#451a03;
+  border-left-color:#f59e0b;
+}
+html[data-theme="light"] .paid-card{
+  background:linear-gradient(135deg,#ecfdf5,#f8fffb) !important;
+  color:#14532d;
+}
+html[data-theme="light"] .sum-history-box{background:#faf5ff !important;color:#581c87;}
+html[data-theme="light"] .sum-history-item{color:#475569;}
+html[data-theme="light"] .modal{background:rgba(15,23,42,.28) !important;}
+html[data-theme="light"] .modal-content{
+  background:rgba(255,255,255,.98) !important;
+  color:#1e293b !important;
+  border-color:rgba(15,23,42,.10);
+  box-shadow:0 24px 60px rgba(15,23,42,.18);
+}
+html[data-theme="light"] .theme-choice-btn{background:#f8fafc;color:#475569;border-color:#e2e8f0;}
+html[data-theme="light"] .settings-lang-btn{background:#f8fafc;color:#475569;border-color:#e2e8f0;}
+html[data-theme="light"] .settings-lang-btn.active{color:#fff;background:linear-gradient(135deg,#2563eb,#4f46e5);}
+html[data-theme="light"] .theme-choice-btn.active{color:#fff;background:linear-gradient(135deg,#2563eb,#4f46e5);}
+html[data-theme="light"] .mobile-bottom-nav{
+  background:rgba(255,255,255,.94);
+  border-color:rgba(15,23,42,.10);
+  box-shadow:0 18px 46px rgba(15,23,42,.14);
+}
+html[data-theme="light"] .mobile-nav-btn{color:#64748b;}
+html[data-theme="light"] .mobile-nav-btn.active{color:#fff;}
+html[data-theme="light"] .login{
+  color:#0f172a;
+  background:linear-gradient(180deg,#eef3fb 0%,#f8fafc 100%) !important;
+}
+html[data-theme="light"] #loginScreen h2{color:#0f172a !important;}
+
+@media (max-width:760px){
+  .theme-choice{grid-template-columns:1fr 1fr;}
+}
+
 </style>
 </head>
 <body>
@@ -1188,12 +1390,7 @@ body:not(.app-open) .mobile-bottom-nav{display:none !important;}
 </div>
 
 <div class="header" id="mainHeader" style="display:none;">
-<div class="header-left">
-  <div class="lang-switch compact-lang">
-    <button class="lang-btn active" data-lang="ru" onclick="setLanguage('ru')">RU</button>
-    <button class="lang-btn" data-lang="tj" onclick="setLanguage('tj')">TJ</button>
-  </div>
-</div>
+<div class="header-left" aria-hidden="true"></div>
 
 <div class="header-center">
   <h2>Fashion&StyleLife - Долги</h2>
@@ -1230,10 +1427,12 @@ body:not(.app-open) .mobile-bottom-nav{display:none !important;}
 
   <section id="view-add" class="app-view">
     <h3 id="addDebtTitle" class="view-title">Добавить долг</h3>
-    <div class="card">
-      <input id="client" placeholder="Имя клиента">
-      <input id="phone" placeholder="Телефон" maxlength="9" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    <div class="card add-debt-form-card">
+      <div class="form-field-label" id="phoneFieldLabel">Телефон клиента</div>
+      <input id="phone" placeholder="Телефон" maxlength="9" inputmode="numeric" autocomplete="tel" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
       <div id="phoneLookupBox" class="phone-lookup-box"></div>
+      <div class="form-field-label" id="clientFieldLabel">Имя клиента</div>
+      <input id="client" placeholder="Имя клиента" autocomplete="name">
       <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
       <label id="dueDateLabel" style="color:#fca5a5;font-weight:bold;">Выберите дату оплаты</label>
       <input id="dueDate" type="date">
@@ -1262,8 +1461,15 @@ body:not(.app-open) .mobile-bottom-nav{display:none !important;}
       <div class="card settings-card">
         <b id="settingsLanguageTitle">🌐 Язык интерфейса</b>
         <div class="settings-lang">
-          <button class="add-debt-btn" onclick="setLanguage('ru')">Русский</button>
-          <button class="add-debt-btn" onclick="setLanguage('tj')">Тоҷикӣ</button>
+          <button class="settings-lang-btn" data-lang="ru" onclick="setLanguage('ru')">Русский</button>
+          <button class="settings-lang-btn" data-lang="tj" onclick="setLanguage('tj')">Тоҷикӣ</button>
+        </div>
+      </div>
+      <div class="card settings-card">
+        <b id="settingsThemeTitle">🎨 Тема оформления</b>
+        <div class="theme-choice" role="group" aria-label="Тема оформления">
+          <button id="themeLightBtn" class="theme-choice-btn" data-theme-value="light" onclick="setTheme('light')"><span>☀️</span><span>Светлая</span></button>
+          <button id="themeDarkBtn" class="theme-choice-btn" data-theme-value="dark" onclick="setTheme('dark')"><span>🌙</span><span>Тёмная</span></button>
         </div>
       </div>
       <div class="card settings-card">
@@ -1392,7 +1598,7 @@ body:not(.app-open) .mobile-bottom-nav{display:none !important;}
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="4.3";
+const VERSION="4.4";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -1415,6 +1621,7 @@ let addDebtTargetClient = "";
 let addDebtTargetPhone = "";
 
 let currentLanguage = localStorage.getItem("lang") || "ru";
+let currentTheme = localStorage.getItem("theme") || "dark";
 let lastStatsData = {};
 let clientsByPhone = {};
 let activeDebtForEnteredPhone = null;
@@ -1456,6 +1663,11 @@ const translations = {
     statsPageTitle: "Статистика",
     settingsTitle: "Настройки",
     settingsLanguage: "🌐 Язык интерфейса",
+    settingsTheme: "🎨 Тема оформления",
+    themeLight: "Светлая",
+    themeDark: "Тёмная",
+    phoneFieldLabel: "Телефон клиента",
+    clientFieldLabel: "Имя клиента",
     settingsActions: "🛠 Действия",
     settingsRefresh: "Обновить данные",
     settingsPdf: "PDF-отчеты",
@@ -1608,6 +1820,11 @@ const translations = {
     statsPageTitle: "Омор",
     settingsTitle: "Танзимот",
     settingsLanguage: "🌐 Забони интерфейс",
+    settingsTheme: "🎨 Намуди интерфейс",
+    themeLight: "Равшан",
+    themeDark: "Торик",
+    phoneFieldLabel: "Телефони муштарӣ",
+    clientFieldLabel: "Номи муштарӣ",
     settingsActions: "🛠 Амалҳо",
     settingsRefresh: "Навсозии маълумот",
     settingsPdf: "Ҳисоботҳои PDF",
@@ -1738,11 +1955,30 @@ function setLanguage(lang){
   currentLanguage = lang;
   localStorage.setItem("lang", lang);
 
-  document.querySelectorAll(".lang-btn").forEach(btn => {
+  document.querySelectorAll(".lang-btn, .settings-lang-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
 
   applyTranslations();
+}
+
+function setTheme(theme){
+  currentTheme = theme === "light" ? "light" : "dark";
+  localStorage.setItem("theme", currentTheme);
+  applyTheme();
+}
+
+function applyTheme(){
+  document.documentElement.dataset.theme = currentTheme;
+  document.documentElement.style.colorScheme = currentTheme;
+
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) metaTheme.setAttribute("content", currentTheme === "light" ? "#f8fafc" : "#0f172a");
+
+  document.querySelectorAll("[data-theme-value]").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.themeValue === currentTheme);
+    btn.setAttribute("aria-pressed", btn.dataset.themeValue === currentTheme ? "true" : "false");
+  });
 }
 
 function applyTranslations(){
@@ -1790,11 +2026,21 @@ function applyTranslations(){
   document.querySelectorAll('.mobile-bottom-nav [data-nav-label="settings"]').forEach(el=>el.textContent=t("navSettings"));
 
   const settingsLanguageTitle = document.getElementById("settingsLanguageTitle");
+  const settingsThemeTitle = document.getElementById("settingsThemeTitle");
+  const themeLightBtn = document.getElementById("themeLightBtn");
+  const themeDarkBtn = document.getElementById("themeDarkBtn");
+  const phoneFieldLabelEl = document.getElementById("phoneFieldLabel");
+  const clientFieldLabelEl = document.getElementById("clientFieldLabel");
   const settingsActionsTitle = document.getElementById("settingsActionsTitle");
   const settingsRefreshBtn = document.getElementById("settingsRefreshBtn");
   const settingsPdfBtn = document.getElementById("settingsPdfBtn");
   const settingsLogoutBtn = document.getElementById("settingsLogoutBtn");
   if (settingsLanguageTitle) settingsLanguageTitle.textContent=t("settingsLanguage");
+  if (settingsThemeTitle) settingsThemeTitle.textContent=t("settingsTheme");
+  if (themeLightBtn) themeLightBtn.lastElementChild.textContent=t("themeLight");
+  if (themeDarkBtn) themeDarkBtn.lastElementChild.textContent=t("themeDark");
+  if (phoneFieldLabelEl) phoneFieldLabelEl.textContent=t("phoneFieldLabel");
+  if (clientFieldLabelEl) clientFieldLabelEl.textContent=t("clientFieldLabel");
   if (settingsActionsTitle) settingsActionsTitle.textContent=t("settingsActions");
   if (settingsRefreshBtn) settingsRefreshBtn.textContent=t("settingsRefresh");
   if (settingsPdfBtn) settingsPdfBtn.textContent=t("settingsPdf");
@@ -2022,7 +2268,9 @@ function openApp(){
 }
 
 window.onload = function(){
-  document.querySelectorAll(".lang-btn").forEach(btn => {
+  applyTheme();
+
+  document.querySelectorAll(".lang-btn, .settings-lang-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.lang === currentLanguage);
   });
 
