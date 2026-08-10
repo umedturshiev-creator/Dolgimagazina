@@ -1890,7 +1890,25 @@ html[data-theme="light"] .stats-detail-head{border-color:rgba(100,116,139,.18);}
 html[data-theme="light"] .stats-detail-summary-item,html[data-theme="light"] .stats-detail-item{background:rgba(248,250,252,.88);border-color:rgba(148,163,184,.24);}
 html[data-theme="light"] .stats-detail-title,html[data-theme="light"] .stats-detail-summary-value,html[data-theme="light"] .stats-detail-item-title,html[data-theme="light"] .stats-detail-item-value{color:#0f172a!important;}
 html[data-theme="light"] .stats-detail-subtitle,html[data-theme="light"] .stats-detail-summary-label,html[data-theme="light"] .stats-detail-item-meta,html[data-theme="light"] .stats-detail-empty,html[data-theme="light"] .stats-detail-loading{color:#475569!important;}
+.stats-debt-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:11px;padding-top:10px;border-top:1px solid var(--glass-border);}
+.stats-debt-action{margin:0!important;min-height:38px;padding:8px 9px!important;border-radius:12px!important;font-size:11px!important;font-weight:850!important;box-shadow:none!important;display:flex!important;align-items:center;justify-content:center;gap:5px;line-height:1.2;text-align:center;text-decoration:none!important;}
+.stats-debt-action.pay{background:linear-gradient(135deg,#16a34a,#22c55e)!important;color:#fff!important;}
+.stats-debt-action.add{background:linear-gradient(135deg,#2563eb,#4f46e5)!important;color:#fff!important;}
+.stats-debt-action.reduce{background:linear-gradient(135deg,#f59e0b,#d97706)!important;color:#fff!important;}
+.stats-debt-action.close-debt{background:linear-gradient(135deg,#ef4444,#dc2626)!important;color:#fff!important;}
+.stats-debt-action.call{background:linear-gradient(135deg,#0ea5e9,#2563eb)!important;color:#fff!important;}
+.stats-debt-action.wa{background:linear-gradient(135deg,#22c55e,#16a34a)!important;color:#fff!important;}
+.stats-debt-action.history{background:rgba(148,163,184,.14)!important;color:var(--surface-text)!important;border:1px solid var(--glass-border)!important;}
+html[data-theme="light"] .stats-debt-action.history{background:#f1f5f9!important;color:#1e293b!important;border-color:#cbd5e1!important;}
+.stats-debt-paid-hint{margin-top:10px;padding:8px 10px;border-radius:11px;background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.18);font-size:11px;font-weight:750;color:var(--surface-muted);}
+.reduce-debt-info{margin-bottom:10px;padding:11px 12px;border-radius:14px;background:var(--glass-bg-soft);border:1px solid var(--glass-border);font-size:12px;line-height:1.55;color:var(--surface-muted);}
+html[data-theme="light"] .reduce-debt-info{background:#f8fafc;color:#475569;border-color:#cbd5e1;}
+#statsDetailModal{z-index:1100!important;}
+#paymentModal,#addToDebtModal,#reduceDebtModal,#historyModal{z-index:1200!important;}
+#fullCloseConfirmModal{z-index:1300!important;}
 @media(max-width:640px){
+  .stats-debt-actions{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .stats-debt-action{font-size:11.5px!important;min-height:42px;}
   .stats-detail-modal .modal-content{width:96vw;max-height:86vh;border-radius:22px!important;}
   .stats-detail-head{padding:15px 14px 12px;}
   .stats-detail-body{padding:12px 14px 16px;}
@@ -2160,6 +2178,16 @@ html[data-theme="light"] .stats-detail-subtitle,html[data-theme="light"] .stats-
   </div>
 </div>
 
+<div class="modal" id="reduceDebtModal">
+  <div class="modal-content">
+    <h3 id="reduceDebtTitle">Уменьшить долг</h3>
+    <div id="reduceDebtInfo" class="reduce-debt-info"></div>
+    <input type="tel" inputmode="decimal" id="reduceDebtAmountInput" placeholder="Сумма уменьшения">
+    <button id="reduceDebtConfirmBtn" class="pay-btn" onclick="confirmReduceDebt()">Уменьшить долг</button>
+    <button id="reduceDebtCancelBtn" onclick="closeReduceDebtModal()" style="background:rgba(148,163,184,0.16);color:#f8fafc;border:1px solid rgba(148,163,184,0.14);">Отмена</button>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 
@@ -2177,7 +2205,7 @@ html[data-theme="light"] .stats-detail-subtitle,html[data-theme="light"] .stats-
 </div>
 
 <script>
-const VERSION="4.9";
+const VERSION="5.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -2198,6 +2226,12 @@ let mergeDebtResolver=null;
 let addDebtTargetRow = null;
 let addDebtTargetClient = "";
 let addDebtTargetPhone = "";
+let reduceDebtTargetRow = null;
+let reduceDebtTargetClient = "";
+let reduceDebtTargetPhone = "";
+let reduceDebtTargetRemainder = 0;
+let statsDetailCurrentAction = "";
+let statsDetailCurrentLabel = "";
 
 let currentLanguage = localStorage.getItem("lang") || "ru";
 let currentTheme = localStorage.getItem("theme") || "dark";
@@ -2810,6 +2844,15 @@ if (addToDebtTitleEl) addToDebtTitleEl.textContent = t("addToDebtTitle");
 if (addToDebtAmountInputEl) addToDebtAmountInputEl.placeholder = t("addToDebtAmount");
 if (addToDebtConfirmBtnEl) addToDebtConfirmBtnEl.textContent = t("addToDebtConfirm");
 if (addToDebtCancelBtnEl) addToDebtCancelBtnEl.textContent = t("cancelBtn");
+
+const reduceDebtTitleEl = document.getElementById("reduceDebtTitle");
+const reduceDebtAmountInputEl = document.getElementById("reduceDebtAmountInput");
+const reduceDebtConfirmBtnEl = document.getElementById("reduceDebtConfirmBtn");
+const reduceDebtCancelBtnEl = document.getElementById("reduceDebtCancelBtn");
+if (reduceDebtTitleEl) reduceDebtTitleEl.textContent = statsLocale_("Уменьшить долг","Қарзро кам кардан");
+if (reduceDebtAmountInputEl) reduceDebtAmountInputEl.placeholder = statsLocale_("Сумма уменьшения","Маблағи камкунӣ");
+if (reduceDebtConfirmBtnEl) reduceDebtConfirmBtnEl.textContent = statsLocale_("Уменьшить долг","Қарзро кам кардан");
+if (reduceDebtCancelBtnEl) reduceDebtCancelBtnEl.textContent = t("cancelBtn");
   
 }
 
@@ -3236,6 +3279,7 @@ function loadDebts(){
       handlePhoneLookup(false);
     }
 
+    refreshOpenStatsDetail_();
     return data;
   });
 }
@@ -3411,6 +3455,45 @@ function statsDetailSummaryHtml_(list){
     <div class="stats-detail-summary-item"><div class="stats-detail-summary-label">${statsLocale_('Остаток','Бақия')}</div><div class="stats-detail-summary-value">${statsMoney_(remainder)} ${t('somoni')}</div></div>
   </div>`;
 }
+function statsFindDebtByRow_(row){
+  const target=Number(row||0);
+  return [...allDebts,...paidDebts].find(d=>Number(d.row||0)===target)||null;
+}
+function statsDebtActionByRow_(action,row){
+  const d=statsFindDebtByRow_(row);
+  if(!d)return;
+  const remainder=Number(d.remainder||0);
+  const phone=normalizePhone(d.phone);
+  if(action==='pay'&&remainder>0)return openPayment(Number(d.row),remainder);
+  if(action==='add'&&remainder>0)return openAddToDebtModal(Number(d.row),String(d.client||''),phone,remainder);
+  if(action==='reduce'&&remainder>0)return openReduceDebtModal(Number(d.row),String(d.client||''),phone,remainder);
+  if(action==='full'&&remainder>0)return statsOpenFullClose_(Number(d.row),remainder);
+  if(action==='history')return showHistory(String(d.client||''));
+}
+function statsDebtActionsHtml_(d){
+  const row=Number(d.row||0);
+  const remainder=Number(d.remainder||0);
+  const phone=normalizePhone(d.phone);
+  const phoneFull=phone?`992${phone}`:"";
+  if(remainder<=0){
+    return `<div class="stats-debt-paid-hint">✅ ${statsLocale_('Долг закрыт. Доступны связь с клиентом и история оплат.','Қарз баста шудааст. Тамос ва таърихи пардохтҳо дастрасанд.')}</div>
+      <div class="stats-debt-actions">
+        ${phoneFull?`<a class="stats-debt-action call" href="tel:+${phoneFull}">📞 ${t('callBtn')}</a>`:''}
+        ${phoneFull?`<a class="stats-debt-action wa" target="_blank" href="https://wa.me/${phoneFull}">💬 ${t('whatsappBtn')}</a>`:''}
+        <button class="stats-debt-action history" onclick="statsDebtActionByRow_('history',${row})">📂 ${t('historyBtn')}</button>
+      </div>`;
+  }
+  const waText=encodeURIComponent(t('waReminder',{amount:remainder}));
+  return `<div class="stats-debt-actions">
+    <button class="stats-debt-action pay" onclick="statsDebtActionByRow_('pay',${row})">💵 ${t('payBtn')}</button>
+    <button class="stats-debt-action add" onclick="statsDebtActionByRow_('add',${row})">➕ ${t('addToDebtBtn')}</button>
+    <button class="stats-debt-action reduce" onclick="statsDebtActionByRow_('reduce',${row})">➖ ${statsLocale_('Уменьшить','Кам кардан')}</button>
+    <button class="stats-debt-action close-debt" onclick="statsDebtActionByRow_('full',${row})">✅ ${statsLocale_('Погасить','Пурра пардохт')}</button>
+    ${phoneFull?`<a class="stats-debt-action call" href="tel:+${phoneFull}">📞 ${t('callBtn')}</a>`:''}
+    ${phoneFull?`<a class="stats-debt-action wa" target="_blank" href="https://wa.me/${phoneFull}?text=${waText}">💬 ${t('whatsappBtn')}</a>`:''}
+    <button class="stats-debt-action history" onclick="statsDebtActionByRow_('history',${row})">📂 ${t('historyBtn')}</button>
+  </div>`;
+}
 function statsDebtItemsHtml_(list){
   if(!list.length) return `<div class="stats-detail-empty">${statsLocale_('По этому показателю данных нет','Аз рӯйи ин нишондиҳанда маълумот нест')}</div>`;
   const sorted=[...list].sort((a,b)=>Number(b.remainder||0)-Number(a.remainder||0));
@@ -3418,7 +3501,7 @@ function statsDebtItemsHtml_(list){
     const phone=normalizePhone(d.phone);
     const days=Number(d.daysOverdue||0);
     const cls=Number(d.remainder||0)<=0?' paid-item':(d.isOverdue||days>0?' overdue-item':'');
-    return `<div class="stats-detail-item${cls}"><div class="stats-detail-item-title">${escapeHtml(String(d.client||'—'))}</div><div class="stats-detail-item-meta">📞 ${escapeHtml(phone||String(d.phone||''))}${d.dueDate?` · 📅 ${escapeHtml(String(d.dueDate))}`:''}${days>0?` · ⚠️ ${days} ${statsLocale_('дн. просрочки','рӯз гузашта')}`:''}</div><div class="stats-detail-item-value"><span>${statsLocale_('Долг','Қарз')}: ${statsMoney_(d.total)} ${t('somoni')}</span><span>${statsLocale_('Оплачено','Пардохт')}: ${statsMoney_(d.paid)} ${t('somoni')}</span><span>${statsLocale_('Остаток','Бақия')}: ${statsMoney_(d.remainder)} ${t('somoni')}</span></div></div>`;
+    return `<div class="stats-detail-item${cls}"><div class="stats-detail-item-title">${escapeHtml(String(d.client||'—'))}</div><div class="stats-detail-item-meta">📞 ${escapeHtml(phone||String(d.phone||''))}${d.dueDate?` · 📅 ${escapeHtml(String(d.dueDate))}`:''}${days>0?` · ⚠️ ${days} ${statsLocale_('дн. просрочки','рӯз гузашта')}`:''}</div><div class="stats-detail-item-value"><span>${statsLocale_('Долг','Қарз')}: ${statsMoney_(d.total)} ${t('somoni')}</span><span>${statsLocale_('Оплачено','Пардохт')}: ${statsMoney_(d.paid)} ${t('somoni')}</span><span>${statsLocale_('Остаток','Бақия')}: ${statsMoney_(d.remainder)} ${t('somoni')}</span></div>${statsDebtActionsHtml_(d)}</div>`;
   }).join('')}</div>`;
 }
 function showStatsDetailLocal_(action,label){
@@ -3444,9 +3527,11 @@ function statsEventItemsHtml_(events){
   if(!Array.isArray(events)||!events.length) return `<div class="stats-detail-empty">${statsLocale_('Операций за выбранный период нет','Дар давраи интихобшуда амалиёт нест')}</div>`;
   return `<div class="stats-detail-list">${events.map(e=>{
     const issued=e.type==='DEBT_NEW'||e.type==='DEBT_APPEND';
-    const typeLabel=e.type==='DEBT_NEW'?statsLocale_('Новый долг','Қарзи нав'):e.type==='DEBT_APPEND'?statsLocale_('Добавлено к долгу','Ба қарз илова шуд'):statsLocale_('Оплата','Пардохт');
-    const worker=issued?e.issuer:e.collector;
-    return `<div class="stats-detail-item ${issued?'':'paid-item'}"><div class="stats-detail-item-title">${issued?'➕':'💵'} ${typeLabel}: ${escapeHtml(String(e.client||'—'))}</div><div class="stats-detail-item-meta">🕒 ${escapeHtml(String(e.date||''))} · 📞 ${escapeHtml(String(e.phone||''))}${worker?` · 👤 ${escapeHtml(String(worker))}`:''}</div><div class="stats-detail-item-value"><span>${statsMoney_(e.amount)} ${t('somoni')}</span>${e.note?`<span>${escapeHtml(String(e.note))}</span>`:''}</div></div>`;
+    const adjusted=e.type==='DEBT_REDUCE';
+    const typeLabel=e.type==='DEBT_NEW'?statsLocale_('Новый долг','Қарзи нав'):e.type==='DEBT_APPEND'?statsLocale_('Добавлено к долгу','Ба қарз илова шуд'):adjusted?statsLocale_('Уменьшение долга','Камкунии қарз'):statsLocale_('Оплата','Пардохт');
+    const worker=issued||adjusted?e.issuer:e.collector;
+    const icon=issued?'➕':adjusted?'➖':'💵';
+    return `<div class="stats-detail-item ${(!issued&&!adjusted)?'paid-item':''}"><div class="stats-detail-item-title">${icon} ${typeLabel}: ${escapeHtml(String(e.client||'—'))}</div><div class="stats-detail-item-meta">🕒 ${escapeHtml(String(e.date||''))} · 📞 ${escapeHtml(String(e.phone||''))}${worker?` · 👤 ${escapeHtml(String(worker))}`:''}</div><div class="stats-detail-item-value"><span>${statsMoney_(e.amount)} ${t('somoni')}</span>${e.note?`<span>${escapeHtml(String(e.note))}</span>`:''}</div></div>`;
   }).join('')}</div>`;
 }
 async function showStatsEventDetail_(action,label){
@@ -3474,14 +3559,26 @@ function openStatsDetail(action,label=''){
   const title=document.getElementById('statsDetailTitle');
   const subtitle=document.getElementById('statsDetailSubtitle');
   if(!modal||!title)return;
+  statsDetailCurrentAction=String(action||'');
+  statsDetailCurrentLabel=String(label||'');
   title.textContent=label||statsLocale_('Детали статистики','Тафсилоти омор');
   subtitle.textContent='';
   modal.style.display='flex'; document.body.style.overflow='hidden';
   if(action.startsWith('period-')||action.startsWith('date:')||action.startsWith('staff:')) showStatsEventDetail_(action,label);
   else showStatsDetailLocal_(action,label);
 }
+function refreshOpenStatsDetail_(){
+  const modal=document.getElementById('statsDetailModal');
+  if(!modal||modal.style.display==='none'||!statsDetailCurrentAction)return;
+  const action=statsDetailCurrentAction,label=statsDetailCurrentLabel;
+  const title=document.getElementById('statsDetailTitle');
+  if(title)title.textContent=label||statsLocale_('Детали статистики','Тафсилоти омор');
+  if(action.startsWith('period-')||action.startsWith('date:')||action.startsWith('staff:')) showStatsEventDetail_(action,label);
+  else showStatsDetailLocal_(action,label);
+}
 function closeStatsDetail(){
   const modal=document.getElementById('statsDetailModal'); if(modal)modal.style.display='none'; document.body.style.overflow='';
+  statsDetailCurrentAction=''; statsDetailCurrentLabel='';
 }
 function statsDetailBackdropClose(e){ if(e?.target?.id==='statsDetailModal')closeStatsDetail(); }
 
@@ -3682,6 +3779,13 @@ function confirmPayment(){
 
 /* ---------- ПОЛНОЕ ПОГАШЕНИЕ ---------- */
 
+function statsOpenFullClose_(row,remainder){
+  currentRow=Number(row||0);
+  currentRemainder=Number(remainder||0);
+  if(!currentRow||currentRemainder<=0)return;
+  openFullCloseConfirm();
+}
+
 function openFullCloseConfirm(){
   if (!currentRow || !currentRemainder) return;
 
@@ -3801,6 +3905,51 @@ async function confirmAddToDebt(){
     console.error(e);
     showToast(`❌ ${t("errorSaveToast")}`, "error");
   }
+}
+
+/* ---------- УМЕНЬШЕНИЕ / КОРРЕКТИРОВКА ДОЛГА ---------- */
+function openReduceDebtModal(row,clientName,phone,remainder){
+  reduceDebtTargetRow=Number(row||0);
+  reduceDebtTargetClient=String(clientName||'');
+  reduceDebtTargetPhone=normalizePhone(phone);
+  reduceDebtTargetRemainder=Number(remainder||0);
+  const input=document.getElementById('reduceDebtAmountInput');
+  const info=document.getElementById('reduceDebtInfo');
+  const modal=document.getElementById('reduceDebtModal');
+  if(input){input.value='';input.max=String(Math.max(0,reduceDebtTargetRemainder-0.01));}
+  if(info)info.innerHTML=`<div><b>${t('clientPlaceholder')}:</b> ${escapeHtml(reduceDebtTargetClient)}</div><div><b>${t('phonePlaceholder')}:</b> ${escapeHtml(reduceDebtTargetPhone)}</div><div><b>${t('remainder')}:</b> ${statsMoney_(reduceDebtTargetRemainder)} ${t('somoni')}</div><div style="margin-top:7px;">⚠️ ${statsLocale_('Это корректировка суммы долга, а не оплата. Для полного закрытия используйте «Погасить».','Ин ислоҳи маблағи қарз аст, на пардохт. Барои бастани пурра «Пурра пардохт»-ро истифода баред.')}</div>`;
+  if(modal)modal.style.display='flex';
+}
+function closeReduceDebtModal(){
+  const modal=document.getElementById('reduceDebtModal');if(modal)modal.style.display='none';
+  reduceDebtTargetRow=null;reduceDebtTargetClient='';reduceDebtTargetPhone='';reduceDebtTargetRemainder=0;
+}
+async function confirmReduceDebt(){
+  const input=document.getElementById('reduceDebtAmountInput');
+  const amount=Number(String(input?.value||'').replace(',','.'));
+  if(!amount||amount<=0){alert(t('invalidAmount'));return;}
+  if(amount>=reduceDebtTargetRemainder){
+    alert(statsLocale_('Сумма уменьшения должна быть меньше текущего остатка. Для полного закрытия используйте «Погасить».','Маблағи камкунӣ бояд аз бақияи ҷорӣ камтар бошад. Барои бастани пурра «Пурра пардохт»-ро истифода баред.'));
+    return;
+  }
+  const btn=document.getElementById('reduceDebtConfirmBtn');
+  if(btn)btn.disabled=true;
+  try{
+    const response=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({
+      client:reduceDebtTargetClient,phone:reduceDebtTargetPhone,amount:amount,seller:currentSeller,
+      mode:'reduce',targetRow:reduceDebtTargetRow,noteText:`Долг уменьшен: -${amount}`
+    })});
+    const result=await response.json();
+    if(result.success){
+      closeReduceDebtModal();
+      showToast(`✅ <b>${statsLocale_('Долг уменьшен','Қарз кам карда шуд')}</b><br>➖ ${statsMoney_(amount)} ${t('somoni')}`,'success');
+      await loadDebts();
+    }else{
+      const msg=result?.message||t('errorSaveToast');
+      showToast(`❌ ${escapeHtml(String(msg))}`,'error');
+    }
+  }catch(e){console.error(e);showToast(`❌ ${t('errorSaveToast')}`,'error');}
+  finally{if(btn)btn.disabled=false;}
 }
 
 /* ---------- ИСТОРИЯ ---------- */
