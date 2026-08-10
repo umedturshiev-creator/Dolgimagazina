@@ -22,6 +22,7 @@ try { document.documentElement.dataset.theme = localStorage.getItem("theme") || 
 <link rel="apple-touch-icon" href="icon-192.png">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
 :root{
@@ -1407,142 +1408,29 @@ html[data-theme="light"] #loginScreen h2{color:#0f172a !important;}
 }
 
 
-/* ===== v4.6 ADVANCED STATISTICS ===== */
-.stats-summary-grid{
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:12px;
-  margin-bottom:14px;
-}
-.stat-kpi{
-  position:relative;
-  overflow:hidden;
-  min-height:126px;
-  padding:16px;
-  border-radius:18px;
-  background:linear-gradient(145deg,rgba(30,41,59,.90),rgba(15,23,42,.94));
-  border:1px solid rgba(148,163,184,.13);
-  box-shadow:var(--shadow-md);
-}
-.stat-kpi::after{
-  content:"";
-  position:absolute;
-  inset:auto -20px -30px auto;
-  width:88px;
-  height:88px;
-  border-radius:50%;
-  background:rgba(96,165,250,.07);
-}
-.stat-kpi-icon{font-size:21px;margin-bottom:12px;}
-.stat-kpi-label{color:var(--text-3);font-size:11px;font-weight:800;line-height:1.3;text-transform:uppercase;letter-spacing:.035em;}
-.stat-kpi-value{margin-top:7px;font-size:23px;font-weight:900;line-height:1.12;color:#fff;}
-.stat-kpi-sub{margin-top:6px;color:var(--text-2);font-size:11px;line-height:1.35;}
-.stat-kpi.danger{border-color:rgba(239,68,68,.28);background:linear-gradient(145deg,rgba(69,10,10,.86),rgba(31,10,10,.92));}
-.stat-kpi.success{border-color:rgba(34,197,94,.25);background:linear-gradient(145deg,rgba(20,83,45,.56),rgba(15,23,42,.92));}
-.stat-kpi.primary{border-color:rgba(59,130,246,.28);}
 
-.stats-mini-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px;}
-.stat-mini{padding:13px 14px;border-radius:15px;background:rgba(15,23,42,.58);border:1px solid rgba(148,163,184,.11);}
-.stat-mini-label{font-size:11px;color:var(--text-3);font-weight:800;}
-.stat-mini-value{margin-top:6px;font-size:18px;font-weight:900;color:var(--text-1);}
-.stat-mini-sub{margin-top:3px;font-size:10px;color:var(--text-3);}
-
-.stats-panel{
-  margin-bottom:12px;
-  padding:0;
-  overflow:hidden;
-  border:1px solid rgba(148,163,184,.12);
-  border-radius:18px;
-  background:linear-gradient(180deg,rgba(30,41,59,.75),rgba(15,23,42,.80));
-  box-shadow:var(--shadow-md);
-}
-.stats-panel summary{
-  list-style:none;
-  cursor:pointer;
-  padding:15px 16px;
-  font-weight:900;
-  color:var(--text-1);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.stats-panel summary::-webkit-details-marker{display:none;}
-.stats-panel summary::after{content:"⌄";color:var(--text-3);font-size:18px;transition:transform .2s ease;}
-.stats-panel[open] summary::after{transform:rotate(180deg);}
-.stats-panel-body{padding:0 14px 14px;}
-.stats-aging-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;}
-.aging-card{padding:12px;border-radius:14px;background:rgba(2,6,23,.36);border:1px solid rgba(148,163,184,.10);}
-.aging-title{font-size:11px;color:var(--text-3);font-weight:900;}
-.aging-value{font-size:17px;font-weight:900;margin-top:6px;color:var(--text-1);}
-.aging-count{font-size:10px;color:var(--text-3);margin-top:3px;}
-
-.stats-dual{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.rank-list{display:flex;flex-direction:column;gap:8px;}
-.rank-item{display:grid;grid-template-columns:28px 1fr auto;gap:9px;align-items:center;padding:10px 11px;border-radius:13px;background:rgba(2,6,23,.34);border:1px solid rgba(148,163,184,.09);}
-.rank-no{width:26px;height:26px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(59,130,246,.16);font-size:11px;font-weight:900;}
-.rank-name{font-size:12px;font-weight:900;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.rank-meta{font-size:10px;color:var(--text-3);margin-top:2px;}
-.rank-amount{text-align:right;font-size:12px;font-weight:900;color:var(--text-1);}
-.rank-days{font-size:10px;color:#fca5a5;margin-top:2px;}
-
-.stats-period-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
-.period-card{padding:13px;border-radius:14px;background:rgba(2,6,23,.34);border:1px solid rgba(148,163,184,.10);}
-.period-title{font-size:11px;font-weight:900;color:var(--text-2);margin-bottom:9px;}
-.period-line{display:flex;justify-content:space-between;gap:8px;font-size:11px;margin-top:5px;color:var(--text-2);}
-.period-line b{color:var(--text-1);}
-.stats-note{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(59,130,246,.09);border:1px solid rgba(96,165,250,.13);font-size:10px;color:var(--text-2);line-height:1.45;}
-
-.trend-list{display:flex;align-items:flex-end;gap:5px;height:132px;padding:12px 3px 0;overflow-x:auto;}
-.trend-day{min-width:34px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%;}
-.trend-bars{height:92px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:3px;}
-.trend-bar{width:8px;min-height:2px;border-radius:5px 5px 2px 2px;}
-.trend-bar.issued{background:linear-gradient(180deg,#60a5fa,#2563eb);}
-.trend-bar.returned{background:linear-gradient(180deg,#4ade80,#16a34a);}
-.trend-label{font-size:8px;color:var(--text-3);white-space:nowrap;}
-.trend-legend{display:flex;gap:14px;font-size:10px;color:var(--text-2);margin-top:8px;}
-.trend-dot{display:inline-block;width:8px;height:8px;border-radius:3px;margin-right:5px;vertical-align:middle;}
-.trend-dot.issued{background:#3b82f6}.trend-dot.returned{background:#22c55e}
-
-.staff-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
-.staff-row{padding:11px 12px;border-radius:13px;background:rgba(2,6,23,.34);border:1px solid rgba(148,163,184,.09);}
-.staff-name{font-weight:900;font-size:12px;color:var(--text-1);}
-.staff-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px;font-size:10px;color:var(--text-3);}
-.staff-metrics b{display:block;color:var(--text-1);font-size:12px;margin-top:2px;}
-
-html[data-theme="light"] .stat-kpi,
-html[data-theme="light"] .stats-panel{background:rgba(255,255,255,.94);border-color:rgba(15,23,42,.08);box-shadow:0 10px 26px rgba(15,23,42,.07);}
-html[data-theme="light"] .stat-kpi-value,
-html[data-theme="light"] .stat-mini-value,
-html[data-theme="light"] .aging-value,
-html[data-theme="light"] .rank-name,
-html[data-theme="light"] .rank-amount,
-html[data-theme="light"] .period-line b,
-html[data-theme="light"] .staff-name,
-html[data-theme="light"] .staff-metrics b,
-html[data-theme="light"] .stats-panel summary{color:#0f172a !important;}
-html[data-theme="light"] .stat-mini,
-html[data-theme="light"] .aging-card,
-html[data-theme="light"] .rank-item,
-html[data-theme="light"] .period-card,
-html[data-theme="light"] .staff-row{background:#f8fafc;border-color:#e2e8f0;}
-html[data-theme="light"] .stat-kpi.danger{background:linear-gradient(145deg,#fff1f2,#fff);}
-html[data-theme="light"] .stat-kpi.success{background:linear-gradient(145deg,#ecfdf5,#fff);}
-
-@media(max-width:1100px){.stats-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr));}.stats-aging-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
-@media(max-width:760px){
-  .stats-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
-  .stat-kpi{min-height:112px;padding:13px;border-radius:16px;}
-  .stat-kpi-value{font-size:19px;}
-  .stats-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
-  .stats-aging-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .stats-dual{grid-template-columns:1fr;}
-  .stats-period-grid{grid-template-columns:1fr 1fr;}
-  .staff-stats{grid-template-columns:1fr;}
-  .stats-panel summary{padding:14px;}
-  .stats-panel-body{padding:0 11px 12px;}
-}
-
+/* ===== EXPORT CENTER v4.7 ===== */
+.export-modal-content{max-width:520px;width:min(94vw,520px);}
+.export-block{margin:14px 0;}
+.export-block-title{display:block;margin-bottom:8px;font-weight:800;color:var(--text-1)!important;}
+.export-format-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.export-choice-btn{margin:0;background:rgba(148,163,184,.12)!important;color:var(--text-2)!important;border:1px solid rgba(148,163,184,.18)!important;box-shadow:none!important;}
+.export-choice-btn.active{background:linear-gradient(135deg,#2563eb,#7c3aed)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 10px 24px rgba(37,99,235,.24)!important;}
+.export-select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(148,163,184,.22);background:var(--panel-solid);color:var(--text-1);font-size:14px;outline:none;}
+.export-select option{background:var(--panel-solid);color:var(--text-1);}
+.export-month-wrap{margin-top:8px;}
+.export-month-wrap input{margin:0;}
+.export-hint{margin-top:7px;font-size:12px;line-height:1.45;color:var(--text-3);}
+.export-info-box{padding:11px 12px;border-radius:14px;background:rgba(37,99,235,.09);border:1px solid rgba(96,165,250,.18);font-size:12px;line-height:1.55;color:var(--text-2);margin:12px 0;}
+.export-download-btn{background:linear-gradient(135deg,#16a34a,#22c55e)!important;box-shadow:0 12px 24px rgba(34,197,94,.22)!important;}
+.export-cancel-btn{background:rgba(148,163,184,.14)!important;color:var(--text-1)!important;border:1px solid rgba(148,163,184,.14)!important;}
+html[data-theme="light"] .export-select{background:#fff;color:#0f172a;border-color:#cbd5e1;}
+html[data-theme="light"] .export-select option{background:#fff;color:#0f172a;}
+html[data-theme="light"] .export-block-title{color:#0f172a!important;}
+html[data-theme="light"] .export-choice-btn{background:#f1f5f9!important;color:#334155!important;border-color:#cbd5e1!important;}
+html[data-theme="light"] .export-choice-btn.active{background:linear-gradient(135deg,#2563eb,#7c3aed)!important;color:#fff!important;}
+html[data-theme="light"] .export-info-box{background:#eff6ff;color:#334155;border-color:#bfdbfe;}
+@media(max-width:640px){.export-modal-content{max-height:88vh}.export-format-switch{grid-template-columns:1fr 1fr}.export-select{font-size:16px}}
 </style>
 </head>
 <body>
@@ -1583,7 +1471,7 @@ html[data-theme="light"] .stat-kpi.success{background:linear-gradient(145deg,#ec
 </div>
 
 <div class="header-right">
-  <button class="export-btn" onclick="openExportMenu()">PDF</button>
+  <button id="headerExportBtn" class="export-btn" onclick="openExportMenu()">Экспорт</button>
   <button class="logout-btn" onclick="logout()">🚪</button>
 </div>
 </div>
@@ -1658,7 +1546,7 @@ html[data-theme="light"] .stat-kpi.success{background:linear-gradient(145deg,#ec
         <b id="settingsActionsTitle">🛠 Действия</b>
         <div class="settings-actions">
           <button id="settingsRefreshBtn" class="add-debt-btn" onclick="forceAppUpdate()">Обновить данные</button>
-          <button id="settingsPdfBtn" class="add-debt-btn" onclick="openExportMenu()">PDF-отчеты</button>
+          <button id="settingsExportBtn" class="add-debt-btn" onclick="openExportMenu()">Экспорт отчетов</button>
           <button id="settingsLogoutBtn" onclick="logout()" style="background:linear-gradient(135deg,#ef4444,#dc2626);">Выйти</button>
         </div>
       </div>
@@ -1700,29 +1588,48 @@ html[data-theme="light"] .stat-kpi.success{background:linear-gradient(145deg,#ec
 </div>
 
 <div class="modal" id="exportModal">
-  <div class="modal-content">
-    <h3 id="exportTitle">Экспорт</h3>
+  <div class="modal-content export-modal-content">
+    <h3 id="exportTitle">Экспорт отчетов</h3>
 
-    <button id="exportAllBtn" onclick="exportPdf('all')" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;box-shadow:0 14px 28px rgba(37,99,235,0.22);">
-      Экспорт всех данных
-    </button>
-
-    <div style="margin-top:10px;">
-      <label id="exportMonthLabel" style="font-weight:bold;">Выберите месяц</label>
-      <input type="month" id="exportMonth">
+    <div class="export-block">
+      <div id="exportFormatLabel" class="export-block-title">Формат файла</div>
+      <div class="export-format-switch">
+        <button id="exportExcelFormatBtn" class="export-choice-btn active" type="button" onclick="setExportFormat('xlsx')">📗 Excel</button>
+        <button id="exportPdfFormatBtn" class="export-choice-btn" type="button" onclick="setExportFormat('pdf')">📄 PDF</button>
+      </div>
     </div>
 
-    <button id="exportMonthBtn" onclick="exportPdf('month')" style="background:linear-gradient(135deg,#0ea5e9,#2563eb);color:white;box-shadow:0 14px 28px rgba(14,165,233,0.22);">
-      Экспорт за месяц
-    </button>
+    <div class="export-block">
+      <label id="exportDatasetLabel" class="export-block-title" for="exportDataset">Что экспортировать</label>
+      <select id="exportDataset" class="export-select" onchange="syncExportUi()">
+        <option value="full">Полный отчет</option>
+        <option value="active">Активные долги</option>
+        <option value="overdue">Просроченные долги</option>
+        <option value="paid">Полностью оплаченные долги</option>
+        <option value="anyPaid">Все, кто вносил оплату</option>
+        <option value="noPayment">Долги без единой оплаты</option>
+        <option value="payments">История всех платежей</option>
+        <option value="stats">Статистика</option>
+        <option value="allRecords">Все записи по долгам</option>
+      </select>
+      <div id="exportDatasetHint" class="export-hint"></div>
+    </div>
 
-    <button id="exportOverdueBtn" onclick="exportPdf('overdue')" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;box-shadow:0 14px 28px rgba(239,68,68,0.22);">
-      Экспорт только просроченных
-    </button>
+    <div class="export-block">
+      <label id="exportPeriodLabel" class="export-block-title" for="exportPeriod">Период</label>
+      <select id="exportPeriod" class="export-select" onchange="syncExportUi()">
+        <option value="all">За всё время</option>
+        <option value="month">Выбрать месяц</option>
+      </select>
+      <div id="exportMonthWrap" class="export-month-wrap" style="display:none;">
+        <input type="month" id="exportMonth" onchange="syncExportUi()">
+      </div>
+    </div>
 
-    <button id="exportCancelBtn" onclick="closeExportMenu()" style="background:rgba(148,163,184,0.16);color:#f8fafc;border:1px solid rgba(148,163,184,0.14);">
-      Отмена
-    </button>
+    <div class="export-info-box" id="exportInfoBox"></div>
+
+    <button id="exportDownloadBtn" class="export-download-btn" onclick="runSelectedExport()">📗 Скачать Excel</button>
+    <button id="exportCancelBtn" class="export-cancel-btn" onclick="closeExportMenu()">Отмена</button>
   </div>
 </div>
 
@@ -1780,7 +1687,7 @@ html[data-theme="light"] .stat-kpi.success{background:linear-gradient(145deg,#ec
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="4.6";
+const VERSION="4.7";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -1808,6 +1715,8 @@ let lastStatsData = {};
 let clientsByPhone = {};
 let activeDebtForEnteredPhone = null;
 let lastAutoFilledClientName = "";
+let exportFormat = "xlsx";
+let exportPaymentsCache = null;
 
 const translations = {
   ru: {
@@ -1853,7 +1762,7 @@ const translations = {
     clientFieldLabel: "Имя клиента",
     settingsActions: "🛠 Действия",
     settingsRefresh: "Обновить данные",
-    settingsPdf: "PDF-отчеты",
+    settingsPdf: "Экспорт отчетов",
     settingsLogout: "Выйти",
     phoneActiveDebtTitle: "У этого номера уже есть активный долг",
     phoneActiveDebtText: "Создать отдельную запись нельзя. Используйте «Добавить к долгу» в карточке ниже.",
@@ -1873,48 +1782,6 @@ const translations = {
     overdueLeft: "Просроченный остаток",
     clients: "клиентов",
     somoni: "сомони",
-    statsTotalIssued: "Выдано всего",
-    statsTotalReturned: "Возвращено всего",
-    statsOutstanding: "Текущий остаток",
-    statsOverdue: "Просрочено",
-    statsRecovery: "Возврат",
-    statsOverdueShare: "Доля просрочки",
-    statsActiveCount: "Активных должников",
-    statsClosedCount: "Закрытых долгов",
-    statsPartialCount: "Частично оплачивают",
-    statsNoPaymentCount: "Без единой оплаты",
-    statsUniqueClients: "Уникальных клиентов",
-    statsRepeatClients: "Повторных клиентов",
-    statsAverageDebt: "Средний активный долг",
-    statsCurrent: "Без просрочки",
-    statsDueDates: "📅 Ближайшие сроки оплаты",
-    statsDueToday: "К оплате сегодня",
-    statsDueTomorrow: "К оплате завтра",
-    statsDue7: "В ближайшие 7 дней",
-    statsAging: "🚨 Просрочка по сроку",
-    statsDays1_7: "1–7 дней",
-    statsDays8_30: "8–30 дней",
-    statsDays31_60: "31–60 дней",
-    statsDays61_90: "61–90 дней",
-    statsDays90: "Более 90 дней",
-    statsRisks: "⚠️ Риски и качество портфеля",
-    statsTop: "🏆 Крупнейшие должники",
-    statsOldest: "🕒 Самая старая просрочка",
-    statsDynamics: "📈 Динамика операций",
-    statsToday: "Сегодня",
-    statsLast7: "Последние 7 дней",
-    statsThisMonth: "Этот месяц",
-    statsPrevMonth: "Прошлый месяц",
-    statsIssued: "Выдано",
-    statsReturned: "Получено",
-    statsOperations: "операций",
-    statsTrackingNote: "Точная динамика выдач и оплат ведётся с {date} (v4.6). Более ранние операции не включаются в этот блок, потому что раньше фактическая дата платежа отдельно не сохранялась.",
-    statsTrend14: "Последние 14 дней",
-    statsStaff: "👥 По сотрудникам — с v4.6",
-    statsStaffIssued: "Выдал/добавил",
-    statsStaffCollected: "Принял оплат",
-    statsNoStaffData: "Новых операций после обновления пока нет.",
-    debtsWord: "долгов",
 
     paymentTitle: "Оплата долга",
     paymentPlaceholder: "Введите сумму",
@@ -1949,14 +1816,34 @@ const translations = {
 
     waReminder: "Салом алейкум 😊, напоминаем вам о не оплаченной сумме: {amount} сомони. Будем признательны за оплату🙏. Сообщение отправлено автоматически.",
 
-    exportBtn: "PDF",
-    exportTitle: "Экспорт",
-    exportAll: "Экспорт всех данных",
-    exportMonth: "Экспорт за месяц",
-    exportOverdue: "Экспорт только просроченных",
-    exportChooseMonth: "Выберите месяц",
+    exportBtn: "Экспорт",
+    exportTitle: "Экспорт отчетов",
+    exportFormatLabel: "Формат файла",
+    exportDatasetLabel: "Что экспортировать",
+    exportPeriodLabel: "Период",
+    exportPeriodAll: "За всё время",
+    exportPeriodMonth: "Выбрать месяц",
     exportNoMonth: "Выберите месяц для экспорта",
     exportNoData: "Нет данных для экспорта",
+    exportDownloadExcel: "📗 Скачать Excel",
+    exportDownloadPdf: "📄 Сформировать PDF",
+    exportFull: "Полный отчет",
+    exportActive: "Активные долги",
+    exportOverdue: "Просроченные долги",
+    exportPaid: "Полностью оплаченные долги",
+    exportAnyPaid: "Все, кто вносил оплату",
+    exportNoPayment: "Долги без единой оплаты",
+    exportPayments: "История всех платежей",
+    exportStats: "Статистика",
+    exportAllRecords: "Все записи по долгам",
+    exportHintFull: "Excel создаст отдельные листы: статистика, активные, просроченные, оплаченные, клиенты с оплатой и история платежей.",
+    exportHintPayments: "Каждый платеж будет отдельной строкой с фактической датой и сотрудником.",
+    exportHintStats: "Сводные показатели, просрочка по срокам, ТОП должников, сотрудники и динамика.",
+    exportHintDefault: "Выгрузка будет сформирована по выбранной категории.",
+    exportInfoAll: "Период: всё время",
+    exportInfoMonth: "Период: {month}",
+    exportPreparing: "Подготовка файла...",
+    exportError: "Не удалось сформировать отчет",
 
     reportDate: "Дата формирования",
     reportSeller: "Продавец",
@@ -2053,7 +1940,7 @@ const translations = {
     clientFieldLabel: "Номи муштарӣ",
     settingsActions: "🛠 Амалҳо",
     settingsRefresh: "Навсозии маълумот",
-    settingsPdf: "Ҳисоботҳои PDF",
+    settingsPdf: "Содироти ҳисоботҳо",
     settingsLogout: "Баромадан",
     phoneActiveDebtTitle: "Барои ин рақам қарзи фаъол мавҷуд аст",
     phoneActiveDebtText: "Сабти алоҳида сохтан мумкин нест. Аз тугмаи «Ба қарз илова кардан» дар карточкаи поён истифода баред.",
@@ -2073,48 +1960,6 @@ const translations = {
     overdueLeft: "Бақияи муҳлатгузашта",
     clients: "муштарӣ",
     somoni: "сомонӣ",
-    statsTotalIssued: "Ҳамагӣ дода шуд",
-    statsTotalReturned: "Ҳамагӣ баргардонида шуд",
-    statsOutstanding: "Бақияи ҷорӣ",
-    statsOverdue: "Муҳлатгузашта",
-    statsRecovery: "Баргардонӣ",
-    statsOverdueShare: "Ҳиссаи муҳлатгузашта",
-    statsActiveCount: "Қарздорони фаъол",
-    statsClosedCount: "Қарзҳои басташуда",
-    statsPartialCount: "Қисман пардохт мекунанд",
-    statsNoPaymentCount: "Бе ягон пардохт",
-    statsUniqueClients: "Муштариёни нодир",
-    statsRepeatClients: "Муштариёни такрорӣ",
-    statsAverageDebt: "Қарзи миёнаи фаъол",
-    statsCurrent: "Бе муҳлатгузаронӣ",
-    statsDueDates: "📅 Муҳлатҳои наздики пардохт",
-    statsDueToday: "Имрӯз пардохт мешавад",
-    statsDueTomorrow: "Фардо пардохт мешавад",
-    statsDue7: "Дар 7 рӯзи наздик",
-    statsAging: "🚨 Муҳлатгузаронӣ аз рӯи рӯзҳо",
-    statsDays1_7: "1–7 рӯз",
-    statsDays8_30: "8–30 рӯз",
-    statsDays31_60: "31–60 рӯз",
-    statsDays61_90: "61–90 рӯз",
-    statsDays90: "Зиёда аз 90 рӯз",
-    statsRisks: "⚠️ Хавфҳо ва сифати қарзҳо",
-    statsTop: "🏆 Қарздорони калонтарин",
-    statsOldest: "🕒 Муҳлатгузаронии қадимтарин",
-    statsDynamics: "📈 Динамикаи амалиётҳо",
-    statsToday: "Имрӯз",
-    statsLast7: "7 рӯзи охир",
-    statsThisMonth: "Ин моҳ",
-    statsPrevMonth: "Моҳи гузашта",
-    statsIssued: "Дода шуд",
-    statsReturned: "Қабул шуд",
-    statsOperations: "амалиёт",
-    statsTrackingNote: "Динамикаи дақиқи додан ва пардохт аз {date} (v4.6) ҳисоб мешавад. Амалиётҳои пешина ба ин блок дохил намешаванд, зеро пештар санаи воқеии пардохт алоҳида нигоҳ дошта намешуд.",
-    statsTrend14: "14 рӯзи охир",
-    statsStaff: "👥 Аз рӯи кормандон — аз v4.6",
-    statsStaffIssued: "Дод/илова кард",
-    statsStaffCollected: "Пардохт қабул кард",
-    statsNoStaffData: "Пас аз навсозӣ ҳоло амалиёти нав нест.",
-    debtsWord: "қарз",
 
     paymentTitle: "Пардохти қарз",
     paymentPlaceholder: "Маблағро ворид кунед",
@@ -2149,14 +1994,34 @@ const translations = {
 
     waReminder: "Салом алейкум 😊, ба шумо дар бораи маблағи пардохтнашуда ёдрас мекунем: {amount} сомонӣ. Барои пардохт пешакӣ ташаккур🙏. Паём автоматӣ фиристода шуд.",
 
-    exportBtn: "PDF",
-    exportTitle: "Содирот",
-    exportAll: "Содироти ҳамаи маълумот",
-    exportMonth: "Содирот барои моҳ",
-    exportOverdue: "Содироти танҳо муҳлатгузашта",
-    exportChooseMonth: "Моҳро интихоб кунед",
+    exportBtn: "Содирот",
+    exportTitle: "Содироти ҳисоботҳо",
+    exportFormatLabel: "Формати файл",
+    exportDatasetLabel: "Чиро содир кардан",
+    exportPeriodLabel: "Давра",
+    exportPeriodAll: "Барои ҳама вақт",
+    exportPeriodMonth: "Интихоби моҳ",
     exportNoMonth: "Барои содирот моҳро интихоб кунед",
     exportNoData: "Барои содирот маълумот нест",
+    exportDownloadExcel: "📗 Excel-ро боргирӣ кунед",
+    exportDownloadPdf: "📄 PDF созед",
+    exportFull: "Ҳисоботи пурра",
+    exportActive: "Қарзҳои фаъол",
+    exportOverdue: "Қарзҳои муҳлатгузашта",
+    exportPaid: "Қарзҳои пурра пардохтшуда",
+    exportAnyPaid: "Ҳамаи онҳое, ки пардохт кардаанд",
+    exportNoPayment: "Қарзҳои бе ягон пардохт",
+    exportPayments: "Таърихи ҳамаи пардохтҳо",
+    exportStats: "Омор",
+    exportAllRecords: "Ҳамаи сабтҳои қарз",
+    exportHintFull: "Excel варақаҳои алоҳида месозад: омор, фаъол, муҳлатгузашта, пардохтшуда, муштариёни пардохткунанда ва таърихи пардохтҳо.",
+    exportHintPayments: "Ҳар як пардохт бо санаи воқеӣ ва корманд дар сатри алоҳида хоҳад буд.",
+    exportHintStats: "Нишондиҳандаҳои ҷамъбастӣ, муҳлатгузаронӣ, ТОП қарздорон, кормандон ва динамика.",
+    exportHintDefault: "Ҳисобот аз рӯйи категорияи интихобшуда сохта мешавад.",
+    exportInfoAll: "Давра: ҳама вақт",
+    exportInfoMonth: "Давра: {month}",
+    exportPreparing: "Омодасозии файл...",
+    exportError: "Ҳисобот сохта нашуд",
 
     reportDate: "Санаи тартиб",
     reportSeller: "Фурӯшанда",
@@ -2369,6 +2234,19 @@ function applyTranslations(){
   if (exportOverdueBtnEl) exportOverdueBtnEl.textContent = t("exportOverdue");
   if (exportMonthLabelEl) exportMonthLabelEl.textContent = t("exportChooseMonth");
   if (exportCancelBtnEl) exportCancelBtnEl.textContent = t("cancelBtn");
+
+  const headerExportBtn = document.getElementById("headerExportBtn");
+  const settingsExportBtn = document.getElementById("settingsExportBtn");
+  const exportFormatLabel = document.getElementById("exportFormatLabel");
+  const exportDatasetLabel = document.getElementById("exportDatasetLabel");
+  const exportPeriodLabel = document.getElementById("exportPeriodLabel");
+  if (headerExportBtn) headerExportBtn.textContent = t("exportBtn");
+  if (settingsExportBtn) settingsExportBtn.textContent = t("settingsPdf");
+  if (exportFormatLabel) exportFormatLabel.textContent = t("exportFormatLabel");
+  if (exportDatasetLabel) exportDatasetLabel.textContent = t("exportDatasetLabel");
+  if (exportPeriodLabel) exportPeriodLabel.textContent = t("exportPeriodLabel");
+  localizeExportOptions();
+  syncExportUi();
 
   const mergeDebtTitleEl = document.getElementById("mergeDebtTitle");
   const mergeAppendBtnEl = document.getElementById("mergeAppendBtn");
@@ -2840,132 +2718,47 @@ function loadDebts(){
 
 /* ---------- СТАТИСТИКА ---------- */
 
-function formatStatMoney(value){
-  const num = Number(value || 0);
-  return new Intl.NumberFormat(currentLanguage === "tj" ? "tg-TJ" : "ru-RU", {maximumFractionDigits: 0}).format(num);
-}
-
-function formatStatPercent(value){
-  const num = Number(value || 0);
-  return `${num.toFixed(1)}%`;
-}
-
-function statMoneyWithCount(obj){
-  obj = obj || {};
-  return `${formatStatMoney(obj.total || 0)} ${t("somoni")} · ${Number(obj.count || 0)}`;
-}
-
-function renderRankItems(items, mode){
-  items = Array.isArray(items) ? items : [];
-  if (!items.length) return `<div class="stats-note">${t("noData")}</div>`;
-  return `<div class="rank-list">${items.map((item,index)=>{
-    const days = Number(item.daysOverdue || 0);
-    return `<div class="rank-item">
-      <div class="rank-no">${index+1}</div>
-      <div><div class="rank-name">${escapeHtml(String(item.client || "-"))}</div><div class="rank-meta">${escapeHtml(String(item.phone || ""))}</div></div>
-      <div class="rank-amount">${formatStatMoney(item.remainder)} ${t("somoni")}${days>0?`<div class="rank-days">${days} ${currentLanguage==="tj"?"рӯз":"дн."}</div>`:""}</div>
-    </div>`;
-  }).join("")}</div>`;
-}
-
-function renderPeriodCard(title, period){
-  period = period || {};
-  return `<div class="period-card">
-    <div class="period-title">${title}</div>
-    <div class="period-line"><span>↗ ${t("statsIssued")}</span><b>${formatStatMoney(period.issued)} ${t("somoni")}</b></div>
-    <div class="period-line"><span>↘ ${t("statsReturned")}</span><b>${formatStatMoney(period.returned)} ${t("somoni")}</b></div>
-    <div class="period-line"><span>${t("statsOperations")}</span><b>${Number(period.issuedCount||0)+Number(period.paymentCount||0)}</b></div>
-  </div>`;
-}
-
-function renderTrend(trend){
-  trend = Array.isArray(trend) ? trend : [];
-  const maxVal = Math.max(1,...trend.map(x=>Math.max(Number(x.issued||0),Number(x.returned||0))));
-  return `<div class="trend-list">${trend.map(day=>{
-    const ih = Math.max(2, Math.round((Number(day.issued||0)/maxVal)*88));
-    const rh = Math.max(2, Math.round((Number(day.returned||0)/maxVal)*88));
-    const parts=String(day.date||"").split("-");
-    const label=parts.length===3?`${parts[2]}.${parts[1]}`:day.date;
-    return `<div class="trend-day" title="${escapeHtml(String(day.date||""))}">
-      <div class="trend-bars"><div class="trend-bar issued" style="height:${ih}px" title="${t("statsIssued")}: ${formatStatMoney(day.issued)}"></div><div class="trend-bar returned" style="height:${rh}px" title="${t("statsReturned")}: ${formatStatMoney(day.returned)}"></div></div>
-      <div class="trend-label">${label}</div>
-    </div>`;
-  }).join("")}</div><div class="trend-legend"><span><i class="trend-dot issued"></i>${t("statsIssued")}</span><span><i class="trend-dot returned"></i>${t("statsReturned")}</span></div>`;
-}
-
-function renderStaffStats(staff){
-  staff = Array.isArray(staff) ? staff : [];
-  if (!staff.length) return `<div class="stats-note">${t("statsNoStaffData")}</div>`;
-  return `<div class="staff-stats">${staff.map(x=>`<div class="staff-row">
-    <div class="staff-name">👤 ${escapeHtml(String(x.name||"-"))}</div>
-    <div class="staff-metrics"><span>${t("statsStaffIssued")}<b>${formatStatMoney(x.issued)} ${t("somoni")}</b></span><span>${t("statsStaffCollected")}<b>${formatStatMoney(x.collected)} ${t("somoni")}</b></span></div>
-  </div>`).join("")}</div>`;
-}
-
 function renderStats(data){
   lastStatsData = data || {};
-  const a = data?.analytics || {};
-  const events = a.events || {};
-  const aging = a.aging || {};
 
-  const activeTotal = Number(data?.activeTotal || 0);
-  const activeCount = Number(data?.activeCount || 0);
-  const overdueTotal = Number(data?.overdueTotal || 0);
-  const overdueCount = Number(data?.overdueCount || 0);
-  const paidCount = Number(data?.paidCount || 0);
-  const partialCount = Number(data?.partialCount || 0);
+  let activeTotal = Number(data.activeTotal || 0);
+  let paidTotal = Number(data.paidTotal || 0);
+  let overdueTotal = Number(data.overdueTotal || 0);
+  let partialTotal = Number(data.partialTotal || 0);
+
+  let activeCount = Number(data.activeCount || 0);
+  let paidCount = Number(data.paidCount || 0);
+  let overdueCount = Number(data.overdueCount || 0);
+  let partialCount = Number(data.partialCount || 0);
+
+  let totalGiven = activeTotal + partialTotal + paidTotal;
 
   statsBox.innerHTML = `
-    <div class="stats-summary-grid">
-      <div class="stat-kpi primary"><div class="stat-kpi-icon">💰</div><div class="stat-kpi-label">${t("statsTotalIssued")}</div><div class="stat-kpi-value">${formatStatMoney(a.totalIssued)} ${t("somoni")}</div><div class="stat-kpi-sub">${Number(a.debtRecords||0)} ${t("debtsWord")}</div></div>
-      <div class="stat-kpi success"><div class="stat-kpi-icon">💵</div><div class="stat-kpi-label">${t("statsTotalReturned")}</div><div class="stat-kpi-value">${formatStatMoney(a.totalReturned)} ${t("somoni")}</div><div class="stat-kpi-sub">${t("statsRecovery")}: ${formatStatPercent(a.recoveryRate)}</div></div>
-      <div class="stat-kpi"><div class="stat-kpi-icon">📉</div><div class="stat-kpi-label">${t("statsOutstanding")}</div><div class="stat-kpi-value">${formatStatMoney(activeTotal)} ${t("somoni")}</div><div class="stat-kpi-sub">${activeCount} ${t("clients")}</div></div>
-      <div class="stat-kpi danger"><div class="stat-kpi-icon">🔴</div><div class="stat-kpi-label">${t("statsOverdue")}</div><div class="stat-kpi-value">${formatStatMoney(overdueTotal)} ${t("somoni")}</div><div class="stat-kpi-sub">${overdueCount} ${t("clients")} · ${t("statsOverdueShare")}: ${formatStatPercent(a.overdueShare)}</div></div>
-      <div class="stat-kpi success"><div class="stat-kpi-icon">📊</div><div class="stat-kpi-label">${t("statsRecovery")}</div><div class="stat-kpi-value">${formatStatPercent(a.recoveryRate)}</div><div class="stat-kpi-sub">${t("statsTotalReturned")}: ${formatStatMoney(a.totalReturned)} ${t("somoni")}</div></div>
+  <div class="card">
+    <div style="font-weight:bold;margin-bottom:12px;">📊 ${t("statsPageTitle")}</div>
+    <div id="statsContent" style="display:block;line-height:1.9;">
+      💰 <b>${t("totalGiven")}:</b> ${totalGiven} ${t("somoni")}<br><br>
+      📉 ${t("activeDebts")}: ${activeTotal} ${t("somoni")} ${t("fromWord")} ${activeCount} ${t("clients")}<br>
+      💸 ${t("alreadyPaid")}: ${partialTotal} ${t("somoni")} ${t("fromWord")} ${partialCount} ${t("clients")}<br>
+      ✅ ${t("fullyClosed")}: ${paidTotal} ${t("somoni")} ${t("fromWord")} ${paidCount} ${t("clients")}<br><br>
+      <b style="color:#fca5a5;">
+        🔴 ${t("overdueLeft")}: ${overdueTotal} ${t("somoni")} ${t("fromWord")} ${overdueCount} ${t("clients")}
+      </b>
     </div>
-
-    <div class="stats-mini-grid">
-      <div class="stat-mini"><div class="stat-mini-label">👥 ${t("statsActiveCount")}</div><div class="stat-mini-value">${activeCount}</div><div class="stat-mini-sub">${formatStatMoney(activeTotal)} ${t("somoni")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">✅ ${t("statsClosedCount")}</div><div class="stat-mini-value">${paidCount}</div><div class="stat-mini-sub">${formatStatMoney(data?.paidTotal||0)} ${t("somoni")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">🟡 ${t("statsPartialCount")}</div><div class="stat-mini-value">${partialCount}</div><div class="stat-mini-sub">${formatStatMoney(data?.partialTotal||0)} ${t("somoni")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">💤 ${t("statsNoPaymentCount")}</div><div class="stat-mini-value">${Number(a.noPaymentCount||0)}</div><div class="stat-mini-sub">${formatStatMoney(a.noPaymentTotal)} ${t("somoni")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">🧑‍🤝‍🧑 ${t("statsUniqueClients")}</div><div class="stat-mini-value">${Number(a.uniqueClients||0)}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">🔁 ${t("statsRepeatClients")}</div><div class="stat-mini-value">${Number(a.repeatClients||0)}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">⚖️ ${t("statsAverageDebt")}</div><div class="stat-mini-value">${formatStatMoney(a.averageActiveDebt)} ${t("somoni")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">🟢 ${t("statsCurrent")}</div><div class="stat-mini-value">${formatStatMoney(a.currentTotal)} ${t("somoni")}</div><div class="stat-mini-sub">${Number(a.currentCount||0)} ${t("clients")}</div></div>
-    </div>
-
-    <details class="stats-panel" open><summary>${t("statsDueDates")}</summary><div class="stats-panel-body"><div class="stats-mini-grid">
-      <div class="stat-mini"><div class="stat-mini-label">${t("statsDueToday")}</div><div class="stat-mini-value">${formatStatMoney(a.dueToday?.total)} ${t("somoni")}</div><div class="stat-mini-sub">${Number(a.dueToday?.count||0)} ${t("clients")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">${t("statsDueTomorrow")}</div><div class="stat-mini-value">${formatStatMoney(a.dueTomorrow?.total)} ${t("somoni")}</div><div class="stat-mini-sub">${Number(a.dueTomorrow?.count||0)} ${t("clients")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">${t("statsDue7")}</div><div class="stat-mini-value">${formatStatMoney(a.dueNext7?.total)} ${t("somoni")}</div><div class="stat-mini-sub">${Number(a.dueNext7?.count||0)} ${t("clients")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">${t("statsCurrent")}</div><div class="stat-mini-value">${formatStatMoney(a.currentTotal)} ${t("somoni")}</div><div class="stat-mini-sub">${Number(a.currentCount||0)} ${t("clients")}</div></div>
-    </div></div></details>
-
-    <details class="stats-panel" open><summary>${t("statsAging")}</summary><div class="stats-panel-body"><div class="stats-aging-grid">
-      ${[["statsDays1_7",aging.d1_7],["statsDays8_30",aging.d8_30],["statsDays31_60",aging.d31_60],["statsDays61_90",aging.d61_90],["statsDays90",aging.d90plus]].map(([key,obj])=>`<div class="aging-card"><div class="aging-title">${t(key)}</div><div class="aging-value">${formatStatMoney(obj?.total)} ${t("somoni")}</div><div class="aging-count">${Number(obj?.count||0)} ${t("clients")}</div></div>`).join("")}
-    </div></div></details>
-
-    <details class="stats-panel"><summary>${t("statsRisks")}</summary><div class="stats-panel-body"><div class="stats-mini-grid">
-      <div class="stat-mini"><div class="stat-mini-label">${t("statsNoPaymentCount")}</div><div class="stat-mini-value">${Number(a.noPaymentCount||0)}</div><div class="stat-mini-sub">${formatStatMoney(a.noPaymentTotal)} ${t("somoni")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">${t("statsPartialCount")}</div><div class="stat-mini-value">${partialCount}</div><div class="stat-mini-sub">${formatStatMoney(data?.partialTotal||0)} ${t("somoni")}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">${t("statsOverdueShare")}</div><div class="stat-mini-value">${formatStatPercent(a.overdueShare)}</div></div>
-      <div class="stat-mini"><div class="stat-mini-label">${t("statsAverageDebt")}</div><div class="stat-mini-value">${formatStatMoney(a.averageActiveDebt)} ${t("somoni")}</div></div>
-    </div></div></details>
-
-    <details class="stats-panel"><summary>${t("statsTop")}</summary><div class="stats-panel-body"><div class="stats-dual"><div>${renderRankItems(a.topDebtors,"amount")}</div><div><div style="font-size:11px;font-weight:900;color:var(--text-3);margin-bottom:8px;">${t("statsOldest")}</div>${renderRankItems(a.oldestOverdue,"days")}</div></div></div></details>
-
-    <details class="stats-panel" open><summary>${t("statsDynamics")}</summary><div class="stats-panel-body">
-      <div class="stats-period-grid">${renderPeriodCard(t("statsToday"),events.today)}${renderPeriodCard(t("statsLast7"),events.last7)}${renderPeriodCard(t("statsThisMonth"),events.thisMonth)}${renderPeriodCard(t("statsPrevMonth"),events.prevMonth)}</div>
-      <div style="margin-top:14px;font-weight:900;font-size:12px;">${t("statsTrend14")}</div>${renderTrend(events.trend)}
-      <div class="stats-note">${t("statsTrackingNote",{date:formatDebtDateForDisplay(events.trackingStart||getTodayIso())})}</div>
-    </div></details>
-
-    <details class="stats-panel"><summary>${t("statsStaff")}</summary><div class="stats-panel-body">${renderStaffStats(events.staff)}</div></details>
+  </div>
   `;
 }
 
-function toggleStats(){}
+function toggleStats(){
+  let el = document.getElementById("statsContent");
+  if (!el) return;
+
+  if (el.style.display === "none" || el.style.display === "") {
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
+}
 
 /* ---------- ОТРИСОВКА ---------- */
 
@@ -3288,7 +3081,7 @@ function showHistory(name){
     let html = "";
     if(data.history && data.history.length>0){
       data.history.forEach(h=>{
-        html += `📅 ${h.date}${h.legacyDate ? ` <span style="font-size:10px;color:#94a3b8;">(legacy)</span>` : ""}<br>💰 ${h.amount} ${t("somoni")}<br>${h.issuer ? `🛍 ${h.issuer}<br>` : ""}👤 ${h.seller}<hr>`;
+        html += `📅 ${h.date}<br>💰 ${h.amount} ${t("somoni")}<br>👤 ${h.seller}<hr>`;
       });
     } else {
       html = t("noPayments");
@@ -3303,10 +3096,62 @@ function closeHistory(){
 
 function openExportMenu(){
   exportModal.style.display = "flex";
+  localizeExportOptions();
+  syncExportUi();
 }
 
 function closeExportMenu(){
   exportModal.style.display = "none";
+}
+
+function localizeExportOptions(){
+  const dataset = document.getElementById("exportDataset");
+  const period = document.getElementById("exportPeriod");
+  if (dataset) {
+    const labels = {
+      full:"exportFull", active:"exportActive", overdue:"exportOverdue", paid:"exportPaid",
+      anyPaid:"exportAnyPaid", noPayment:"exportNoPayment", payments:"exportPayments",
+      stats:"exportStats", allRecords:"exportAllRecords"
+    };
+    [...dataset.options].forEach(opt=>{ if(labels[opt.value]) opt.textContent=t(labels[opt.value]); });
+  }
+  if (period) {
+    const all=period.querySelector('option[value="all"]');
+    const month=period.querySelector('option[value="month"]');
+    if(all) all.textContent=t("exportPeriodAll");
+    if(month) month.textContent=t("exportPeriodMonth");
+  }
+  const title=document.getElementById("exportTitle");
+  const cancel=document.getElementById("exportCancelBtn");
+  if(title) title.textContent=t("exportTitle");
+  if(cancel) cancel.textContent=t("cancelBtn");
+}
+
+function setExportFormat(format){
+  exportFormat = format === "pdf" ? "pdf" : "xlsx";
+  document.getElementById("exportExcelFormatBtn")?.classList.toggle("active", exportFormat === "xlsx");
+  document.getElementById("exportPdfFormatBtn")?.classList.toggle("active", exportFormat === "pdf");
+  syncExportUi();
+}
+
+function syncExportUi(){
+  const dataset=document.getElementById("exportDataset")?.value || "full";
+  const period=document.getElementById("exportPeriod")?.value || "all";
+  const monthWrap=document.getElementById("exportMonthWrap");
+  const hint=document.getElementById("exportDatasetHint");
+  const info=document.getElementById("exportInfoBox");
+  const download=document.getElementById("exportDownloadBtn");
+  if(monthWrap) monthWrap.style.display = period === "month" ? "block" : "none";
+  if(hint) {
+    hint.textContent = dataset === "full" ? t("exportHintFull")
+      : dataset === "payments" ? t("exportHintPayments")
+      : dataset === "stats" ? t("exportHintStats") : t("exportHintDefault");
+  }
+  if(info) {
+    const month=document.getElementById("exportMonth")?.value || "—";
+    info.textContent = period === "month" ? t("exportInfoMonth",{month}) : t("exportInfoAll");
+  }
+  if(download) download.textContent = exportFormat === "xlsx" ? t("exportDownloadExcel") : t("exportDownloadPdf");
 }
 
 function formatReportDate(dateStr){
@@ -3316,29 +3161,30 @@ function formatReportDate(dateStr){
   return new Intl.DateTimeFormat(currentLanguage === "tj" ? "tg-TJ" : "ru-RU").format(d);
 }
 
+function formatReportDateTime(dateStr){
+  if(!dateStr) return "";
+  const d = new Date(dateStr);
+  if (isNaN(d)) return String(dateStr);
+  return new Intl.DateTimeFormat(currentLanguage === "tj" ? "tg-TJ" : "ru-RU", {
+    year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"
+  }).format(d);
+}
+
 function getTodayFormatted(){
   return new Intl.DateTimeFormat(currentLanguage === "tj" ? "tg-TJ" : "ru-RU", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit"
+    year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
   }).format(new Date());
 }
 
 function escapeHtml(value){
   return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
 
 function getDebtStatusKey(d){
   const remainder = Number(d.remainder || 0);
   const paid = Number(d.paid || 0);
-
   if (remainder <= 0) return "statusClosed";
   if (d.isOverdue) return "statusOverdue";
   if (d.isPartial || paid > 0) return "statusPartial";
@@ -3352,145 +3198,278 @@ function getDebtStatusClass(statusKey){
   return "pdf-status-active";
 }
 
-function getFilteredDebtsForExport(type){
-  let list = [...allDebts];
-
-  if(type === "overdue"){
-    list = list.filter(d => getDebtStatusKey(d) === "statusOverdue");
-  }
-
-  if(type === "month"){
-    const selectedMonth = document.getElementById("exportMonth").value;
-    if(!selectedMonth){
-      alert(t("exportNoMonth"));
-      return null;
-    }
-
-    list = list.filter(d => (d.dueDate || "").startsWith(selectedMonth));
-  }
-
-  return list;
+function getExportMonth(){
+  const period=document.getElementById("exportPeriod")?.value || "all";
+  if(period !== "month") return "";
+  const month=document.getElementById("exportMonth")?.value || "";
+  if(!month){ alert(t("exportNoMonth")); return null; }
+  return month;
 }
 
-function getReportTitle(type){
-  if(type === "month"){
-    const selectedMonth = document.getElementById("exportMonth").value || "";
-    return t("reportTitleMonth", { month: selectedMonth });
+function recordMonthValue(record){
+  return String(record?.createdAt || record?.dueDate || "").slice(0,7);
+}
+
+function filterRecordsBySelectedPeriod(list, month){
+  if(!month) return [...(list||[])];
+  return [...(list||[])].filter(r=>recordMonthValue(r)===month);
+}
+
+function getAllDebtRecords(){
+  const map=new Map();
+  [...(allDebts||[]),...(paidDebts||[])].forEach(d=>map.set(String(d.id||d.row||Math.random()),d));
+  return [...map.values()];
+}
+
+function getDebtDataset(dataset, month){
+  let list=getAllDebtRecords();
+  if(dataset==="active") list=allDebts||[];
+  else if(dataset==="overdue") list=(allDebts||[]).filter(d=>d.isOverdue);
+  else if(dataset==="paid") list=paidDebts||[];
+  else if(dataset==="anyPaid") list=list.filter(d=>Number(d.paid||0)>0);
+  else if(dataset==="noPayment") list=list.filter(d=>Number(d.remainder||0)>0 && Number(d.paid||0)<=0);
+  return filterRecordsBySelectedPeriod(list,month);
+}
+
+async function getDebtDatasetAsync(dataset,month){
+  if(dataset!=="anyPaid" || !month) return getDebtDataset(dataset,month);
+  const payments=filterPaymentsByMonth(await loadExportPayments(),month);
+  const ids=new Set(payments.map(p=>String(p.debtId||"")));
+  const phones=new Set(payments.map(p=>normalizePhone(p.phone||"")));
+  return getAllDebtRecords().filter(d=>ids.has(String(d.id||"")) || phones.has(normalizePhone(d.phone||"")));
+}
+
+async function loadExportPayments(){
+  if(exportPaymentsCache) return exportPaymentsCache;
+  const res=await fetch(SCRIPT_URL+"?exportPayments=1");
+  const data=await res.json();
+  exportPaymentsCache=Array.isArray(data.payments)?data.payments:[];
+  return exportPaymentsCache;
+}
+
+function filterPaymentsByMonth(payments,month){
+  if(!month) return [...payments];
+  return payments.filter(p=>String(p.paidAt||"").slice(0,7)===month);
+}
+
+function money(v){ return Number(v||0); }
+function pct(v){ return Math.round(Number(v||0)*10)/10; }
+
+function debtRowsForExport(list){
+  return (list||[]).map((d,i)=>({
+    "№":i+1,
+    "ID":d.id||"",
+    "Дата создания":formatReportDateTime(d.createdAt||""),
+    "Клиент":d.client||"",
+    "Телефон":normalizePhone(d.phone||""),
+    "Сумма долга":money(d.total),
+    "Оплачено":money(d.paid),
+    "Остаток":money(d.remainder),
+    "Дата оплаты по договоренности":formatReportDate(d.dueDate||""),
+    "Просрочка, дней":Number(d.daysOverdue||0),
+    "Кто выдал":d.seller||"",
+    "Статус":t(getDebtStatusKey(d))
+  }));
+}
+
+function paymentRowsForExport(list){
+  return (list||[]).map((p,i)=>({
+    "№":i+1,
+    "Дата оплаты":formatReportDateTime(p.paidAt||""),
+    "ID долга":p.debtId||"",
+    "Клиент":p.client||"",
+    "Телефон":normalizePhone(p.phone||""),
+    "Сумма платежа":money(p.amount),
+    "Общая сумма долга":money(p.total),
+    "Остаток после платежа":money(p.remainder),
+    "Кто выдал":p.issuer||"",
+    "Кто принял оплату":p.collector||"",
+    "Статус после платежа":p.status||""
+  }));
+}
+
+function buildStatsAoA(month,payments){
+  const d=lastStatsData||{};
+  const a=d.analytics||{};
+  const rows=[
+    [t("statsPageTitle")],
+    [t("reportDate"),getTodayFormatted()],
+    [""],
+    ["Главные показатели","Значение"],
+    ["Общая сумма выданных долгов",money(a.totalIssued)],
+    ["Всего возвращено",money(a.totalReturned)],
+    ["Текущий остаток",money(d.activeTotal)],
+    ["Просрочено",money(d.overdueTotal)],
+    ["Процент возврата",pct(a.recoveryRate)+"%"],
+    ["Доля просрочки",pct(a.overdueShare)+"%"],
+    ["Средний активный долг",Math.round(money(a.averageActiveDebt)*100)/100],
+    ["Активных долгов",Number(d.activeCount||0)],
+    ["Полностью погашено",Number(d.paidCount||0)],
+    ["Частично оплачивают",Number(d.partialCount||0)],
+    ["Без единой оплаты",Number(a.noPaymentCount||0)],
+    ["Уникальных клиентов",Number(a.uniqueClients||0)],
+    ["Повторных клиентов",Number(a.repeatClients||0)],
+    [""],
+    ["Сроки оплаты","Сумма","Количество"],
+    ["Сегодня",money(a.dueToday?.total),Number(a.dueToday?.count||0)],
+    ["Завтра",money(a.dueTomorrow?.total),Number(a.dueTomorrow?.count||0)],
+    ["Ближайшие 7 дней",money(a.dueNext7?.total),Number(a.dueNext7?.count||0)],
+    [""],
+    ["Просрочка по возрасту","Сумма","Количество"],
+    ["1–7 дней",money(a.aging?.d1_7?.total),Number(a.aging?.d1_7?.count||0)],
+    ["8–30 дней",money(a.aging?.d8_30?.total),Number(a.aging?.d8_30?.count||0)],
+    ["31–60 дней",money(a.aging?.d31_60?.total),Number(a.aging?.d31_60?.count||0)],
+    ["61–90 дней",money(a.aging?.d61_90?.total),Number(a.aging?.d61_90?.count||0)],
+    ["90+ дней",money(a.aging?.d90plus?.total),Number(a.aging?.d90plus?.count||0)]
+  ];
+  if(month){
+    const records=filterRecordsBySelectedPeriod(getAllDebtRecords(),month);
+    const p=filterPaymentsByMonth(payments||[],month);
+    rows.push([""],[`Показатели за ${month}`,"Значение"],
+      ["Выдано долгов",records.reduce((s,x)=>s+money(x.total),0)],
+      ["Новых записей",records.length],
+      ["Получено платежей",p.reduce((s,x)=>s+money(x.amount),0)],
+      ["Количество платежей",p.length]);
   }
-  if(type === "overdue") return t("reportTitleOverdue");
-  return t("reportTitleAll");
+  return rows;
 }
 
-function getPdfFileName(type){
-  if(type === "month") return `${t("pdfFileMonth")}.pdf`;
-  if(type === "overdue") return `${t("pdfFileOverdue")}.pdf`;
-  return `${t("pdfFileAll")}.pdf`;
+function topDebtorsAoA(){
+  const list=lastStatsData?.analytics?.topDebtors||[];
+  return [["ТОП крупнейших должников","Остаток","Просрочка, дней","Телефон"],
+    ...list.map(x=>[x.client||"",money(x.remainder),Number(x.daysOverdue||0),normalizePhone(x.phone||"")])];
 }
 
-function buildPdfHtml(type, debts){
-  const rows = debts.map((d, index) => {
-    const statusKey = getDebtStatusKey(d);
-
-    return `
-      <tr>
-        <td>${index + 1}</td>
-        <td>${escapeHtml(d.client || "")}</td>
-        <td>${escapeHtml(d.phone || "")}</td>
-        <td>${escapeHtml(formatReportDate(d.dueDate || ""))}</td>
-        <td>${escapeHtml(d.total || 0)} ${escapeHtml(t("somoni"))}</td>
-        <td>${escapeHtml(d.paid || 0)} ${escapeHtml(t("somoni"))}</td>
-        <td>${escapeHtml(d.remainder || 0)} ${escapeHtml(t("somoni"))}</td>
-        <td class="${getDebtStatusClass(statusKey)}">${escapeHtml(t(statusKey))}</td>
-      </tr>
-    `;
-  }).join("");
-
-  return `
-    <div class="pdf-report" id="pdfReportTemp">
-      <h1>${escapeHtml(getReportTitle(type))}</h1>
-
-      <div class="pdf-meta">
-        <div><b>${escapeHtml(t("reportDate"))}:</b> ${escapeHtml(getTodayFormatted())}</div>
-        <div><b>${escapeHtml(t("reportSeller"))}:</b> ${escapeHtml(currentSeller || "-")}</div>
-        <div><b>${escapeHtml(t("reportLanguage"))}:</b> ${escapeHtml(currentLanguage.toUpperCase())}</div>
-      </div>
-
-      <table class="pdf-table">
-        <thead>
-          <tr>
-            <th>№</th>
-            <th>${escapeHtml(t("clientPlaceholder"))}</th>
-            <th>${escapeHtml(t("phonePlaceholder"))}</th>
-            <th>${escapeHtml(t("choosePayDate"))}</th>
-            <th>${escapeHtml(t("debtAmount"))}</th>
-            <th>${escapeHtml(t("paidAmount"))}</th>
-            <th>${escapeHtml(t("remainder"))}</th>
-            <th>${escapeHtml(t("statusColumn"))}</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    </div>
-  `;
+function oldestOverdueAoA(){
+  const list=lastStatsData?.analytics?.oldestOverdue||[];
+  return [["Самые старые просрочки","Остаток","Просрочка, дней","Телефон"],
+    ...list.map(x=>[x.client||"",money(x.remainder),Number(x.daysOverdue||0),normalizePhone(x.phone||"")])];
 }
 
-function exportPdf(type){
-  const debts = getFilteredDebtsForExport(type);
-  if (debts === null) return;
+function staffAoA(){
+  const list=lastStatsData?.analytics?.events?.staff||[];
+  return [["Сотрудник","Выдано/добавлено","Принято оплат"],...list.map(x=>[x.name||"",money(x.issued),money(x.collected)])];
+}
 
-  if (!debts.length){
-    alert(t("exportNoData"));
-    return;
+function trendAoA(){
+  const list=lastStatsData?.analytics?.events?.trend||[];
+  return [["Дата","Выдано","Возвращено"],...list.map(x=>[formatReportDate(x.date),money(x.issued),money(x.returned)])];
+}
+
+function setSheetWidths(ws,widths){ ws['!cols']=widths.map(w=>({wch:w})); }
+function addAutofilter(ws,rows){ if(rows>1 && ws['!ref']) ws['!autofilter']={ref:ws['!ref']}; }
+
+function appendJsonSheet(wb,name,rows,widths){
+  const safeRows=rows.length?rows:[{"Нет данных":""}];
+  const ws=XLSX.utils.json_to_sheet(safeRows);
+  setSheetWidths(ws,widths||[6,12,20,20,14,16,16,16,16,14,18,18]);
+  addAutofilter(ws,safeRows.length+1);
+  XLSX.utils.book_append_sheet(wb,ws,name.slice(0,31));
+}
+
+function appendAoASheet(wb,name,rows,widths){
+  const ws=XLSX.utils.aoa_to_sheet(rows||[[""]]);
+  setSheetWidths(ws,widths||[30,18,16,16]);
+  XLSX.utils.book_append_sheet(wb,ws,name.slice(0,31));
+}
+
+function excelFileName(dataset,month){
+  const suffix=month?`-${month}`:"";
+  return `debts-${dataset}${suffix}.xlsx`;
+}
+
+async function exportExcel(dataset,month){
+  if(typeof XLSX==="undefined") throw new Error("XLSX library unavailable");
+  const wb=XLSX.utils.book_new();
+  let payments=[];
+  if(dataset==="payments" || dataset==="stats" || dataset==="full") payments=await loadExportPayments();
+
+  if(dataset==="full"){
+    const all=getDebtDataset("allRecords",month);
+    appendAoASheet(wb,"Статистика",buildStatsAoA(month,payments),[34,20,16]);
+    appendJsonSheet(wb,"Активные",debtRowsForExport(filterRecordsBySelectedPeriod(allDebts,month)));
+    appendJsonSheet(wb,"Просроченные",debtRowsForExport(filterRecordsBySelectedPeriod(allDebts.filter(d=>d.isOverdue),month)));
+    appendJsonSheet(wb,"Оплаченные",debtRowsForExport(filterRecordsBySelectedPeriod(paidDebts,month)));
+    appendJsonSheet(wb,"С оплатой",debtRowsForExport(all.filter(d=>money(d.paid)>0)));
+    appendJsonSheet(wb,"Без оплаты",debtRowsForExport(all.filter(d=>money(d.remainder)>0&&money(d.paid)<=0)));
+    appendJsonSheet(wb,"Платежи",paymentRowsForExport(filterPaymentsByMonth(payments,month)),[6,20,12,24,14,16,18,18,18,20,20]);
+    appendAoASheet(wb,"ТОП должников",topDebtorsAoA(),[30,18,18,16]);
+    appendAoASheet(wb,"Сотрудники",staffAoA(),[24,18,18]);
+    appendAoASheet(wb,"Динамика 14 дней",trendAoA(),[16,18,18]);
+  } else if(dataset==="stats"){
+    appendAoASheet(wb,"Статистика",buildStatsAoA(month,payments),[34,20,16]);
+    appendAoASheet(wb,"ТОП должников",topDebtorsAoA(),[30,18,18,16]);
+    appendAoASheet(wb,"Старые просрочки",oldestOverdueAoA(),[30,18,18,16]);
+    appendAoASheet(wb,"Сотрудники",staffAoA(),[24,18,18]);
+    appendAoASheet(wb,"Динамика 14 дней",trendAoA(),[16,18,18]);
+  } else if(dataset==="payments"){
+    appendJsonSheet(wb,"Платежи",paymentRowsForExport(filterPaymentsByMonth(payments,month)),[6,20,12,24,14,16,18,18,18,20,20]);
+  } else {
+    const rows=debtRowsForExport(await getDebtDatasetAsync(dataset,month));
+    appendJsonSheet(wb,"Отчет",rows);
   }
+  XLSX.writeFile(wb,excelFileName(dataset,month),{compression:true});
+}
 
-  const wrapper = document.createElement("div");
-  wrapper.style.position = "fixed";
-  wrapper.style.left = "0";
-  wrapper.style.top = "0";
-  wrapper.style.width = "1120px";
-  wrapper.style.background = "#fff";
-  wrapper.style.zIndex = "9999";
-  wrapper.style.opacity = "0.01";
-  wrapper.style.pointerEvents = "none";
+function reportDatasetTitle(dataset){
+  const keys={full:"exportFull",active:"exportActive",overdue:"exportOverdue",paid:"exportPaid",anyPaid:"exportAnyPaid",noPayment:"exportNoPayment",payments:"exportPayments",stats:"exportStats",allRecords:"exportAllRecords"};
+  return t(keys[dataset]||"exportFull");
+}
 
-  wrapper.innerHTML = buildPdfHtml(type, debts);
-  document.body.appendChild(wrapper);
+function buildDebtPdfTable(list){
+  const rows=debtRowsForExport(list).map(r=>`<tr><td>${r["№"]}</td><td>${escapeHtml(r["Клиент"])}</td><td>${escapeHtml(r["Телефон"])}</td><td>${escapeHtml(r["Дата оплаты по договоренности"])}</td><td>${r["Сумма долга"]}</td><td>${r["Оплачено"]}</td><td>${r["Остаток"]}</td><td>${escapeHtml(r["Статус"])}</td></tr>`).join("");
+  return `<table class="pdf-table"><thead><tr><th>№</th><th>${escapeHtml(t("clientPlaceholder"))}</th><th>${escapeHtml(t("phonePlaceholder"))}</th><th>${escapeHtml(t("choosePayDate"))}</th><th>${escapeHtml(t("debtAmount"))}</th><th>${escapeHtml(t("paidAmount"))}</th><th>${escapeHtml(t("remainder"))}</th><th>${escapeHtml(t("statusColumn"))}</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
 
-  const reportElement = wrapper.querySelector("#pdfReportTemp");
+function buildPaymentsPdfTable(payments){
+  const rows=paymentRowsForExport(payments).map(r=>`<tr><td>${r["№"]}</td><td>${escapeHtml(r["Дата оплаты"])}</td><td>${escapeHtml(r["Клиент"])}</td><td>${escapeHtml(r["Телефон"])}</td><td>${r["Сумма платежа"]}</td><td>${escapeHtml(r["Кто выдал"])}</td><td>${escapeHtml(r["Кто принял оплату"])}</td><td>${escapeHtml(r["Статус после платежа"])}</td></tr>`).join("");
+  return `<table class="pdf-table"><thead><tr><th>№</th><th>Дата</th><th>${escapeHtml(t("clientPlaceholder"))}</th><th>${escapeHtml(t("phonePlaceholder"))}</th><th>Платеж</th><th>Кто выдал</th><th>Кто принял</th><th>${escapeHtml(t("statusColumn"))}</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
 
-  setTimeout(() => {
-    html2pdf()
-      .set({
-        margin: [6, 6, 6, 6],
-        filename: getPdfFileName(type),
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: "#ffffff"
-        },
-        jsPDF: {
-          unit: "mm",
-          format: "a4",
-          orientation: "landscape"
-        },
-        pagebreak: {
-          mode: ["css", "legacy"]
-        }
-      })
-      .from(reportElement)
-      .save()
-      .then(() => {
-        wrapper.remove();
-        closeExportMenu();
-      })
-      .catch((err) => {
-        console.error("PDF export error:", err);
-        wrapper.remove();
-      });
-  }, 150);
+function statsPdfHtml(month,payments){
+  const rows=buildStatsAoA(month,payments).filter(r=>r.length>1 && r[0]!=="").map(r=>`<tr><td>${escapeHtml(r[0])}</td><td>${escapeHtml(r[1]??"")}</td><td>${escapeHtml(r[2]??"")}</td></tr>`).join("");
+  return `<h2>${escapeHtml(t("statsPageTitle"))}</h2><table class="pdf-table"><tbody>${rows}</tbody></table>`;
+}
+
+async function buildSelectedPdfHtml(dataset,month){
+  let payments=[];
+  if(dataset==="payments"||dataset==="stats"||dataset==="full") payments=await loadExportPayments();
+  let body="";
+  if(dataset==="stats") body=statsPdfHtml(month,payments);
+  else if(dataset==="payments") body=buildPaymentsPdfTable(filterPaymentsByMonth(payments,month));
+  else if(dataset==="full"){
+    body=statsPdfHtml(month,payments)+`<div style="page-break-before:always"></div><h2>${escapeHtml(t("exportActive"))}</h2>`+buildDebtPdfTable(filterRecordsBySelectedPeriod(allDebts,month))+
+      `<div style="page-break-before:always"></div><h2>${escapeHtml(t("exportPaid"))}</h2>`+buildDebtPdfTable(filterRecordsBySelectedPeriod(paidDebts,month))+
+      `<div style="page-break-before:always"></div><h2>${escapeHtml(t("exportPayments"))}</h2>`+buildPaymentsPdfTable(filterPaymentsByMonth(payments,month));
+  } else body=buildDebtPdfTable(await getDebtDatasetAsync(dataset,month));
+  return `<div class="pdf-report" id="pdfReportTemp"><h1>${escapeHtml(reportDatasetTitle(dataset))}</h1><div class="pdf-meta"><div><b>${escapeHtml(t("reportDate"))}:</b> ${escapeHtml(getTodayFormatted())}</div><div><b>${escapeHtml(t("reportSeller"))}:</b> ${escapeHtml(currentSeller||"-")}</div>${month?`<div><b>${escapeHtml(t("exportPeriodLabel"))}:</b> ${escapeHtml(month)}</div>`:""}</div>${body}</div>`;
+}
+
+async function exportPdf(dataset,month){
+  const html=await buildSelectedPdfHtml(dataset,month);
+  const wrapper=document.createElement("div");
+  Object.assign(wrapper.style,{position:"fixed",left:"0",top:"0",width:"1120px",background:"#fff",zIndex:"9999",opacity:"0.01",pointerEvents:"none"});
+  wrapper.innerHTML=html; document.body.appendChild(wrapper);
+  const reportElement=wrapper.querySelector("#pdfReportTemp");
+  try{
+    await html2pdf().set({margin:[6,6,6,6],filename:`debts-${dataset}${month?'-'+month:''}.pdf`,image:{type:"jpeg",quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff"},jsPDF:{unit:"mm",format:"a4",orientation:"landscape"},pagebreak:{mode:["css","legacy"]}}).from(reportElement).save();
+  } finally { wrapper.remove(); }
+}
+
+async function runSelectedExport(){
+  const dataset=document.getElementById("exportDataset")?.value||"full";
+  const month=getExportMonth();
+  if(month===null) return;
+  const btn=document.getElementById("exportDownloadBtn");
+  const oldText=btn?.textContent||"";
+  if(btn){btn.disabled=true;btn.textContent=t("exportPreparing");}
+  try{
+    const simpleDatasets=["active","overdue","paid","anyPaid","noPayment","allRecords"];
+    if(simpleDatasets.includes(dataset) && (await getDebtDatasetAsync(dataset,month)).length===0){ alert(t("exportNoData")); return; }
+    if(exportFormat==="xlsx") await exportExcel(dataset,month); else await exportPdf(dataset,month);
+    closeExportMenu();
+  } catch(err){ console.error("Export error",err); alert(t("exportError")); }
+  finally{ if(btn){btn.disabled=false;btn.textContent=oldText;} syncExportUi(); }
 }
 
 /* ---------- ВЫХОД ---------- */
