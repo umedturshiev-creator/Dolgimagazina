@@ -1017,6 +1017,150 @@ button[onclick*="showHistory"]{
   }
 }
   
+
+/* ===== v4.3 NAVIGATION / SECTIONS ===== */
+.app-sidebar{
+  position:fixed;
+  left:0;
+  top:76px;
+  bottom:0;
+  width:230px;
+  padding:18px 14px;
+  background:linear-gradient(180deg,rgba(15,23,42,.96),rgba(9,16,30,.97));
+  border-right:1px solid rgba(148,163,184,.12);
+  box-shadow:14px 0 34px rgba(2,6,23,.28);
+  z-index:40;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+body:not(.app-open) .app-sidebar,
+body:not(.app-open) .mobile-bottom-nav{display:none !important;}
+
+.nav-btn{
+  width:100%;
+  min-height:48px;
+  margin:0;
+  padding:11px 13px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  text-align:left;
+  border-radius:14px;
+  background:transparent;
+  color:#cbd5e1;
+  border:1px solid transparent;
+  box-shadow:none;
+}
+.nav-btn .nav-icon{width:24px;text-align:center;font-size:18px;}
+.nav-btn.active{
+  color:#fff;
+  background:linear-gradient(135deg,rgba(37,99,235,.94),rgba(79,70,229,.92));
+  border-color:rgba(96,165,250,.28);
+  box-shadow:0 10px 24px rgba(37,99,235,.22);
+}
+.nav-btn:hover{background-color:rgba(255,255,255,.05);}
+
+.main-view-container{
+  max-width:1120px !important;
+  margin:0 auto 0 230px !important;
+  padding:20px 24px 34px !important;
+}
+.app-view{display:none;animation:cardFadeUp .24s ease both;}
+.app-view.active{display:block;}
+.view-title{margin:2px 0 14px;font-size:21px;}
+
+.section-toolbar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:14px;
+}
+.section-toolbar .search-box{flex:1;margin:0;}
+
+.phone-debt-preview{margin-top:12px;}
+.phone-debt-preview:empty{display:none;}
+
+.paid-card{
+  border-left:5px solid #22c55e;
+  background:linear-gradient(135deg,rgba(20,83,45,.62),rgba(15,23,42,.82)) !important;
+}
+.paid-status{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:7px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(34,197,94,.13);
+  color:#86efac;
+  font-weight:700;
+  font-size:12px;
+}
+
+.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.settings-card{margin:0;}
+.settings-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.settings-actions button{margin:0;}
+.settings-lang{display:flex;gap:8px;margin-top:12px;}
+.settings-lang button{margin:0;}
+
+.mobile-bottom-nav{display:none;}
+
+@media (max-width:760px){
+  .app-sidebar{display:none !important;}
+  .main-view-container{
+    margin:0 !important;
+    max-width:none !important;
+    padding:14px 12px 96px !important;
+  }
+  .mobile-bottom-nav{
+    position:fixed;
+    left:8px;
+    right:8px;
+    bottom:8px;
+    z-index:70;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:4px;
+    padding:6px;
+    background:rgba(15,23,42,.92);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:20px;
+    box-shadow:0 18px 46px rgba(0,0,0,.42);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+  .mobile-nav-btn{
+    min-width:0;
+    min-height:56px;
+    margin:0;
+    padding:6px 2px;
+    border-radius:14px;
+    background:transparent;
+    color:#94a3b8;
+    box-shadow:none;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    font-size:10px;
+    line-height:1.05;
+    white-space:nowrap;
+  }
+  .mobile-nav-btn .nav-icon{font-size:19px;line-height:1;}
+  .mobile-nav-btn.active{
+    color:#fff;
+    background:linear-gradient(135deg,rgba(37,99,235,.94),rgba(79,70,229,.92));
+    box-shadow:0 8px 18px rgba(37,99,235,.20);
+  }
+  .settings-grid{grid-template-columns:1fr;}
+  .view-title{font-size:19px;}
+  .section-toolbar{display:block;}
+}
+
 </style>
 </head>
 <body>
@@ -1067,26 +1211,80 @@ button[onclick*="showHistory"]{
 </div>
 </div>
 
-<div class="container" id="appContent" style="display:none;">
-  <div id="statsBox"></div>
+<aside class="app-sidebar" id="desktopSidebar">
+  <button class="nav-btn active" data-view="active" onclick="showView('active')"><span class="nav-icon">💳</span><span data-nav-label="active">Активные долги</span></button>
+  <button class="nav-btn" data-view="add" onclick="showView('add')"><span class="nav-icon">➕</span><span data-nav-label="add">Добавить долг</span></button>
+  <button class="nav-btn" data-view="paid" onclick="showView('paid')"><span class="nav-icon">✅</span><span data-nav-label="paid">Оплаченные долги</span></button>
+  <button class="nav-btn" data-view="stats" onclick="showView('stats')"><span class="nav-icon">📊</span><span data-nav-label="stats">Статистика</span></button>
+  <button class="nav-btn" data-view="settings" onclick="showView('settings')"><span class="nav-icon">⚙️</span><span data-nav-label="settings">Настройки</span></button>
+</aside>
 
-  <h3>Добавить долг</h3>
-  <input id="client" placeholder="Имя клиента">
-  <input id="phone" placeholder="Телефон" maxlength="9" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-  <div id="phoneLookupBox" class="phone-lookup-box"></div>
-  <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
-  <label id="dueDateLabel" style="color:#fca5a5;font-weight:bold;">Выберите дату оплаты</label>
-  <input id="dueDate" type="date">
-  <button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
-  <div id="saveLoader" class="loader" style="display:none;">⏳ Сохранение...</div>
+<div class="container main-view-container" id="appContent" style="display:none;">
+  <section id="view-active" class="app-view active">
+    <h3 id="activeDebtsTitle" class="view-title">Активные долги</h3>
+    <div class="search-box">
+      <input id="searchInput" placeholder="🔍 Поиск по имени или номеру">
+    </div>
+    <div id="debtList"></div>
+  </section>
 
-  <div class="search-box">
-    <input id="searchInput" placeholder="🔍 Поиск по имени или номеру">
-  </div>
+  <section id="view-add" class="app-view">
+    <h3 id="addDebtTitle" class="view-title">Добавить долг</h3>
+    <div class="card">
+      <input id="client" placeholder="Имя клиента">
+      <input id="phone" placeholder="Телефон" maxlength="9" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      <div id="phoneLookupBox" class="phone-lookup-box"></div>
+      <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
+      <label id="dueDateLabel" style="color:#fca5a5;font-weight:bold;">Выберите дату оплаты</label>
+      <input id="dueDate" type="date">
+      <button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
+      <div id="saveLoader" class="loader" style="display:none;">⏳ Сохранение...</div>
+    </div>
+    <div id="phoneDebtPreview" class="phone-debt-preview"></div>
+  </section>
 
-  <h3>Список должников</h3>
-  <div id="debtList"></div>
+  <section id="view-paid" class="app-view">
+    <h3 id="paidDebtsTitle" class="view-title">Оплаченные долги</h3>
+    <div class="search-box">
+      <input id="paidSearchInput" placeholder="🔍 Поиск по имени или номеру">
+    </div>
+    <div id="paidDebtList"></div>
+  </section>
+
+  <section id="view-stats" class="app-view">
+    <h3 id="statsPageTitle" class="view-title">Статистика</h3>
+    <div id="statsBox"></div>
+  </section>
+
+  <section id="view-settings" class="app-view">
+    <h3 id="settingsTitle" class="view-title">Настройки</h3>
+    <div class="settings-grid">
+      <div class="card settings-card">
+        <b id="settingsLanguageTitle">🌐 Язык интерфейса</b>
+        <div class="settings-lang">
+          <button class="add-debt-btn" onclick="setLanguage('ru')">Русский</button>
+          <button class="add-debt-btn" onclick="setLanguage('tj')">Тоҷикӣ</button>
+        </div>
+      </div>
+      <div class="card settings-card">
+        <b id="settingsActionsTitle">🛠 Действия</b>
+        <div class="settings-actions">
+          <button id="settingsRefreshBtn" class="add-debt-btn" onclick="forceAppUpdate()">Обновить данные</button>
+          <button id="settingsPdfBtn" class="add-debt-btn" onclick="openExportMenu()">PDF-отчеты</button>
+          <button id="settingsLogoutBtn" onclick="logout()" style="background:linear-gradient(135deg,#ef4444,#dc2626);">Выйти</button>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
+
+<nav class="mobile-bottom-nav" id="mobileBottomNav">
+  <button class="mobile-nav-btn active" data-view="active" onclick="showView('active')"><span class="nav-icon">💳</span><span data-nav-label="active">Долги</span></button>
+  <button class="mobile-nav-btn" data-view="add" onclick="showView('add')"><span class="nav-icon">➕</span><span data-nav-label="add">Добавить</span></button>
+  <button class="mobile-nav-btn" data-view="paid" onclick="showView('paid')"><span class="nav-icon">✅</span><span data-nav-label="paid">Оплачено</span></button>
+  <button class="mobile-nav-btn" data-view="stats" onclick="showView('stats')"><span class="nav-icon">📊</span><span data-nav-label="stats">Статистика</span></button>
+  <button class="mobile-nav-btn" data-view="settings" onclick="showView('settings')"><span class="nav-icon">⚙️</span><span data-nav-label="settings">Настройки</span></button>
+</nav>
 
 <div class="modal" id="paymentModal">
   <div class="modal-content">
@@ -1194,7 +1392,7 @@ button[onclick*="showHistory"]{
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="4.2";
+const VERSION="4.3";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -1206,6 +1404,8 @@ const USERS={
 
 let currentSeller=null;
 let allDebts=[];
+let paidDebts=[];
+let currentView="active";
 let currentRow=null;
 let currentRemainder=0;
 let toastTimer=null;
@@ -1243,6 +1443,23 @@ const translations = {
     saveLoader: "⏳ Сохранение...",
     searchPlaceholder: "🔍 Поиск по имени или номеру",
     debtorsList: "Список должников",
+    navActive: "Активные долги",
+    navAdd: "Добавить долг",
+    navPaid: "Оплаченные долги",
+    navStats: "Статистика",
+    navSettings: "Настройки",
+    mobileNavActive: "Долги",
+    mobileNavAdd: "Добавить",
+    mobileNavPaid: "Оплачено",
+    activeDebtsTitle: "Активные долги",
+    paidDebtsTitle: "Оплаченные долги",
+    statsPageTitle: "Статистика",
+    settingsTitle: "Настройки",
+    settingsLanguage: "🌐 Язык интерфейса",
+    settingsActions: "🛠 Действия",
+    settingsRefresh: "Обновить данные",
+    settingsPdf: "PDF-отчеты",
+    settingsLogout: "Выйти",
     phoneActiveDebtTitle: "У этого номера уже есть активный долг",
     phoneActiveDebtText: "Создать отдельную запись нельзя. Используйте «Добавить к долгу» в карточке ниже.",
     phoneKnownClientTitle: "Клиент найден",
@@ -1378,6 +1595,23 @@ const translations = {
     saveLoader: "⏳ Захира шуда истодааст...",
     searchPlaceholder: "🔍 Ҷустуҷӯ аз рӯйи ном ё рақам",
     debtorsList: "Рӯйхати қарздорон",
+    navActive: "Қарзҳои фаъол",
+    navAdd: "Иловаи қарз",
+    navPaid: "Қарзҳои пардохтшуда",
+    navStats: "Омор",
+    navSettings: "Танзимот",
+    mobileNavActive: "Қарзҳо",
+    mobileNavAdd: "Илова",
+    mobileNavPaid: "Пардохт",
+    activeDebtsTitle: "Қарзҳои фаъол",
+    paidDebtsTitle: "Қарзҳои пардохтшуда",
+    statsPageTitle: "Омор",
+    settingsTitle: "Танзимот",
+    settingsLanguage: "🌐 Забони интерфейс",
+    settingsActions: "🛠 Амалҳо",
+    settingsRefresh: "Навсозии маълумот",
+    settingsPdf: "Ҳисоботҳои PDF",
+    settingsLogout: "Баромадан",
     phoneActiveDebtTitle: "Барои ин рақам қарзи фаъол мавҷуд аст",
     phoneActiveDebtText: "Сабти алоҳида сохтан мумкин нест. Аз тугмаи «Ба қарз илова кардан» дар карточкаи поён истифода баред.",
     phoneKnownClientTitle: "Муштарӣ ёфт шуд",
@@ -1533,9 +1767,38 @@ function applyTranslations(){
   if (logoutBtns[0]) logoutBtns[0].textContent = t("logoutBtn");
   if (logoutBtns[1]) logoutBtns[1].textContent = t("cancelBtn");
 
-  const appHeadings = document.querySelectorAll("#appContent h3");
-  if (appHeadings[0]) appHeadings[0].textContent = t("addDebt");
-  if (appHeadings[1]) appHeadings[1].textContent = t("debtorsList");
+  const activeTitleEl = document.getElementById("activeDebtsTitle");
+  const addTitleEl = document.getElementById("addDebtTitle");
+  const paidTitleEl = document.getElementById("paidDebtsTitle");
+  const statsPageTitleEl = document.getElementById("statsPageTitle");
+  const settingsTitleEl = document.getElementById("settingsTitle");
+  if (activeTitleEl) activeTitleEl.textContent = t("activeDebtsTitle");
+  if (addTitleEl) addTitleEl.textContent = t("addDebt");
+  if (paidTitleEl) paidTitleEl.textContent = t("paidDebtsTitle");
+  if (statsPageTitleEl) statsPageTitleEl.textContent = t("statsPageTitle");
+  if (settingsTitleEl) settingsTitleEl.textContent = t("settingsTitle");
+
+  document.querySelectorAll('.app-sidebar [data-nav-label="active"]').forEach(el=>el.textContent=t("navActive"));
+  document.querySelectorAll('.app-sidebar [data-nav-label="add"]').forEach(el=>el.textContent=t("navAdd"));
+  document.querySelectorAll('.app-sidebar [data-nav-label="paid"]').forEach(el=>el.textContent=t("navPaid"));
+  document.querySelectorAll('.app-sidebar [data-nav-label="stats"]').forEach(el=>el.textContent=t("navStats"));
+  document.querySelectorAll('.app-sidebar [data-nav-label="settings"]').forEach(el=>el.textContent=t("navSettings"));
+  document.querySelectorAll('.mobile-bottom-nav [data-nav-label="active"]').forEach(el=>el.textContent=t("mobileNavActive"));
+  document.querySelectorAll('.mobile-bottom-nav [data-nav-label="add"]').forEach(el=>el.textContent=t("mobileNavAdd"));
+  document.querySelectorAll('.mobile-bottom-nav [data-nav-label="paid"]').forEach(el=>el.textContent=t("mobileNavPaid"));
+  document.querySelectorAll('.mobile-bottom-nav [data-nav-label="stats"]').forEach(el=>el.textContent=t("navStats"));
+  document.querySelectorAll('.mobile-bottom-nav [data-nav-label="settings"]').forEach(el=>el.textContent=t("navSettings"));
+
+  const settingsLanguageTitle = document.getElementById("settingsLanguageTitle");
+  const settingsActionsTitle = document.getElementById("settingsActionsTitle");
+  const settingsRefreshBtn = document.getElementById("settingsRefreshBtn");
+  const settingsPdfBtn = document.getElementById("settingsPdfBtn");
+  const settingsLogoutBtn = document.getElementById("settingsLogoutBtn");
+  if (settingsLanguageTitle) settingsLanguageTitle.textContent=t("settingsLanguage");
+  if (settingsActionsTitle) settingsActionsTitle.textContent=t("settingsActions");
+  if (settingsRefreshBtn) settingsRefreshBtn.textContent=t("settingsRefresh");
+  if (settingsPdfBtn) settingsPdfBtn.textContent=t("settingsPdf");
+  if (settingsLogoutBtn) settingsLogoutBtn.textContent=t("settingsLogout");
 
   const clientEl = document.getElementById("client");
   const phoneEl = document.getElementById("phone");
@@ -1544,6 +1807,7 @@ function applyTranslations(){
   const saveBtnEl = document.getElementById("saveBtn");
   const saveLoaderEl = document.getElementById("saveLoader");
   const searchEl = document.getElementById("searchInput");
+  const paidSearchEl = document.getElementById("paidSearchInput");
 
   if (clientEl) clientEl.placeholder = t("clientPlaceholder");
   if (phoneEl) phoneEl.placeholder = t("phonePlaceholder");
@@ -1552,6 +1816,7 @@ function applyTranslations(){
   if (saveBtnEl) saveBtnEl.textContent = t("saveBtn");
   if (saveLoaderEl) saveLoaderEl.textContent = t("saveLoader");
   if (searchEl) searchEl.placeholder = t("searchPlaceholder");
+  if (paidSearchEl) paidSearchEl.placeholder = t("searchPlaceholder");
 
   const paymentTitle = document.querySelector("#paymentModal h3");
   const paymentInput = document.getElementById("paymentAmount");
@@ -1603,6 +1868,7 @@ function applyTranslations(){
 
   renderStats(lastStatsData || {});
   renderDebts([...allDebts]);
+  renderPaidDebts([...paidDebts]);
   if (String(phone?.value || "").replace(/\D/g, "").length === 9) {
     handlePhoneLookup(false);
   }
@@ -1749,7 +2015,9 @@ function openApp(){
   loginScreen.style.display = "none";
   mainHeader.style.display = "flex";
   appContent.style.display = "block";
+  document.body.classList.add("app-open");
   userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
+  showView(currentView || "active");
   loadDebts();
 }
 
@@ -1816,7 +2084,8 @@ function clearPhoneLookup({clearAutoName = true, restoreList = true} = {}){
     box.className = "phone-lookup-box";
     box.innerHTML = "";
   }
-
+  const preview = document.getElementById("phoneDebtPreview");
+  if (preview) preview.innerHTML = "";
 
   if (client) {
     client.readOnly = false;
@@ -1873,12 +2142,13 @@ function handlePhoneLookup(scrollToPreview = true){
       `;
     }
 
-    renderDebts([activeDebt]);
+    const preview = document.getElementById("phoneDebtPreview");
+    if (preview) preview.innerHTML = `<h3 style="margin:14px 0 8px;">${t("foundDebtorTitle")}</h3>${buildDebtCardHtml(activeDebt)}`;
 
     validateForm();
 
-    if (scrollToPreview && debtList) {
-      setTimeout(() => debtList.scrollIntoView({behavior:"smooth", block:"nearest"}), 60);
+    if (scrollToPreview && preview) {
+      setTimeout(() => preview.scrollIntoView({behavior:"smooth", block:"nearest"}), 60);
     }
     return;
   }
@@ -1906,8 +2176,8 @@ function handlePhoneLookup(scrollToPreview = true){
     }
   }
 
-  if (String(searchInput?.value || "").trim()) applySearch();
-  else renderDebts([...allDebts]);
+  const preview = document.getElementById("phoneDebtPreview");
+  if (preview) preview.innerHTML = "";
   validateForm();
 }
 
@@ -2014,9 +2284,11 @@ function loadDebts(){
   .then(data=>{
     data=data||{};
     allDebts=data.debts||[];
+    paidDebts=data.paidDebts||[];
     clientsByPhone=data.clientsByPhone||{};
     renderStats(data);
     renderDebts([...allDebts]);
+    renderPaidDebts([...paidDebts]);
 
     if (normalizePhone(phone?.value).length === 9) {
       handlePhoneLookup(false);
@@ -2045,16 +2317,13 @@ function renderStats(data){
 
   statsBox.innerHTML = `
   <div class="card">
-    <div onclick="toggleStats()" style="cursor:pointer;font-weight:bold;">
-      📊 ${t("statsTitle")}
-    </div>
-
-    <div id="statsContent" style="display:none;margin-top:10px;">
+    <div style="font-weight:bold;margin-bottom:12px;">📊 ${t("statsPageTitle")}</div>
+    <div id="statsContent" style="display:block;line-height:1.9;">
       💰 <b>${t("totalGiven")}:</b> ${totalGiven} ${t("somoni")}<br><br>
       📉 ${t("activeDebts")}: ${activeTotal} ${t("somoni")} ${t("fromWord")} ${activeCount} ${t("clients")}<br>
       💸 ${t("alreadyPaid")}: ${partialTotal} ${t("somoni")} ${t("fromWord")} ${partialCount} ${t("clients")}<br>
       ✅ ${t("fullyClosed")}: ${paidTotal} ${t("somoni")} ${t("fromWord")} ${paidCount} ${t("clients")}<br><br>
-      <b style="color:red;">
+      <b style="color:#fca5a5;">
         🔴 ${t("overdueLeft")}: ${overdueTotal} ${t("somoni")} ${t("fromWord")} ${overdueCount} ${t("clients")}
       </b>
     </div>
@@ -2147,6 +2416,58 @@ function renderDebts(list){
     : `<div class="card">${t("noData")}</div>`;
 }
 
+
+function buildPaidDebtCardHtml(d){
+  const phoneNormalized = normalizePhone(d.phone);
+  return `
+    <div class="card paid-card">
+      <b>${d.client}</b><br>
+      ${t("phonePlaceholder")}: ${phoneNormalized}<br>
+      ${t("debtAmount")}: ${d.total} ${t("somoni")}<br>
+      ${t("paidAmount")}: <b>${d.paid || d.total || 0} ${t("somoni")}</b><br>
+      ${d.dueDate ? `${t("choosePayDate")}: ${d.dueDate}<br>` : ""}
+      ${d.seller ? `👤 ${d.seller}<br>` : ""}
+      <span class="paid-status">✅ ${t("statusClosed")}</span>
+      <button onclick="showHistory('${String(d.client).replace(/'/g,"\\'")}')">📂 ${t("historyBtn")}</button>
+    </div>`;
+}
+
+function renderPaidDebts(list){
+  const box = document.getElementById("paidDebtList");
+  if (!box) return;
+  const sorted=[...(list||[])].sort((a,b)=>Number(b.id||0)-Number(a.id||0));
+  box.innerHTML = sorted.length
+    ? sorted.map(buildPaidDebtCardHtml).join("")
+    : `<div class="card">${t("noData")}</div>`;
+}
+
+function applyPaidSearch(){
+  const input=document.getElementById("paidSearchInput");
+  const val=String(input?.value||"").toLowerCase().trim();
+  if (!val) return renderPaidDebts([...paidDebts]);
+  renderPaidDebts(paidDebts.filter(d=>{
+    const name=String(d.client||"").toLowerCase();
+    const ph=normalizePhone(d.phone);
+    return name.includes(val)||ph.includes(val.replace(/\D/g,""));
+  }));
+}
+
+function showView(view){
+  const allowed=["active","add","paid","stats","settings"];
+  if (!allowed.includes(view)) view="active";
+  currentView=view;
+  document.querySelectorAll(".app-view").forEach(el=>el.classList.toggle("active",el.id===`view-${view}`));
+  document.querySelectorAll(".nav-btn,.mobile-nav-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.view===view));
+  if (view==="active") {
+    if (String(searchInput?.value||"").trim()) applySearch(); else renderDebts([...allDebts]);
+  } else if (view==="paid") {
+    applyPaidSearch();
+  } else if (view==="stats") {
+    renderStats(lastStatsData||{});
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
 /* ---------- ПОИСК ---------- */
 
 function applySearch(){
@@ -2167,6 +2488,8 @@ function applySearch(){
 }
 
 searchInput.addEventListener("input", applySearch);
+const paidSearchInputEl=document.getElementById("paidSearchInput");
+if (paidSearchInputEl) paidSearchInputEl.addEventListener("input", applyPaidSearch);
 
 /* ---------- ОПЛАТА ---------- */
 
@@ -2557,6 +2880,7 @@ function confirmLogout(){
 
   setTimeout(()=>{
     sessionStorage.removeItem("seller");
+  document.body.classList.remove("app-open");
     location.reload();
   },300);
 }
