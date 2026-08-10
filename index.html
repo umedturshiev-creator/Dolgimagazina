@@ -1110,18 +1110,6 @@ body:not(.app-open) .mobile-bottom-nav{display:none !important;}
 .settings-actions button{margin:0;}
 .settings-lang{display:flex;gap:8px;margin-top:12px;}
 .settings-lang button{margin:0;}
-.settings-lang-btn{
-  background:rgba(148,163,184,.10);
-  color:var(--text-2);
-  border:1px solid rgba(148,163,184,.14);
-  box-shadow:none;
-}
-.settings-lang-btn.active{
-  color:#fff;
-  background:linear-gradient(135deg,#2563eb,#4f46e5);
-  border-color:rgba(96,165,250,.34);
-  box-shadow:0 10px 22px rgba(37,99,235,.20);
-}
 
 .mobile-bottom-nav{display:none;}
 
@@ -1231,6 +1219,63 @@ html[data-theme="light"]{color-scheme:light;}
   letter-spacing:.01em;
 }
 .add-debt-form-card input{margin-top:5px;}
+
+.date-picker-wrap{
+  position:relative;
+  width:100%;
+  margin:10px 0 6px;
+  min-height:56px;
+  border-radius:14px;
+  overflow:hidden;
+}
+.date-picker-display{
+  min-height:56px;
+  width:100%;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,.22);
+  background:rgba(2,6,23,.72);
+  color:var(--text-2);
+  font-size:14px;
+  font-weight:800;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+  transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  pointer-events:none;
+}
+.date-picker-wrap:focus-within .date-picker-display{
+  border-color:rgba(59,130,246,.85);
+  box-shadow:0 0 0 3px rgba(59,130,246,.16),0 8px 20px rgba(37,99,235,.18);
+}
+.date-picker-wrap.has-date .date-picker-display{
+  color:#fff;
+  border-color:rgba(34,197,94,.42);
+  background:linear-gradient(135deg,rgba(22,101,52,.26),rgba(15,23,42,.78));
+}
+.date-picker-native{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  opacity:0 !important;
+  cursor:pointer;
+  z-index:2;
+}
+html[data-theme="light"] .date-picker-display{
+  background:#f8fafc;
+  color:#475569;
+  border-color:#dbe3ee;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+}
+html[data-theme="light"] .date-picker-wrap.has-date .date-picker-display{
+  color:#166534;
+  background:#f0fdf4;
+  border-color:#86efac;
+}
 
 .theme-choice{
   display:grid;
@@ -1343,8 +1388,6 @@ html[data-theme="light"] .modal-content{
   box-shadow:0 24px 60px rgba(15,23,42,.18);
 }
 html[data-theme="light"] .theme-choice-btn{background:#f8fafc;color:#475569;border-color:#e2e8f0;}
-html[data-theme="light"] .settings-lang-btn{background:#f8fafc;color:#475569;border-color:#e2e8f0;}
-html[data-theme="light"] .settings-lang-btn.active{color:#fff;background:linear-gradient(135deg,#2563eb,#4f46e5);}
 html[data-theme="light"] .theme-choice-btn.active{color:#fff;background:linear-gradient(135deg,#2563eb,#4f46e5);}
 html[data-theme="light"] .mobile-bottom-nav{
   background:rgba(255,255,255,.94);
@@ -1434,8 +1477,10 @@ html[data-theme="light"] #loginScreen h2{color:#0f172a !important;}
       <div class="form-field-label" id="clientFieldLabel">Имя клиента</div>
       <input id="client" placeholder="Имя клиента" autocomplete="name">
       <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
-      <label id="dueDateLabel" style="color:#fca5a5;font-weight:bold;">Выберите дату оплаты</label>
-      <input id="dueDate" type="date">
+      <div class="date-picker-wrap" id="dueDateWrap">
+        <div class="date-picker-display" id="dueDateDisplay">📅 Выберите дату оплаты</div>
+        <input id="dueDate" class="date-picker-native" type="date" aria-label="Выберите дату оплаты">
+      </div>
       <button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
       <div id="saveLoader" class="loader" style="display:none;">⏳ Сохранение...</div>
     </div>
@@ -1461,8 +1506,8 @@ html[data-theme="light"] #loginScreen h2{color:#0f172a !important;}
       <div class="card settings-card">
         <b id="settingsLanguageTitle">🌐 Язык интерфейса</b>
         <div class="settings-lang">
-          <button class="settings-lang-btn" data-lang="ru" onclick="setLanguage('ru')">Русский</button>
-          <button class="settings-lang-btn" data-lang="tj" onclick="setLanguage('tj')">Тоҷикӣ</button>
+          <button class="add-debt-btn" onclick="setLanguage('ru')">Русский</button>
+          <button class="add-debt-btn" onclick="setLanguage('tj')">Тоҷикӣ</button>
         </div>
       </div>
       <div class="card settings-card">
@@ -1598,7 +1643,7 @@ html[data-theme="light"] #loginScreen h2{color:#0f172a !important;}
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="4.4";
+const VERSION="4.5";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -1646,6 +1691,7 @@ const translations = {
     phonePlaceholder: "Телефон",
     amountPlaceholder: "Сумма",
     choosePayDate: "Выберите дату оплаты",
+    selectedPayDate: "Дата оплаты: {date}",
     saveBtn: "Сохранить",
     saveLoader: "⏳ Сохранение...",
     searchPlaceholder: "🔍 Поиск по имени или номеру",
@@ -1803,6 +1849,7 @@ const translations = {
     phonePlaceholder: "Телефон",
     amountPlaceholder: "Маблағ",
     choosePayDate: "Санаи пардохтро интихоб кунед",
+    selectedPayDate: "Санаи пардохт: {date}",
     saveBtn: "Захира кардан",
     saveLoader: "⏳ Захира шуда истодааст...",
     searchPlaceholder: "🔍 Ҷустуҷӯ аз рӯйи ном ё рақам",
@@ -1955,7 +2002,7 @@ function setLanguage(lang){
   currentLanguage = lang;
   localStorage.setItem("lang", lang);
 
-  document.querySelectorAll(".lang-btn, .settings-lang-btn").forEach(btn => {
+  document.querySelectorAll(".lang-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
 
@@ -2049,7 +2096,7 @@ function applyTranslations(){
   const clientEl = document.getElementById("client");
   const phoneEl = document.getElementById("phone");
   const amountEl = document.getElementById("amount");
-  const dueLabel = document.getElementById("dueDateLabel");
+  const dueDisplay = document.getElementById("dueDateDisplay");
   const saveBtnEl = document.getElementById("saveBtn");
   const saveLoaderEl = document.getElementById("saveLoader");
   const searchEl = document.getElementById("searchInput");
@@ -2058,7 +2105,7 @@ function applyTranslations(){
   if (clientEl) clientEl.placeholder = t("clientPlaceholder");
   if (phoneEl) phoneEl.placeholder = t("phonePlaceholder");
   if (amountEl) amountEl.placeholder = t("amountPlaceholder");
-  if (dueLabel) dueLabel.textContent = t("choosePayDate");
+  updateDueDateDisplay();
   if (saveBtnEl) saveBtnEl.textContent = t("saveBtn");
   if (saveLoaderEl) saveLoaderEl.textContent = t("saveLoader");
   if (searchEl) searchEl.placeholder = t("searchPlaceholder");
@@ -2270,7 +2317,7 @@ function openApp(){
 window.onload = function(){
   applyTheme();
 
-  document.querySelectorAll(".lang-btn, .settings-lang-btn").forEach(btn => {
+  document.querySelectorAll(".lang-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.lang === currentLanguage);
   });
 
@@ -2429,6 +2476,28 @@ function handlePhoneLookup(scrollToPreview = true){
   validateForm();
 }
 
+function formatDebtDateForDisplay(value){
+  if (!value) return "";
+  const parts = String(value).split("-");
+  if (parts.length !== 3) return value;
+  return `${parts[2]}.${parts[1]}.${parts[0]}`;
+}
+
+function updateDueDateDisplay(){
+  const display = document.getElementById("dueDateDisplay");
+  const wrap = document.getElementById("dueDateWrap");
+  if (!display || !dueDate) return;
+
+  if (dueDate.value) {
+    const formatted = formatDebtDateForDisplay(dueDate.value);
+    display.textContent = t("selectedPayDate", {date: formatted});
+    wrap?.classList.add("has-date");
+  } else {
+    display.textContent = `📅 ${t("choosePayDate")}`;
+    wrap?.classList.remove("has-date");
+  }
+}
+
 function validateForm(){
   const phoneOk = normalizePhone(phone.value).length === 9;
   const amountOk = Number(amount.value || 0) > 0;
@@ -2446,11 +2515,13 @@ dueDate.addEventListener("input", () => {
     dueDate.value = "";
     showToast(`⚠️ ${t("invalidPastDate")}`, "error");
   }
+  updateDueDateDisplay();
   validateForm();
 });
 
 function initializeDebtForm(){
   if (dueDate) dueDate.min = getTodayIso();
+  updateDueDateDisplay();
   validateForm();
 }
 
