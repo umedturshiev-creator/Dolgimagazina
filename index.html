@@ -457,6 +457,43 @@ input:focus{
   box-shadow:0 0 0 4px rgba(59,130,246,0.12);
 }
 
+.phone-lookup-box{
+  display:none;
+  margin:6px 0 10px;
+  padding:12px 14px;
+  border-radius:14px;
+  font-size:13px;
+  line-height:1.5;
+  border:1px solid rgba(148,163,184,0.16);
+  background:rgba(15,23,42,0.72);
+}
+
+.phone-lookup-box.active-debt{
+  display:block;
+  border-color:rgba(239,68,68,0.48);
+  background:linear-gradient(135deg,rgba(127,29,29,0.34),rgba(69,10,10,0.32));
+  color:#fecaca;
+}
+
+.phone-lookup-box.known-client{
+  display:block;
+  border-color:rgba(34,197,94,0.42);
+  background:linear-gradient(135deg,rgba(20,83,45,0.30),rgba(6,78,59,0.24));
+  color:#bbf7d0;
+}
+
+.phone-lookup-box.new-number{
+  display:block;
+  border-color:rgba(59,130,246,0.38);
+  background:linear-gradient(135deg,rgba(30,64,175,0.24),rgba(30,58,138,0.20));
+  color:#bfdbfe;
+}
+
+input[readonly]{
+  opacity:0.86;
+  cursor:not-allowed;
+}
+
 .search-box{
   background:rgba(15,23,42,0.74);
   padding:12px;
@@ -1036,8 +1073,9 @@ button[onclick*="showHistory"]{
   <h3>Добавить долг</h3>
   <input id="client" placeholder="Имя клиента">
   <input id="phone" placeholder="Телефон" maxlength="9" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+  <div id="phoneLookupBox" class="phone-lookup-box"></div>
   <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
-  <label style="color:#fca5a5;font-weight:bold;">Выберите дату оплаты</label>
+  <label id="dueDateLabel" style="color:#fca5a5;font-weight:bold;">Выберите дату оплаты</label>
   <input id="dueDate" type="date">
   <button id="saveBtn" class="save-btn" disabled onclick="addDebt()">Сохранить</button>
   <div id="saveLoader" class="loader" style="display:none;">⏳ Сохранение...</div>
@@ -1156,7 +1194,7 @@ button[onclick*="showHistory"]{
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="4.1";
+const VERSION="4.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -1178,6 +1216,9 @@ let addDebtTargetPhone = "";
 
 let currentLanguage = localStorage.getItem("lang") || "ru";
 let lastStatsData = {};
+let clientsByPhone = {};
+let activeDebtForEnteredPhone = null;
+let lastAutoFilledClientName = "";
 
 const translations = {
   ru: {
@@ -1202,6 +1243,15 @@ const translations = {
     saveLoader: "⏳ Сохранение...",
     searchPlaceholder: "🔍 Поиск по имени или номеру",
     debtorsList: "Список должников",
+    phoneActiveDebtTitle: "У этого номера уже есть активный долг",
+    phoneActiveDebtText: "Создать отдельную запись нельзя. Используйте «Добавить к долгу» в карточке ниже.",
+    phoneKnownClientTitle: "Клиент найден",
+    phoneKnownClientText: "Активного долга нет. Можно создать новый долг.",
+    phoneNewNumberTitle: "Новый номер",
+    phoneNewNumberText: "Активного долга по этому номеру нет.",
+    foundDebtorTitle: "Найденный должник",
+    duplicateActiveToast: "У этого номера уже есть активный долг",
+    invalidPastDate: "Дата оплаты не может быть раньше сегодняшней",
 
     statsTitle: "Статистика (нажмите для раскрытия)",
     totalGiven: "Общий выданный долг",
@@ -1328,6 +1378,15 @@ const translations = {
     saveLoader: "⏳ Захира шуда истодааст...",
     searchPlaceholder: "🔍 Ҷустуҷӯ аз рӯйи ном ё рақам",
     debtorsList: "Рӯйхати қарздорон",
+    phoneActiveDebtTitle: "Барои ин рақам қарзи фаъол мавҷуд аст",
+    phoneActiveDebtText: "Сабти алоҳида сохтан мумкин нест. Аз тугмаи «Ба қарз илова кардан» дар карточкаи поён истифода баред.",
+    phoneKnownClientTitle: "Муштарӣ ёфт шуд",
+    phoneKnownClientText: "Қарзи фаъол нест. Метавон қарзи нав эҷод кард.",
+    phoneNewNumberTitle: "Рақами нав",
+    phoneNewNumberText: "Барои ин рақам қарзи фаъол нест.",
+    foundDebtorTitle: "Қарздори ёфтшуда",
+    duplicateActiveToast: "Барои ин рақам аллакай қарзи фаъол мавҷуд аст",
+    invalidPastDate: "Санаи пардохт аз санаи имрӯз пештар буда наметавонад",
 
     statsTitle: "Омор (барои кушодан пахш кунед)",
     totalGiven: "Ҳаҷми умумии қарзи додашуда",
@@ -1481,7 +1540,7 @@ function applyTranslations(){
   const clientEl = document.getElementById("client");
   const phoneEl = document.getElementById("phone");
   const amountEl = document.getElementById("amount");
-  const dueLabel = document.querySelector('label[style*="color:red"]');
+  const dueLabel = document.getElementById("dueDateLabel");
   const saveBtnEl = document.getElementById("saveBtn");
   const saveLoaderEl = document.getElementById("saveLoader");
   const searchEl = document.getElementById("searchInput");
@@ -1544,6 +1603,9 @@ function applyTranslations(){
 
   renderStats(lastStatsData || {});
   renderDebts([...allDebts]);
+  if (String(phone?.value || "").replace(/\D/g, "").length === 9) {
+    handlePhoneLookup(false);
+  }
 
   const refreshBtnEl = document.getElementById("refreshBtn");
   if (refreshBtnEl) refreshBtnEl.textContent = t("refreshBtn");
@@ -1721,61 +1783,190 @@ function logout(){
 
 /* ---------- ДОБАВЛЕНИЕ ---------- */
 
-function validateForm(){
-  saveBtn.disabled = !(client.value && phone.value.length===9 && amount.value && dueDate.value);
+function normalizePhone(value){
+  let digits = String(value || "").replace(/\D/g, "");
+  if (digits.length === 12 && digits.startsWith("992")) digits = digits.slice(3);
+  return digits.length > 9 ? digits.slice(-9) : digits;
 }
-client.addEventListener("input",validateForm);
-phone.addEventListener("input",validateForm);
-amount.addEventListener("input",validateForm);
-dueDate.addEventListener("input",validateForm);
+
+function getTodayIso(){
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function findActiveDebtByPhone(phoneValue){
+  const normalized = normalizePhone(phoneValue);
+  if (normalized.length !== 9) return null;
+
+  return allDebts.find(d =>
+    normalizePhone(d.phone) === normalized && Number(d.remainder || 0) > 0
+  ) || null;
+}
+
+function clearPhoneLookup({clearAutoName = true, restoreList = true} = {}){
+  const box = document.getElementById("phoneLookupBox");
+
+  activeDebtForEnteredPhone = null;
+
+  if (box) {
+    box.style.display = "none";
+    box.className = "phone-lookup-box";
+    box.innerHTML = "";
+  }
+
+
+  if (client) {
+    client.readOnly = false;
+    if (clearAutoName && lastAutoFilledClientName) {
+      client.value = "";
+    }
+  }
+
+  lastAutoFilledClientName = "";
+
+  if (restoreList) {
+    if (String(searchInput?.value || "").trim()) applySearch();
+    else renderDebts([...allDebts]);
+  }
+}
+
+function setAutoClientName(name, lockField){
+  const safeName = String(name || "").trim();
+  if (!safeName || !client) return;
+
+  if (!client.value.trim() || client.value.trim() === lastAutoFilledClientName || lockField) {
+    client.value = safeName;
+    lastAutoFilledClientName = safeName;
+  }
+
+  client.readOnly = !!lockField;
+}
+
+function handlePhoneLookup(scrollToPreview = true){
+  const normalized = normalizePhone(phone.value);
+  const box = document.getElementById("phoneLookupBox");
+
+  if (normalized.length !== 9) {
+    clearPhoneLookup();
+    validateForm();
+    return;
+  }
+
+  const activeDebt = findActiveDebtByPhone(normalized);
+
+  if (activeDebt) {
+    activeDebtForEnteredPhone = activeDebt;
+    setAutoClientName(activeDebt.client, true);
+
+    if (box) {
+      box.className = "phone-lookup-box active-debt";
+      box.style.display = "block";
+      box.innerHTML = `
+        <b>⚠️ ${t("phoneActiveDebtTitle")}</b><br>
+        ${t("phoneActiveDebtText")}<br>
+        <span style="display:inline-block;margin-top:6px;">
+          👤 ${activeDebt.client} · ${t("remainder")}: <b>${activeDebt.remainder} ${t("somoni")}</b>
+        </span>
+      `;
+    }
+
+    renderDebts([activeDebt]);
+
+    validateForm();
+
+    if (scrollToPreview && debtList) {
+      setTimeout(() => debtList.scrollIntoView({behavior:"smooth", block:"nearest"}), 60);
+    }
+    return;
+  }
+
+  activeDebtForEnteredPhone = null;
+  if (client) client.readOnly = false;
+
+  const knownClient = clientsByPhone[normalized];
+  if (knownClient && knownClient.client) {
+    setAutoClientName(knownClient.client, false);
+    if (box) {
+      box.className = "phone-lookup-box known-client";
+      box.style.display = "block";
+      box.innerHTML = `<b>✅ ${t("phoneKnownClientTitle")}:</b> ${knownClient.client}<br>${t("phoneKnownClientText")}`;
+    }
+  } else {
+    if (lastAutoFilledClientName && client.value.trim() === lastAutoFilledClientName) {
+      client.value = "";
+    }
+    lastAutoFilledClientName = "";
+    if (box) {
+      box.className = "phone-lookup-box new-number";
+      box.style.display = "block";
+      box.innerHTML = `<b>ℹ️ ${t("phoneNewNumberTitle")}</b><br>${t("phoneNewNumberText")}`;
+    }
+  }
+
+  if (String(searchInput?.value || "").trim()) applySearch();
+  else renderDebts([...allDebts]);
+  validateForm();
+}
+
+function validateForm(){
+  const phoneOk = normalizePhone(phone.value).length === 9;
+  const amountOk = Number(amount.value || 0) > 0;
+  const dueOk = !!dueDate.value && dueDate.value >= getTodayIso();
+  const requiredOk = !!client.value.trim() && phoneOk && amountOk && dueOk;
+
+  saveBtn.disabled = !requiredOk || !!activeDebtForEnteredPhone;
+}
+
+client.addEventListener("input", validateForm);
+phone.addEventListener("input", () => handlePhoneLookup(true));
+amount.addEventListener("input", validateForm);
+dueDate.addEventListener("input", () => {
+  if (dueDate.value && dueDate.value < getTodayIso()) {
+    dueDate.value = "";
+    showToast(`⚠️ ${t("invalidPastDate")}`, "error");
+  }
+  validateForm();
+});
+
+function initializeDebtForm(){
+  if (dueDate) dueDate.min = getTodayIso();
+  validateForm();
+}
+
+initializeDebtForm();
 
 async function addDebt(){
   if (saveBtn.disabled) return;
 
   const clientName = client.value.trim();
-  const phoneValue = phone.value.trim();
+  const phoneValue = normalizePhone(phone.value);
   const amountValue = Number(amount.value || 0);
   const dueDateValue = dueDate.value;
 
-  if (!clientName || !phoneValue || !amountValue || !dueDateValue) return;
+  if (!clientName || phoneValue.length !== 9 || !amountValue || !dueDateValue) return;
+  if (dueDateValue < getTodayIso()) {
+    showToast(`⚠️ ${t("invalidPastDate")}`, "error");
+    return;
+  }
 
-  const normalizedPhone = phoneValue.replace(/\D/g, "");
+  const existingDebt = findActiveDebtByPhone(phoneValue);
+  if (existingDebt) {
+    activeDebtForEnteredPhone = existingDebt;
+    handlePhoneLookup(true);
+    showToast(`⚠️ ${t("duplicateActiveToast")}`, "error");
+    return;
+  }
 
-  const existingDebt = allDebts.find(d => {
-    const debtPhone = String(d.phone || "").replace(/\D/g, "");
-    return debtPhone === normalizedPhone && Number(d.remainder || 0) > 0;
-  });
-
-  let payload = {
+  const payload = {
     client: clientName,
     phone: phoneValue,
     amount: amountValue,
     dueDate: dueDateValue,
     seller: currentSeller
   };
-
-  if (existingDebt) {
-    const action = await askDebtSaveMode(existingDebt, payload);
-
-    if (action === "cancel") {
-      showToast(`ℹ️ ${t("cancelActionToast")}`, "error");
-      return;
-    }
-
-    if (action === "append") {
-      const now = new Date();
-      const formattedDate =
-        String(now.getDate()).padStart(2, "0") + "." +
-        String(now.getMonth() + 1).padStart(2, "0") + "." +
-        now.getFullYear() + " " +
-        String(now.getHours()).padStart(2, "0") + ":" +
-        String(now.getMinutes()).padStart(2, "0");
-
-      payload.mode = "append";
-      payload.targetRow = existingDebt.row;
-      payload.noteText = `Долг суммирован: +${amountValue} (${formattedDate})`;
-    }
-  }
 
   saveLoader.style.display="block";
   saveBtn.disabled=true;
@@ -1787,27 +1978,26 @@ async function addDebt(){
     });
 
     const result = await response.json();
-
     saveLoader.style.display="none";
-    client.value="";
-    phone.value="";
-    amount.value="";
-    dueDate.value="";
-    saveBtn.disabled=true;
 
     if (result.success) {
-      if (payload.mode === "append") {
-        showToast(
-          `✅ <b>${t("appendSuccessToast")}</b><br>👤 ${clientName}<br>💰 +${amountValue} ${t("somoni")}`,
-          "append"
-        );
-      } else {
-        showToast(`✅ <b>${t("newDebtSuccessToast")}</b>`, "success");
-      }
-
+      client.value="";
+      phone.value="";
+      amount.value="";
+      dueDate.value="";
+      client.readOnly=false;
+      lastAutoFilledClientName="";
+      clearPhoneLookup({clearAutoName:false, restoreList:false});
+      saveBtn.disabled=true;
+      showToast(`✅ <b>${t("newDebtSuccessToast")}</b>`, "success");
       loadDebts();
+    } else if (result.code === "DUPLICATE_ACTIVE_DEBT") {
+      await loadDebts();
+      handlePhoneLookup(true);
+      showToast(`⚠️ ${t("duplicateActiveToast")}`, "error");
     } else {
-      showToast(`❌ ${t("errorSaveToast")}`, "error");
+      saveBtn.disabled=false;
+      showToast(`❌ ${result.message || t("errorSaveToast")}`, "error");
     }
   } catch(e) {
     saveLoader.style.display="none";
@@ -1819,13 +2009,20 @@ async function addDebt(){
 /* ---------- ЗАГРУЗКА ---------- */
 
 function loadDebts(){
-  fetch(SCRIPT_URL)
+  return fetch(SCRIPT_URL)
   .then(res=>res.json())
   .then(data=>{
     data=data||{};
     allDebts=data.debts||[];
+    clientsByPhone=data.clientsByPhone||{};
     renderStats(data);
-    renderDebts(allDebts);
+    renderDebts([...allDebts]);
+
+    if (normalizePhone(phone?.value).length === 9) {
+      handlePhoneLookup(false);
+    }
+
+    return data;
   });
 }
 
@@ -1878,41 +2075,34 @@ function toggleStats(){
 
 /* ---------- ОТРИСОВКА ---------- */
 
-function renderDebts(list){
-  list.sort((a,b)=>{
-    if(a.isOverdue && !b.isOverdue) return -1;
-    if(!a.isOverdue && b.isOverdue) return 1;
-    return new Date(a.dueDate||0) - new Date(b.dueDate||0);
-  });
-
-  let html = "";
+function buildDebtCardHtml(d){
   let today = new Date();
   today.setHours(0,0,0,0);
 
-  list.forEach(d=>{
-    let due = new Date(d.dueDate);
-    due.setHours(0,0,0,0);
-    let diffDays = Math.ceil((due-today)/(1000*60*60*24));
+  let due = d.dueDate ? new Date(d.dueDate) : null;
+  if (due) due.setHours(0,0,0,0);
+  let diffDays = due ? Math.ceil((due-today)/(1000*60*60*24)) : 9999;
 
-    let cardClass = "card";
-    let extra = "";
+  let cardClass = "card";
+  let extra = "";
 
-    if(d.isOverdue || diffDays < 0){
-      cardClass += " overdue";
-      extra = `<div style="color:#fca5a5;font-weight:bold;">${t("overdueDays",{days:Math.abs(diffDays)})}</div>`;
-    } else if(diffDays <= 2){
-      cardClass += " warning";
-      extra = `<div style="color:orange;">${t("leftDays",{days:diffDays})}</div>`;
-    }
+  if(d.isOverdue || diffDays < 0){
+    cardClass += " overdue";
+    extra = `<div style="color:#fca5a5;font-weight:bold;">${t("overdueDays",{days:Math.abs(diffDays)})}</div>`;
+  } else if(diffDays <= 2){
+    cardClass += " warning";
+    extra = `<div style="color:orange;">${t("leftDays",{days:diffDays})}</div>`;
+  }
 
-    let waText = encodeURIComponent(t("waReminder", { amount: d.remainder }));
-    let phoneFull = "992" + d.phone;
-    let sumHistoryHtml = renderSumHistory(d.notification);
+  let waText = encodeURIComponent(t("waReminder", { amount: d.remainder }));
+  let phoneNormalized = normalizePhone(d.phone);
+  let phoneFull = "992" + phoneNormalized;
+  let sumHistoryHtml = renderSumHistory(d.notification);
 
-    html += `
+  return `
     <div class="${cardClass}">
       <b>${d.client}</b> (${t("dueDateText",{date:d.dueDate})})<br>
-      ${t("phonePlaceholder")}: ${d.phone}<br>
+      ${t("phonePlaceholder")}: ${phoneNormalized}<br>
       ${t("debtAmount")}: ${d.total} ${t("somoni")}<br>
       ${t("paidAmount")}: ${d.paid || 0} ${t("somoni")}<br>
       ${t("lastPayment")}: ${d.partialPayment || 0} ${t("somoni")}<br>
@@ -1922,14 +2112,14 @@ function renderDebts(list){
       ${extra}
 
       <div class="action-row">
-  <button class="pay-btn half-btn" onclick="openPayment(${d.row},${d.remainder})">
-    ${t("payBtn")}
-  </button>
+        <button class="pay-btn half-btn" onclick="openPayment(${d.row},${d.remainder})">
+          ${t("payBtn")}
+        </button>
 
-  <button class="add-debt-btn half-btn" onclick="openAddToDebtModal(${d.row}, '${String(d.client).replace(/'/g,"\\'")}', '${String(d.phone).replace(/'/g,"\\'")}', ${d.remainder})">
-    ➕ ${t("addToDebtBtn")}
-  </button>
-</div>
+        <button class="add-debt-btn half-btn" onclick="openAddToDebtModal(${d.row}, '${String(d.client).replace(/'/g,"\\'")}', '${String(phoneNormalized).replace(/'/g,"\\'")}', ${d.remainder})">
+          ➕ ${t("addToDebtBtn")}
+        </button>
+      </div>
 
       <div class="action-row">
         <a class="call-btn" href="tel:+${phoneFull}">📞 ${t("callBtn")}</a>
@@ -1942,10 +2132,19 @@ function renderDebts(list){
         📂 ${t("historyBtn")}
       </button>
     </div>
-    `;
+  `;
+}
+
+function renderDebts(list){
+  const sorted = [...(list || [])].sort((a,b)=>{
+    if(a.isOverdue && !b.isOverdue) return -1;
+    if(!a.isOverdue && b.isOverdue) return 1;
+    return new Date(a.dueDate||0) - new Date(b.dueDate||0);
   });
 
-  debtList.innerHTML = html || `<div class="card">${t("noData")}</div>`;
+  debtList.innerHTML = sorted.length
+    ? sorted.map(buildDebtCardHtml).join("")
+    : `<div class="card">${t("noData")}</div>`;
 }
 
 /* ---------- ПОИСК ---------- */
