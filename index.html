@@ -3473,7 +3473,7 @@ function statsDebtActionsHtml_(d){
   const waText=encodeURIComponent(t('waReminder',{amount:remainder}));
   return `<div class="stats-debt-actions">
     <button class="stats-debt-action add" onclick="openAddToDebtModal(${row},'${safeClient}','${safePhone}',${remainder})">➕ ${t('addToDebtBtn')}</button>
-    <button class="stats-debt-action close-debt" onclick="statsOpenFullClose_(${row},${remainder})">✅ ${statsLocale_('Погасить','Пурра пардохт')}</button>
+    <button class="stats-debt-action pay" onclick="openPayment(${row},${remainder})">💵 ${t('payBtn')}</button>
     ${phoneFull?`<a class="stats-debt-action call" href="tel:+${phoneFull}">📞 ${t('callBtn')}</a>`:''}
     ${phoneFull?`<a class="stats-debt-action wa" target="_blank" href="https://wa.me/${phoneFull}?text=${waText}">💬 ${t('whatsappBtn')}</a>`:''}
     <button class="stats-debt-action history" onclick="showHistory('${safeClient}')">📂 ${t('historyBtn')}</button>
