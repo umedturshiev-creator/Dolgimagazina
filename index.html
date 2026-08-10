@@ -1743,6 +1743,69 @@ html[data-theme="light"][data-contrast="high"] .modal-content{background:rgba(25
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}
 }
 
+
+/* ===== v4.8.1 — расширенная статистика Liquid Glass ===== */
+.stats-dashboard{display:flex;flex-direction:column;gap:16px;}
+.stats-hero-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;}
+.stats-kpi,.stats-panel,.stats-mini-card{
+  position:relative;overflow:hidden;
+  border:1px solid rgba(148,163,184,.17);
+  background:linear-gradient(145deg,rgba(255,255,255,.085),rgba(255,255,255,.035));
+  box-shadow:0 18px 42px rgba(2,6,23,.24),inset 0 1px 0 rgba(255,255,255,.07);
+  backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%);
+}
+.stats-kpi::before,.stats-panel::before,.stats-mini-card::before{
+  content:"";position:absolute;left:8%;right:8%;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.24),transparent);pointer-events:none;
+}
+.stats-kpi{border-radius:20px;padding:16px;min-height:122px;display:flex;flex-direction:column;justify-content:space-between;}
+.stats-kpi-icon{font-size:22px;line-height:1;}
+.stats-kpi-label{font-size:12px;font-weight:800;letter-spacing:.01em;color:var(--text-2);margin-top:12px;}
+.stats-kpi-value{font-size:24px;line-height:1.08;font-weight:900;letter-spacing:-.02em;color:var(--text-1);margin-top:6px;word-break:break-word;}
+.stats-kpi-note{font-size:11px;color:var(--text-3);margin-top:5px;font-weight:700;}
+.stats-kpi.primary{background:linear-gradient(145deg,rgba(37,99,235,.23),rgba(255,255,255,.045));border-color:rgba(96,165,250,.27);}
+.stats-kpi.success{background:linear-gradient(145deg,rgba(34,197,94,.19),rgba(255,255,255,.04));border-color:rgba(74,222,128,.24);}
+.stats-kpi.danger{background:linear-gradient(145deg,rgba(239,68,68,.20),rgba(255,255,255,.04));border-color:rgba(248,113,113,.28);}
+.stats-kpi.purple{background:linear-gradient(145deg,rgba(139,92,246,.20),rgba(255,255,255,.04));border-color:rgba(167,139,250,.26);}
+.stats-section-title{display:flex;align-items:center;gap:9px;margin:0 0 12px;font-size:15px;font-weight:900;color:var(--text-1);}
+.stats-panel{border-radius:22px;padding:16px;}
+.stats-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.stats-grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
+.stats-grid-5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;}
+.stats-mini-card{border-radius:16px;padding:12px;min-height:88px;}
+.stats-mini-label{font-size:11px;font-weight:800;color:var(--text-2);line-height:1.3;}
+.stats-mini-value{font-size:17px;font-weight:900;color:var(--text-1);margin-top:7px;line-height:1.15;}
+.stats-mini-sub{font-size:11px;color:var(--text-3);margin-top:4px;font-weight:700;}
+.stats-aging-card{border-left:3px solid rgba(148,163,184,.4);}
+.stats-aging-card.a1{border-left-color:#fbbf24}.stats-aging-card.a2{border-left-color:#fb923c}.stats-aging-card.a3{border-left-color:#f97316}.stats-aging-card.a4{border-left-color:#ef4444}.stats-aging-card.a5{border-left-color:#be123c}
+.stats-period-tabs{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;margin-bottom:12px;scrollbar-width:none;}
+.stats-period-tabs::-webkit-scrollbar{display:none;}
+.stats-period-btn{margin:0;width:auto;min-width:max-content;padding:9px 12px;border-radius:13px;border:1px solid rgba(148,163,184,.17);background:rgba(255,255,255,.055);color:var(--text-2);font-size:12px;font-weight:850;box-shadow:none;}
+.stats-period-btn.active{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border-color:rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(37,99,235,.25);}
+.stats-period-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;}
+.stats-list{display:flex;flex-direction:column;gap:8px;}
+.stats-list-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid rgba(148,163,184,.13);border-radius:15px;background:rgba(255,255,255,.038);}
+.stats-list-main{min-width:0;}.stats-list-name{font-size:13px;font-weight:900;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.stats-list-meta{font-size:11px;color:var(--text-3);margin-top:3px;font-weight:650;}.stats-list-value{text-align:right;font-size:14px;font-weight:900;color:var(--text-1);white-space:nowrap;}
+.stats-two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.stats-trend{display:flex;align-items:flex-end;gap:6px;height:150px;padding:18px 4px 2px;overflow-x:auto;}
+.stats-trend-day{min-width:28px;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:4px;}
+.stats-trend-bars{display:flex;align-items:flex-end;gap:2px;height:112px;width:100%;justify-content:center;}
+.stats-trend-bar{width:8px;min-height:2px;border-radius:5px 5px 2px 2px;transition:height .25s ease;}.stats-trend-bar.issued{background:linear-gradient(180deg,#60a5fa,#2563eb)}.stats-trend-bar.returned{background:linear-gradient(180deg,#4ade80,#16a34a)}
+.stats-trend-label{font-size:9px;color:var(--text-3);font-weight:750;white-space:nowrap;}
+.stats-legend{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--text-2);font-weight:750;margin-bottom:4px;}.stats-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;}
+.stats-note{font-size:11px;color:var(--text-3);line-height:1.45;margin-top:10px;padding:9px 11px;border-radius:13px;background:rgba(255,255,255,.035);border:1px solid rgba(148,163,184,.10);}
+.stats-empty{text-align:center;padding:16px;color:var(--text-3);font-size:12px;font-weight:750;}
+
+html[data-theme="light"] .stats-kpi,html[data-theme="light"] .stats-panel,html[data-theme="light"] .stats-mini-card{background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(255,255,255,.48));border-color:rgba(100,116,139,.18);box-shadow:0 16px 35px rgba(15,23,42,.08),inset 0 1px 0 rgba(255,255,255,.94);}
+html[data-theme="light"] .stats-kpi.primary{background:linear-gradient(145deg,rgba(219,234,254,.88),rgba(255,255,255,.65));border-color:#bfdbfe}html[data-theme="light"] .stats-kpi.success{background:linear-gradient(145deg,rgba(220,252,231,.88),rgba(255,255,255,.66));border-color:#bbf7d0}html[data-theme="light"] .stats-kpi.danger{background:linear-gradient(145deg,rgba(254,226,226,.90),rgba(255,255,255,.67));border-color:#fecaca}html[data-theme="light"] .stats-kpi.purple{background:linear-gradient(145deg,rgba(237,233,254,.90),rgba(255,255,255,.67));border-color:#ddd6fe}
+html[data-theme="light"] .stats-list-row,html[data-theme="light"] .stats-period-btn,html[data-theme="light"] .stats-note{background:rgba(248,250,252,.72);border-color:rgba(100,116,139,.16)}
+html[data-theme="light"] .stats-period-btn{color:#475569}html[data-theme="light"] .stats-period-btn.active{color:#fff}
+html[data-contrast="high"] .stats-kpi,html[data-contrast="high"] .stats-panel,html[data-contrast="high"] .stats-mini-card,html[data-contrast="high"] .stats-list-row{border-width:2px;}
+
+@media(max-width:1100px){.stats-hero-grid{grid-template-columns:repeat(3,minmax(0,1fr));}.stats-grid-5{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:720px){.stats-dashboard{gap:12px}.stats-hero-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stats-kpi{padding:13px;min-height:112px}.stats-kpi-value{font-size:20px}.stats-grid-3,.stats-grid-4,.stats-grid-5{grid-template-columns:repeat(2,minmax(0,1fr));}.stats-period-summary{grid-template-columns:repeat(2,minmax(0,1fr));}.stats-two-col{grid-template-columns:1fr}.stats-panel{padding:13px}.stats-list-row{padding:10px}.stats-trend{height:132px}.stats-trend-bars{height:94px}}
+@media(max-width:420px){.stats-kpi-label{font-size:11px}.stats-kpi-value{font-size:18px}.stats-mini-value{font-size:15px}.stats-grid-5{grid-template-columns:1fr 1fr}.stats-trend-day{min-width:25px}}
+
 </style>
 </head>
 <body>
@@ -2007,7 +2070,7 @@ html[data-theme="light"][data-contrast="high"] .modal-content{background:rgba(25
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="4.8";
+const VERSION="4.8.1";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -3072,35 +3135,118 @@ function loadDebts(){
 
 /* ---------- СТАТИСТИКА ---------- */
 
+function statsLocale_(ru, tj){ return currentLanguage === "tj" ? tj : ru; }
+function statsMoney_(value){
+  const n=Number(value||0);
+  try { return new Intl.NumberFormat(currentLanguage === "tj" ? "tg-TJ" : "ru-RU",{maximumFractionDigits:2}).format(n); }
+  catch(e){ return String(Math.round(n*100)/100); }
+}
+function statsPct_(value){ return `${Number(value||0).toFixed(1)}%`; }
+function statsCountText_(count){ return `${Number(count||0)} ${statsLocale_("зап.","сабт")}`; }
+function statsKpi_(cls,icon,label,value,note=""){
+  return `<div class="stats-kpi ${cls}"><div><div class="stats-kpi-icon">${icon}</div><div class="stats-kpi-label">${label}</div></div><div><div class="stats-kpi-value">${value}</div>${note?`<div class="stats-kpi-note">${note}</div>`:""}</div></div>`;
+}
+function statsMini_(label,value,sub="",extra=""){
+  return `<div class="stats-mini-card ${extra}"><div class="stats-mini-label">${label}</div><div class="stats-mini-value">${value}</div>${sub?`<div class="stats-mini-sub">${sub}</div>`:""}</div>`;
+}
+function statsDebtorRows_(list,mode){
+  if(!Array.isArray(list)||!list.length) return `<div class="stats-empty">${statsLocale_("Нет данных","Маълумот нест")}</div>`;
+  return `<div class="stats-list">${list.map((d,i)=>`<div class="stats-list-row"><div class="stats-list-main"><div class="stats-list-name">${i+1}. ${escapeHtml(String(d.client||"—"))}</div><div class="stats-list-meta">${escapeHtml(String(d.phone||""))}${d.dueDate?` · ${statsLocale_("до","то")} ${escapeHtml(String(d.dueDate))}`:""}${Number(d.daysOverdue||0)>0?` · ${Number(d.daysOverdue)} ${statsLocale_("дн. просрочки","рӯз гузашта")}`:""}</div></div><div class="stats-list-value">${statsMoney_(d.remainder)} ${t("somoni")}</div></div>`).join("")}</div>`;
+}
+function statsPeriodData_(key){
+  const e=lastStatsData?.analytics?.events||{};
+  return e[key]||{issued:0,issuedCount:0,returned:0,paymentCount:0};
+}
+function selectStatsPeriod(key){
+  window.__statsPeriod=key;
+  document.querySelectorAll('.stats-period-btn').forEach(b=>b.classList.toggle('active',b.dataset.period===key));
+  const p=statsPeriodData_(key);
+  const box=document.getElementById('statsPeriodSummary');
+  if(!box)return;
+  const net=Number(p.issued||0)-Number(p.returned||0);
+  box.innerHTML=[
+    statsMini_(statsLocale_("Выдано","Дода шуд"),`${statsMoney_(p.issued)} ${t("somoni")}`,`${Number(p.issuedCount||0)} ${statsLocale_("операций","амалиёт")}`),
+    statsMini_(statsLocale_("Получено оплат","Пардохт гирифта шуд"),`${statsMoney_(p.returned)} ${t("somoni")}`,`${Number(p.paymentCount||0)} ${statsLocale_("платежей","пардохт")}`),
+    statsMini_(statsLocale_("Изменение остатка","Тағйири бақия"),`${net>=0?"+":""}${statsMoney_(net)} ${t("somoni")}`,net>0?statsLocale_("долг вырос","қарз зиёд шуд"):net<0?statsLocale_("долг снизился","қарз кам шуд"):statsLocale_("без изменений","бе тағйир")),
+    statsMini_(statsLocale_("Движений всего","Ҳамаи амалиёт"),String(Number(p.issuedCount||0)+Number(p.paymentCount||0)),statsLocale_("выдачи + оплаты","додан + пардохт"))
+  ].join('');
+}
 function renderStats(data){
-  lastStatsData = data || {};
+  lastStatsData=data||{};
+  const a=data?.analytics||{};
+  const ev=a.events||{};
+  const aging=a.aging||{};
+  const totalIssued=Number(a.totalIssued ?? 0);
+  const totalReturned=Number(a.totalReturned ?? 0);
+  const activeTotal=Number(data?.activeTotal||0);
+  const activeCount=Number(data?.activeCount||0);
+  const overdueTotal=Number(data?.overdueTotal||0);
+  const overdueCount=Number(data?.overdueCount||0);
+  const paidCount=Number(data?.paidCount||0);
+  const partialCount=Number(data?.partialCount||0);
 
-  let activeTotal = Number(data.activeTotal || 0);
-  let paidTotal = Number(data.paidTotal || 0);
-  let overdueTotal = Number(data.overdueTotal || 0);
-  let partialTotal = Number(data.partialTotal || 0);
+  const trend=Array.isArray(ev.trend)?ev.trend:[];
+  const maxTrend=Math.max(1,...trend.flatMap(x=>[Number(x.issued||0),Number(x.returned||0)]));
+  const trendHtml=trend.length?`<div class="stats-legend"><span><i style="background:#3b82f6"></i>${statsLocale_("Выдано","Дода шуд")}</span><span><i style="background:#22c55e"></i>${statsLocale_("Возвращено","Баргардонида шуд")}</span></div><div class="stats-trend">${trend.map(x=>{const ih=Math.max(2,Math.round(Number(x.issued||0)/maxTrend*100));const rh=Math.max(2,Math.round(Number(x.returned||0)/maxTrend*100));const ds=String(x.date||"");return `<div class="stats-trend-day" title="${ds}: ${statsLocale_("выдано","дода шуд")} ${statsMoney_(x.issued)}, ${statsLocale_("возвращено","баргардонида шуд")} ${statsMoney_(x.returned)}"><div class="stats-trend-bars"><div class="stats-trend-bar issued" style="height:${ih}%"></div><div class="stats-trend-bar returned" style="height:${rh}%"></div></div><div class="stats-trend-label">${ds.slice(5).replace('-', '.')}</div></div>`}).join('')}</div>`:`<div class="stats-empty">${statsLocale_("Динамика начнёт заполняться новыми операциями","Динамика бо амалиёти нав пур мешавад")}</div>`;
 
-  let activeCount = Number(data.activeCount || 0);
-  let paidCount = Number(data.paidCount || 0);
-  let overdueCount = Number(data.overdueCount || 0);
-  let partialCount = Number(data.partialCount || 0);
+  const staff=Array.isArray(ev.staff)?ev.staff:[];
+  const staffHtml=staff.length?`<div class="stats-list">${staff.map(s=>`<div class="stats-list-row"><div class="stats-list-main"><div class="stats-list-name">👤 ${escapeHtml(String(s.name||"—"))}</div><div class="stats-list-meta">${statsLocale_("Выдано","Дода шуд")}: ${statsMoney_(s.issued)} · ${statsLocale_("Принято оплат","Пардохт қабул шуд")}: ${statsMoney_(s.collected)}</div></div><div class="stats-list-value">${statsMoney_(Number(s.collected||0)-Number(s.issued||0))}</div></div>`).join('')}</div>`:`<div class="stats-empty">${statsLocale_("Статистика сотрудников появится по новым операциям","Омори кормандон аз амалиёти нав пайдо мешавад")}</div>`;
 
-  let totalGiven = activeTotal + partialTotal + paidTotal;
-
-  statsBox.innerHTML = `
-  <div class="card">
-    <div style="font-weight:bold;margin-bottom:12px;">📊 ${t("statsPageTitle")}</div>
-    <div id="statsContent" style="display:block;line-height:1.9;">
-      💰 <b>${t("totalGiven")}:</b> ${totalGiven} ${t("somoni")}<br><br>
-      📉 ${t("activeDebts")}: ${activeTotal} ${t("somoni")} ${t("fromWord")} ${activeCount} ${t("clients")}<br>
-      💸 ${t("alreadyPaid")}: ${partialTotal} ${t("somoni")} ${t("fromWord")} ${partialCount} ${t("clients")}<br>
-      ✅ ${t("fullyClosed")}: ${paidTotal} ${t("somoni")} ${t("fromWord")} ${paidCount} ${t("clients")}<br><br>
-      <b style="color:#fca5a5;">
-        🔴 ${t("overdueLeft")}: ${overdueTotal} ${t("somoni")} ${t("fromWord")} ${overdueCount} ${t("clients")}
-      </b>
+  const periodKey=window.__statsPeriod||'thisMonth';
+  statsBox.innerHTML=`<div class="stats-dashboard">
+    <div class="stats-hero-grid">
+      ${statsKpi_('primary','💰',statsLocale_('Выдано всего','Ҳамагӣ дода шуд'),`${statsMoney_(totalIssued)} ${t('somoni')}`,`${Number(a.debtRecords||0)} ${statsLocale_('записей','сабт')}`)}
+      ${statsKpi_('success','💵',statsLocale_('Возвращено всего','Ҳамагӣ баргардонида шуд'),`${statsMoney_(totalReturned)} ${t('somoni')}`,statsLocale_('все частичные и полные оплаты','ҳамаи пардохтҳои қисмӣ ва пурра'))}
+      ${statsKpi_('','📉',statsLocale_('Текущий остаток','Бақияи ҷорӣ'),`${statsMoney_(activeTotal)} ${t('somoni')}`,`${activeCount} ${statsLocale_('активных долгов','қарзи фаъол')}`)}
+      ${statsKpi_('danger','🔴',statsLocale_('Просрочено','Муҳлат гузашта'),`${statsMoney_(overdueTotal)} ${t('somoni')}`,`${overdueCount} ${statsLocale_('долгов','қарз')}`)}
+      ${statsKpi_('purple','📈',statsLocale_('Процент возврата','Фоизи баргардонӣ'),statsPct_(a.recoveryRate),`${statsLocale_('доля просрочки','ҳиссаи муҳлатгузашта')}: ${statsPct_(a.overdueShare)}`)}
     </div>
-  </div>
-  `;
+
+    <div class="stats-panel"><div class="stats-section-title">🧾 ${statsLocale_('Состояние долгов','Ҳолати қарзҳо')}</div><div class="stats-grid-4">
+      ${statsMini_(statsLocale_('Активные должники','Қарздорони фаъол'),String(activeCount),`${statsMoney_(activeTotal)} ${t('somoni')}`)}
+      ${statsMini_(statsLocale_('Частично оплачивают','Қисман пардохт мекунанд'),String(partialCount),`${statsMoney_(data?.partialTotal||0)} ${t('somoni')} ${statsLocale_('внесено','пардохт шуд')}`)}
+      ${statsMini_(statsLocale_('Полностью погашено','Пурра пардохт шуд'),String(paidCount),`${statsMoney_(data?.paidTotal||0)} ${t('somoni')}`)}
+      ${statsMini_(statsLocale_('Без единой оплаты','Бе ягон пардохт'),String(Number(a.noPaymentCount||0)),`${statsMoney_(a.noPaymentTotal)} ${t('somoni')}`)}
+      ${statsMini_(statsLocale_('Средний активный долг','Миёнаи қарзи фаъол'),`${statsMoney_(a.averageActiveDebt)} ${t('somoni')}`,statsLocale_('на одну запись','ба як сабт'))}
+      ${statsMini_(statsLocale_('Уникальных клиентов','Муштарии нодир'),String(Number(a.uniqueClients||0)),statsLocale_('по номеру телефона','аз рӯйи рақам'))}
+      ${statsMini_(statsLocale_('Повторные клиенты','Муштарии такрорӣ'),String(Number(a.repeatClients||0)),statsLocale_('более одной записи','зиёда аз як сабт'))}
+      ${statsMini_(statsLocale_('В срок, не просрочено','Дар муҳлат'),`${statsMoney_(a.currentTotal)} ${t('somoni')}`,`${Number(a.currentCount||0)} ${statsLocale_('долгов','қарз')}`)}
+    </div></div>
+
+    <div class="stats-panel"><div class="stats-section-title">📅 ${statsLocale_('Ближайшие оплаты','Пардохтҳои наздик')}</div><div class="stats-grid-3">
+      ${statsMini_(statsLocale_('К оплате сегодня','Имрӯз бояд пардохт шавад'),`${statsMoney_(a.dueToday?.total)} ${t('somoni')}`,`${Number(a.dueToday?.count||0)} ${statsLocale_('долгов','қарз')}`)}
+      ${statsMini_(statsLocale_('К оплате завтра','Фардо бояд пардохт шавад'),`${statsMoney_(a.dueTomorrow?.total)} ${t('somoni')}`,`${Number(a.dueTomorrow?.count||0)} ${statsLocale_('долгов','қарз')}`)}
+      ${statsMini_(statsLocale_('Ближайшие 7 дней','7 рӯзи наздик'),`${statsMoney_(a.dueNext7?.total)} ${t('somoni')}`,`${Number(a.dueNext7?.count||0)} ${statsLocale_('долгов','қарз')}`)}
+    </div></div>
+
+    <div class="stats-panel"><div class="stats-section-title">🚨 ${statsLocale_('Возраст просрочки','Давомнокии муҳлатгузаронӣ')}</div><div class="stats-grid-5">
+      ${statsMini_('1–7 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d1_7?.total)} ${t('somoni')}`,`${Number(aging.d1_7?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a1')}
+      ${statsMini_('8–30 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d8_30?.total)} ${t('somoni')}`,`${Number(aging.d8_30?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a2')}
+      ${statsMini_('31–60 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d31_60?.total)} ${t('somoni')}`,`${Number(aging.d31_60?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a3')}
+      ${statsMini_('61–90 '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d61_90?.total)} ${t('somoni')}`,`${Number(aging.d61_90?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a4')}
+      ${statsMini_('90+ '+statsLocale_('дней','рӯз'),`${statsMoney_(aging.d90plus?.total)} ${t('somoni')}`,`${Number(aging.d90plus?.count||0)} ${statsLocale_('долгов','қарз')}`,'stats-aging-card a5')}
+    </div></div>
+
+    <div class="stats-panel"><div class="stats-section-title">🔄 ${statsLocale_('Динамика операций','Динамикаи амалиёт')}</div>
+      <div class="stats-period-tabs">
+        <button class="stats-period-btn" data-period="today" onclick="selectStatsPeriod('today')">${statsLocale_('Сегодня','Имрӯз')}</button>
+        <button class="stats-period-btn" data-period="last7" onclick="selectStatsPeriod('last7')">${statsLocale_('7 дней','7 рӯз')}</button>
+        <button class="stats-period-btn" data-period="thisMonth" onclick="selectStatsPeriod('thisMonth')">${statsLocale_('Этот месяц','Ин моҳ')}</button>
+        <button class="stats-period-btn" data-period="prevMonth" onclick="selectStatsPeriod('prevMonth')">${statsLocale_('Прошлый месяц','Моҳи гузашта')}</button>
+      </div><div id="statsPeriodSummary" class="stats-period-summary"></div>
+      ${ev.trackingStart?`<div class="stats-note">ℹ️ ${statsLocale_('Точная динамика по операциям ведётся с','Динамикаи дақиқи амалиёт аз')} <b>${escapeHtml(String(ev.trackingStart))}</b>. ${statsLocale_('Общие показатели выше учитывают всю базу.','Нишондиҳандаҳои умумии боло тамоми базаи маълумотро дар бар мегиранд.')}</div>`:''}
+    </div>
+
+    <div class="stats-panel"><div class="stats-section-title">📊 ${statsLocale_('Выдано / возвращено — последние 14 дней','Дода / баргардонида — 14 рӯзи охир')}</div>${trendHtml}</div>
+
+    <div class="stats-two-col">
+      <div class="stats-panel"><div class="stats-section-title">🏅 ${statsLocale_('Топ-5 крупнейших должников','5 қарздори калонтарин')}</div>${statsDebtorRows_(a.topDebtors,'top')}</div>
+      <div class="stats-panel"><div class="stats-section-title">⏳ ${statsLocale_('Самые старые просрочки','Қарзҳои деринаи муҳлатгузашта')}</div>${statsDebtorRows_(a.oldestOverdue,'old')}</div>
+    </div>
+
+    <div class="stats-panel"><div class="stats-section-title">👥 ${statsLocale_('По сотрудникам','Аз рӯйи кормандон')}</div>${staffHtml}</div>
+  </div>`;
+  selectStatsPeriod(periodKey);
 }
 
 function toggleStats(){
