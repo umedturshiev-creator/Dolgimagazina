@@ -9,7 +9,13 @@
 
 <meta name="theme-color" content="#000000">
 <script>
-try { document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark"; } catch(e) { document.documentElement.dataset.theme = "dark"; }
+try {
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
+  document.documentElement.dataset.contrast = localStorage.getItem("contrast") || "normal";
+} catch(e) {
+  document.documentElement.dataset.theme = "dark";
+  document.documentElement.dataset.contrast = "normal";
+}
 </script>
 <meta name="background-color" content="#000000">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1431,6 +1437,312 @@ html[data-theme="light"] .export-choice-btn{background:#f1f5f9!important;color:#
 html[data-theme="light"] .export-choice-btn.active{background:linear-gradient(135deg,#2563eb,#7c3aed)!important;color:#fff!important;}
 html[data-theme="light"] .export-info-box{background:#eff6ff;color:#334155;border-color:#bfdbfe;}
 @media(max-width:640px){.export-modal-content{max-height:88vh}.export-format-switch{grid-template-columns:1fr 1fr}.export-select{font-size:16px}}
+
+
+/* ===== v4.8 LIQUID GLASS / READABILITY ===== */
+:root{
+  --glass-bg:rgba(15,23,42,.70);
+  --glass-bg-strong:rgba(15,23,42,.84);
+  --glass-bg-soft:rgba(30,41,59,.56);
+  --glass-border:rgba(255,255,255,.13);
+  --glass-border-strong:rgba(255,255,255,.21);
+  --glass-highlight:rgba(255,255,255,.10);
+  --glass-shadow:0 22px 54px rgba(2,6,23,.34), inset 0 1px 0 rgba(255,255,255,.07);
+  --focus-ring:0 0 0 3px rgba(96,165,250,.28);
+  --surface-text:#f8fafc;
+  --surface-muted:#cbd5e1;
+  --surface-faint:#a7b3c5;
+}
+
+html[data-theme="light"]{
+  --glass-bg:rgba(255,255,255,.72);
+  --glass-bg-strong:rgba(255,255,255,.88);
+  --glass-bg-soft:rgba(248,250,252,.64);
+  --glass-border:rgba(15,23,42,.10);
+  --glass-border-strong:rgba(15,23,42,.16);
+  --glass-highlight:rgba(255,255,255,.84);
+  --glass-shadow:0 20px 50px rgba(30,41,59,.11), inset 0 1px 0 rgba(255,255,255,.92);
+  --focus-ring:0 0 0 3px rgba(37,99,235,.18);
+  --surface-text:#172033;
+  --surface-muted:#3f4b5f;
+  --surface-faint:#64748b;
+}
+
+html,body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+}
+
+body{
+  letter-spacing:.002em;
+  background-size:cover;
+}
+
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  pointer-events:none;
+  z-index:-1;
+  border-radius:50%;
+  filter:blur(4px);
+  opacity:.72;
+}
+body::before{
+  width:46vw;height:46vw;max-width:680px;max-height:680px;
+  left:-15vw;top:8vh;
+  background:radial-gradient(circle,rgba(59,130,246,.24),rgba(59,130,246,0) 68%);
+}
+body::after{
+  width:42vw;height:42vw;max-width:620px;max-height:620px;
+  right:-14vw;bottom:-8vh;
+  background:radial-gradient(circle,rgba(139,92,246,.20),rgba(139,92,246,0) 68%);
+}
+html[data-theme="light"] body::before{background:radial-gradient(circle,rgba(59,130,246,.15),rgba(59,130,246,0) 68%);}
+html[data-theme="light"] body::after{background:radial-gradient(circle,rgba(168,85,247,.10),rgba(168,85,247,0) 68%);}
+
+.header,
+.app-sidebar,
+.mobile-bottom-nav,
+.card,
+.search-box,
+.modal-content,
+.phone-lookup-box:not(:empty),
+.export-info-box{
+  background:linear-gradient(145deg,var(--glass-highlight),rgba(255,255,255,0) 24%),var(--glass-bg) !important;
+  border:1px solid var(--glass-border) !important;
+  box-shadow:var(--glass-shadow) !important;
+  backdrop-filter:blur(22px) saturate(150%);
+  -webkit-backdrop-filter:blur(22px) saturate(150%);
+}
+
+.header{
+  background:linear-gradient(180deg,var(--glass-bg-strong),var(--glass-bg)) !important;
+  border-left:0!important;border-right:0!important;border-top:0!important;
+  box-shadow:0 14px 36px rgba(2,6,23,.20),inset 0 -1px 0 rgba(255,255,255,.04)!important;
+}
+
+.header-center h2{
+  font-size:19px;
+  font-weight:800;
+  letter-spacing:-.018em;
+  color:var(--surface-text)!important;
+  text-shadow:none;
+}
+#userInfo,.user-meta{color:var(--surface-muted)!important;font-weight:600;}
+
+.app-sidebar{
+  background:linear-gradient(155deg,var(--glass-highlight),rgba(255,255,255,0) 24%),var(--glass-bg-strong)!important;
+  border-color:var(--glass-border)!important;
+}
+.app-sidebar::before{color:var(--surface-faint)!important;letter-spacing:.10em;}
+.nav-btn{
+  position:relative;
+  overflow:hidden;
+  color:var(--surface-muted)!important;
+  font-weight:700;
+  border:1px solid transparent!important;
+  transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+.nav-btn:hover{
+  color:var(--surface-text)!important;
+  background:rgba(148,163,184,.09)!important;
+  border-color:var(--glass-border)!important;
+}
+.nav-btn.active{
+  color:#fff!important;
+  background:linear-gradient(135deg,rgba(37,99,235,.92),rgba(99,102,241,.88))!important;
+  border-color:rgba(147,197,253,.34)!important;
+  box-shadow:0 12px 28px rgba(37,99,235,.24),inset 0 1px 0 rgba(255,255,255,.22)!important;
+}
+.nav-btn.active::after{
+  content:"";position:absolute;left:5px;top:12px;bottom:12px;width:3px;border-radius:3px;background:rgba(255,255,255,.88);
+}
+
+.view-title{
+  color:var(--surface-text)!important;
+  font-weight:850;
+  letter-spacing:-.025em;
+  line-height:1.15;
+}
+
+.card{
+  position:relative;
+  overflow:hidden;
+  color:var(--surface-text)!important;
+  font-size:14.5px;
+  line-height:1.62;
+  border-radius:22px!important;
+}
+.card::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  left:10px;right:10px;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
+  opacity:.9;
+}
+.card b{color:var(--surface-text)!important;font-weight:800;}
+
+.overdue{
+  background:linear-gradient(145deg,rgba(239,68,68,.17),rgba(255,255,255,.035) 30%),rgba(44,13,18,.82)!important;
+  border-color:rgba(248,113,113,.26)!important;
+  border-left:4px solid #ef4444!important;
+}
+.warning{
+  background:linear-gradient(145deg,rgba(245,158,11,.16),rgba(255,255,255,.035) 30%),rgba(42,29,8,.80)!important;
+  border-color:rgba(251,191,36,.25)!important;
+  border-left:4px solid #f59e0b!important;
+}
+.paid-card{
+  background:linear-gradient(145deg,rgba(34,197,94,.16),rgba(255,255,255,.035) 30%),rgba(10,42,30,.78)!important;
+  border-color:rgba(74,222,128,.24)!important;
+  border-left:4px solid #22c55e!important;
+}
+html[data-theme="light"] .overdue{background:linear-gradient(145deg,rgba(254,226,226,.91),rgba(255,255,255,.82))!important;color:#3f0a16!important;}
+html[data-theme="light"] .warning{background:linear-gradient(145deg,rgba(254,243,199,.88),rgba(255,255,255,.84))!important;color:#3b2605!important;}
+html[data-theme="light"] .paid-card{background:linear-gradient(145deg,rgba(220,252,231,.90),rgba(255,255,255,.84))!important;color:#123a25!important;}
+
+input,.export-select,.date-picker-display{
+  min-height:52px;
+  background:var(--glass-bg-soft)!important;
+  color:var(--surface-text)!important;
+  border:1px solid var(--glass-border-strong)!important;
+  border-radius:15px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06)!important;
+  font-weight:600;
+  caret-color:#60a5fa;
+}
+input::placeholder{color:var(--surface-faint)!important;opacity:1;}
+input:focus,.export-select:focus,.date-picker-wrap:focus-within .date-picker-display{
+  border-color:rgba(96,165,250,.72)!important;
+  box-shadow:var(--focus-ring),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  outline:none!important;
+}
+.form-field-label{color:var(--surface-muted)!important;font-size:12.5px;font-weight:800;}
+.date-picker-wrap.has-date .date-picker-display{color:var(--surface-text)!important;background:linear-gradient(135deg,rgba(34,197,94,.13),var(--glass-bg-soft))!important;}
+
+button,.call-btn,.wa-btn{
+  min-height:44px;
+  letter-spacing:.005em;
+}
+button:focus-visible,.call-btn:focus-visible,.wa-btn:focus-visible,.nav-btn:focus-visible,.mobile-nav-btn:focus-visible{
+  outline:none!important;
+  box-shadow:var(--focus-ring)!important;
+}
+.mini-refresh-btn,.export-btn,.logout-btn,.theme-choice-btn,.contrast-choice-btn,.export-choice-btn{
+  border:1px solid var(--glass-border)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 10px 24px rgba(2,6,23,.14)!important;
+}
+.logout-btn{background:rgba(148,163,184,.10)!important;color:var(--surface-text)!important;}
+
+.search-box{padding:8px!important;border-radius:20px!important;}
+.search-box input{margin:0!important;background:rgba(2,6,23,.16)!important;border-color:transparent!important;box-shadow:none!important;}
+html[data-theme="light"] .search-box input{background:rgba(255,255,255,.48)!important;}
+.search-box:focus-within{border-color:rgba(96,165,250,.50)!important;box-shadow:var(--glass-shadow),var(--focus-ring)!important;}
+
+.modal{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.modal-content{background:linear-gradient(145deg,var(--glass-highlight),rgba(255,255,255,0) 22%),var(--glass-bg-strong)!important;border-radius:24px!important;color:var(--surface-text)!important;}
+.modal-content h3{color:var(--surface-text)!important;letter-spacing:-.02em;}
+
+.settings-grid{gap:16px;}
+.settings-card{min-height:138px;}
+.settings-card>b{display:block;font-size:15px;letter-spacing:-.01em;}
+.settings-hint{margin-top:10px;color:var(--surface-faint);font-size:12px;line-height:1.5;}
+.theme-choice,.contrast-choice{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;}
+.theme-choice-btn,.contrast-choice-btn{
+  margin:0;
+  min-height:50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:rgba(148,163,184,.10)!important;
+  color:var(--surface-muted)!important;
+  border-color:var(--glass-border)!important;
+  box-shadow:none!important;
+}
+.theme-choice-btn.active,.contrast-choice-btn.active{
+  color:#fff!important;
+  background:linear-gradient(135deg,rgba(37,99,235,.94),rgba(99,102,241,.92))!important;
+  border-color:rgba(147,197,253,.30)!important;
+  box-shadow:0 10px 24px rgba(37,99,235,.20),inset 0 1px 0 rgba(255,255,255,.20)!important;
+}
+
+.mobile-bottom-nav{
+  background:linear-gradient(155deg,var(--glass-highlight),rgba(255,255,255,0) 24%),var(--glass-bg-strong)!important;
+  border-color:var(--glass-border)!important;
+  box-shadow:0 18px 46px rgba(2,6,23,.30),inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+.mobile-nav-btn{color:var(--surface-faint)!important;font-weight:750;}
+.mobile-nav-btn.active{
+  color:#fff!important;
+  background:linear-gradient(135deg,rgba(37,99,235,.92),rgba(99,102,241,.90))!important;
+  box-shadow:0 8px 18px rgba(37,99,235,.22),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+
+.paid-status{background:rgba(34,197,94,.15)!important;color:#bbf7d0!important;border:1px solid rgba(74,222,128,.18);}
+html[data-theme="light"] .paid-status{color:#166534!important;background:rgba(220,252,231,.92)!important;border-color:#bbf7d0;}
+
+/* Readability mode */
+html[data-contrast="high"]{
+  --glass-border:rgba(255,255,255,.25);
+  --glass-border-strong:rgba(255,255,255,.36);
+  --surface-text:#ffffff;
+  --surface-muted:#e2e8f0;
+  --surface-faint:#cbd5e1;
+}
+html[data-theme="light"][data-contrast="high"]{
+  --glass-border:rgba(15,23,42,.20);
+  --glass-border-strong:rgba(15,23,42,.30);
+  --surface-text:#0b1220;
+  --surface-muted:#243247;
+  --surface-faint:#475569;
+}
+html[data-contrast="high"] .card,
+html[data-contrast="high"] .modal-content,
+html[data-contrast="high"] .app-sidebar,
+html[data-contrast="high"] .mobile-bottom-nav{backdrop-filter:blur(14px) saturate(125%);-webkit-backdrop-filter:blur(14px) saturate(125%);}
+html[data-contrast="high"] .card{font-size:15px;}
+html[data-contrast="high"] input,
+html[data-contrast="high"] .date-picker-display,
+html[data-contrast="high"] .export-select{font-weight:700;}
+html[data-theme="dark"][data-contrast="high"] .card,
+html[data-theme="dark"][data-contrast="high"] .modal-content{background:rgba(9,16,29,.92)!important;}
+html[data-theme="light"][data-contrast="high"] .card,
+html[data-theme="light"][data-contrast="high"] .modal-content{background:rgba(255,255,255,.96)!important;}
+
+/* Better tap/read density on phones */
+@media(max-width:760px){
+  .header{padding:10px 11px!important;}
+  .header-center h2{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  #userInfo{font-size:11px;}
+  .mini-refresh-btn{height:28px!important;min-height:28px!important;padding:0 9px!important;font-size:11px!important;}
+  .export-btn{width:48px;height:36px;min-height:36px;font-size:11px;}
+  .logout-btn{width:36px;height:36px;min-height:36px;}
+  .card{padding:15px!important;border-radius:20px!important;font-size:14px;line-height:1.58;}
+  .view-title{font-size:20px!important;margin:3px 2px 14px!important;}
+  .mobile-bottom-nav{left:7px!important;right:7px!important;bottom:max(7px,env(safe-area-inset-bottom))!important;border-radius:22px!important;}
+  .mobile-nav-btn{min-height:58px!important;border-radius:16px!important;}
+  .settings-card{min-height:0;}
+}
+
+@supports not ((backdrop-filter:blur(10px)) or (-webkit-backdrop-filter:blur(10px))){
+  .header,.app-sidebar,.mobile-bottom-nav,.card,.search-box,.modal-content,.phone-lookup-box:not(:empty){background:var(--panel-solid)!important;}
+  html[data-theme="light"] .header,
+  html[data-theme="light"] .app-sidebar,
+  html[data-theme="light"] .mobile-bottom-nav,
+  html[data-theme="light"] .card,
+  html[data-theme="light"] .search-box,
+  html[data-theme="light"] .modal-content{background:#fff!important;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}
+}
+
 </style>
 </head>
 <body>
@@ -1541,6 +1853,14 @@ html[data-theme="light"] .export-info-box{background:#eff6ff;color:#334155;borde
           <button id="themeLightBtn" class="theme-choice-btn" data-theme-value="light" onclick="setTheme('light')"><span>☀️</span><span>Светлая</span></button>
           <button id="themeDarkBtn" class="theme-choice-btn" data-theme-value="dark" onclick="setTheme('dark')"><span>🌙</span><span>Тёмная</span></button>
         </div>
+      </div>
+      <div class="card settings-card">
+        <b id="settingsContrastTitle">👁 Читаемость</b>
+        <div class="contrast-choice" role="group" aria-label="Читаемость">
+          <button id="contrastNormalBtn" class="contrast-choice-btn" data-contrast-value="normal" onclick="setContrast('normal')"><span>◐</span><span>Обычная</span></button>
+          <button id="contrastHighBtn" class="contrast-choice-btn" data-contrast-value="high" onclick="setContrast('high')"><span>◉</span><span>Повышенная</span></button>
+        </div>
+        <div id="contrastHint" class="settings-hint">Повышенный контраст делает текст, границы и элементы управления заметнее.</div>
       </div>
       <div class="card settings-card">
         <b id="settingsActionsTitle">🛠 Действия</b>
@@ -1687,7 +2007,7 @@ html[data-theme="light"] .export-info-box{background:#eff6ff;color:#334155;borde
 <div id="toast" class="toast"></div>
 
 <script>
-const VERSION="4.7";
+const VERSION="4.8";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
 const USERS={
@@ -1711,6 +2031,7 @@ let addDebtTargetPhone = "";
 
 let currentLanguage = localStorage.getItem("lang") || "ru";
 let currentTheme = localStorage.getItem("theme") || "dark";
+let currentContrast = localStorage.getItem("contrast") || "normal";
 let lastStatsData = {};
 let clientsByPhone = {};
 let activeDebtForEnteredPhone = null;
@@ -1758,6 +2079,10 @@ const translations = {
     settingsTheme: "🎨 Тема оформления",
     themeLight: "Светлая",
     themeDark: "Тёмная",
+    settingsContrast: "👁 Читаемость",
+    contrastNormal: "Обычная",
+    contrastHigh: "Повышенная",
+    contrastHint: "Повышенный контраст делает текст, границы и элементы управления заметнее.",
     phoneFieldLabel: "Телефон клиента",
     clientFieldLabel: "Имя клиента",
     settingsActions: "🛠 Действия",
@@ -1936,6 +2261,10 @@ const translations = {
     settingsTheme: "🎨 Намуди интерфейс",
     themeLight: "Равшан",
     themeDark: "Торик",
+    settingsContrast: "👁 Хонданбобӣ",
+    contrastNormal: "Одатӣ",
+    contrastHigh: "Баланд",
+    contrastHint: "Контрасти баланд матн, сарҳадҳо ва тугмаҳоро равшантар нишон медиҳад.",
     phoneFieldLabel: "Телефони муштарӣ",
     clientFieldLabel: "Номи муштарӣ",
     settingsActions: "🛠 Амалҳо",
@@ -2101,6 +2430,21 @@ function setTheme(theme){
   applyTheme();
 }
 
+function setContrast(mode){
+  currentContrast = mode === "high" ? "high" : "normal";
+  localStorage.setItem("contrast", currentContrast);
+  applyContrast();
+}
+
+function applyContrast(){
+  document.documentElement.dataset.contrast = currentContrast;
+  document.querySelectorAll("[data-contrast-value]").forEach(btn => {
+    const active = btn.dataset.contrastValue === currentContrast;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+}
+
 function applyTheme(){
   document.documentElement.dataset.theme = currentTheme;
   document.documentElement.style.colorScheme = currentTheme;
@@ -2112,6 +2456,7 @@ function applyTheme(){
     btn.classList.toggle("active", btn.dataset.themeValue === currentTheme);
     btn.setAttribute("aria-pressed", btn.dataset.themeValue === currentTheme ? "true" : "false");
   });
+  applyContrast();
 }
 
 function applyTranslations(){
@@ -2162,16 +2507,24 @@ function applyTranslations(){
   const settingsThemeTitle = document.getElementById("settingsThemeTitle");
   const themeLightBtn = document.getElementById("themeLightBtn");
   const themeDarkBtn = document.getElementById("themeDarkBtn");
+  const settingsContrastTitle = document.getElementById("settingsContrastTitle");
+  const contrastNormalBtn = document.getElementById("contrastNormalBtn");
+  const contrastHighBtn = document.getElementById("contrastHighBtn");
+  const contrastHintEl = document.getElementById("contrastHint");
   const phoneFieldLabelEl = document.getElementById("phoneFieldLabel");
   const clientFieldLabelEl = document.getElementById("clientFieldLabel");
   const settingsActionsTitle = document.getElementById("settingsActionsTitle");
   const settingsRefreshBtn = document.getElementById("settingsRefreshBtn");
-  const settingsPdfBtn = document.getElementById("settingsPdfBtn");
+  const settingsPdfBtn = document.getElementById("settingsExportBtn");
   const settingsLogoutBtn = document.getElementById("settingsLogoutBtn");
   if (settingsLanguageTitle) settingsLanguageTitle.textContent=t("settingsLanguage");
   if (settingsThemeTitle) settingsThemeTitle.textContent=t("settingsTheme");
   if (themeLightBtn) themeLightBtn.lastElementChild.textContent=t("themeLight");
   if (themeDarkBtn) themeDarkBtn.lastElementChild.textContent=t("themeDark");
+  if (settingsContrastTitle) settingsContrastTitle.textContent=t("settingsContrast");
+  if (contrastNormalBtn) contrastNormalBtn.lastElementChild.textContent=t("contrastNormal");
+  if (contrastHighBtn) contrastHighBtn.lastElementChild.textContent=t("contrastHigh");
+  if (contrastHintEl) contrastHintEl.textContent=t("contrastHint");
   if (phoneFieldLabelEl) phoneFieldLabelEl.textContent=t("phoneFieldLabel");
   if (clientFieldLabelEl) clientFieldLabelEl.textContent=t("clientFieldLabel");
   if (settingsActionsTitle) settingsActionsTitle.textContent=t("settingsActions");
@@ -2415,6 +2768,7 @@ function openApp(){
 
 window.onload = function(){
   applyTheme();
+  applyContrast();
 
   document.querySelectorAll(".lang-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.lang === currentLanguage);
