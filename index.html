@@ -12,9 +12,11 @@
 try {
   document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   document.documentElement.dataset.contrast = localStorage.getItem("contrast") || "normal";
+  document.documentElement.dataset.resume = sessionStorage.getItem("authToken") ? "1" : "0";
 } catch(e) {
   document.documentElement.dataset.theme = "dark";
   document.documentElement.dataset.contrast = "normal";
+  document.documentElement.dataset.resume = "0";
 }
 </script>
 <meta name="background-color" content="#000000">
@@ -2209,8 +2211,19 @@ html[data-theme="light"] .header{
 #loginScreen .login-primary-btn,.login-primary-btn{width:100%!important;max-width:none!important;margin:4px 0 0!important;background:linear-gradient(135deg,#2563eb,#6d28d9)!important;color:#fff!important;border:1px solid rgba(96,165,250,.35)!important;box-shadow:0 12px 28px rgba(37,99,235,.25)!important;font-weight:800!important;}
 .login-message{min-height:18px;margin-top:9px;font-size:12px;line-height:1.4;color:var(--text-3);}
 .login-message.error{color:#fca5a5;}.login-message.success{color:#86efac;}.login-message.info{color:#93c5fd;}
-.login-links{display:flex;justify-content:space-between;gap:10px;margin-top:6px;}
+.login-links{display:flex;justify-content:center;gap:10px;margin-top:6px;}
 #loginScreen .login-link-btn{width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0!important;padding:7px 2px!important;background:transparent!important;color:#93c5fd!important;border:0!important;box-shadow:none!important;font-size:12px!important;font-weight:700!important;}
+.session-resume-screen{position:fixed;inset:0;z-index:2600;display:none;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 22%,rgba(59,130,246,.18),transparent 36%),linear-gradient(180deg,#020617 0%,#081121 100%);box-sizing:border-box;}
+html[data-resume="1"] .session-resume-screen{display:flex;}
+html[data-resume="1"] #loginScreen{display:none!important;}
+.session-resume-card{display:flex;flex-direction:column;align-items:center;gap:12px;min-width:210px;padding:24px 28px;border-radius:26px;background:linear-gradient(145deg,rgba(30,41,59,.72),rgba(15,23,42,.60));border:1px solid rgba(255,255,255,.09);box-shadow:0 28px 70px rgba(2,6,23,.38),inset 0 1px 0 rgba(255,255,255,.10);backdrop-filter:blur(24px) saturate(145%);-webkit-backdrop-filter:blur(24px) saturate(145%);}
+.session-resume-logo{width:70px;height:auto;filter:drop-shadow(0 10px 20px rgba(0,0,0,.25));}
+.session-resume-spinner{width:28px;height:28px;border-radius:50%;border:3px solid rgba(148,163,184,.22);border-top-color:#60a5fa;animation:sessionResumeSpin .72s linear infinite;}
+.session-resume-text{font-size:12px;font-weight:800;color:#cbd5e1;}
+@keyframes sessionResumeSpin{to{transform:rotate(360deg)}}
+html[data-theme="light"] .session-resume-screen{background:radial-gradient(circle at 50% 22%,rgba(59,130,246,.13),transparent 36%),linear-gradient(180deg,#eef4ff 0%,#f8fafc 100%);}
+html[data-theme="light"] .session-resume-card{background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(241,245,249,.88));border-color:rgba(15,23,42,.08);box-shadow:0 26px 60px rgba(15,23,42,.14),inset 0 1px 0 #fff;}
+html[data-theme="light"] .session-resume-text{color:#334155;}
 .auth-flow-modal{z-index:2300!important;}
 .auth-flow-content,.user-modal-content{max-width:470px;width:min(94vw,470px);}
 .auth-flow-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:15px;}
@@ -2305,6 +2318,14 @@ html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;backgro
   </div>
 </div>
 
+<div id="sessionResumeScreen" class="session-resume-screen" aria-live="polite" aria-label="Восстановление сессии">
+  <div class="session-resume-card">
+    <img src="logo.png" class="session-resume-logo" alt="Fashion&StyleLife">
+    <div class="session-resume-spinner" aria-hidden="true"></div>
+    <div id="sessionResumeText" class="session-resume-text">Открываем приложение…</div>
+  </div>
+</div>
+
 <div id="loginScreen" class="login">
   <div class="login-card">
     <div class="login-lang-row">
@@ -2323,7 +2344,6 @@ html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;backgro
     <div id="loginMessage" class="login-message" aria-live="polite"></div>
     <div class="login-links">
       <button id="forgotPasswordBtn" type="button" class="login-link-btn" onclick="openPasswordReset()">Забыли пароль?</button>
-      <button id="firstLoginBtn" type="button" class="login-link-btn" onclick="openActivation()">Первый вход</button>
     </div>
   </div>
 </div>
@@ -2664,7 +2684,7 @@ html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;backgro
 <div class="modal" id="userModal">
   <div class="modal-content user-modal-content">
     <div class="auth-flow-head">
-      <div><h3 id="userModalTitle">Новый пользователь</h3><div id="userModalHint" class="auth-flow-subtitle">Код активации будет отправлен на email.</div></div>
+      <div><h3 id="userModalTitle">Новый пользователь</h3><div id="userModalHint" class="auth-flow-subtitle">Инструкция по установке пароля будет отправлена на email.</div></div>
       <button type="button" class="auth-close-btn" onclick="closeUserModal()">×</button>
     </div>
     <label id="userNameLabel" for="userNameInput">Имя</label>
@@ -2725,11 +2745,31 @@ html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;backgro
 </div>
 
 <script>
-const VERSION="5.3.1";
+const VERSION="5.3.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 let authToken = sessionStorage.getItem("authToken") || "";
 let currentUser = null;
+let resumeRetryTimer = null;
+let resumeSessionInFlight = false;
+function readCachedAuthUser_(){
+  try { const raw=sessionStorage.getItem("authUser"); return raw?JSON.parse(raw):null; } catch(e){ return null; }
+}
+function cacheAuthUser_(user){
+  try { if(user)sessionStorage.setItem("authUser",JSON.stringify(user)); else sessionStorage.removeItem("authUser"); } catch(e){}
+}
+function hideSessionResume_(){
+  document.documentElement.dataset.resume="0";
+  if(resumeRetryTimer){clearTimeout(resumeRetryTimer);resumeRetryTimer=null;}
+  const el=document.getElementById("sessionResumeScreen"); if(el)el.style.display="none";
+}
+function scheduleResumeRetry_(message){
+  document.documentElement.dataset.resume="1";
+  const el=document.getElementById("sessionResumeScreen");if(el)el.style.display="flex";
+  const text=document.getElementById("sessionResumeText");if(text)text.textContent=message||securityText_("Нет связи с сервером. Повторяем…","Пайвастшавӣ ба сервер нест. Такрор мекунем…");
+  if(resumeRetryTimer)clearTimeout(resumeRetryTimer);
+  resumeRetryTimer=setTimeout(()=>{resumeRetryTimer=null;resumeSession_();},3000);
+}
 let currentSeller = null;
 let appUsers = [];
 let appNotifications = [];
@@ -3517,15 +3557,16 @@ async function apiPost(action,payload={},options={}){
   }
   return data||{};
 }
-function clearAuthSession_(){ stopNotificationPolling_(); authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); }
+function clearAuthSession_(){ stopNotificationPolling_(); authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); cacheAuthUser_(null); document.documentElement.dataset.resume="0"; }
 function showLogin_(){
+  hideSessionResume_();
   const login=document.getElementById("loginScreen"); if(login)login.style.display="flex";
   if(mainHeader)mainHeader.style.display="none"; if(appContent)appContent.style.display="none"; document.body.classList.remove("app-open");
 }
 function applySecurityTranslations_(){
   const pairs={
     loginTitleText:["Вход","Вуруд"],loginSubtitle:["Войдите по электронной почте","Бо почтаи электронӣ ворид шавед"],
-    loginSubmitBtn:["Войти","Даромадан"],forgotPasswordBtn:["Забыли пароль?","Паролро фаромӯш кардед?"],firstLoginBtn:["Первый вход","Вуруди аввал"],
+    loginSubmitBtn:["Войти","Даромадан"],forgotPasswordBtn:["Забыли пароль?","Паролро фаромӯш кардед?"],
     accountSecurityTitle:["🔐 Безопасность аккаунта","🔐 Амнияти ҳисоб"],changePasswordBtn:["Изменить пароль","Иваз кардани парол"],
     usersSettingsTitle:["👥 Пользователи","👥 Истифодабарандагон"],usersSettingsHint:["Управление доступом сотрудников","Идоракунии дастрасии кормандон"],addUserBtn:["+ Добавить","+ Илова"],
     userNameLabel:["Имя","Ном"],userEmailLabel:["Email / логин","Email / логин"],userRoleLabel:["Роль","Нақш"],userActiveLabel:["Пользователь активен","Истифодабаранда фаъол аст"],saveUserBtn:["Сохранить","Захира"],
@@ -3541,6 +3582,7 @@ function applySecurityTranslations_(){
     notificationFilterAll:["Все","Ҳама"],notificationFilterUnread:["Новые","Нав"],notificationFilterDebts:["Долги","Қарзҳо"],notificationFilterPayments:["Оплаты","Пардохтҳо"],notificationFilterSecurity:["Безопасность","Амният"],notificationFilterUsers:["Пользователи","Истифодабарандагон"]
   };
   Object.entries(pairs).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=currentLanguage==="tj"?v[1]:v[0];});
+  const resumeText=document.getElementById("sessionResumeText");if(resumeText)resumeText.textContent=securityText_("Открываем приложение…","Барнома кушода мешавад…");
   const email=document.getElementById("emailInput"); if(email)email.placeholder="Email";
   const pass=document.getElementById("passwordInput"); if(pass)pass.placeholder=securityText_("Пароль","Парол");
   document.querySelectorAll(".login-lang-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.lang===currentLanguage));
@@ -3562,18 +3604,17 @@ async function login(){
       if(result.code==="LOCKED"&&result.retryAfterSeconds){const min=Math.ceil(Number(result.retryAfterSeconds)/60);msg=securityText_(`Вход временно заблокирован. Повторите примерно через ${min} мин.`,`Вуруд муваққатан баста шуд. Тақрибан пас аз ${min} дақиқа такрор кунед.`);}
       setMessage_("loginMessage",msg,"error"); return;
     }
-    authToken=result.token||""; currentUser=result.user||null; currentSeller=currentUser?.name||""; sessionStorage.setItem("authToken",authToken);
-    document.getElementById("passwordInput").value=""; setMessage_("loginMessage","",""); openApp();
+    authToken=result.token||""; currentUser=result.user||null; currentSeller=currentUser?.name||""; sessionStorage.setItem("authToken",authToken); cacheAuthUser_(currentUser);
+    document.getElementById("passwordInput").value=""; setMessage_("loginMessage","",""); hideSessionResume_(); openApp();
   }catch(e){setMessage_("loginMessage",e.message||String(e),"error");}
   finally{if(btn){btn.disabled=false;btn.textContent=securityText_("Войти","Даромадан");}}
 }
 function openPasswordReset(){authFlowMode="reset";authFlowStep="request";const src=document.getElementById("emailInput");const dst=document.getElementById("authEmailInput");if(dst)dst.value=src?.value||"";renderAuthFlow_();document.getElementById("authFlowModal").style.display="flex";}
-function openActivation(){authFlowMode="activate";authFlowStep="code";const src=document.getElementById("emailInput");const dst=document.getElementById("authEmailInput");if(dst)dst.value=src?.value||"";renderAuthFlow_();document.getElementById("authFlowModal").style.display="flex";}
 function closeAuthFlow(){document.getElementById("authFlowModal").style.display="none";setMessage_("authFlowMessage","","");["authCodeInput","authNewPasswordInput","authConfirmPasswordInput"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});}
 function renderAuthFlow_(){
-  const isReset=authFlowMode==="reset", isRequest=isReset&&authFlowStep==="request";
-  document.getElementById("authFlowTitle").textContent=isReset?securityText_("Восстановление пароля","Барқарорсозии парол"):securityText_("Первый вход","Вуруди аввал");
-  document.getElementById("authFlowSubtitle").textContent=isRequest?securityText_("Укажите email — мы отправим одноразовый код.","Email-ро ворид кунед — рамзи якдафъаина мефиристем."):securityText_("Введите код из письма и задайте новый пароль.","Рамзи аз почта гирифташударо ворид карда, пароли нав гузоред.");
+  const isRequest=authFlowStep==="request";
+  document.getElementById("authFlowTitle").textContent=securityText_("Восстановление пароля","Барқарорсозии парол");
+  document.getElementById("authFlowSubtitle").textContent=isRequest?securityText_("Укажите email — мы отправим одноразовый код. Этот же способ используется для установки пароля новым пользователем.","Email-ро ворид кунед — рамзи якдафъаина мефиристем. Истифодабарандаи нав низ паролро ҳамин тавр мегузорад."):securityText_("Введите код из письма и задайте новый пароль.","Рамзи аз почта гирифташударо ворид карда, пароли нав гузоред.");
   document.getElementById("authEmailLabel").textContent="Email";
   document.getElementById("authCodeLabel").textContent=securityText_("Код из письма","Рамз аз почта");
   document.getElementById("authNewPasswordLabel").textContent=securityText_("Новый пароль","Пароли нав");
@@ -3596,8 +3637,7 @@ async function authFlowPrimaryAction(){
     const confirm=String(document.getElementById("authConfirmPasswordInput")?.value||"");
     if(code.length!==6){setMessage_("authFlowMessage",securityText_("Введите 6-значный код","Рамзи 6-рақамаро ворид кунед"),"error");return;}
     if(newPassword!==confirm){setMessage_("authFlowMessage",securityText_("Пароли не совпадают","Паролҳо мувофиқ нестанд"),"error");return;}
-    const action=authFlowMode==="activate"?"auth.activate":"auth.resetPassword";
-    const r=await apiPost(action,{email,code,newPassword},{public:true});
+    const r=await apiPost("auth.resetPassword",{email,code,newPassword},{public:true});
     if(!r.success){setMessage_("authFlowMessage",r.message||securityText_("Не удалось изменить пароль","Иваз кардани парол имкон нашуд"),"error");return;}
     closeAuthFlow(); const loginEmail=document.getElementById("emailInput"); if(loginEmail)loginEmail.value=email; setMessage_("loginMessage",r.message||securityText_("Пароль установлен. Теперь войдите.","Парол гузошта шуд. Акнун ворид шавед."),"success"); document.getElementById("passwordInput")?.focus();
   }catch(e){setMessage_("authFlowMessage",e.message||String(e),"error");}
@@ -3631,8 +3671,8 @@ function renderUsers_(){
   if(!appUsers.length){box.innerHTML=`<div class="settings-hint">${securityText_("Пользователей пока нет","Ҳоло истифодабаранда нест")}</div>`;return;}
   box.innerHTML=appUsers.map(u=>{
     const active=u.active!==false,verified=!!u.emailVerified,manageable=canManageUserClient_(u);
-    const badges=`<span class="user-badge">${escapeHtml(roleLabel_(u.role))}</span><span class="user-badge ${active?'ok':'off'}">${active?securityText_("Активен","Фаъол"):securityText_("Отключен","Хомӯш")}</span>${verified?'':`<span class="user-badge warn">${securityText_("Ожидает активации","Интизори фаъолсозӣ")}</span>`}`;
-    const actions=manageable?`<button class="user-mini-btn" onclick="openUserModal('${escapeAttr_(u.id)}')">${securityText_("Изменить","Тағйир")}</button>${!verified?`<button class="user-mini-btn" onclick="resendInvite('${escapeAttr_(u.id)}')">${securityText_("Новый код","Рамзи нав")}</button>`:""}`:"";
+    const badges=`<span class="user-badge">${escapeHtml(roleLabel_(u.role))}</span><span class="user-badge ${active?'ok':'off'}">${active?securityText_("Активен","Фаъол"):securityText_("Отключен","Хомӯш")}</span>${verified?'':`<span class="user-badge warn">${securityText_("Пароль не установлен","Парол гузошта нашудааст")}</span>`}`;
+    const actions=manageable?`<button class="user-mini-btn" onclick="openUserModal('${escapeAttr_(u.id)}')">${securityText_("Изменить","Тағйир")}</button>${!verified?`<button class="user-mini-btn" onclick="resendInvite('${escapeAttr_(u.id)}')">${securityText_("Отправить инструкцию","Фиристодани дастур")}</button>`:""}`:"";
     return `<div class="user-row"><div class="user-row-main"><div class="user-row-name">${escapeHtml(u.name||"—")}</div><div class="user-row-email">${escapeHtml(u.email||"")}</div><div class="user-row-meta">${badges}</div></div><div class="user-row-actions">${actions}</div></div>`;
   }).join("");
 }
@@ -3645,7 +3685,7 @@ function openUserModal(id=""){
   if(!canPermission("manageUsers"))return;
   editingUserId=id||null;const user=id?appUsers.find(u=>String(u.id)===String(id)):null;
   document.getElementById("userModalTitle").textContent=user?securityText_("Редактирование пользователя","Таҳрири истифодабаранда"):securityText_("Новый пользователь","Истифодабарандаи нав");
-  document.getElementById("userModalHint").textContent=user?securityText_("Email является логином и на этом этапе не изменяется.","Email логин аст ва дар ин марҳила тағйир намеёбад."):securityText_("Код активации будет отправлен на email.","Рамзи фаъолсозӣ ба email фиристода мешавад.");
+  document.getElementById("userModalHint").textContent=user?securityText_("Email является логином и на этом этапе не изменяется.","Email логин аст ва дар ин марҳила тағйир намеёбад."):securityText_("Инструкция по установке пароля будет отправлена на email.","Дастур барои гузоштани парол ба email фиристода мешавад.");
   const name=document.getElementById("userNameInput"),email=document.getElementById("userEmailInput"),role=document.getElementById("userRoleSelect"),active=document.getElementById("userActiveInput");
   name.value=user?.name||"";email.value=user?.email||"";email.readOnly=!!user;role.innerHTML=roleOptions_(user?.role||(currentUser?.role==="owner"?"manager":"manager"),user?.role||"");role.disabled=user?.role==="owner";active.checked=user?user.active!==false:true;active.disabled=user?.role==="owner";
   setMessage_("userModalMessage","","");document.getElementById("userModal").style.display="flex";
@@ -3786,8 +3826,8 @@ async function openNotificationItem(id){
   else if(n.entityType==="security") {showView("settings");setTimeout(()=>document.getElementById(canPermission("security")?"securityEventsCard":"accountSecurityCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}
 }
 function securityEventLabel_(event){
-  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Код активации отправлен",LOGOUT:"Выход",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений"};
-  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Рамзи фаъолсозӣ фиристода шуд",LOGOUT:"Баромад",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома"};return (currentLanguage==="tj"?tj:ru)[event]||event;
+  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений"};
+  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Дастури дастрасӣ фиристода шуд",LOGOUT:"Баромад",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома"};return (currentLanguage==="tj"?tj:ru)[event]||event;
 }
 async function loadSecurityEvents(){
   if(!canPermission("security"))return;const box=document.getElementById("securityEventsList");if(box)box.innerHTML=`<div class="settings-hint">${securityText_("Загрузка...","Боркунӣ...")}</div>`;
@@ -3802,9 +3842,11 @@ function stopNotificationPolling_(){if(notificationPollTimer){clearInterval(noti
 
 /* ---------- LOGIN ---------- */
 
-function openApp(){
+function openApp(options={}){
   if(!authToken||!currentUser){showLogin_();return;}
+  hideSessionResume_();
   currentSeller=currentUser.name||currentUser.email||"";
+  cacheAuthUser_(currentUser);
   loginScreen.style.display = "none";
   mainHeader.style.display = "flex";
   appContent.style.display = "block";
@@ -3812,12 +3854,59 @@ function openApp(){
   userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
   applyPermissions_();
   renderAccountSecurity_();
+  if(options.initialData)applyDebtData_(options.initialData);
   showView(currentView || "active");
-  loadDebts();
+  if(!options.initialData)loadDebts();
   loadNotifications({silent:true});
   startNotificationPolling_();
-  if(canPermission("viewUsers"))loadUsers();
-  if(canPermission("security"))loadSecurityEvents();
+}
+
+async function resumeSession_(){
+  if(resumeSessionInFlight)return;
+  resumeSessionInFlight=true;
+  let lastError=null;
+  try{
+    if(!authToken){clearAuthSession_();showLogin_();applySecurityTranslations_();return;}
+    document.documentElement.dataset.resume="1";
+    const resumeText=document.getElementById("sessionResumeText");if(resumeText)resumeText.textContent=securityText_("Открываем приложение…","Барнома кушода мешавад…");
+    const cachedUser=readCachedAuthUser_();
+    if(cachedUser){
+      currentUser=cachedUser;
+      currentSeller=cachedUser.name||cachedUser.email||"";
+      try{
+        // data.get одновременно проверяет серверную сессию и возвращает основные данные.
+        // При обычном F5 это убирает лишний последовательный auth.me перед загрузкой данных.
+        const data=await apiPost("data.get",{});
+        if(!authToken)return; // сервер уже признал сессию недействительной и показал вход
+        if(data&&data.success!==false){
+          openApp({initialData:data});
+          // Имя, роль и права актуализируем уже в фоне, не задерживая открытие приложения.
+          apiPost("auth.me",{}).then(r=>{
+            if(r&&r.success&&r.user&&authToken){
+              currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);
+              applyPermissions_();renderAccountSecurity_();
+              if(userInfo)userInfo.innerHTML=t("userInfo",{name:currentSeller,version:VERSION});
+            }
+          }).catch(()=>{});
+          return;
+        }
+      }catch(e){lastError=e;}
+    }
+    if(!authToken)return;
+    // Совместимость с сессиями предыдущей версии и запасная проверка при ошибке основного запроса.
+    try{
+      const r=await apiPost("auth.me",{});
+      if(!authToken)return;
+      if(r&&r.success&&r.user){
+        currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);openApp();return;
+      }
+    }catch(e){lastError=e;}
+    if(!authToken)return;
+    // Сетевой сбой не считается выходом: токен сохраняем и автоматически пробуем снова.
+    scheduleResumeRetry_(lastError?.message||securityText_("Нет связи с сервером. Повторяем…","Пайвастшавӣ ба сервер нест. Такрор мекунем…"));
+  } finally {
+    resumeSessionInFlight=false;
+  }
 }
 
 window.onload = async function(){
@@ -3831,14 +3920,7 @@ window.onload = async function(){
   const addToDebtConfirmBtn = document.getElementById("addToDebtConfirmBtn");
   if (addToDebtConfirmBtn) addToDebtConfirmBtn.onclick = confirmAddToDebt;
 
-  if(authToken){
-    setMessage_("loginMessage",securityText_("Проверяем сессию...","Санҷиши сессия..."),"info");
-    try{
-      const r=await apiPost("auth.me",{});
-      if(r.success&&r.user){currentUser=r.user;currentSeller=r.user.name||r.user.email||"";setMessage_("loginMessage","","");openApp();return;}
-    }catch(e){}
-  }
-  clearAuthSession_(); showLogin_(); applySecurityTranslations_();
+  await resumeSession_();
 };
 
 function logout(){ logoutModal.style.display="flex"; }
@@ -4092,23 +4174,22 @@ async function addDebt(){
 
 /* ---------- ЗАГРУЗКА ---------- */
 
+function applyDebtData_(data){
+  data=data||{};
+  allDebts=data.debts||[];
+  paidDebts=data.paidDebts||[];
+  clientsByPhone=data.clientsByPhone||{};
+  renderStats(data);
+  renderDebts([...allDebts]);
+  renderPaidDebts([...paidDebts]);
+  if (normalizePhone(phone?.value).length === 9) handlePhoneLookup(false);
+  refreshOpenStatsDetail_();
+  return data;
+}
 function loadDebts(){
-  return apiPost("data.get", {})
-  .then(data=>{
-    data=data||{};
-    allDebts=data.debts||[];
-    paidDebts=data.paidDebts||[];
-    clientsByPhone=data.clientsByPhone||{};
-    renderStats(data);
-    renderDebts([...allDebts]);
-    renderPaidDebts([...paidDebts]);
-
-    if (normalizePhone(phone?.value).length === 9) {
-      handlePhoneLookup(false);
-    }
-
-    refreshOpenStatsDetail_();
-    return data;
+  return apiPost("data.get", {}).then(data=>{
+    if(data&&data.success===false)return data;
+    return applyDebtData_(data);
   });
 }
 
@@ -4516,7 +4597,11 @@ function showView(view){
     renderStats(lastStatsData||{});
   }
   window.scrollTo({top:0,behavior:"smooth"});
-  if(view==="settings"){loadNotifications({silent:true});if(canPermission("security"))loadSecurityEvents();}
+  if(view==="settings"){
+    loadNotifications({silent:true});
+    if(canPermission("viewUsers"))loadUsers();
+    if(canPermission("security"))loadSecurityEvents();
+  }
 }
 
 /* ---------- ПОИСК ---------- */
