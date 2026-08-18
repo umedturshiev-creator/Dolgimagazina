@@ -31,6 +31,7 @@ try {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 :root{
@@ -2358,7 +2359,7 @@ html[data-theme="light"] .audit-item,html[data-theme="light"] .audit-diff-col{ba
 .assign-debt-user-meta{font-size:10px;color:var(--text-3);margin-top:5px}
 html[data-theme="light"] .debt-responsible-box{background:#eff6ff;border-color:#dbeafe}
 
-/* ===== SECURITY CENTER v5.6.0 ===== */
+/* ===== SECURITY CENTER v5.7.0 ===== */
 .security-center-card{padding:16px!important;}
 .security-center-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
 .security-center-head b{display:block;font-size:15px;letter-spacing:-.01em;}
@@ -2408,6 +2409,16 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
   .debt-scope-count{width:100%;margin-left:2px}
   .debt-responsible-box{align-items:flex-start}
 }
+
+/* ===== OPTIONAL 2FA v5.7.0 ===== */
+.two-factor-box{margin-top:14px;padding:14px;border:1px solid var(--glass-border);border-radius:18px;background:rgba(255,255,255,.035);display:flex;align-items:center;justify-content:space-between;gap:14px}
+.two-factor-main{min-width:0}.two-factor-title{font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px}.two-factor-sub{margin-top:5px;color:var(--muted);font-size:12px;line-height:1.45}.two-factor-status{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;border:1px solid rgba(148,163,184,.22)}.two-factor-status.on{background:rgba(34,197,94,.12);color:#86efac}.two-factor-status.off{background:rgba(148,163,184,.1);color:var(--muted)}
+.two-factor-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.two-factor-btn{width:auto!important;margin:0!important;min-width:120px}
+.twofa-qr-wrap{display:flex;justify-content:center;padding:12px}.twofa-qr{background:#fff;padding:12px;border-radius:16px;min-width:180px;min-height:180px;display:flex;align-items:center;justify-content:center}.twofa-secret{display:flex;gap:8px;align-items:center;margin:8px 0 14px}.twofa-secret code{flex:1;overflow-wrap:anywhere;background:rgba(148,163,184,.12);padding:10px;border-radius:12px;font-size:13px;letter-spacing:1px}.twofa-secret button{width:auto!important;margin:0!important}
+.twofa-step{display:none}.twofa-step.active{display:block}.twofa-note{font-size:12px;line-height:1.5;color:var(--muted);margin:6px 0 12px}.twofa-backup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.twofa-backup-code{font-family:monospace;font-weight:800;letter-spacing:1px;text-align:center;padding:10px;border-radius:12px;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.15)}
+.twofa-manage-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.twofa-danger{background:linear-gradient(135deg,#ef4444,#dc2626)!important;color:#fff!important}.twofa-login-modal .auth-flow-content{max-width:430px}.twofa-login-code{text-align:center;font-size:22px!important;letter-spacing:5px!important;font-weight:800}.twofa-backup-login{letter-spacing:2px!important;text-transform:uppercase}
+@media(max-width:700px){.two-factor-box{align-items:stretch;flex-direction:column}.two-factor-actions{justify-content:stretch}.two-factor-actions button{width:100%!important}.twofa-backup-grid,.twofa-manage-actions{grid-template-columns:1fr}.twofa-qr{min-width:160px;min-height:160px}}
+
 </style>
 </head>
 <body>
@@ -2485,6 +2496,17 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
       <button id="authFlowPrimaryBtn" class="login-primary-btn" type="button" onclick="authFlowPrimaryAction()">Отправить код</button>
       <button id="authFlowCancelBtn" class="export-cancel-btn" type="button" onclick="closeAuthFlow()">Отмена</button>
     </div>
+  </div>
+</div>
+
+<div class="modal auth-flow-modal twofa-login-modal" id="twoFactorLoginModal">
+  <div class="modal-content auth-flow-content">
+    <div class="auth-flow-head"><div><h3 id="twoFactorLoginTitle">Подтверждение входа</h3><div id="twoFactorLoginSubtitle" class="auth-flow-subtitle">Введите 6-значный код из приложения-аутентификатора или резервный код.</div></div><button type="button" class="auth-close-btn" onclick="closeTwoFactorLogin()">×</button></div>
+    <label id="twoFactorLoginCodeLabel" for="twoFactorLoginCode">Код 2FA</label>
+    <input id="twoFactorLoginCode" class="twofa-login-code" type="text" inputmode="text" autocomplete="one-time-code" maxlength="12" placeholder="000000" onkeydown="if(event.key==='Enter')verifyTwoFactorLogin()">
+    <div id="twoFactorLoginMessage" class="login-message"></div>
+    <button id="twoFactorLoginSubmitBtn" class="login-primary-btn" type="button" onclick="verifyTwoFactorLogin()">Подтвердить</button>
+    <button id="twoFactorLoginCancelBtn" class="export-cancel-btn" type="button" onclick="closeTwoFactorLogin()">Отмена</button>
   </div>
 </div>
 
@@ -2647,6 +2669,10 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
         </div>
         <div id="securityCenterSummary" class="security-center-summary"><div class="security-empty">Загрузка…</div></div>
         <div class="security-account-line"><div id="accountSecurityInfo" class="security-account-main"></div><button id="changePasswordBtn" class="add-debt-btn" type="button" onclick="openChangePasswordModal()">Изменить пароль</button></div>
+        <div class="two-factor-box" id="twoFactorBox">
+          <div class="two-factor-main"><div class="two-factor-title"><span id="twoFactorTitle">🛡 Двухфакторная защита</span><span id="twoFactorStatus" class="two-factor-status off">Выключена</span></div><div id="twoFactorHint" class="two-factor-sub">Дополнительный код из Google/Microsoft Authenticator или Authy. По умолчанию выключена.</div></div>
+          <div class="two-factor-actions"><button id="twoFactorActionBtn" class="add-debt-btn two-factor-btn" type="button" onclick="openTwoFactorManager()">Включить 2FA</button></div>
+        </div>
         <div class="security-center-section">
           <div class="security-center-section-head"><div><b id="securityDevicesTitle">Активные устройства</b><small id="securityDevicesHint">Сессия действует максимум 12 часов.</small></div></div>
           <div id="securitySessionsList" class="security-sessions-list"><div class="security-empty">Загрузка…</div></div>
@@ -2897,6 +2923,41 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
   </div>
 </div>
 
+<div class="modal" id="twoFactorModal">
+  <div class="modal-content auth-flow-content">
+    <div class="auth-flow-head"><div><h3 id="twoFactorModalTitle">Двухфакторная защита</h3><div id="twoFactorModalSubtitle" class="auth-flow-subtitle"></div></div><button type="button" class="auth-close-btn" onclick="closeTwoFactorModal()">×</button></div>
+    <div id="twoFactorEnableFlow">
+      <div id="twoFactorEnablePasswordStep" class="twofa-step active">
+        <div class="twofa-note" id="twoFactorEnablePasswordHint">Для включения подтвердите текущий пароль.</div>
+        <label id="twoFactorCurrentPasswordLabel" for="twoFactorCurrentPassword">Текущий пароль</label>
+        <input id="twoFactorCurrentPassword" type="password" autocomplete="current-password" placeholder="Текущий пароль">
+        <button id="twoFactorStartBtn" class="login-primary-btn" type="button" onclick="startTwoFactorSetup()">Продолжить</button>
+      </div>
+      <div id="twoFactorScanStep" class="twofa-step">
+        <div class="twofa-note" id="twoFactorScanHint">Отсканируйте QR-код в приложении-аутентификаторе или введите ключ вручную.</div>
+        <div class="twofa-qr-wrap"><div id="twoFactorQr" class="twofa-qr"></div></div>
+        <div class="twofa-secret"><code id="twoFactorSecret"></code><button id="twoFactorCopySecretBtn" class="user-mini-btn" type="button" onclick="copyTwoFactorSecret()">Копировать</button></div>
+        <label id="twoFactorConfirmCodeLabel" for="twoFactorConfirmCode">Код из приложения</label>
+        <input id="twoFactorConfirmCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" oninput="this.value=this.value.replace(/\D/g,'').slice(0,6)">
+        <button id="twoFactorEnableBtn" class="login-primary-btn" type="button" onclick="confirmTwoFactorEnable()">Включить 2FA</button>
+      </div>
+      <div id="twoFactorBackupStep" class="twofa-step">
+        <div class="twofa-note" id="twoFactorBackupHint">Сохраните резервные коды в безопасном месте. Каждый код можно использовать только один раз.</div>
+        <div id="twoFactorBackupCodes" class="twofa-backup-grid"></div>
+        <button id="twoFactorCopyBackupBtn" class="login-primary-btn" type="button" onclick="copyTwoFactorBackupCodes()">Копировать все коды</button>
+        <button id="twoFactorBackupDoneBtn" class="export-cancel-btn" type="button" onclick="closeTwoFactorModal()">Я сохранил коды</button>
+      </div>
+    </div>
+    <div id="twoFactorManageFlow" style="display:none">
+      <div class="twofa-note" id="twoFactorManageHint">2FA включена. Для отключения или обновления резервных кодов подтвердите пароль и код 2FA.</div>
+      <label id="twoFactorManagePasswordLabel" for="twoFactorManagePassword">Текущий пароль</label><input id="twoFactorManagePassword" type="password" autocomplete="current-password" placeholder="Текущий пароль">
+      <label id="twoFactorManageCodeLabel" for="twoFactorManageCode">Код 2FA или резервный код</label><input id="twoFactorManageCode" type="text" autocomplete="one-time-code" maxlength="12" placeholder="000000">
+      <div class="twofa-manage-actions"><button id="twoFactorRegenerateBtn" class="add-debt-btn" type="button" onclick="regenerateTwoFactorBackupCodes()">Новые резервные коды</button><button id="twoFactorDisableBtn" class="twofa-danger" type="button" onclick="disableTwoFactor()">Отключить 2FA</button></div>
+    </div>
+    <div id="twoFactorMessage" class="login-message"></div>
+  </div>
+</div>
+
 <div class="modal" id="reduceDebtModal">
   <div class="modal-content">
     <h3 id="reduceDebtTitle">Уменьшить долг</h3>
@@ -2924,7 +2985,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
 </div>
 
 <script>
-const VERSION="5.6.0";
+const VERSION="5.7.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 let authToken = sessionStorage.getItem("authToken") || "";
@@ -2966,6 +3027,10 @@ let notificationPrefsSaveQueue = Promise.resolve();
 let securityEvents = [];
 let securityCenterData = null;
 let securityCenterLoading = false;
+let twoFactorLoginChallenge = "";
+let twoFactorSetupSecret = "";
+let twoFactorSetupUri = "";
+let twoFactorBackupCodes = [];
 let auditEntries = [];
 let auditActors = [];
 let auditLoading = false;
@@ -3782,6 +3847,9 @@ function applySecurityTranslations_(){
     userNameLabel:["Имя","Ном"],userEmailLabel:["Email / логин","Email / логин"],userRoleLabel:["Роль","Нақш"],userActiveLabel:["Пользователь активен","Истифодабаранда фаъол аст"],saveUserBtn:["Сохранить","Захира"],
     changePasswordTitle:["Изменить пароль","Иваз кардани парол"],changePasswordSubtitle:["После смены пароля все активные сессии будут завершены.","Пас аз иваз кардани парол ҳамаи сессияҳои фаъол баста мешаванд."],
     oldPasswordLabel:["Текущий пароль","Пароли ҷорӣ"],newPasswordLabel:["Новый пароль","Пароли нав"],confirmNewPasswordLabel:["Повторите новый пароль","Пароли навро такрор кунед"],changePasswordSaveBtn:["Изменить пароль","Иваз кардани парол"],
+    twoFactorTitle:["🛡 Двухфакторная защита","🛡 Муҳофизати дуомила"],twoFactorHint:["Дополнительный код из Google/Microsoft Authenticator или Authy. По умолчанию выключена.","Рамзи иловагӣ аз Google/Microsoft Authenticator ё Authy. Бо нобаёнӣ хомӯш аст."],
+    twoFactorLoginTitle:["Подтверждение входа","Тасдиқи вуруд"],twoFactorLoginSubtitle:["Введите 6-значный код из приложения-аутентификатора или резервный код.","Рамзи 6-рақама аз барномаи аутентификатор ё рамзи эҳтиётиро ворид кунед."],twoFactorLoginCodeLabel:["Код 2FA","Рамзи 2FA"],twoFactorLoginSubmitBtn:["Подтвердить","Тасдиқ"],twoFactorLoginCancelBtn:["Отмена","Бекор кардан"],
+    twoFactorModalTitle:["Двухфакторная защита","Муҳофизати дуомила"],twoFactorEnablePasswordHint:["Для включения подтвердите текущий пароль.","Барои фаъолкунӣ пароли ҷориро тасдиқ кунед."],twoFactorCurrentPasswordLabel:["Текущий пароль","Пароли ҷорӣ"],twoFactorStartBtn:["Продолжить","Идома"],twoFactorScanHint:["Отсканируйте QR-код в приложении-аутентификаторе или введите ключ вручную.","QR-кодро дар барномаи аутентификатор скан кунед ё калидро дастӣ ворид кунед."],twoFactorCopySecretBtn:["Копировать","Нусха"],twoFactorConfirmCodeLabel:["Код из приложения","Рамз аз барнома"],twoFactorEnableBtn:["Включить 2FA","Фаъол кардани 2FA"],twoFactorBackupHint:["Сохраните резервные коды в безопасном месте. Каждый код можно использовать только один раз.","Рамзҳои эҳтиётиро дар ҷои бехатар нигоҳ доред. Ҳар рамз танҳо як бор истифода мешавад."],twoFactorCopyBackupBtn:["Копировать все коды","Нусхаи ҳамаи рамзҳо"],twoFactorBackupDoneBtn:["Я сохранил коды","Рамзҳоро нигоҳ доштам"],twoFactorManageHint:["2FA включена. Для отключения или обновления резервных кодов подтвердите пароль и код 2FA.","2FA фаъол аст. Барои хомӯш кардан ё нав кардани рамзҳои эҳтиётӣ парол ва рамзи 2FA-ро тасдиқ кунед."],twoFactorManagePasswordLabel:["Текущий пароль","Пароли ҷорӣ"],twoFactorManageCodeLabel:["Код 2FA или резервный код","Рамзи 2FA ё рамзи эҳтиётӣ"],twoFactorRegenerateBtn:["Новые резервные коды","Рамзҳои эҳтиётии нав"],twoFactorDisableBtn:["Отключить 2FA","Хомӯш кардани 2FA"],
     notificationSettingsTitle:["🔔 Уведомления","🔔 Огоҳиномаҳо"],notificationSettingsHint:["Выберите, какие события показывать в центре уведомлений.","Интихоб кунед, ки кадом рӯйдодҳо дар маркази огоҳиномаҳо нишон дода шаванд."],
     notificationPrefDebtsLabel:["Долги и сроки","Қарзҳо ва муҳлатҳо"],notificationPrefDebtsHint:["Новые долги, изменения и просрочки","Қарзҳои нав, тағйирот ва муҳлатгузашта"],notificationPrefPaymentsLabel:["Оплаты","Пардохтҳо"],notificationPrefPaymentsHint:["Частичные и полные оплаты","Пардохтҳои қисман ва пурра"],
     notificationPrefUsersLabel:["Пользователи","Истифодабарандагон"],notificationPrefUsersHint:["Создание и изменение доступа","Эҷод ва тағйири дастрасӣ"],notificationPrefSecurityLabel:["Безопасность","Амният"],notificationPrefSecurityHint:["Входы, блокировки и изменение пароля","Вурудҳо, басташавӣ ва иваз кардани парол"],
@@ -3801,7 +3869,7 @@ function applySecurityTranslations_(){
   const pass=document.getElementById("passwordInput"); if(pass)pass.placeholder=securityText_("Пароль","Парол");
   document.querySelectorAll(".login-lang-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.lang===currentLanguage));
   if(document.getElementById("authFlowModal")?.style.display==="flex")renderAuthFlow_();
-  renderUsers_(); renderAccountSecurity_(); renderSecurityCenter_(); renderNotificationPreferences_(); renderNotifications_(); renderSecurityEvents_(); renderAuditLog_();
+  renderUsers_(); renderAccountSecurity_(); renderSecurityCenter_(); renderTwoFactorStatus_(); renderNotificationPreferences_(); renderNotifications_(); renderSecurityEvents_(); renderAuditLog_();
   const filterNames={all:["Все","Ҳама"],unread:["Новые","Нав"],debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],security:["Безопасность","Амният"],users:["Пользователи","Истифодабарандагон"]};
   document.querySelectorAll("[data-notification-filter]").forEach(btn=>{const v=filterNames[btn.dataset.notificationFilter]||filterNames.all;btn.textContent=currentLanguage==="tj"?v[1]:v[0];});
 }
@@ -3818,10 +3886,60 @@ async function login(){
       if(result.code==="LOCKED"&&result.retryAfterSeconds){const min=Math.ceil(Number(result.retryAfterSeconds)/60);msg=securityText_(`Вход временно заблокирован. Повторите примерно через ${min} мин.`,`Вуруд муваққатан баста шуд. Тақрибан пас аз ${min} дақиқа такрор кунед.`);}
       setMessage_("loginMessage",msg,"error"); return;
     }
+    if(result.requiresTwoFactor){
+      twoFactorLoginChallenge=String(result.challengeToken||"");
+      document.getElementById("passwordInput").value="";setMessage_("loginMessage","","");openTwoFactorLogin();return;
+    }
     authToken=result.token||""; currentUser=result.user||null; currentSeller=currentUser?.name||""; sessionStorage.setItem("authToken",authToken); cacheAuthUser_(currentUser);
     document.getElementById("passwordInput").value=""; setMessage_("loginMessage","",""); hideSessionResume_(); openApp();
   }catch(e){setMessage_("loginMessage",e.message||String(e),"error");}
   finally{if(btn){btn.disabled=false;btn.textContent=securityText_("Войти","Даромадан");}}
+}
+
+function openTwoFactorLogin(){
+  const m=document.getElementById("twoFactorLoginModal");if(!m)return;const input=document.getElementById("twoFactorLoginCode");if(input)input.value="";setMessage_("twoFactorLoginMessage","","");m.style.display="flex";setTimeout(()=>input?.focus(),80);
+}
+function closeTwoFactorLogin(){const m=document.getElementById("twoFactorLoginModal");if(m)m.style.display="none";twoFactorLoginChallenge="";setMessage_("twoFactorLoginMessage","","");}
+async function verifyTwoFactorLogin(){
+  const code=String(document.getElementById("twoFactorLoginCode")?.value||"").trim();if(!code){setMessage_("twoFactorLoginMessage",securityText_("Введите код","Рамзро ворид кунед"),"error");return;}
+  const btn=document.getElementById("twoFactorLoginSubmitBtn");if(btn)btn.disabled=true;
+  try{const r=await apiPost("auth.verify2fa",{challengeToken:twoFactorLoginChallenge,code},{public:true});if(!r.success){setMessage_("twoFactorLoginMessage",r.message||securityText_("Неверный код","Рамзи нодуруст"),"error");return;}document.getElementById("twoFactorLoginModal").style.display="none";twoFactorLoginChallenge="";authToken=r.token||"";currentUser=r.user||null;currentSeller=currentUser?.name||"";sessionStorage.setItem("authToken",authToken);cacheAuthUser_(currentUser);hideSessionResume_();openApp();}
+  catch(e){setMessage_("twoFactorLoginMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
+}
+function renderTwoFactorStatus_(){
+  const a=securityCenterData?.account||currentUser||{},enabled=!!a.twoFactorEnabled,status=document.getElementById("twoFactorStatus"),btn=document.getElementById("twoFactorActionBtn"),hint=document.getElementById("twoFactorHint");
+  if(status){status.textContent=enabled?securityText_("Включена","Фаъол"):securityText_("Выключена","Хомӯш");status.classList.toggle("on",enabled);status.classList.toggle("off",!enabled);}
+  if(btn)btn.textContent=enabled?securityText_("Управление 2FA","Идораи 2FA"):securityText_("Включить 2FA","Фаъол кардани 2FA");
+  if(hint){if(enabled){const when=a.twoFactorEnabledAt?` · ${securityText_("с","аз")} ${a.twoFactorEnabledAt}`:"",remaining=Number.isFinite(Number(a.backupCodesRemaining))?` · ${securityText_("резервных кодов","рамзҳои эҳтиётӣ")}: ${Number(a.backupCodesRemaining)}`:"";hint.textContent=securityText_("Дополнительная защита активна","Муҳофизати иловагӣ фаъол аст")+when+remaining;}else hint.textContent=securityText_("Дополнительный код из Google/Microsoft Authenticator или Authy. По умолчанию выключена.","Рамзи иловагӣ аз Google/Microsoft Authenticator ё Authy. Бо нобаёнӣ хомӯш аст.");}
+}
+function setTwoFactorStep_(step){["twoFactorEnablePasswordStep","twoFactorScanStep","twoFactorBackupStep"].forEach(id=>document.getElementById(id)?.classList.remove("active"));document.getElementById(step)?.classList.add("active");}
+function openTwoFactorManager(){
+  const enabled=!!(securityCenterData?.account?.twoFactorEnabled??currentUser?.twoFactorEnabled),modal=document.getElementById("twoFactorModal");if(!modal)return;setMessage_("twoFactorMessage","","");["twoFactorCurrentPassword","twoFactorConfirmCode","twoFactorManagePassword","twoFactorManageCode"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});twoFactorSetupSecret="";twoFactorSetupUri="";twoFactorBackupCodes=[];document.getElementById("twoFactorEnableFlow").style.display=enabled?"none":"block";document.getElementById("twoFactorManageFlow").style.display=enabled?"block":"none";document.getElementById("twoFactorModalSubtitle").textContent=enabled?securityText_("Защита включена для вашего аккаунта.","Муҳофизат барои ҳисоби шумо фаъол аст."):securityText_("Функция добровольная и включается только вами.","Функсия ихтиёрӣ аст ва танҳо аз ҷониби шумо фаъол мешавад.");if(!enabled)setTwoFactorStep_("twoFactorEnablePasswordStep");modal.style.display="flex";
+}
+function closeTwoFactorModal(){const m=document.getElementById("twoFactorModal");if(m)m.style.display="none";setMessage_("twoFactorMessage","","");}
+async function startTwoFactorSetup(){
+  const currentPassword=String(document.getElementById("twoFactorCurrentPassword")?.value||"");if(!currentPassword){setMessage_("twoFactorMessage",securityText_("Введите текущий пароль","Пароли ҷориро ворид кунед"),"error");return;}const btn=document.getElementById("twoFactorStartBtn");if(btn)btn.disabled=true;
+  try{const r=await apiPost("auth.2fa.setup",{currentPassword});if(!r.success){setMessage_("twoFactorMessage",r.message||"Error","error");return;}twoFactorSetupSecret=String(r.secret||"");twoFactorSetupUri=String(r.otpauthUri||"");document.getElementById("twoFactorSecret").textContent=twoFactorSetupSecret;const qr=document.getElementById("twoFactorQr");if(qr){qr.innerHTML="";try{if(window.QRCode)new QRCode(qr,{text:twoFactorSetupUri,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});else qr.innerHTML=`<div style="color:#111;text-align:center;padding:12px">${securityText_("QR недоступен — введите ключ вручную","QR дастнорас аст — калидро дастӣ ворид кунед")}</div>`;}catch(e){qr.innerHTML=`<div style="color:#111;text-align:center;padding:12px">${securityText_("Введите ключ вручную","Калидро дастӣ ворид кунед")}</div>`;}}setTwoFactorStep_("twoFactorScanStep");setMessage_("twoFactorMessage",securityText_("Добавьте аккаунт в Authenticator и введите текущий код.","Ҳисобро ба Authenticator илова карда, рамзи ҷориро ворид кунед."),"info");}
+  catch(e){setMessage_("twoFactorMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
+}
+async function confirmTwoFactorEnable(){
+  const code=String(document.getElementById("twoFactorConfirmCode")?.value||"").replace(/\D/g,"");if(code.length!==6){setMessage_("twoFactorMessage",securityText_("Введите 6-значный код","Рамзи 6-рақамаро ворид кунед"),"error");return;}const btn=document.getElementById("twoFactorEnableBtn");if(btn)btn.disabled=true;
+  try{const r=await apiPost("auth.2fa.enable",{code});if(!r.success){setMessage_("twoFactorMessage",r.message||"Error","error");return;}twoFactorBackupCodes=Array.isArray(r.backupCodes)?r.backupCodes:[];if(r.user){currentUser={...(currentUser||{}),...r.user};cacheAuthUser_(currentUser);}if(securityCenterData?.account){securityCenterData.account.twoFactorEnabled=true;securityCenterData.account.twoFactorEnabledAt=r.user?.twoFactorEnabledAt||"";securityCenterData.account.backupCodesRemaining=twoFactorBackupCodes.length;}renderBackupCodes_();setTwoFactorStep_("twoFactorBackupStep");renderTwoFactorStatus_();setMessage_("twoFactorMessage",securityText_("2FA включена. Сохраните резервные коды.","2FA фаъол шуд. Рамзҳои эҳтиётиро нигоҳ доред."),"success");}
+  catch(e){setMessage_("twoFactorMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
+}
+function renderBackupCodes_(){const box=document.getElementById("twoFactorBackupCodes");if(box)box.innerHTML=twoFactorBackupCodes.map(c=>`<div class="twofa-backup-code">${escapeHtml(c)}</div>`).join("");}
+async function clipboardWrite_(text){try{await navigator.clipboard.writeText(String(text||""));return true;}catch(e){const ta=document.createElement("textarea");ta.value=String(text||"");document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand("copy");}catch(x){}ta.remove();return ok;}}
+async function copyTwoFactorSecret(){if(await clipboardWrite_(twoFactorSetupSecret))showToast(`✅ <b>${securityText_("Ключ скопирован","Калид нусха шуд")}</b>`,"success");}
+async function copyTwoFactorBackupCodes(){if(await clipboardWrite_(twoFactorBackupCodes.join("\n")))showToast(`✅ <b>${securityText_("Резервные коды скопированы","Рамзҳои эҳтиётӣ нусха шуданд")}</b>`,"success");}
+async function disableTwoFactor(){
+  const currentPassword=String(document.getElementById("twoFactorManagePassword")?.value||""),code=String(document.getElementById("twoFactorManageCode")?.value||"").trim();if(!currentPassword||!code){setMessage_("twoFactorMessage",securityText_("Введите пароль и код 2FA","Парол ва рамзи 2FA-ро ворид кунед"),"error");return;}if(!window.confirm(securityText_("Отключить двухфакторную защиту?","Муҳофизати дуомиларо хомӯш кунед?")))return;const btn=document.getElementById("twoFactorDisableBtn");if(btn)btn.disabled=true;
+  try{const r=await apiPost("auth.2fa.disable",{currentPassword,code});if(!r.success){setMessage_("twoFactorMessage",r.message||"Error","error");return;}if(r.user){currentUser={...(currentUser||{}),...r.user};cacheAuthUser_(currentUser);}closeTwoFactorModal();securityCenterData=null;await loadSecurityCenter();showToast(`✅ <b>${securityText_("2FA отключена","2FA хомӯш шуд")}</b>`,"success");}
+  catch(e){setMessage_("twoFactorMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
+}
+async function regenerateTwoFactorBackupCodes(){
+  const currentPassword=String(document.getElementById("twoFactorManagePassword")?.value||""),code=String(document.getElementById("twoFactorManageCode")?.value||"").trim();if(!currentPassword||!code){setMessage_("twoFactorMessage",securityText_("Введите пароль и код 2FA","Парол ва рамзи 2FA-ро ворид кунед"),"error");return;}if(!window.confirm(securityText_("Старые резервные коды перестанут работать. Продолжить?","Рамзҳои эҳтиётии кӯҳна дигар кор намекунанд. Идома диҳем?")))return;const btn=document.getElementById("twoFactorRegenerateBtn");if(btn)btn.disabled=true;
+  try{const r=await apiPost("auth.2fa.backup.regenerate",{currentPassword,code});if(!r.success){setMessage_("twoFactorMessage",r.message||"Error","error");return;}twoFactorBackupCodes=Array.isArray(r.backupCodes)?r.backupCodes:[];document.getElementById("twoFactorEnableFlow").style.display="block";document.getElementById("twoFactorManageFlow").style.display="none";renderBackupCodes_();setTwoFactorStep_("twoFactorBackupStep");setMessage_("twoFactorMessage",securityText_("Созданы новые резервные коды.","Рамзҳои эҳтиётии нав сохта шуданд."),"success");}
+  catch(e){setMessage_("twoFactorMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
 }
 function openPasswordReset(){authFlowMode="reset";authFlowStep="request";const src=document.getElementById("emailInput");const dst=document.getElementById("authEmailInput");if(dst)dst.value=src?.value||"";renderAuthFlow_();document.getElementById("authFlowModal").style.display="flex";}
 function closeAuthFlow(){document.getElementById("authFlowModal").style.display="none";setMessage_("authFlowMessage","","");["authCodeInput","authNewPasswordInput","authConfirmPasswordInput"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});}
@@ -3914,6 +4032,7 @@ function renderSecurityCenter_(){
   if(events)events.innerHTML=ownEvents.length?ownEvents.map(e=>`<div class="security-own-event"><div class="security-own-event-top"><b>${escapeHtml(securityEventLabel_(e.event))}</b><span class="security-own-event-time">${escapeHtml(e.date||"")}</span></div><div class="security-own-event-detail">${escapeHtml(e.details||"")}</div></div>`).join(""):`<div class="security-empty">${securityText_("Событий пока нет","Ҳоло рӯйдод нест")}</div>`;
   const all=Array.isArray(securityCenterData.allSessions)?securityCenterData.allSessions:[];
   if(allBox)allBox.innerHTML=all.length?all.map(s=>securitySessionHtml_(s,true)).join(""):`<div class="security-empty">${securityText_("Активных сессий пользователей нет","Сессияи фаъоли истифодабарандагон нест")}</div>`;
+  renderTwoFactorStatus_();
 }
 async function loadSecurityCenter(){
   if(securityCenterLoading||!authToken)return;securityCenterLoading=true;
@@ -3951,7 +4070,7 @@ function renderUsers_(){
   if(!appUsers.length){box.innerHTML=`<div class="settings-hint">${securityText_("Пользователей пока нет","Ҳоло истифодабаранда нест")}</div>`;return;}
   box.innerHTML=appUsers.map(u=>{
     const active=u.active!==false,verified=!!u.emailVerified,manageable=canManageUserClient_(u);
-    const badges=`<span class="user-badge">${escapeHtml(roleLabel_(u.role))}</span><span class="user-badge ${active?'ok':'off'}">${active?securityText_("Активен","Фаъол"):securityText_("Отключен","Хомӯш")}</span>${verified?'':`<span class="user-badge warn">${securityText_("Пароль не установлен","Парол гузошта нашудааст")}</span>`}`;
+    const badges=`<span class="user-badge">${escapeHtml(roleLabel_(u.role))}</span><span class="user-badge ${active?'ok':'off'}">${active?securityText_("Активен","Фаъол"):securityText_("Отключен","Хомӯш")}</span>${verified?'':`<span class="user-badge warn">${securityText_("Пароль не установлен","Парол гузошта нашудааст")}</span>`}${u.twoFactorEnabled?`<span class="user-badge ok">2FA</span>`:""}`;
     const actions=manageable?`<button class="user-mini-btn" onclick="openUserModal('${escapeAttr_(u.id)}')">${securityText_("Изменить","Тағйир")}</button>${!verified?`<button class="user-mini-btn" onclick="resendInvite('${escapeAttr_(u.id)}')">${securityText_("Отправить инструкцию","Фиристодани дастур")}</button>`:""}`:"";
     return `<div class="user-row"><div class="user-row-main"><div class="user-row-name">${escapeHtml(u.name||"—")}</div><div class="user-row-email">${escapeHtml(u.email||"")}</div><div class="user-row-meta">${badges}</div></div><div class="user-row-actions">${actions}</div></div>`;
   }).join("");
@@ -4218,8 +4337,8 @@ async function openNotificationItem(id){
   else if(n.entityType==="security") {showView("settings");setTimeout(()=>document.getElementById(canPermission("security")?"securityEventsCard":"accountSecurityCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}
 }
 function securityEventLabel_(event){
-  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",SESSION_REVOKED:"Сессия завершена",OTHER_SESSIONS_REVOKED:"Другие сессии завершены",ALL_SESSIONS_REVOKED:"Все сессии завершены",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений"};
-  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Дастури дастрасӣ фиристода шуд",LOGOUT:"Баромад",SESSION_REVOKED:"Сессия баста шуд",OTHER_SESSIONS_REVOKED:"Сессияҳои дигар баста шуданд",ALL_SESSIONS_REVOKED:"Ҳама сессияҳо баста шуданд",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома"};return (currentLanguage==="tj"?tj:ru)[event]||event;
+  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",SESSION_REVOKED:"Сессия завершена",OTHER_SESSIONS_REVOKED:"Другие сессии завершены",ALL_SESSIONS_REVOKED:"Все сессии завершены",TWO_FACTOR_SETUP_STARTED:"Настройка 2FA",TWO_FACTOR_ENABLED:"2FA включена",TWO_FACTOR_DISABLED:"2FA отключена",TWO_FACTOR_BACKUP_REGENERATED:"Резервные коды 2FA",LOGIN_2FA_REQUIRED:"Ожидание 2FA",LOGIN_2FA_SUCCESS:"2FA подтверждена",LOGIN_2FA_FAILED:"Ошибка 2FA",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений"};
+  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Дастури дастрасӣ фиристода шуд",LOGOUT:"Баромад",SESSION_REVOKED:"Сессия баста шуд",OTHER_SESSIONS_REVOKED:"Сессияҳои дигар баста шуданд",ALL_SESSIONS_REVOKED:"Ҳама сессияҳо баста шуданд",TWO_FACTOR_SETUP_STARTED:"Танзими 2FA",TWO_FACTOR_ENABLED:"2FA фаъол шуд",TWO_FACTOR_DISABLED:"2FA хомӯш шуд",TWO_FACTOR_BACKUP_REGENERATED:"Рамзҳои эҳтиётии 2FA",LOGIN_2FA_REQUIRED:"Интизории 2FA",LOGIN_2FA_SUCCESS:"2FA тасдиқ шуд",LOGIN_2FA_FAILED:"Хатои 2FA",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома"};return (currentLanguage==="tj"?tj:ru)[event]||event;
 }
 async function loadSecurityEvents(){
   if(!canPermission("security"))return;const box=document.getElementById("securityEventsList");if(box)box.innerHTML=`<div class="settings-hint">${securityText_("Загрузка...","Боркунӣ...")}</div>`;
