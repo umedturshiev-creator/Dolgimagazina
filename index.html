@@ -2360,7 +2360,7 @@ html[data-theme="light"] .audit-item,html[data-theme="light"] .audit-diff-col{ba
 html[data-theme="light"] .debt-responsible-box{background:#eff6ff;border-color:#dbeafe}
 
 
-/* ===== TEAM ANALYTICS v5.8.0 ===== */
+/* ===== SETTINGS UX v5.8.1 ===== */
 .team-analytics-shell{display:flex;flex-direction:column;gap:12px}
 .team-analytics-toolbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .team-analytics-heading{min-width:0}.team-analytics-heading b{display:block;font-size:14px;color:var(--text-1)}.team-analytics-heading small{display:block;margin-top:4px;font-size:11px;line-height:1.45;color:var(--text-3)}
@@ -2444,6 +2444,18 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
 .twofa-step{display:none}.twofa-step.active{display:block}.twofa-note{font-size:12px;line-height:1.5;color:var(--muted);margin:6px 0 12px}.twofa-backup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.twofa-backup-code{font-family:monospace;font-weight:800;letter-spacing:1px;text-align:center;padding:10px;border-radius:12px;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.15)}
 .twofa-manage-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.twofa-danger{background:linear-gradient(135deg,#ef4444,#dc2626)!important;color:#fff!important}.twofa-login-modal .auth-flow-content{max-width:430px}.twofa-login-code{text-align:center;font-size:22px!important;letter-spacing:5px!important;font-weight:800}.twofa-backup-login{letter-spacing:2px!important;text-transform:uppercase}
 @media(max-width:700px){.two-factor-box{align-items:stretch;flex-direction:column}.two-factor-actions{justify-content:stretch}.two-factor-actions button{width:100%!important}.twofa-backup-grid,.twofa-manage-actions{grid-template-columns:1fr}.twofa-qr{min-width:160px;min-height:160px}}
+
+/* ===== SETTINGS UX + HELP v5.8.1 ===== */
+.settings-topbar-card{padding:16px 18px!important;margin-bottom:14px;display:flex;flex-direction:column;gap:12px}
+.settings-topbar-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}.settings-topbar-title{font-size:18px;font-weight:900;color:var(--text-1)}.settings-topbar-sub{font-size:12px;color:var(--text-3);margin-top:4px}
+.settings-search-wrap{position:relative}.settings-search-input{width:100%;padding:12px 14px 12px 40px;border-radius:14px;border:1px solid rgba(148,163,184,.14);background:rgba(148,163,184,.08);color:var(--text-1);font-size:14px;outline:none}.settings-search-wrap:before{content:"🔎";position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;opacity:.8}
+.settings-quick-nav{display:flex;gap:8px;overflow:auto;padding-bottom:2px;scrollbar-width:none}.settings-quick-nav::-webkit-scrollbar{display:none}.settings-quick-chip{width:auto!important;min-width:max-content!important;margin:0!important;padding:8px 12px!important;border-radius:999px!important;border:1px solid rgba(148,163,184,.14)!important;background:rgba(148,163,184,.08)!important;color:var(--text-2)!important;box-shadow:none!important;font-size:12px!important;font-weight:800!important}
+.settings-quick-chip:hover{transform:none!important;background:rgba(59,130,246,.14)!important;color:#bfdbfe!important}.settings-card-hidden{display:none!important}
+.settings-grid-v531{gap:14px!important}.settings-card{scroll-margin-top:92px}
+.settings-help-card .help-summary{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:start}.help-list{display:grid;gap:10px}.help-step{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:14px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.1)}.help-step-num{width:24px;height:24px;border-radius:999px;background:linear-gradient(135deg,var(--primary-1),var(--primary-2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0}.help-step b{display:block;font-size:13px;margin-bottom:2px}.help-step span{font-size:12px;color:var(--text-2);line-height:1.45}.help-side{padding:12px 14px;border-radius:16px;background:rgba(59,130,246,.10);border:1px solid rgba(96,165,250,.16)}.help-side b{display:block;margin-bottom:8px}.help-side ul{margin:0;padding-left:18px;color:var(--text-2);font-size:12px;line-height:1.55}.help-open-btn{width:auto!important;min-width:max-content!important}.help-guide-modal .modal-content{max-width:780px;width:min(780px,96vw);max-height:88vh;overflow:auto}.help-guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}.help-guide-item{padding:14px;border-radius:16px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.1)}.help-guide-item h4{margin:0 0 8px;font-size:14px}.help-guide-item p,.help-guide-item li{font-size:12px;line-height:1.55;color:var(--text-2)}.help-guide-item ul{margin:0;padding-left:18px}.settings-highlight{box-shadow:0 0 0 2px rgba(59,130,246,.36),0 16px 36px rgba(59,130,246,.14)!important;transition:box-shadow .25s ease}
+html[data-theme="light"] .settings-search-input,html[data-theme="light"] .help-step,html[data-theme="light"] .help-guide-item{background:#f8fafc;border-color:#e2e8f0}html[data-theme="light"] .help-side{background:#eff6ff;border-color:#dbeafe}
+@media(max-width:900px){.settings-help-card .help-summary{grid-template-columns:1fr}.help-guide-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.header{flex-wrap:wrap;align-items:flex-start;padding:12px 12px 10px}.header-center{order:1;flex:1 0 100%;text-align:left}.header-left{order:2;min-width:auto}.header-right{order:3;min-width:auto;margin-left:auto;gap:6px!important}.user-meta{justify-content:flex-start}.settings-topbar-card{padding:13px!important}.settings-topbar-head{flex-direction:column}.settings-search-input{font-size:16px}.settings-help-card .help-summary{grid-template-columns:1fr}.help-step{padding:10px}.help-open-btn{width:100%!important}.notification-head{align-items:center}.notification-head-actions{flex-shrink:0}.notification-toolbar{align-items:stretch!important}.notification-bulk-actions{width:100%;justify-content:space-between}.notification-filters{width:100%}.notification-drawer{padding-top:14px!important}.notification-badge{top:-4px;right:-4px;min-width:17px;height:17px;font-size:9px}}
 
 </style>
 </head>
@@ -2642,8 +2654,29 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
 
   <section id="view-settings" class="app-view">
     <h3 id="settingsTitle" class="view-title">Настройки</h3>
+    <div class="card settings-card settings-topbar-card">
+      <div class="settings-topbar-head">
+        <div>
+          <div class="settings-topbar-title">⚙️ Центр настроек</div>
+          <div class="settings-topbar-sub">Быстрый поиск по настройкам, переход по разделам и инструкция по работе.</div>
+        </div>
+        <button class="user-mini-btn help-open-btn" type="button" onclick="openHelpGuideModal()">📘 Инструкция</button>
+      </div>
+      <div class="settings-search-wrap">
+        <input id="settingsSearchInput" class="settings-search-input" type="search" placeholder="Поиск: уведомления, пароль, 2FA, пользователи, журнал…" oninput="filterSettingsCards_()">
+      </div>
+      <div class="settings-quick-nav">
+        <button class="settings-quick-chip" type="button" onclick="focusSettingsSection_('appearance')">Интерфейс</button>
+        <button class="settings-quick-chip" type="button" onclick="focusSettingsSection_('notifications')">Уведомления</button>
+        <button class="settings-quick-chip" type="button" onclick="focusSettingsSection_('security')">Безопасность</button>
+        <button class="settings-quick-chip" type="button" onclick="focusSettingsSection_('users')">Пользователи</button>
+        <button class="settings-quick-chip" type="button" onclick="focusSettingsSection_('guide')">Инструкция</button>
+        <button class="settings-quick-chip" type="button" onclick="focusSettingsSection_('actions')">Действия</button>
+      </div>
+    </div>
+
     <div class="settings-grid settings-grid-v531">
-      <div class="card settings-card settings-appearance-card">
+      <div id="settingsSectionAppearance" data-settings-card="appearance" data-settings-keywords="интерфейс язык тема светлая темная читаемость" class="card settings-card settings-appearance-card">
         <div class="settings-section-head">
           <div>
             <b id="settingsAppearanceTitle">✨ Интерфейс</b>
@@ -2675,7 +2708,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
           </div>
         </div>
       </div>
-      <div class="card settings-card notification-settings-card" id="notificationSettingsCard">
+      <div id="notificationSettingsCard" data-settings-card="notifications" data-settings-keywords="уведомления оплата долги пользователи безопасность звук браузер" class="card settings-card notification-settings-card">
         <b id="notificationSettingsTitle">🔔 Уведомления</b>
         <div id="notificationSettingsHint" class="settings-hint">Выберите, какие события показывать в центре уведомлений.</div>
         <div class="notification-pref-grid">
@@ -2688,7 +2721,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
         </div>
         <div id="notificationSettingsStatus" class="notification-settings-status"></div>
       </div>
-      <div class="card settings-card security-center-card settings-wide-card" id="accountSecurityCard">
+      <div id="accountSecurityCard" data-settings-card="security" data-settings-keywords="security center пароль сессии устройства 2fa двухфакторная защита безопасность" class="card settings-card security-center-card settings-wide-card">
         <div class="security-center-head">
           <div><b id="accountSecurityTitle">🔐 Security Center</b><div id="securityCenterHint" class="settings-hint">Устройства, активные сессии и защита аккаунта.</div></div>
           <div class="security-center-head-actions"><button id="securityCenterRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityCenter()">Обновить</button></div>
@@ -2709,7 +2742,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
           <div id="securityOwnEvents" class="security-own-events"><div class="security-empty">Загрузка…</div></div>
         </div>
       </div>
-      <div class="card settings-card users-settings-card settings-wide-card" id="usersSettingsCard" style="display:none;">
+      <div id="usersSettingsCard" data-settings-card="users" data-settings-keywords="пользователи доступ роли сотрудники email приглашение" class="card settings-card users-settings-card settings-wide-card" style="display:none;">
         <div class="users-card-head">
           <div>
             <b id="usersSettingsTitle">👥 Пользователи</b>
@@ -2719,15 +2752,41 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
         </div>
         <div id="usersList" class="users-list"><div class="settings-hint">Загрузка...</div></div>
       </div>
-      <div class="card settings-card security-all-sessions-card settings-wide-card" id="securityAllSessionsCard" style="display:none;">
+      <div id="securityAllSessionsCard" data-settings-card="security" data-settings-keywords="активные сессии пользователей устройства безопасность" class="card settings-card security-all-sessions-card settings-wide-card" style="display:none;">
         <div class="security-events-head"><div><b id="securityAllSessionsTitle">🖥 Активные сессии пользователей</b><div id="securityAllSessionsHint" class="settings-hint">Владелец может завершить отдельную сессию сотрудника.</div></div><button id="securityAllSessionsRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityCenter()">Обновить</button></div>
         <div id="securityAllSessionsList" class="security-all-sessions-list"><div class="security-empty">Загрузка…</div></div>
       </div>
-      <div class="card settings-card security-events-card settings-wide-card" id="securityEventsCard" style="display:none;">
+      <div id="securityEventsCard" data-settings-card="security" data-settings-keywords="события безопасности вход блокировка журнал" class="card settings-card security-events-card settings-wide-card" style="display:none;">
         <div class="security-events-head"><div><b id="securityEventsTitle">🛡 События безопасности</b><div id="securityEventsHint" class="settings-hint">Последние события. Список прокручивается.</div></div><button id="securityEventsRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityEvents()">Обновить</button></div>
         <div id="securityEventsList" class="security-events-list"><div class="settings-hint">Загрузка...</div></div>
       </div>
-      <div class="card settings-card settings-actions-card settings-wide-card">
+      <div id="settingsSectionGuide" data-settings-card="guide" data-settings-keywords="инструкция помощь как работать добавить долг оплата статистика экспорт" class="card settings-card settings-help-card settings-wide-card">
+        <div class="users-card-head">
+          <div>
+            <b>📘 Инструкция по работе</b>
+            <div class="settings-hint">Краткий справочник по основным действиям и безопасности.</div>
+          </div>
+          <button class="user-mini-btn help-open-btn" type="button" onclick="openHelpGuideModal()">Открыть</button>
+        </div>
+        <div class="help-summary">
+          <div class="help-list">
+            <div class="help-step"><div class="help-step-num">1</div><div><b>Добавление долга</b><span>Укажите телефон, имя клиента, сумму и срок оплаты. При необходимости сразу назначьте ответственного.</span></div></div>
+            <div class="help-step"><div class="help-step-num">2</div><div><b>Оплаты и изменения</b><span>Частичную оплату, полное погашение, уменьшение или увеличение долга вносите из карточки клиента.</span></div></div>
+            <div class="help-step"><div class="help-step-num">3</div><div><b>Контроль работы</b><span>Используйте статистику, аналитику команды, уведомления и журнал действий для ежедневного контроля.</span></div></div>
+          </div>
+          <div class="help-side">
+            <b>Что важно помнить</b>
+            <ul>
+              <li>Не передавайте пароль другим сотрудникам.</li>
+              <li>При необходимости включите 2FA в Security Center.</li>
+              <li>Экспорт и журнал действий доступны из настроек и соответствующих разделов.</li>
+              <li>Если уведомление касается вашего собственного действия, оно больше не будет приходить вам в центр уведомлений.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="settingsSectionActions" data-settings-card="actions" data-settings-keywords="действия экспорт журнал обновить выйти" class="card settings-card settings-actions-card settings-wide-card">
         <b id="settingsActionsTitle">🛠 Действия</b>
         <div class="settings-actions">
           <button id="settingsRefreshBtn" class="add-debt-btn" onclick="forceAppUpdate()">Обновить данные</button>
@@ -3011,7 +3070,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
 </div>
 
 <script>
-const VERSION="5.8.0";
+const VERSION="5.8.1";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 let authToken = sessionStorage.getItem("authToken") || "";
@@ -4261,6 +4320,14 @@ function notificationCategoryLabel_(cat){
 function notificationIcon_(cat,type){
   if(cat==="payments")return type==="PAYMENT_FULL"?"✅":"💵"; if(cat==="security")return type==="ACCOUNT_LOCKED"?"🚨":"🛡"; if(cat==="users")return "👥"; if(cat==="debts")return type==="OVERDUE"?"⚠️":type==="DEBT_REDUCE"?"➖":"💳"; return "🔔";
 }
+function notificationVisibleToCurrentUser_(n){
+  if(!n) return false;
+  const actorId=String(n.actorId||'');
+  const me=String(currentUser?.id||'');
+  if(actorId && me && actorId===me) return false;
+  return true;
+}
+
 function updateNotificationBadge_(count){
   const badge=document.getElementById("notificationBadge");if(!badge)return;const n=Math.max(0,Number(count||0));badge.textContent=n>99?"99+":String(n);badge.classList.toggle("show",n>0);
 }
@@ -4304,6 +4371,27 @@ async function saveNotificationPreferences(requestBrowser=false){
   try{await notificationPrefsSaveQueue;}catch(e){return;}
   if(revision===notificationPrefsRevision)await loadNotifications({silent:true,forcePreferences:true});
 }
+function openHelpGuideModal(){const m=document.getElementById("helpGuideModal");if(!m)return;m.style.display="flex";document.body.style.overflow="hidden";}
+function closeHelpGuideModal(){const m=document.getElementById("helpGuideModal");if(!m)return;m.style.display="none";document.body.style.overflow="";}
+function getSettingsCards_(){return Array.from(document.querySelectorAll('#view-settings [data-settings-card]'));}
+function filterSettingsCards_(){
+  const q=String(document.getElementById('settingsSearchInput')?.value||'').trim().toLowerCase();
+  const cards=getSettingsCards_();
+  cards.forEach(card=>{
+    const text=((card.dataset.settingsKeywords||'')+' '+(card.textContent||'')).toLowerCase();
+    const show=!q||text.indexOf(q)>=0;
+    card.classList.toggle('settings-card-hidden',!show);
+  });
+}
+function focusSettingsSection_(name){
+  const map={appearance:'settingsSectionAppearance',notifications:'notificationSettingsCard',security:'accountSecurityCard',users:'usersSettingsCard',guide:'settingsSectionGuide',actions:'settingsSectionActions'};
+  const input=document.getElementById('settingsSearchInput');
+  if(input){input.value=''; filterSettingsCards_();}
+  const el=document.getElementById(map[name]||name); if(!el)return;
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+  el.classList.add('settings-highlight'); setTimeout(()=>el.classList.remove('settings-highlight'),1600);
+}
+
 function playNotificationTone_(){
   if(!notificationPreferences?.sound)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ctx=new AC(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.frequency.value=720;gain.gain.setValueAtTime(.045,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.16);osc.start();osc.stop(ctx.currentTime+.17);setTimeout(()=>ctx.close(),250);}catch(e){}
 }
@@ -4315,10 +4403,10 @@ async function loadNotifications(options={}){
   if(!authToken)return;const silent=options.silent===true;const revisionAtStart=notificationPrefsRevision;
   try{
     const r=await apiPost("notifications.list",{limit:100});if(!r.success)throw new Error(r.message||"Error");
-    appNotifications=Array.isArray(r.notifications)?r.notifications:[];
+    appNotifications=(Array.isArray(r.notifications)?r.notifications:[]).filter(notificationVisibleToCurrentUser_);
     const mayApplyPrefs=options.forcePreferences===true||(notificationPrefsPending===0&&revisionAtStart===notificationPrefsRevision);
     if(mayApplyPrefs)notificationPreferences=r.preferences||notificationPreferences||{};
-    updateNotificationBadge_(r.unreadCount||0);renderNotificationPreferences_();renderNotifications_();
+    updateNotificationBadge_(appNotifications.filter(x=>!x.isRead).length);renderNotificationPreferences_();renderNotifications_();
     const newest=appNotifications.find(n=>!n.isRead);
     if(!notificationFirstLoad&&newest&&newest.id&&newest.id!==notificationTopUnreadId){playNotificationTone_();showBrowserNotification_(newest);}
     notificationFirstLoad=false;if(newest?.id){notificationTopUnreadId=newest.id;sessionStorage.setItem("notificationTopUnreadId",newest.id);}
@@ -6017,5 +6105,20 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
+<div class="modal help-guide-modal" id="helpGuideModal" onclick="if(event.target.id==='helpGuideModal')closeHelpGuideModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <h3>📘 Инструкция по работе</h3>
+    <div class="help-guide-grid">
+      <div class="help-guide-item"><h4>1. Работа с долгами</h4><ul><li>Создавайте долг во вкладке «Добавить долг».</li><li>Используйте поиск по имени или телефону.</li><li>Назначайте ответственного, если над долгом работает конкретный сотрудник.</li></ul></div>
+      <div class="help-guide-item"><h4>2. Приём оплат</h4><ul><li>Откройте карточку должника и нажмите «Оплатить».</li><li>Для полного закрытия используйте полное погашение.</li><li>Все изменения автоматически пишутся в журнал действий.</li></ul></div>
+      <div class="help-guide-item"><h4>3. Уведомления</h4><ul><li>В центре уведомлений отображаются сроки, просрочки, оплаты и события безопасности.</li><li>Собственные действия пользователя больше не дублируются ему же уведомлением.</li><li>Лишние уведомления можно удалить по одному или очистить все сразу.</li></ul></div>
+      <div class="help-guide-item"><h4>4. Безопасность</h4><ul><li>Меняйте пароль в Security Center.</li><li>При необходимости включайте 2FA самостоятельно.</li><li>Завершайте лишние сессии и устройства прямо из Security Center.</li></ul></div>
+      <div class="help-guide-item"><h4>5. Команда и права</h4><ul><li>Владелец и администратор видят больше разделов и настроек.</li><li>Менеджер и кассир работают в рамках своих прав.</li><li>Назначение ответственных помогает разделять базу на «мои долги».</li></ul></div>
+      <div class="help-guide-item"><h4>6. Аналитика и экспорт</h4><ul><li>Во вкладке «Статистика» смотрите общие показатели и аналитику команды.</li><li>Экспортируйте данные в Excel/PDF из меню экспорта.</li><li>Журнал действий помогает понять, кто и что менял.</li></ul></div>
+    </div>
+    <button onclick="closeHelpGuideModal()">Закрыть</button>
+  </div>
+</div>
+
 </body>
 </html>
