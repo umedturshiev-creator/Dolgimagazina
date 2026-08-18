@@ -2508,6 +2508,9 @@ html[data-theme="dark"] .debt-head-metric-v2,html[data-theme="dark"] .debt-row-v
   #debtList.debt-list-v2{gap:11px!important}.debt-row-v2{display:block!important;padding:14px!important;border-radius:21px!important}.debt-row-v2.is-overdue{background:linear-gradient(145deg,rgba(254,226,226,.90),rgba(255,255,255,.84))!important}.debt-client-name-v2{font-size:16px}.debt-client-meta-v2{font-size:12px}.debt-copy-btn-v2{display:none!important}.debt-finance-v2{margin-top:10px;grid-template-columns:repeat(3,minmax(0,1fr))}.debt-finance-cell-v2{padding:8px 7px}.debt-finance-cell-v2 b{font-size:12px}.debt-responsible-v2{margin-top:10px;padding:10px 11px;border-radius:14px;background:#eff6ff;border:1px solid #dbeafe}.debt-responsible-v2 .debt-responsible-btn{float:right;margin-top:-26px!important}.debt-actions-v2{margin-top:10px;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.debt-actions-v2 button,.debt-actions-v2 a{min-height:44px!important;font-size:13px!important;border-radius:13px!important}.debt-actions-v2 .history-action-btn{grid-column:1/-1}.debt-actions-v2 .desktop-wa-btn{display:none!important}.debt-mobile-extra-v2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}.debt-mobile-extra-v2 a{min-height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;font-weight:850}.debt-mobile-call-v2{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff}.debt-mobile-wa-v2{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff}
   html[data-theme="dark"] .debt-row-v2.is-overdue{background:linear-gradient(145deg,rgba(127,29,29,.34),rgba(15,23,42,.84))!important}html[data-theme="dark"] .debt-responsible-v2{background:rgba(37,99,235,.10);border-color:rgba(96,165,250,.14)}
 }
+
+/* ===== FAST AUTH / DATA FIX v5.8.9 ===== */
+.debt-load-error-v589{max-width:620px!important;display:grid!important;gap:10px!important;color:var(--text-2)!important}.debt-load-error-v589 b{color:var(--danger-1)!important}.debt-load-error-v589 button{width:auto!important;justify-self:start!important;margin:0!important}
 </style>
 </head>
 <body>
@@ -3222,7 +3225,7 @@ html[data-theme="dark"] .debt-head-metric-v2,html[data-theme="dark"] .debt-row-v
 </div>
 
 <script>
-const VERSION="5.8.8";
+const VERSION="5.8.9";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4096,10 +4099,18 @@ async function apiPost(action,payload={},options={}){
   const tokenOverride=Object.prototype.hasOwnProperty.call(options,"token")?options.token:null;
   const token=tokenOverride!==null?tokenOverride:(publicAction?"":authToken);
   if(token)body.token=token;
+  const timeoutMs=Number(options.timeoutMs||((action==="auth.login"||action==="auth.verify2fa")?25000:(action==="data.stats"?60000:30000)));
+  const controller=typeof AbortController!=="undefined"?new AbortController():null;
+  const timer=controller?setTimeout(()=>controller.abort(),timeoutMs):null;
   let response;
   try{
-    response=await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(body)});
-  }catch(e){ throw new Error(securityText_("Нет связи с сервером","Пайвастшавӣ ба сервер нест")); }
+    response=await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(body),signal:controller?controller.signal:undefined});
+  }catch(e){
+    if(timer)clearTimeout(timer);
+    if(e&&e.name==="AbortError")throw new Error(securityText_("Сервер не ответил вовремя. Повторите ещё раз.","Сервер сари вақт ҷавоб надод. Боз такрор кунед."));
+    throw new Error(securityText_("Нет связи с сервером","Пайвастшавӣ ба сервер нест"));
+  }
+  if(timer)clearTimeout(timer);
   let data;
   try{data=await response.json();}catch(e){throw new Error(securityText_("Сервер вернул некорректный ответ","Ҷавоби сервер нодуруст аст"));}
   const authCodes=["AUTH_REQUIRED","SESSION_INVALID","SESSION_EXPIRED","ACCOUNT_DISABLED"];
@@ -4159,9 +4170,9 @@ async function login(){
   setMessage_("loginMessage",securityText_("Проверяем данные...","Санҷиши маълумот..."),"info");
   let loginSlowTimer=setTimeout(()=>{
     setMessage_("loginMessage",securityText_("Сервер отвечает дольше обычного. Продолжаем вход…","Сервер дертар ҷавоб медиҳад. Вуруд идома дорад…"),"info");
-  },8000);
+  },5000);
   try{
-    const result=await apiPost("auth.login",{email,password,device:getClientDeviceInfo_()},{public:true});
+    const result=await apiPost("auth.login",{email,password,device:getClientDeviceInfo_()},{public:true,timeoutMs:25000});
     clearTimeout(loginSlowTimer);
     if(!result.success){
       let msg=result.message||securityText_("Не удалось войти","Вуруд имкон нашуд");
@@ -5075,15 +5086,22 @@ function applyDebtData_(data){
   refreshOpenStatsDetail_();
   return data;
 }
+function renderDebtLoadError_(message){
+  debtDataReady=false;
+  const msg=escapeHtml(String(message||securityText_("Не удалось загрузить данные","Маълумот бор нашуд")));
+  if(debtList)debtList.innerHTML=`<div class="card debt-empty-v2 debt-load-error-v589"><b>⚠️ ${securityText_("Данные не загрузились","Маълумот бор нашуд")}</b><div>${msg}</div><button class="add-debt-btn" type="button" onclick="loadDebts({forceFresh:true})">${securityText_("Повторить","Такрор")}</button></div>`;
+  const count=document.getElementById("debtScopeCount");if(count)count.textContent=securityText_("Ошибка загрузки","Хатои боркунӣ");
+}
 async function loadDebts(options={}){
   const forceFresh=options.forceFresh===true;
   try{
-    let data=await apiPost("data.get", {forceFresh});
-    if(data&&data.success===false)return data;
+    let data=await apiPost("data.get", {forceFresh},{timeoutMs:30000});
+    if(data&&data.success===false)throw new Error(data.message||securityText_("Ошибка загрузки данных","Хатои боркунии маълумот"));
     const incomingCount=(Array.isArray(data?.debts)?data.debts.length:0)+(Array.isArray(data?.paidDebts)?data.paidDebts.length:0);
     if(!forceFresh && incomingCount===0){
-      const fresh=await apiPost("data.get", {forceFresh:true});
-      if(fresh&&fresh.success!==false)data=fresh;
+      const fresh=await apiPost("data.get", {forceFresh:true},{timeoutMs:30000});
+      if(fresh&&fresh.success===false)throw new Error(fresh.message||securityText_("Ошибка загрузки данных","Хатои боркунии маълумот"));
+      if(fresh)data=fresh;
     }
     return applyDebtData_(data);
   }catch(e){
@@ -5092,7 +5110,8 @@ async function loadDebts(options={}){
       showToast(`⚠️ <b>${securityText_("Не удалось обновить данные. Показана последняя загруженная версия.","Навсозии маълумот нашуд. Версияи охирин нишон дода мешавад.")}</b>`,`error`);
       return {success:false,message:e.message||String(e)};
     }
-    throw e;
+    renderDebtLoadError_(e.message||String(e));
+    return {success:false,message:e.message||String(e)};
   }
 }
 async function loadStatsData_(options={}){
@@ -5509,6 +5528,9 @@ function buildDebtCardHtml(d){
   const phone=normalizePhone(d.phone),phoneFull="992"+phone,waText=encodeURIComponent(t("waReminder",{amount:d.remainder}));
   const safeClientJs=String(d.client||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
   const safePhoneJs=String(phone||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  const sumHistoryHtml=renderSumHistory(d.notification);
+  const historyItems=parseSumHistory(d.notification);
+  const latestChange=historyItems.length?historyItems[historyItems.length-1]:"";
   const responsibleName=String(d.responsibleName||"").trim();
   let responsibleAction="";
   if(canPermission("assignDebts"))responsibleAction=`<button class="debt-responsible-btn" type="button" onclick="openAssignDebtModal(${Number(d.row||0)},'${escapeAttr_(String(d.responsibleUserId||""))}')">${t("responsibleChange")}</button>`;
