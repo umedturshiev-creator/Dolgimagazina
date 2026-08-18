@@ -2287,7 +2287,7 @@ html[data-theme="light"] .notification-drawer{background:linear-gradient(155deg,
 .security-events-card{min-height:0!important;}
 .security-events-list{max-height:360px;overflow:auto;padding-right:4px;overscroll-behavior:contain;scrollbar-width:thin;}
 .security-events-list::-webkit-scrollbar{width:7px}.security-events-list::-webkit-scrollbar-thumb{background:rgba(148,163,184,.28);border-radius:999px}.security-events-list::-webkit-scrollbar-track{background:transparent;}
-.settings-actions-card .settings-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px!important;margin-top:12px!important;}
+.settings-actions-card .settings-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px!important;margin-top:12px!important;}
 .settings-actions-card .settings-actions button{min-height:42px!important;}
 .notification-bulk-actions{display:flex;align-items:center;gap:5px;flex-shrink:0;}
 .notification-clear-all{width:auto!important;min-width:max-content!important;margin:0!important;padding:7px 9px!important;border-radius:11px!important;background:rgba(239,68,68,.08)!important;color:#fca5a5!important;border:1px solid rgba(239,68,68,.12)!important;box-shadow:none!important;font-size:11px!important;font-weight:850!important;}
@@ -2297,6 +2297,31 @@ html[data-theme="light"] .notification-drawer{background:linear-gradient(155deg,
 .notification-delete-one:hover{opacity:1;background:rgba(239,68,68,.10)!important;color:#fca5a5!important;}
 html[data-theme="light"] .settings-mini-panel{background:#f8fafc;border-color:#e2e8f0;}
 html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;background:#fff1f2!important;border-color:#fecdd3!important;}
+
+/* ===== AUDIT LOG v5.5.0 ===== */
+#auditNavBtn{display:none}
+.audit-view{max-width:1180px}
+.audit-toolbar-card{padding:15px!important;margin-bottom:14px!important}
+.audit-toolbar-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.audit-toolbar-title{font-size:14px;font-weight:900;color:var(--text-1)}
+.audit-toolbar-sub{font-size:11px;color:var(--text-3);margin-top:3px}
+.audit-toolbar-grid{display:grid;grid-template-columns:minmax(190px,1.4fr) repeat(4,minmax(130px,.8fr)) auto;gap:8px;align-items:end}
+.audit-field{min-width:0}.audit-field label{display:block;font-size:10px;font-weight:800;color:var(--text-3);margin:0 0 5px 2px}
+.audit-field input,.audit-field select{width:100%!important;margin:0!important;min-height:40px!important;padding:9px 10px!important;border-radius:12px!important;font-size:12px!important}
+.audit-refresh-btn{min-height:40px!important;margin:0!important;padding:0 14px!important;width:auto!important;white-space:nowrap}
+.audit-summary-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px 9px;color:var(--text-3);font-size:11px}
+.audit-list{display:flex;flex-direction:column;gap:8px;max-height:calc(100vh - 285px);min-height:240px;overflow:auto;padding:1px 5px 8px 1px;scrollbar-width:thin}
+.audit-item{padding:12px 13px;border-radius:16px;background:rgba(148,163,184,.055);border:1px solid rgba(148,163,184,.11)}
+.audit-item-main{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.audit-item-left{min-width:0;display:flex;gap:10px;align-items:flex-start}.audit-icon{width:34px;height:34px;flex:0 0 34px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(59,130,246,.11);font-size:16px}
+.audit-title{font-size:12px;font-weight:900;color:var(--text-1);line-height:1.35}.audit-summary{font-size:11px;color:var(--text-2);margin-top:3px;line-height:1.4}.audit-meta{font-size:10px;color:var(--text-3);margin-top:5px;display:flex;gap:7px;flex-wrap:wrap}
+.audit-time{white-space:nowrap;font-size:9px;color:var(--text-3);padding-top:2px}.audit-chip{display:inline-flex;align-items:center;border-radius:999px;padding:3px 7px;background:rgba(59,130,246,.08);color:var(--text-2);font-size:9px;font-weight:800}
+.audit-details{margin:9px 0 0 44px}.audit-details summary{cursor:pointer;color:var(--text-3);font-size:10px;font-weight:800;user-select:none}.audit-diff{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:8px}.audit-diff-col{padding:8px 9px;border-radius:11px;background:rgba(148,163,184,.055);border:1px solid rgba(148,163,184,.09);font-size:10px;line-height:1.55;color:var(--text-2)}.audit-diff-col b{display:block;color:var(--text-3);font-size:9px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}.audit-change-row{display:flex;justify-content:space-between;gap:9px}.audit-change-row span:first-child{color:var(--text-3)}
+.audit-empty{padding:30px 16px;text-align:center;color:var(--text-3);font-size:12px}
+html[data-theme="light"] .audit-item,html[data-theme="light"] .audit-diff-col{background:#f8fafc;border-color:#e2e8f0}.audit-export-btn{background:rgba(16,185,129,.10)!important;color:#34d399!important;border:1px solid rgba(16,185,129,.17)!important}
+@media(max-width:1050px){.audit-toolbar-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.audit-refresh-btn{width:100%!important}}
+@media(max-width:640px){.audit-toolbar-card{padding:12px!important}.audit-toolbar-grid{grid-template-columns:1fr 1fr}.audit-search-field{grid-column:1/-1}.audit-refresh-btn{grid-column:1/-1}.audit-list{max-height:none;overflow:visible}.audit-item{padding:11px}.audit-details{margin-left:0}.audit-diff{grid-template-columns:1fr}.audit-item-main{gap:7px}.audit-time{font-size:8px}.audit-toolbar-head{flex-direction:column}.audit-export-btn{width:100%!important}}
+
 @media(max-width:900px){.settings-appearance-grid{grid-template-columns:1fr;}.account-security-card{grid-template-columns:1fr;}.account-security-card>b{grid-column:auto}.account-security-card #changePasswordBtn{width:100%!important}.settings-actions-card .settings-actions{grid-template-columns:1fr;}.notification-toolbar{align-items:flex-start;flex-direction:column}.notification-bulk-actions{width:100%;justify-content:flex-end}.security-events-list{max-height:320px}}
 @media(max-width:640px){#view-settings{max-width:none}.settings-appearance-card,.notification-settings-card,.settings-wide-card{padding:13px!important}.notification-pref-grid{grid-template-columns:1fr!important}.notification-bulk-actions{justify-content:space-between}.notification-mark-all,.notification-clear-all{font-size:10px!important;padding:7px 8px!important}.notification-item-side{gap:3px}.notification-time{font-size:9px}.notification-delete-one{width:26px!important;height:26px!important;min-width:26px!important}}
 
@@ -2446,6 +2471,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
   <button class="nav-btn" data-view="add" onclick="showView('add')"><span class="nav-icon">➕</span><span data-nav-label="add">Добавить долг</span></button>
   <button class="nav-btn" data-view="paid" onclick="showView('paid')"><span class="nav-icon">✅</span><span data-nav-label="paid">Оплаченные долги</span></button>
   <button class="nav-btn" data-view="stats" onclick="showView('stats')"><span class="nav-icon">📊</span><span data-nav-label="stats">Статистика</span></button>
+  <button class="nav-btn" id="auditNavBtn" data-view="audit" onclick="showView('audit')"><span class="nav-icon">🧾</span><span id="auditNavLabel">Журнал</span></button>
   <button class="nav-btn" data-view="settings" onclick="showView('settings')"><span class="nav-icon">⚙️</span><span data-nav-label="settings">Настройки</span></button>
 </aside>
 
@@ -2499,6 +2525,29 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
   <section id="view-stats" class="app-view">
     <h3 id="statsPageTitle" class="view-title">Статистика</h3>
     <div id="statsBox"></div>
+  </section>
+
+
+  <section id="view-audit" class="app-view audit-view">
+    <h3 id="auditPageTitle" class="view-title">Журнал действий</h3>
+    <div class="card audit-toolbar-card">
+      <div class="audit-toolbar-head">
+        <div><div id="auditToolbarTitle" class="audit-toolbar-title">🧾 История изменений</div><div id="auditToolbarHint" class="audit-toolbar-sub">Кто, когда и что изменил в системе.</div></div>
+        <button id="auditExportBtn" class="user-mini-btn audit-export-btn" type="button" onclick="exportAuditCsv()">⬇ CSV</button>
+      </div>
+      <div class="audit-toolbar-grid">
+        <div class="audit-field audit-search-field"><label id="auditSearchLabel">Поиск</label><input id="auditSearchInput" placeholder="Клиент, пользователь, действие…" oninput="scheduleAuditReload_()"></div>
+        <div class="audit-field"><label id="auditCategoryLabel">Категория</label><select id="auditCategoryFilter" onchange="loadAuditLog()"><option value="all">Все</option><option value="debts">Долги</option><option value="payments">Оплаты</option><option value="users">Пользователи</option><option value="access">Доступ</option><option value="system">Система</option></select></div>
+        <div class="audit-field" id="auditUserField"><label id="auditUserLabel">Пользователь</label><select id="auditUserFilter" onchange="loadAuditLog()"><option value="">Все пользователи</option></select></div>
+        <div class="audit-field"><label id="auditFromLabel">С даты</label><input id="auditDateFrom" type="date" onchange="loadAuditLog()"></div>
+        <div class="audit-field"><label id="auditToLabel">По дату</label><input id="auditDateTo" type="date" onchange="loadAuditLog()"></div>
+        <button id="auditRefreshBtn" class="add-debt-btn audit-refresh-btn" type="button" onclick="loadAuditLog()">Обновить</button>
+      </div>
+    </div>
+    <div class="card" style="padding:14px">
+      <div class="audit-summary-bar"><span id="auditResultCount">0 записей</span><span id="auditScopeText"></span></div>
+      <div id="auditList" class="audit-list"><div class="audit-empty">Журнал загружается…</div></div>
+    </div>
   </section>
 
   <section id="view-settings" class="app-view">
@@ -2573,6 +2622,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
         <div class="settings-actions">
           <button id="settingsRefreshBtn" class="add-debt-btn" onclick="forceAppUpdate()">Обновить данные</button>
           <button id="settingsExportBtn" class="add-debt-btn" onclick="openExportMenu()">Экспорт отчетов</button>
+          <button id="settingsAuditBtn" class="add-debt-btn" onclick="showView('audit')">Журнал действий</button>
           <button id="settingsLogoutBtn" onclick="logout()" style="background:linear-gradient(135deg,#ef4444,#dc2626);">Выйти</button>
         </div>
       </div>
@@ -2816,7 +2866,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
 </div>
 
 <script>
-const VERSION="5.4.0";
+const VERSION="5.5.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 let authToken = sessionStorage.getItem("authToken") || "";
@@ -2856,6 +2906,9 @@ let notificationPrefsRevision = 0;
 let notificationPrefsPending = 0;
 let notificationPrefsSaveQueue = Promise.resolve();
 let securityEvents = [];
+let auditEntries = [];
+let auditActors = [];
+let auditLoading = false;
 let editingUserId = null;
 let authFlowMode = "reset";
 let authFlowStep = "request";
@@ -3672,6 +3725,7 @@ function applySecurityTranslations_(){
     notificationPrefUsersLabel:["Пользователи","Истифодабарандагон"],notificationPrefUsersHint:["Создание и изменение доступа","Эҷод ва тағйири дастрасӣ"],notificationPrefSecurityLabel:["Безопасность","Амният"],notificationPrefSecurityHint:["Входы, блокировки и изменение пароля","Вурудҳо, басташавӣ ва иваз кардани парол"],
     notificationPrefSoundLabel:["Звук","Садо"],notificationPrefSoundHint:["Короткий сигнал при новых событиях","Сигнали кӯтоҳ ҳангоми рӯйдоди нав"],notificationPrefBrowserLabel:["Уведомления браузера","Огоҳиномаҳои браузер"],notificationPrefBrowserHint:["Показывать, пока приложение открыто","Ҳангоми кушода будани барнома нишон дода шавад"],
     securityEventsTitle:["🛡 События безопасности","🛡 Рӯйдодҳои амниятӣ"],securityEventsHint:["Последние события. Список прокручивается.","Рӯйдодҳои охирин. Рӯйхат ҳаракат мекунад."],securityEventsRefreshBtn:["Обновить","Навсозӣ"],
+    auditPageTitle:["Журнал действий","Журнали амалҳо"],auditToolbarTitle:["🧾 История изменений","🧾 Таърихи тағйирот"],auditToolbarHint:["Кто, когда и что изменил в системе.","Кӣ, кай ва чиро дар система тағйир дод."],auditSearchLabel:["Поиск","Ҷустуҷӯ"],auditCategoryLabel:["Категория","Категория"],auditUserLabel:["Пользователь","Истифодабаранда"],auditFromLabel:["С даты","Аз сана"],auditToLabel:["По дату","То сана"],auditRefreshBtn:["Обновить","Навсозӣ"],settingsAuditBtn:["Журнал действий","Журнали амалҳо"],auditNavLabel:["Журнал","Журнал"],
     settingsAppearanceTitle:["✨ Интерфейс","✨ Интерфейс"],settingsAppearanceHint:["Язык, тема и читаемость собраны в одном месте.","Забон, мавзӯъ ва хондашавӣ дар як ҷой ҷамъ шудаанд."],
     notificationCenterTitle:["Уведомления","Огоҳиномаҳо"],notificationCenterSubtitle:["События по долгам, оплатам и безопасности","Рӯйдодҳои қарзҳо, пардохтҳо ва амният"],notificationMarkAllBtn:["Прочитать все","Ҳамаро хондан"],notificationDeleteAllBtn:["🗑 Очистить","🗑 Тоза кардан"],
     notificationFilterAll:["Все","Ҳама"],notificationFilterUnread:["Новые","Нав"],notificationFilterDebts:["Долги","Қарзҳо"],notificationFilterPayments:["Оплаты","Пардохтҳо"],notificationFilterSecurity:["Безопасность","Амният"],notificationFilterUsers:["Пользователи","Истифодабарандагон"],
@@ -3685,7 +3739,7 @@ function applySecurityTranslations_(){
   const pass=document.getElementById("passwordInput"); if(pass)pass.placeholder=securityText_("Пароль","Парол");
   document.querySelectorAll(".login-lang-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.lang===currentLanguage));
   if(document.getElementById("authFlowModal")?.style.display==="flex")renderAuthFlow_();
-  renderUsers_(); renderAccountSecurity_(); renderNotificationPreferences_(); renderNotifications_(); renderSecurityEvents_();
+  renderUsers_(); renderAccountSecurity_(); renderNotificationPreferences_(); renderNotifications_(); renderSecurityEvents_(); renderAuditLog_();
   const filterNames={all:["Все","Ҳама"],unread:["Новые","Нав"],debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],security:["Безопасность","Амният"],users:["Пользователи","Истифодабарандагон"]};
   document.querySelectorAll("[data-notification-filter]").forEach(btn=>{const v=filterNames[btn.dataset.notificationFilter]||filterNames.all;btn.textContent=currentLanguage==="tj"?v[1]:v[0];});
 }
@@ -3751,11 +3805,15 @@ function applyPermissions_(){
   const uc=document.getElementById("usersSettingsCard");if(uc)uc.style.display=users?"":"none";
   const addUser=document.getElementById("addUserBtn");if(addUser)addUser.style.display=canPermission("manageUsers")?"":"none";
   const securityCard=document.getElementById("securityEventsCard");if(securityCard)securityCard.style.display=canPermission("security")?"":"none";
+  const auditAllowed=canPermission("viewAudit");
+  const auditNav=document.getElementById("auditNavBtn");if(auditNav)auditNav.style.display=auditAllowed?"":"none";
+  const auditView=document.getElementById("view-audit");if(auditView)auditView.style.display=auditAllowed?"":"none";
+  const auditBtn=document.getElementById("settingsAuditBtn");if(auditBtn)auditBtn.style.display=auditAllowed?"":"none";
   const responsibleWrap=document.getElementById("responsibleFieldWrap");if(responsibleWrap)responsibleWrap.style.display=create&&canPermission("assignDebts")?"block":"none";
   const mineBtn=document.getElementById("debtScopeMineBtn");if(mineBtn)mineBtn.style.display=currentUser?.role==="viewer"?"none":"";
   const unassignedBtn=document.getElementById("debtScopeUnassignedBtn");if(unassignedBtn)unassignedBtn.style.display=canPermission("assignDebts")?"":"none";
   if((debtScope==="unassigned"&&!canPermission("assignDebts"))||(debtScope==="mine"&&currentUser?.role==="viewer"))debtScope="all";
-  if(currentView==="add"&&!create)currentView="active";if(currentView==="stats"&&!stats)currentView="active";
+  if(currentView==="add"&&!create)currentView="active";if(currentView==="stats"&&!stats)currentView="active";if(currentView==="audit"&&!auditAllowed)currentView="active";
   updateDebtScopeButtons_();
 }
 function renderAccountSecurity_(){
@@ -4808,20 +4866,98 @@ function applyPaidSearch(){
   }));
 }
 
+
+let auditSearchTimer_=null;
+function scheduleAuditReload_(){
+  if(auditSearchTimer_)clearTimeout(auditSearchTimer_);
+  auditSearchTimer_=setTimeout(()=>{auditSearchTimer_=null;loadAuditLog();},320);
+}
+function auditCategoryLabel_(v){
+  const m={debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],users:["Пользователи","Истифодабарандагон"],access:["Доступ","Дастрасӣ"],system:["Система","Система"]};
+  const x=m[String(v||"system")]||m.system;return currentLanguage==="tj"?x[1]:x[0];
+}
+function auditActionLabel_(a){
+  const m={DEBT_NEW:["Новый долг","Қарзи нав"],DEBT_APPEND:["Долг увеличен","Қарз зиёд шуд"],DEBT_REDUCE:["Долг уменьшен","Қарз кам шуд"],PAYMENT_PARTIAL:["Частичная оплата","Пардохти қисман"],PAYMENT_FULL:["Полная оплата","Пардохти пурра"],DEBT_ASSIGN:["Назначен ответственный","Масъул таъин шуд"],DEBT_UNASSIGN:["Ответственный снят","Масъул хориҷ шуд"],DEBT_CLAIM:["Долг взят в работу","Қарз ба кор гирифта шуд"],USER_CREATED:["Создан пользователь","Истифодабаранда сохта шуд"],USER_UPDATED:["Изменён пользователь","Истифодабаранда тағйир ёфт"],ACCESS_INSTRUCTION_SENT:["Отправлена инструкция доступа","Дастури дастрасӣ фиристода шуд"],PASSWORD_CHANGE:["Изменён пароль","Парол иваз шуд"],EXPORT_REPORT:["Экспорт отчёта","Содироти ҳисобот"]};
+  const x=m[String(a||"")];return x?(currentLanguage==="tj"?x[1]:x[0]):String(a||"").replaceAll("_"," ");
+}
+function auditIcon_(e){
+  if(e.category==="payments")return e.action==="PAYMENT_FULL"?"✅":"💵";
+  if(e.category==="users")return "👥"; if(e.category==="access")return "🔐";
+  if(e.action==="DEBT_REDUCE")return "➖";if(e.action==="DEBT_APPEND")return "➕";if(e.action==="DEBT_ASSIGN"||e.action==="DEBT_CLAIM")return "👤";return "🧾";
+}
+function auditFieldLabel_(k){
+  const m={client:["Клиент","Муштарӣ"],phone:["Телефон","Телефон"],total:["Сумма долга","Маблағи қарз"],paid:["Оплачено","Пардохт шуд"],remainder:["Остаток","Бақия"],dueDate:["Дата оплаты","Санаи пардохт"],status:["Статус","Ҳолат"],responsibleName:["Ответственный","Масъул"],responsibleUserId:["ID ответственного","ID-и масъул"],name:["Имя","Ном"],email:["Email","Email"],role:["Роль","Нақш"],active:["Активен","Фаъол"]};
+  const x=m[k];return x?(currentLanguage==="tj"?x[1]:x[0]):k;
+}
+function auditValue_(v,k){
+  if(v===undefined||v===null||v==="")return "—";
+  if(typeof v==="boolean")return v?securityText_("Да","Ҳа"):securityText_("Нет","Не");
+  if(["total","paid","remainder"].includes(k)&&!isNaN(Number(v)))return `${Number(v).toLocaleString("ru-RU")} ${securityText_("сомони","сомонӣ")}`;
+  return String(v);
+}
+function auditObjectHtml_(obj,title){
+  if(!obj||typeof obj!=="object")return `<div class="audit-diff-col"><b>${escapeHtml(title)}</b><div>—</div></div>`;
+  const keys=Object.keys(obj).filter(k=>!["responsibleUserId"].includes(k));
+  const rows=keys.length?keys.map(k=>`<div class="audit-change-row"><span>${escapeHtml(auditFieldLabel_(k))}</span><strong>${escapeHtml(auditValue_(obj[k],k))}</strong></div>`).join(""):`<div>—</div>`;
+  return `<div class="audit-diff-col"><b>${escapeHtml(title)}</b>${rows}</div>`;
+}
+function renderAuditFilterOptions_(){
+  const sel=document.getElementById("auditCategoryFilter");if(!sel)return;const prev=sel.value||"all";
+  const opts=[["all","Все","Ҳама"],["debts","Долги","Қарзҳо"],["payments","Оплаты","Пардохтҳо"],["users","Пользователи","Истифодабарандагон"],["access","Доступ","Дастрасӣ"],["system","Система","Система"]];
+  sel.innerHTML=opts.map(x=>`<option value="${x[0]}">${currentLanguage==="tj"?x[2]:x[1]}</option>`).join("");if([...sel.options].some(o=>o.value===prev))sel.value=prev;
+}
+function renderAuditActors_(){
+  const field=document.getElementById("auditUserField"),sel=document.getElementById("auditUserFilter");if(!sel)return;
+  const elevated=["owner","admin"].includes(String(currentUser?.role||""));if(field)field.style.display=elevated?"":"none";
+  const prev=sel.value;sel.innerHTML=`<option value="">${securityText_("Все пользователи","Ҳамаи истифодабарандагон")}</option>`+(auditActors||[]).map(a=>`<option value="${escapeAttr_(a.id)}">${escapeHtml(a.name||a.email||"")}</option>`).join("");
+  if([...sel.options].some(o=>o.value===prev))sel.value=prev;
+}
+function renderAuditLog_(){
+  const box=document.getElementById("auditList"),count=document.getElementById("auditResultCount"),scope=document.getElementById("auditScopeText");if(!box)return;
+  renderAuditFilterOptions_(); renderAuditActors_();
+  if(count)count.textContent=`${auditEntries.length} ${securityText_("записей","сабт")}`;
+  if(scope)scope.textContent=["owner","admin"].includes(String(currentUser?.role||""))?securityText_("Все доступные действия","Ҳамаи амалҳои дастрас"):securityText_("Только мои действия","Танҳо амалҳои ман");
+  if(!auditEntries.length){box.innerHTML=`<div class="audit-empty">${securityText_("По выбранным фильтрам записей нет","Аз рӯи филтрҳо сабт нест")}</div>`;return;}
+  box.innerHTML=auditEntries.map(e=>{
+    const actor=e.userName||e.email||securityText_("Система","Система");const target=e.entityLabel||e.entityId||"";
+    const hasDetails=(e.before&&typeof e.before==="object")||(e.after&&typeof e.after==="object");
+    const details=hasDetails?`<details class="audit-details"><summary>${securityText_("Показать изменения","Нишон додани тағйирот")}</summary><div class="audit-diff">${auditObjectHtml_(e.before,securityText_("Было","Буд"))}${auditObjectHtml_(e.after,securityText_("Стало","Шуд"))}</div></details>`:"";
+    return `<div class="audit-item"><div class="audit-item-main"><div class="audit-item-left"><div class="audit-icon">${auditIcon_(e)}</div><div><div class="audit-title">${escapeHtml(auditActionLabel_(e.action))}${target?` · ${escapeHtml(target)}`:""}</div><div class="audit-summary">${escapeHtml(e.summary||"")}</div><div class="audit-meta"><span class="audit-chip">${escapeHtml(auditCategoryLabel_(e.category))}</span><span>👤 ${escapeHtml(actor)}</span>${e.email?`<span>${escapeHtml(e.email)}</span>`:""}</div></div></div><div class="audit-time">${escapeHtml(e.date||"")}</div></div>${details}</div>`;
+  }).join("");
+}
+async function loadAuditLog(){
+  if(!canPermission("viewAudit")||auditLoading)return;auditLoading=true;
+  const box=document.getElementById("auditList");if(box&&!auditEntries.length)box.innerHTML=`<div class="audit-empty">${securityText_("Загрузка…","Боркунӣ…")}</div>`;
+  const payload={category:document.getElementById("auditCategoryFilter")?.value||"all",userId:document.getElementById("auditUserFilter")?.value||"",dateFrom:document.getElementById("auditDateFrom")?.value||"",dateTo:document.getElementById("auditDateTo")?.value||"",query:String(document.getElementById("auditSearchInput")?.value||"").trim(),limit:300};
+  try{const r=await apiPost("audit.list",payload);if(!r.success)throw new Error(r.message||"Error");auditEntries=Array.isArray(r.entries)?r.entries:[];auditActors=Array.isArray(r.actors)?r.actors:[];renderAuditLog_();}
+  catch(e){if(box)box.innerHTML=`<div class="audit-empty">❌ ${escapeHtml(e.message||String(e))}</div>`;}
+  finally{auditLoading=false;}
+}
+function exportAuditCsv(){
+  if(!auditEntries.length){showToast(`ℹ️ <b>${securityText_("Нет данных для экспорта","Барои содирот маълумот нест")}</b>`);return;}
+  const cols=[securityText_("Дата","Сана"),securityText_("Пользователь","Истифодабаранда"),"Email",securityText_("Категория","Категория"),securityText_("Действие","Амал"),securityText_("Объект","Объект"),securityText_("Описание","Тавсиф")];
+  const esc=v=>`"${String(v??"").replaceAll('"','""')}"`;
+  const rows=auditEntries.map(e=>[e.date,e.userName,e.email,auditCategoryLabel_(e.category),auditActionLabel_(e.action),e.entityLabel||e.entityId,e.summary].map(esc).join(";"));
+  const blob=new Blob(["\ufeff"+cols.map(esc).join(";")+"\n"+rows.join("\n")],{type:"text/csv;charset=utf-8"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`audit_${new Date().toISOString().slice(0,10)}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+}
+
 function showView(view){
-  const allowed=["active","add","paid","stats","settings"];
+  const allowed=["active","add","paid","stats","audit","settings"];
   if (!allowed.includes(view)) view="active";
   if(view==="add"&&!canPermission("createDebt"))view="active";
   if(view==="stats"&&!canPermission("viewStats"))view="active";
+  if(view==="audit"&&!canPermission("viewAudit"))view="active";
   currentView=view;
   document.querySelectorAll(".app-view").forEach(el=>el.classList.toggle("active",el.id===`view-${view}`));
-  document.querySelectorAll(".nav-btn,.mobile-nav-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.view===view));
+  document.querySelectorAll(".nav-btn,.mobile-nav-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.view===view||(view==="audit"&&btn.classList.contains("mobile-nav-btn")&&btn.dataset.view==="settings")));
   if (view==="active") {
     renderActiveDebtView_();
   } else if (view==="paid") {
     applyPaidSearch();
   } else if (view==="stats") {
     renderStats(lastStatsData||{});
+  } else if (view==="audit") {
+    loadAuditLog();
   }
   window.scrollTo({top:0,behavior:"smooth"});
   if(view==="settings"){
@@ -5451,6 +5587,7 @@ async function runSelectedExport(){
     const simpleDatasets=["active","overdue","paid","anyPaid","noPayment","allRecords"];
     if(simpleDatasets.includes(dataset) && (await getDebtDatasetAsync(dataset,month)).length===0){ alert(t("exportNoData")); return; }
     if(exportFormat==="xlsx") await exportExcel(dataset,month); else await exportPdf(dataset,month);
+    apiPost("audit.recordExport",{dataset,format:exportFormat,month:month||""}).catch(()=>{});
     closeExportMenu();
   } catch(err){ console.error("Export error",err); alert(t("exportError")); }
   finally{ if(btn){btn.disabled=false;btn.textContent=oldText;} syncExportUi(); }
