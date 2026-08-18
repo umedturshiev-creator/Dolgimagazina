@@ -2235,6 +2235,21 @@ html[data-theme="light"] #loginScreen .login-link-btn{color:#2563eb!important;}
 html[data-theme="light"] .login-message.error{color:#b91c1c;}html[data-theme="light"] .login-message.success{color:#15803d;}html[data-theme="light"] .login-message.info{color:#1d4ed8;}
 html[data-theme="light"] .user-row{background:#f8fafc;border-color:#e2e8f0;}html[data-theme="light"] .user-row-name{color:#0f172a;}html[data-theme="light"] .user-row-email{color:#64748b;}html[data-theme="light"] .user-badge{color:#1d4ed8;background:#eff6ff;}html[data-theme="light"] .user-badge.ok{color:#15803d;background:#f0fdf4;}html[data-theme="light"] .user-badge.warn{color:#b45309;background:#fffbeb;}html[data-theme="light"] .user-badge.off{color:#b91c1c;background:#fff1f2;}html[data-theme="light"] .account-security-info{color:#334155;background:#eff6ff;border-color:#dbeafe;}
 @media(max-width:640px){.login{padding:14px;}.login-card{padding:20px 16px;border-radius:24px;}.user-row{grid-template-columns:1fr;}.user-row-actions{justify-content:flex-start;}.users-card-head{align-items:center;}.compact-action-btn{min-width:92px!important;font-size:12px!important;}}
+
+/* ===== Notification Center v5.3.0 ===== */
+.notification-bell-btn{position:relative;width:40px!important;height:38px!important;min-width:40px!important;margin:0!important;padding:0!important;border-radius:13px!important;display:flex!important;align-items:center;justify-content:center;background:rgba(148,163,184,.12)!important;color:var(--surface-text)!important;border:1px solid rgba(148,163,184,.14)!important;box-shadow:none!important;font-size:17px!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.notification-badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#ef4444;color:#fff;font-size:10px;font-weight:900;display:none;align-items:center;justify-content:center;border:2px solid rgba(15,23,42,.95);box-sizing:border-box}
+.notification-badge.show{display:flex}.notification-center-modal{align-items:stretch!important;justify-content:flex-end!important;padding:0!important;background:rgba(2,6,23,.44)!important}
+.notification-drawer{width:min(440px,94vw);height:100%;margin:0!important;border-radius:28px 0 0 28px!important;padding:18px!important;overflow:hidden;display:flex;flex-direction:column;background:linear-gradient(155deg,rgba(15,23,42,.96),rgba(17,24,39,.92))!important;border-left:1px solid rgba(255,255,255,.08)!important;box-shadow:-24px 0 60px rgba(0,0,0,.28)!important;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px)}
+.notification-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:4px 2px 12px}.notification-title{font-size:20px;font-weight:900;color:var(--text-1)}.notification-subtitle{font-size:12px;color:var(--text-3);margin-top:3px}.notification-head-actions{display:flex;gap:7px}.notification-icon-btn{width:34px!important;height:34px!important;min-width:34px!important;margin:0!important;padding:0!important;border-radius:11px!important;background:rgba(148,163,184,.11)!important;color:var(--text-2)!important;border:1px solid rgba(148,163,184,.13)!important;box-shadow:none!important;font-size:18px!important}
+.notification-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:11px}.notification-filters{display:flex;gap:6px;overflow-x:auto;padding:1px 1px 4px;scrollbar-width:none}.notification-filters::-webkit-scrollbar{display:none}.notification-filter{width:auto!important;min-width:max-content!important;margin:0!important;padding:7px 10px!important;border-radius:999px!important;background:rgba(148,163,184,.08)!important;color:var(--text-3)!important;border:1px solid rgba(148,163,184,.11)!important;box-shadow:none!important;font-size:11px!important;font-weight:800!important}.notification-filter.active{background:rgba(59,130,246,.18)!important;color:#bfdbfe!important;border-color:rgba(96,165,250,.22)!important}.notification-mark-all{width:auto!important;min-width:max-content!important;margin:0!important;padding:7px 9px!important;border-radius:11px!important;background:transparent!important;color:#93c5fd!important;border:0!important;box-shadow:none!important;font-size:11px!important;font-weight:800!important}
+.notification-list{flex:1;overflow:auto;padding:2px 3px 16px;display:grid;align-content:start;gap:8px}.notification-item{position:relative;padding:12px 12px 11px 14px;border-radius:17px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.1);cursor:pointer;transition:.18s ease}.notification-item:hover{transform:translateY(-1px);background:rgba(148,163,184,.1)}.notification-item.unread{background:rgba(59,130,246,.09);border-color:rgba(96,165,250,.16)}.notification-item.unread:before{content:"";position:absolute;left:5px;top:16px;width:4px;height:20px;border-radius:9px;background:#3b82f6}.notification-item.danger{border-color:rgba(239,68,68,.2)}.notification-item.warning{border-color:rgba(245,158,11,.18)}.notification-item.success{border-color:rgba(34,197,94,.18)}.notification-row-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.notification-item-title{font-size:13px;font-weight:900;color:var(--text-1);line-height:1.35}.notification-time{font-size:10px;color:var(--text-3);white-space:nowrap}.notification-message{font-size:12px;color:var(--text-2);line-height:1.45;margin-top:4px}.notification-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px}.notification-category-chip{padding:3px 7px;border-radius:999px;background:rgba(148,163,184,.09);color:var(--text-3);font-size:9px;font-weight:850}.notification-empty{padding:40px 16px;text-align:center;color:var(--text-3);font-size:13px}
+.notification-settings-card{grid-column:1/-1}.notification-pref-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.notification-pref{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-radius:14px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.1);font-size:12px;font-weight:750;color:var(--text-2)}.notification-pref input{width:18px!important;height:18px!important;margin:0!important;accent-color:#3b82f6}.notification-pref small{display:block;color:var(--text-3);font-size:10px;font-weight:600;margin-top:2px;line-height:1.3}.notification-pref.locked{opacity:.75}.notification-settings-status{font-size:11px;color:var(--text-3);margin-top:8px;min-height:16px}
+.security-events-card{grid-column:1/-1}.security-events-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.security-events-list{display:grid;gap:7px;margin-top:12px}.security-event{padding:10px 11px;border-radius:14px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.1)}.security-event-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.security-event-title{font-size:12px;font-weight:850;color:var(--text-1)}.security-event-time{font-size:10px;color:var(--text-3)}.security-event-detail{font-size:11px;color:var(--text-2);line-height:1.4;margin-top:3px}.security-result{font-size:9px;font-weight:900;padding:3px 6px;border-radius:999px;background:rgba(34,197,94,.12);color:#86efac}.security-result.fail{background:rgba(239,68,68,.12);color:#fca5a5}
+.notification-focus{animation:notificationFocus 1.25s ease}@keyframes notificationFocus{0%,100%{box-shadow:var(--shadow-soft)}40%{box-shadow:0 0 0 3px rgba(59,130,246,.4),0 18px 40px rgba(59,130,246,.16)}}
+html[data-theme="light"] .notification-drawer{background:linear-gradient(155deg,rgba(255,255,255,.97),rgba(248,250,252,.94))!important;border-color:#e2e8f0!important}html[data-theme="light"] .notification-bell-btn{background:rgba(255,255,255,.72)!important;color:#0f172a!important;border-color:#e2e8f0!important}html[data-theme="light"] .notification-badge{border-color:#fff}html[data-theme="light"] .notification-item,html[data-theme="light"] .notification-pref,html[data-theme="light"] .security-event{background:#f8fafc;border-color:#e2e8f0}html[data-theme="light"] .notification-item.unread{background:#eff6ff;border-color:#dbeafe}html[data-theme="light"] .notification-filter.active{background:#eff6ff!important;color:#1d4ed8!important;border-color:#dbeafe!important}html[data-theme="light"] .security-result{color:#15803d;background:#f0fdf4}html[data-theme="light"] .security-result.fail{color:#b91c1c;background:#fff1f2}
+@media(max-width:640px){.header-right{gap:5px!important}.notification-bell-btn{width:36px!important;height:34px!important;min-width:36px!important;border-radius:11px!important}.notification-drawer{width:100%;height:92%;margin-top:auto!important;border-radius:26px 26px 0 0!important;border-left:0!important;border-top:1px solid rgba(255,255,255,.08)!important;padding:15px 13px calc(18px + env(safe-area-inset-bottom))!important}.notification-center-modal{align-items:flex-end!important}.notification-pref-grid{grid-template-columns:1fr}.notification-title{font-size:18px}}
+
 </style>
 </head>
 <body>
@@ -2322,6 +2337,7 @@ html[data-theme="light"] .user-row{background:#f8fafc;border-color:#e2e8f0;}html
 </div>
 
 <div class="header-right">
+  <button id="notificationBellBtn" class="notification-bell-btn" type="button" onclick="openNotificationCenter()" aria-label="Уведомления">🔔<span id="notificationBadge" class="notification-badge"></span></button>
   <button id="headerExportBtn" class="export-btn" onclick="openExportMenu()">Экспорт</button>
   <button class="logout-btn" onclick="logout()">🚪</button>
 </div>
@@ -2401,6 +2417,19 @@ html[data-theme="light"] .user-row{background:#f8fafc;border-color:#e2e8f0;}html
         </div>
         <div id="contrastHint" class="settings-hint">Повышенный контраст делает текст, границы и элементы управления заметнее.</div>
       </div>
+      <div class="card settings-card notification-settings-card" id="notificationSettingsCard">
+        <b id="notificationSettingsTitle">🔔 Уведомления</b>
+        <div id="notificationSettingsHint" class="settings-hint">Выберите, какие события показывать в центре уведомлений.</div>
+        <div class="notification-pref-grid">
+          <label class="notification-pref"><span><span id="notificationPrefDebtsLabel">Долги и сроки</span><small id="notificationPrefDebtsHint">Новые долги, изменения и просрочки</small></span><input id="notificationPrefDebts" type="checkbox" onchange="saveNotificationPreferences()"></label>
+          <label class="notification-pref"><span><span id="notificationPrefPaymentsLabel">Оплаты</span><small id="notificationPrefPaymentsHint">Частичные и полные оплаты</small></span><input id="notificationPrefPayments" type="checkbox" onchange="saveNotificationPreferences()"></label>
+          <label class="notification-pref"><span><span id="notificationPrefUsersLabel">Пользователи</span><small id="notificationPrefUsersHint">Создание и изменение доступа</small></span><input id="notificationPrefUsers" type="checkbox" onchange="saveNotificationPreferences()"></label>
+          <label class="notification-pref" id="notificationSecurityPrefRow"><span><span id="notificationPrefSecurityLabel">Безопасность</span><small id="notificationPrefSecurityHint">Входы, блокировки и изменение пароля</small></span><input id="notificationPrefSecurity" type="checkbox" onchange="saveNotificationPreferences()"></label>
+          <label class="notification-pref"><span><span id="notificationPrefSoundLabel">Звук</span><small id="notificationPrefSoundHint">Короткий сигнал при новых событиях</small></span><input id="notificationPrefSound" type="checkbox" onchange="saveNotificationPreferences()"></label>
+          <label class="notification-pref"><span><span id="notificationPrefBrowserLabel">Уведомления браузера</span><small id="notificationPrefBrowserHint">Показывать, пока приложение открыто</small></span><input id="notificationPrefBrowser" type="checkbox" onchange="saveNotificationPreferences(true)"></label>
+        </div>
+        <div id="notificationSettingsStatus" class="notification-settings-status"></div>
+      </div>
       <div class="card settings-card account-security-card" id="accountSecurityCard">
         <b id="accountSecurityTitle">🔐 Безопасность аккаунта</b>
         <div id="accountSecurityInfo" class="account-security-info"></div>
@@ -2415,6 +2444,10 @@ html[data-theme="light"] .user-row{background:#f8fafc;border-color:#e2e8f0;}html
           <button id="addUserBtn" class="add-debt-btn compact-action-btn" type="button" onclick="openUserModal()">+ Добавить</button>
         </div>
         <div id="usersList" class="users-list"><div class="settings-hint">Загрузка...</div></div>
+      </div>
+      <div class="card settings-card security-events-card" id="securityEventsCard" style="display:none;">
+        <div class="security-events-head"><div><b id="securityEventsTitle">🛡 События безопасности</b><div id="securityEventsHint" class="settings-hint">Последние входы, блокировки и изменения доступа</div></div><button id="securityEventsRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityEvents()">Обновить</button></div>
+        <div id="securityEventsList" class="security-events-list"><div class="settings-hint">Загрузка...</div></div>
       </div>
       <div class="card settings-card">
         <b id="settingsActionsTitle">🛠 Действия</b>
@@ -2558,6 +2591,27 @@ html[data-theme="light"] .user-row{background:#f8fafc;border-color:#e2e8f0;}html
   </div>
 </div>
 
+<div class="modal notification-center-modal" id="notificationCenterModal" onclick="notificationBackdropClose(event)">
+  <div class="modal-content notification-drawer" onclick="event.stopPropagation()">
+    <div class="notification-head">
+      <div><div id="notificationCenterTitle" class="notification-title">Уведомления</div><div id="notificationCenterSubtitle" class="notification-subtitle">События по долгам, оплатам и безопасности</div></div>
+      <div class="notification-head-actions"><button class="notification-icon-btn" type="button" onclick="loadNotifications({silent:false})" aria-label="Обновить">↻</button><button class="notification-icon-btn" type="button" onclick="closeNotificationCenter()" aria-label="Закрыть">×</button></div>
+    </div>
+    <div class="notification-toolbar">
+      <div class="notification-filters">
+        <button class="notification-filter active" data-notification-filter="all" onclick="setNotificationFilter('all')">Все</button>
+        <button class="notification-filter" data-notification-filter="unread" onclick="setNotificationFilter('unread')">Новые</button>
+        <button class="notification-filter" data-notification-filter="debts" onclick="setNotificationFilter('debts')">Долги</button>
+        <button class="notification-filter" data-notification-filter="payments" onclick="setNotificationFilter('payments')">Оплаты</button>
+        <button class="notification-filter" data-notification-filter="security" onclick="setNotificationFilter('security')">Безопасность</button>
+        <button class="notification-filter" data-notification-filter="users" onclick="setNotificationFilter('users')">Пользователи</button>
+      </div>
+      <button id="notificationMarkAllBtn" class="notification-mark-all" type="button" onclick="markAllNotificationsRead()">Прочитать все</button>
+    </div>
+    <div id="notificationList" class="notification-list"><div class="notification-empty">Загрузка...</div></div>
+  </div>
+</div>
+
 <div class="modal" id="userModal">
   <div class="modal-content user-modal-content">
     <div class="auth-flow-head">
@@ -2622,13 +2676,20 @@ html[data-theme="light"] .user-row{background:#f8fafc;border-color:#e2e8f0;}html
 </div>
 
 <script>
-const VERSION="5.2.0";
+const VERSION="5.3.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 let authToken = sessionStorage.getItem("authToken") || "";
 let currentUser = null;
 let currentSeller = null;
 let appUsers = [];
+let appNotifications = [];
+let notificationPreferences = null;
+let notificationFilter = "all";
+let notificationPollTimer = null;
+let notificationFirstLoad = true;
+let notificationTopUnreadId = sessionStorage.getItem("notificationTopUnreadId") || "";
+let securityEvents = [];
 let editingUserId = null;
 let authFlowMode = "reset";
 let authFlowStep = "request";
@@ -3404,7 +3465,7 @@ async function apiPost(action,payload={},options={}){
   }
   return data||{};
 }
-function clearAuthSession_(){ authToken=""; currentUser=null; currentSeller=null; sessionStorage.removeItem("authToken"); }
+function clearAuthSession_(){ stopNotificationPolling_(); authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); }
 function showLogin_(){
   const login=document.getElementById("loginScreen"); if(login)login.style.display="flex";
   if(mainHeader)mainHeader.style.display="none"; if(appContent)appContent.style.display="none"; document.body.classList.remove("app-open");
@@ -3417,14 +3478,22 @@ function applySecurityTranslations_(){
     usersSettingsTitle:["👥 Пользователи","👥 Истифодабарандагон"],usersSettingsHint:["Управление доступом сотрудников","Идоракунии дастрасии кормандон"],addUserBtn:["+ Добавить","+ Илова"],
     userNameLabel:["Имя","Ном"],userEmailLabel:["Email / логин","Email / логин"],userRoleLabel:["Роль","Нақш"],userActiveLabel:["Пользователь активен","Истифодабаранда фаъол аст"],saveUserBtn:["Сохранить","Захира"],
     changePasswordTitle:["Изменить пароль","Иваз кардани парол"],changePasswordSubtitle:["После смены пароля все активные сессии будут завершены.","Пас аз иваз кардани парол ҳамаи сессияҳои фаъол баста мешаванд."],
-    oldPasswordLabel:["Текущий пароль","Пароли ҷорӣ"],newPasswordLabel:["Новый пароль","Пароли нав"],confirmNewPasswordLabel:["Повторите новый пароль","Пароли навро такрор кунед"],changePasswordSaveBtn:["Изменить пароль","Иваз кардани парол"]
+    oldPasswordLabel:["Текущий пароль","Пароли ҷорӣ"],newPasswordLabel:["Новый пароль","Пароли нав"],confirmNewPasswordLabel:["Повторите новый пароль","Пароли навро такрор кунед"],changePasswordSaveBtn:["Изменить пароль","Иваз кардани парол"],
+    notificationSettingsTitle:["🔔 Уведомления","🔔 Огоҳиномаҳо"],notificationSettingsHint:["Выберите, какие события показывать в центре уведомлений.","Интихоб кунед, ки кадом рӯйдодҳо дар маркази огоҳиномаҳо нишон дода шаванд."],
+    notificationPrefDebtsLabel:["Долги и сроки","Қарзҳо ва муҳлатҳо"],notificationPrefDebtsHint:["Новые долги, изменения и просрочки","Қарзҳои нав, тағйирот ва муҳлатгузашта"],notificationPrefPaymentsLabel:["Оплаты","Пардохтҳо"],notificationPrefPaymentsHint:["Частичные и полные оплаты","Пардохтҳои қисман ва пурра"],
+    notificationPrefUsersLabel:["Пользователи","Истифодабарандагон"],notificationPrefUsersHint:["Создание и изменение доступа","Эҷод ва тағйири дастрасӣ"],notificationPrefSecurityLabel:["Безопасность","Амният"],notificationPrefSecurityHint:["Входы, блокировки и изменение пароля","Вурудҳо, басташавӣ ва иваз кардани парол"],
+    notificationPrefSoundLabel:["Звук","Садо"],notificationPrefSoundHint:["Короткий сигнал при новых событиях","Сигнали кӯтоҳ ҳангоми рӯйдоди нав"],notificationPrefBrowserLabel:["Уведомления браузера","Огоҳиномаҳои браузер"],notificationPrefBrowserHint:["Показывать, пока приложение открыто","Ҳангоми кушода будани барнома нишон дода шавад"],
+    securityEventsTitle:["🛡 События безопасности","🛡 Рӯйдодҳои амниятӣ"],securityEventsHint:["Последние входы, блокировки и изменения доступа","Вурудҳо, басташавӣ ва тағйири дастрасии охирин"],securityEventsRefreshBtn:["Обновить","Навсозӣ"],
+    notificationCenterTitle:["Уведомления","Огоҳиномаҳо"],notificationCenterSubtitle:["События по долгам, оплатам и безопасности","Рӯйдодҳои қарзҳо, пардохтҳо ва амният"],notificationMarkAllBtn:["Прочитать все","Ҳамаро хондан"]
   };
   Object.entries(pairs).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=currentLanguage==="tj"?v[1]:v[0];});
   const email=document.getElementById("emailInput"); if(email)email.placeholder="Email";
   const pass=document.getElementById("passwordInput"); if(pass)pass.placeholder=securityText_("Пароль","Парол");
   document.querySelectorAll(".login-lang-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.lang===currentLanguage));
   if(document.getElementById("authFlowModal")?.style.display==="flex")renderAuthFlow_();
-  renderUsers_(); renderAccountSecurity_();
+  renderUsers_(); renderAccountSecurity_(); renderNotificationPreferences_(); renderNotifications_(); renderSecurityEvents_();
+  const filterNames={all:["Все","Ҳама"],unread:["Новые","Нав"],debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],security:["Безопасность","Амният"],users:["Пользователи","Истифодабарандагон"]};
+  document.querySelectorAll("[data-notification-filter]").forEach(btn=>{const v=filterNames[btn.dataset.notificationFilter]||filterNames.all;btn.textContent=currentLanguage==="tj"?v[1]:v[0];});
 }
 async function login(){
   const email=String(document.getElementById("emailInput")?.value||"").trim();
@@ -3489,6 +3558,7 @@ function applyPermissions_(){
   ["headerExportBtn","settingsExportBtn"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=exp?"":"none";});
   const uc=document.getElementById("usersSettingsCard");if(uc)uc.style.display=users?"":"none";
   const addUser=document.getElementById("addUserBtn");if(addUser)addUser.style.display=canPermission("manageUsers")?"":"none";
+  const securityCard=document.getElementById("securityEventsCard");if(securityCard)securityCard.style.display=canPermission("security")?"":"none";
   if(currentView==="add"&&!create)currentView="active";if(currentView==="stats"&&!stats)currentView="active";
 }
 function renderAccountSecurity_(){
@@ -3543,6 +3613,101 @@ async function changePassword(){
   try{const r=await apiPost("auth.changePassword",{oldPassword,newPassword});if(!r.success){setMessage_("changePasswordMessage",r.message||"Error","error");return;}closeChangePasswordModal();clearAuthSession_();showLogin_();setMessage_("loginMessage",r.message||securityText_("Пароль изменён. Войдите снова.","Парол иваз шуд. Аз нав ворид шавед."),"success");}catch(e){setMessage_("changePasswordMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
 }
 
+
+/* ---------- NOTIFICATIONS v5.3.0 ---------- */
+function notificationText_(n, field){
+  if(!n)return ""; const lang=currentLanguage==="tj"?"Tj":"Ru"; return String(n[field+lang]||n[field+"Ru"]||"");
+}
+function notificationCategoryLabel_(cat){
+  const m={debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],users:["Пользователи","Истифодабарандагон"],security:["Безопасность","Амният"],system:["Система","Система"]};
+  const x=m[String(cat||"system")]||m.system;return currentLanguage==="tj"?x[1]:x[0];
+}
+function notificationIcon_(cat,type){
+  if(cat==="payments")return type==="PAYMENT_FULL"?"✅":"💵"; if(cat==="security")return type==="ACCOUNT_LOCKED"?"🚨":"🛡"; if(cat==="users")return "👥"; if(cat==="debts")return type==="OVERDUE"?"⚠️":type==="DEBT_REDUCE"?"➖":"💳"; return "🔔";
+}
+function updateNotificationBadge_(count){
+  const badge=document.getElementById("notificationBadge");if(!badge)return;const n=Math.max(0,Number(count||0));badge.textContent=n>99?"99+":String(n);badge.classList.toggle("show",n>0);
+}
+function renderNotificationPreferences_(){
+  if(!notificationPreferences)return;
+  const map={notificationPrefDebts:"debts",notificationPrefPayments:"payments",notificationPrefUsers:"users",notificationPrefSecurity:"security",notificationPrefSound:"sound",notificationPrefBrowser:"browser"};
+  Object.entries(map).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.checked=!!notificationPreferences[key];});
+  const security=document.getElementById("notificationPrefSecurity"),row=document.getElementById("notificationSecurityPrefRow");
+  const locked=currentUser?.role==="owner";if(security){security.disabled=!!locked;if(locked)security.checked=true;}if(row)row.classList.toggle("locked",!!locked);
+}
+async function saveNotificationPreferences(requestBrowser=false){
+  const status=document.getElementById("notificationSettingsStatus");
+  const payload={debts:!!document.getElementById("notificationPrefDebts")?.checked,payments:!!document.getElementById("notificationPrefPayments")?.checked,users:!!document.getElementById("notificationPrefUsers")?.checked,security:!!document.getElementById("notificationPrefSecurity")?.checked,sound:!!document.getElementById("notificationPrefSound")?.checked,browser:!!document.getElementById("notificationPrefBrowser")?.checked};
+  if(currentUser?.role==="owner")payload.security=true;
+  if(requestBrowser&&payload.browser&&"Notification" in window&&Notification.permission==="default"){
+    try{const permission=await Notification.requestPermission();if(permission!=="granted"){payload.browser=false;const el=document.getElementById("notificationPrefBrowser");if(el)el.checked=false;}}catch(e){payload.browser=false;}
+  }
+  if(status)status.textContent=securityText_("Сохранение...","Захира...");
+  try{const r=await apiPost("notifications.preferences.save",payload);if(!r.success)throw new Error(r.message||"Error");notificationPreferences=r.preferences||payload;renderNotificationPreferences_();if(status)status.textContent=securityText_("Настройки сохранены","Танзимот захира шуд");await loadNotifications({silent:true});}
+  catch(e){if(status)status.textContent="❌ "+String(e.message||e);}
+}
+function playNotificationTone_(){
+  if(!notificationPreferences?.sound)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ctx=new AC(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.frequency.value=720;gain.gain.setValueAtTime(.045,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.16);osc.start();osc.stop(ctx.currentTime+.17);setTimeout(()=>ctx.close(),250);}catch(e){}
+}
+function showBrowserNotification_(n){
+  if(!notificationPreferences?.browser||!("Notification" in window)||Notification.permission!=="granted"||!n)return;
+  try{new Notification(notificationText_(n,"title")||"Fashion&StyleLife",{body:notificationText_(n,"message")||"",tag:"debt-notification-"+n.id});}catch(e){}
+}
+async function loadNotifications(options={}){
+  if(!authToken)return;const silent=options.silent===true;
+  try{
+    const r=await apiPost("notifications.list",{limit:100});if(!r.success)throw new Error(r.message||"Error");
+    appNotifications=Array.isArray(r.notifications)?r.notifications:[];notificationPreferences=r.preferences||notificationPreferences||{};updateNotificationBadge_(r.unreadCount||0);renderNotificationPreferences_();renderNotifications_();
+    const newest=appNotifications.find(n=>!n.isRead);
+    if(!notificationFirstLoad&&newest&&newest.id&&newest.id!==notificationTopUnreadId){playNotificationTone_();showBrowserNotification_(newest);}
+    notificationFirstLoad=false;if(newest?.id){notificationTopUnreadId=newest.id;sessionStorage.setItem("notificationTopUnreadId",newest.id);}
+  }catch(e){if(!silent&&document.getElementById("notificationCenterModal")?.style.display==="flex"){document.getElementById("notificationList").innerHTML=`<div class="notification-empty">❌ ${escapeHtml(e.message||String(e))}</div>`;}}
+}
+function renderNotifications_(){
+  const box=document.getElementById("notificationList");if(!box)return;let list=[...(appNotifications||[])];
+  if(notificationFilter==="unread")list=list.filter(n=>!n.isRead);else if(notificationFilter!=="all")list=list.filter(n=>n.category===notificationFilter);
+  document.querySelectorAll("[data-notification-filter]").forEach(btn=>btn.classList.toggle("active",btn.dataset.notificationFilter===notificationFilter));
+  if(!list.length){box.innerHTML=`<div class="notification-empty">${securityText_("Здесь пока нет уведомлений","Ҳоло огоҳинома нест")}</div>`;return;}
+  box.innerHTML=list.map(n=>`<div class="notification-item ${n.isRead?"":"unread"} ${escapeAttr_(n.severity||"info")}" onclick="openNotificationItem('${escapeAttr_(n.id)}')"><div class="notification-row-top"><div class="notification-item-title">${notificationIcon_(n.category,n.type)} ${escapeHtml(notificationText_(n,"title")||securityText_("Уведомление","Огоҳинома"))}</div><div class="notification-time">${escapeHtml(String(n.createdAt||""))}</div></div><div class="notification-message">${escapeHtml(notificationText_(n,"message"))}</div><div class="notification-meta"><span class="notification-category-chip">${escapeHtml(notificationCategoryLabel_(n.category))}</span>${n.actorName?`<span class="notification-category-chip">👤 ${escapeHtml(n.actorName)}</span>`:""}</div></div>`).join("");
+}
+function setNotificationFilter(filter){notificationFilter=String(filter||"all");renderNotifications_();}
+async function openNotificationCenter(){document.getElementById("notificationCenterModal").style.display="flex";document.body.style.overflow="hidden";await loadNotifications({silent:false});}
+function closeNotificationCenter(){const m=document.getElementById("notificationCenterModal");if(m)m.style.display="none";document.body.style.overflow="";}
+function notificationBackdropClose(e){if(e?.target?.id==="notificationCenterModal")closeNotificationCenter();}
+async function markNotificationRead(id){
+  const n=appNotifications.find(x=>x.id===id);if(n&&!n.isRead){n.isRead=true;renderNotifications_();updateNotificationBadge_(appNotifications.filter(x=>!x.isRead).length);try{await apiPost("notifications.markRead",{id});}catch(e){}}
+}
+async function markAllNotificationsRead(){
+  try{const r=await apiPost("notifications.markAllRead",{});if(!r.success)throw new Error(r.message||"Error");appNotifications.forEach(n=>n.isRead=true);updateNotificationBadge_(0);renderNotifications_();}
+  catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
+}
+async function openNotificationItem(id){
+  const n=appNotifications.find(x=>x.id===id);if(!n)return;await markNotificationRead(id);closeNotificationCenter();
+  if(n.entityType==="debt"||n.entityType==="paidDebt"){
+    const view=n.entityType==="paidDebt"?"paid":"active";showView(view);
+    const safeId=(window.CSS&&CSS.escape)?CSS.escape(String(n.entityId||"")):String(n.entityId||"").replace(/[^a-zA-Z0-9_-]/g,"\$&");
+    const selector=`[data-debt-id="${safeId}"]`;
+    let el=document.querySelector(selector);
+    if(!el){await loadDebts();el=document.querySelector(selector);}
+    if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("notification-focus");setTimeout(()=>el.classList.remove("notification-focus"),1400);}
+  } else if(n.entityType==="user") {showView("settings");setTimeout(()=>document.getElementById("usersSettingsCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}
+  else if(n.entityType==="security") {showView("settings");setTimeout(()=>document.getElementById(canPermission("security")?"securityEventsCard":"accountSecurityCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}
+}
+function securityEventLabel_(event){
+  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Код активации отправлен",LOGOUT:"Выход",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений"};
+  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Рамзи фаъолсозӣ фиристода шуд",LOGOUT:"Баромад",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома"};return (currentLanguage==="tj"?tj:ru)[event]||event;
+}
+async function loadSecurityEvents(){
+  if(!canPermission("security"))return;const box=document.getElementById("securityEventsList");if(box)box.innerHTML=`<div class="settings-hint">${securityText_("Загрузка...","Боркунӣ...")}</div>`;
+  try{const r=await apiPost("security.events",{limit:35});if(!r.success)throw new Error(r.message||"Error");securityEvents=Array.isArray(r.events)?r.events:[];renderSecurityEvents_();}catch(e){if(box)box.innerHTML=`<div class="settings-hint">❌ ${escapeHtml(e.message||String(e))}</div>`;}
+}
+function renderSecurityEvents_(){
+  const box=document.getElementById("securityEventsList");if(!box)return;if(!canPermission("security")){box.innerHTML="";return;}if(!securityEvents.length){box.innerHTML=`<div class="settings-hint">${securityText_("Событий пока нет","Ҳоло рӯйдод нест")}</div>`;return;}
+  box.innerHTML=securityEvents.slice(0,12).map(e=>`<div class="security-event"><div class="security-event-top"><div class="security-event-title">${escapeHtml(securityEventLabel_(e.event))} ${e.email?`· ${escapeHtml(e.email)}`:""}</div><div class="security-event-time">${escapeHtml(String(e.date||""))}</div></div><div class="security-event-detail">${escapeHtml(String(e.details||""))}</div><div class="notification-meta"><span class="security-result ${String(e.result).toUpperCase()==="SUCCESS"?"":"fail"}">${escapeHtml(String(e.result||""))}</span></div></div>`).join("");
+}
+function startNotificationPolling_(){if(notificationPollTimer)clearInterval(notificationPollTimer);notificationPollTimer=setInterval(()=>loadNotifications({silent:true}),60000);}
+function stopNotificationPolling_(){if(notificationPollTimer){clearInterval(notificationPollTimer);notificationPollTimer=null;}}
+
 /* ---------- LOGIN ---------- */
 
 function openApp(){
@@ -3557,7 +3722,10 @@ function openApp(){
   renderAccountSecurity_();
   showView(currentView || "active");
   loadDebts();
+  loadNotifications({silent:true});
+  startNotificationPolling_();
   if(canPermission("viewUsers"))loadUsers();
+  if(canPermission("security"))loadSecurityEvents();
 }
 
 window.onload = async function(){
@@ -3814,6 +3982,7 @@ async function addDebt(){
       saveBtn.disabled=true;
       showToast(`✅ <b>${t("newDebtSuccessToast")}</b>`, "success");
       loadDebts();
+      loadNotifications({silent:true});
     } else if (result.code === "DUPLICATE_ACTIVE_DEBT") {
       await loadDebts();
       handlePhoneLookup(true);
@@ -4168,7 +4337,7 @@ function buildDebtCardHtml(d){
   const financialActions=financialButtons.length?`<div class="action-row">${financialButtons.join("")}</div>`:"";
 
   return `
-    <div class="${cardClass}">
+    <div class="${cardClass}" data-debt-id="${escapeAttr_(String(d.id||d.row||''))}">
       <b>${escapeHtml(String(d.client||""))}</b> (${t("dueDateText",{date:d.dueDate})})<br>
       ${t("phonePlaceholder")}: ${escapeHtml(phoneNormalized)}<br>
       ${t("debtAmount")}: ${d.total} ${t("somoni")}<br>
@@ -4207,7 +4376,7 @@ function renderDebts(list){
 function buildPaidDebtCardHtml(d){
   const phoneNormalized = normalizePhone(d.phone);
   return `
-    <div class="card paid-card">
+    <div class="card paid-card" data-debt-id="${escapeAttr_(String(d.id||d.row||''))}">
       <b>${d.client}</b><br>
       ${t("phonePlaceholder")}: ${phoneNormalized}<br>
       ${t("debtAmount")}: ${d.total} ${t("somoni")}<br>
@@ -4255,6 +4424,7 @@ function showView(view){
     renderStats(lastStatsData||{});
   }
   window.scrollTo({top:0,behavior:"smooth"});
+  if(view==="settings"){loadNotifications({silent:true});if(canPermission("security"))loadSecurityEvents();}
 }
 
 /* ---------- ПОИСК ---------- */
@@ -4313,6 +4483,7 @@ function confirmPayment(){
     if(result.success===false){showToast(`❌ ${escapeHtml(result.message||t("errorSaveToast"))}`,"error");return;}
     paymentModal.style.display = "none";
     loadDebts();
+    loadNotifications({silent:true});
   }).catch(err=>{paymentLoader.style.display="none";showToast(`❌ ${escapeHtml(err.message||String(err))}`,"error");});
 }
 
@@ -4359,6 +4530,7 @@ function confirmFullClose(){
 
       showToast(`✅ <b>${t("closeDebtSuccess")}</b>`, "success");
       loadDebts();
+      loadNotifications({silent:true});
     })
     .catch(err => {
       console.error(err);
@@ -4432,6 +4604,7 @@ async function confirmAddToDebt(){
       closeAddToDebtModal();
       showToast(`✅ <b>${t("addToDebtSuccess")}</b><br>💰 +${amount} ${t("somoni")}`, "append");
       loadDebts();
+      loadNotifications({silent:true});
     } else {
       showToast(`❌ ${t("errorSaveToast")}`, "error");
     }
@@ -4477,6 +4650,7 @@ async function confirmReduceDebt(){
       closeReduceDebtModal();
       showToast(`✅ <b>${statsLocale_('Долг уменьшен','Қарз кам карда шуд')}</b><br>➖ ${statsMoney_(amount)} ${t('somoni')}`,'success');
       await loadDebts();
+      loadNotifications({silent:true});
     }else{
       const msg=result?.message||t('errorSaveToast');
       showToast(`❌ ${escapeHtml(String(msg))}`,'error');
