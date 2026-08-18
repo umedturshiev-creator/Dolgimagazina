@@ -2357,6 +2357,48 @@ html[data-theme="light"] .audit-item,html[data-theme="light"] .audit-diff-col{ba
 .responsible-form-field select{margin:0!important}
 .assign-debt-user-meta{font-size:10px;color:var(--text-3);margin-top:5px}
 html[data-theme="light"] .debt-responsible-box{background:#eff6ff;border-color:#dbeafe}
+
+/* ===== SECURITY CENTER v5.6.0 ===== */
+.security-center-card{padding:16px!important;}
+.security-center-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.security-center-head b{display:block;font-size:15px;letter-spacing:-.01em;}
+.security-center-head-actions{display:flex;gap:7px;align-items:center;}
+.security-center-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0;}
+.security-summary-chip{padding:11px 12px;border-radius:16px;background:rgba(148,163,184,.065);border:1px solid rgba(148,163,184,.11);min-width:0;}
+.security-summary-chip span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);font-weight:850;margin-bottom:4px;}
+.security-summary-chip b{display:block;font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.security-summary-chip.good b{color:#86efac}.security-summary-chip.warn b{color:#fbbf24}.security-summary-chip.danger b{color:#fca5a5}
+.security-account-line{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 12px;border-radius:16px;background:rgba(59,130,246,.07);border:1px solid rgba(96,165,250,.12);}
+.security-account-main{min-width:0;font-size:11px;line-height:1.55;color:var(--text-2)}
+.security-account-main b{font-size:13px;color:var(--text-1)}
+.security-account-line #changePasswordBtn{width:auto!important;min-width:170px;margin:0!important;}
+.security-center-section{margin-top:14px;padding-top:13px;border-top:1px solid rgba(148,163,184,.12);}
+.security-center-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;}
+.security-center-section-head b{font-size:12px;color:var(--text-1)}
+.security-center-section-head small{font-size:10px;color:var(--text-3)}
+.security-sessions-list,.security-own-events,.security-all-sessions-list{display:grid;gap:7px;max-height:350px;overflow:auto;padding-right:4px;overscroll-behavior:contain;scrollbar-width:thin;}
+.security-session-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;border-radius:15px;background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.105);}
+.security-session-main{display:flex;align-items:center;gap:10px;min-width:0;}
+.security-device-icon{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border-radius:12px;background:rgba(59,130,246,.11);border:1px solid rgba(96,165,250,.12);font-size:18px;}
+.security-session-copy{min-width:0}.security-session-title{font-size:12px;font-weight:850;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.security-session-sub{font-size:10px;color:var(--text-3);margin-top:3px;line-height:1.45;}
+.security-current-tag{display:inline-flex;padding:2px 6px;border-radius:999px;background:rgba(34,197,94,.12);color:#86efac;font-size:8px;font-weight:900;margin-left:5px;vertical-align:1px;}
+.security-session-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto;}
+.security-session-revoke{width:auto!important;margin:0!important;padding:7px 9px!important;min-height:32px!important;border-radius:10px!important;background:rgba(239,68,68,.10)!important;color:#fca5a5!important;border:1px solid rgba(239,68,68,.15)!important;font-size:10px!important;font-weight:850!important;}
+.security-center-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.security-center-actions button{width:auto!important;margin:0!important;min-height:38px!important;padding:8px 11px!important;font-size:10px!important;}
+.security-center-danger{background:rgba(239,68,68,.12)!important;color:#fecaca!important;border:1px solid rgba(239,68,68,.16)!important;}
+.security-own-event{padding:9px 10px;border-radius:13px;background:rgba(148,163,184,.05);border:1px solid rgba(148,163,184,.09);}
+.security-own-event-top{display:flex;justify-content:space-between;gap:8px;font-size:10px}.security-own-event-top b{font-size:11px;color:var(--text-1)}.security-own-event-time{color:var(--text-3);white-space:nowrap}.security-own-event-detail{font-size:10px;color:var(--text-2);margin-top:3px;line-height:1.4}
+.security-all-sessions-card{grid-column:1/-1;padding:16px!important;}
+.security-session-user{font-size:9px;color:#93c5fd;font-weight:800;margin-top:2px;}
+.security-empty{padding:12px;border-radius:14px;background:rgba(148,163,184,.05);color:var(--text-3);font-size:11px;text-align:center;}
+html[data-theme="light"] .security-summary-chip,html[data-theme="light"] .security-session-item,html[data-theme="light"] .security-own-event{background:#f8fafc;border-color:#e2e8f0}
+html[data-theme="light"] .security-summary-chip.good b{color:#15803d}html[data-theme="light"] .security-summary-chip.warn b{color:#b45309}html[data-theme="light"] .security-summary-chip.danger b{color:#b91c1c}
+html[data-theme="light"] .security-account-line{background:#eff6ff;border-color:#dbeafe}html[data-theme="light"] .security-current-tag{color:#15803d;background:#f0fdf4}html[data-theme="light"] .security-session-revoke{color:#b91c1c!important;background:#fff1f2!important;border-color:#fecdd3!important}html[data-theme="light"] .security-center-danger{color:#b91c1c!important;background:#fff1f2!important;border-color:#fecdd3!important}html[data-theme="light"] .security-session-user{color:#2563eb}
+.security-sessions-list::-webkit-scrollbar,.security-own-events::-webkit-scrollbar,.security-all-sessions-list::-webkit-scrollbar{width:7px}.security-sessions-list::-webkit-scrollbar-thumb,.security-own-events::-webkit-scrollbar-thumb,.security-all-sessions-list::-webkit-scrollbar-thumb{background:rgba(148,163,184,.28);border-radius:999px}
+@media(max-width:900px){.security-center-summary{grid-template-columns:repeat(2,minmax(0,1fr));}.security-account-line{align-items:stretch;flex-direction:column}.security-account-line #changePasswordBtn{width:100%!important}.security-session-item{align-items:flex-start}.security-session-actions{padding-top:2px}}
+@media(max-width:640px){.security-center-card,.security-all-sessions-card{padding:13px!important}.security-center-summary{grid-template-columns:1fr 1fr;gap:6px}.security-summary-chip{padding:9px 10px}.security-session-item{padding:9px}.security-session-revoke{padding:6px 8px!important}.security-center-actions{display:grid;grid-template-columns:1fr}.security-center-actions button{width:100%!important}.security-own-event-top{flex-direction:column;gap:2px}.security-sessions-list,.security-own-events,.security-all-sessions-list{max-height:300px}}
+
 html[data-theme="light"] .debt-responsible-btn{color:#1d4ed8!important;background:#eef2ff!important}
 html[data-theme="light"] .debt-scope-btn{background:#f8fafc!important;color:#475569!important;border-color:#e2e8f0!important}
 html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:linear-gradient(135deg,#2563eb,#6366f1)!important}
@@ -2537,7 +2579,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
       </div>
       <div class="audit-toolbar-grid">
         <div class="audit-field audit-search-field"><label id="auditSearchLabel">Поиск</label><input id="auditSearchInput" placeholder="Клиент, пользователь, действие…" oninput="scheduleAuditReload_()"></div>
-        <div class="audit-field"><label id="auditCategoryLabel">Категория</label><select id="auditCategoryFilter" onchange="loadAuditLog()"><option value="all">Все</option><option value="debts">Долги</option><option value="payments">Оплаты</option><option value="users">Пользователи</option><option value="access">Доступ</option><option value="system">Система</option></select></div>
+        <div class="audit-field"><label id="auditCategoryLabel">Категория</label><select id="auditCategoryFilter" onchange="loadAuditLog()"><option value="all">Все</option><option value="debts">Долги</option><option value="payments">Оплаты</option><option value="users">Пользователи</option><option value="access">Доступ</option><option value="security">Безопасность</option><option value="system">Система</option></select></div>
         <div class="audit-field" id="auditUserField"><label id="auditUserLabel">Пользователь</label><select id="auditUserFilter" onchange="loadAuditLog()"><option value="">Все пользователи</option></select></div>
         <div class="audit-field"><label id="auditFromLabel">С даты</label><input id="auditDateFrom" type="date" onchange="loadAuditLog()"></div>
         <div class="audit-field"><label id="auditToLabel">По дату</label><input id="auditDateTo" type="date" onchange="loadAuditLog()"></div>
@@ -2598,10 +2640,22 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
         </div>
         <div id="notificationSettingsStatus" class="notification-settings-status"></div>
       </div>
-      <div class="card settings-card account-security-card settings-wide-card" id="accountSecurityCard">
-        <b id="accountSecurityTitle">🔐 Безопасность аккаунта</b>
-        <div id="accountSecurityInfo" class="account-security-info"></div>
-        <button id="changePasswordBtn" class="add-debt-btn" type="button" onclick="openChangePasswordModal()">Изменить пароль</button>
+      <div class="card settings-card security-center-card settings-wide-card" id="accountSecurityCard">
+        <div class="security-center-head">
+          <div><b id="accountSecurityTitle">🔐 Security Center</b><div id="securityCenterHint" class="settings-hint">Устройства, активные сессии и защита аккаунта.</div></div>
+          <div class="security-center-head-actions"><button id="securityCenterRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityCenter()">Обновить</button></div>
+        </div>
+        <div id="securityCenterSummary" class="security-center-summary"><div class="security-empty">Загрузка…</div></div>
+        <div class="security-account-line"><div id="accountSecurityInfo" class="security-account-main"></div><button id="changePasswordBtn" class="add-debt-btn" type="button" onclick="openChangePasswordModal()">Изменить пароль</button></div>
+        <div class="security-center-section">
+          <div class="security-center-section-head"><div><b id="securityDevicesTitle">Активные устройства</b><small id="securityDevicesHint">Сессия действует максимум 12 часов.</small></div></div>
+          <div id="securitySessionsList" class="security-sessions-list"><div class="security-empty">Загрузка…</div></div>
+          <div class="security-center-actions"><button id="securityRevokeOthersBtn" class="user-mini-btn" type="button" onclick="revokeOtherSecuritySessions()">Завершить другие сессии</button><button id="securityRevokeAllBtn" class="security-center-danger" type="button" onclick="revokeAllSecuritySessions()">Выйти со всех устройств</button></div>
+        </div>
+        <div class="security-center-section">
+          <div class="security-center-section-head"><div><b id="securityOwnEventsTitle">Последняя активность безопасности</b><small id="securityOwnEventsHint">Входы, попытки входа и изменения доступа.</small></div></div>
+          <div id="securityOwnEvents" class="security-own-events"><div class="security-empty">Загрузка…</div></div>
+        </div>
       </div>
       <div class="card settings-card users-settings-card settings-wide-card" id="usersSettingsCard" style="display:none;">
         <div class="users-card-head">
@@ -2612,6 +2666,10 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
           <button id="addUserBtn" class="add-debt-btn compact-action-btn" type="button" onclick="openUserModal()">+ Добавить</button>
         </div>
         <div id="usersList" class="users-list"><div class="settings-hint">Загрузка...</div></div>
+      </div>
+      <div class="card settings-card security-all-sessions-card settings-wide-card" id="securityAllSessionsCard" style="display:none;">
+        <div class="security-events-head"><div><b id="securityAllSessionsTitle">🖥 Активные сессии пользователей</b><div id="securityAllSessionsHint" class="settings-hint">Владелец может завершить отдельную сессию сотрудника.</div></div><button id="securityAllSessionsRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityCenter()">Обновить</button></div>
+        <div id="securityAllSessionsList" class="security-all-sessions-list"><div class="security-empty">Загрузка…</div></div>
       </div>
       <div class="card settings-card security-events-card settings-wide-card" id="securityEventsCard" style="display:none;">
         <div class="security-events-head"><div><b id="securityEventsTitle">🛡 События безопасности</b><div id="securityEventsHint" class="settings-hint">Последние события. Список прокручивается.</div></div><button id="securityEventsRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityEvents()">Обновить</button></div>
@@ -2866,7 +2924,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
 </div>
 
 <script>
-const VERSION="5.5.0";
+const VERSION="5.6.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 let authToken = sessionStorage.getItem("authToken") || "";
@@ -2906,6 +2964,8 @@ let notificationPrefsRevision = 0;
 let notificationPrefsPending = 0;
 let notificationPrefsSaveQueue = Promise.resolve();
 let securityEvents = [];
+let securityCenterData = null;
+let securityCenterLoading = false;
 let auditEntries = [];
 let auditActors = [];
 let auditLoading = false;
@@ -3705,7 +3765,7 @@ async function apiPost(action,payload={},options={}){
   }
   return data||{};
 }
-function clearAuthSession_(){ stopNotificationPolling_(); authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); cacheAuthUser_(null); document.documentElement.dataset.resume="0"; }
+function clearAuthSession_(){ stopNotificationPolling_(); authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; securityCenterData=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); cacheAuthUser_(null); document.documentElement.dataset.resume="0"; }
 function showLogin_(){
   hideSessionResume_();
   const login=document.getElementById("loginScreen"); if(login)login.style.display="flex";
@@ -3715,7 +3775,9 @@ function applySecurityTranslations_(){
   const pairs={
     loginTitleText:["Вход","Вуруд"],loginSubtitle:["Войдите по электронной почте","Бо почтаи электронӣ ворид шавед"],
     loginSubmitBtn:["Войти","Даромадан"],forgotPasswordBtn:["Забыли пароль?","Паролро фаромӯш кардед?"],
-    accountSecurityTitle:["🔐 Безопасность аккаунта","🔐 Амнияти ҳисоб"],changePasswordBtn:["Изменить пароль","Иваз кардани парол"],
+    accountSecurityTitle:["🔐 Security Center","🔐 Маркази амният"],securityCenterHint:["Устройства, активные сессии и защита аккаунта.","Дастгоҳҳо, сессияҳои фаъол ва ҳифзи ҳисоб."],securityCenterRefreshBtn:["Обновить","Навсозӣ"],changePasswordBtn:["Изменить пароль","Иваз кардани парол"],
+    securityDevicesTitle:["Активные устройства","Дастгоҳҳои фаъол"],securityDevicesHint:["Сессия действует максимум 12 часов.","Сессия то 12 соат амал мекунад."],securityRevokeOthersBtn:["Завершить другие сессии","Бастани сессияҳои дигар"],securityRevokeAllBtn:["Выйти со всех устройств","Баромадан аз ҳамаи дастгоҳҳо"],securityOwnEventsTitle:["Последняя активность безопасности","Фаъолияти охирини амният"],securityOwnEventsHint:["Входы, попытки входа и изменения доступа.","Вурудҳо, кӯшишҳои вуруд ва тағйири дастрасӣ."],
+    securityAllSessionsTitle:["🖥 Активные сессии пользователей","🖥 Сессияҳои фаъоли истифодабарандагон"],securityAllSessionsHint:["Владелец может завершить отдельную сессию сотрудника.","Соҳиб метавонад сессияи алоҳидаи кормандро бандад."],securityAllSessionsRefreshBtn:["Обновить","Навсозӣ"],
     usersSettingsTitle:["👥 Пользователи","👥 Истифодабарандагон"],usersSettingsHint:["Управление доступом сотрудников","Идоракунии дастрасии кормандон"],addUserBtn:["+ Добавить","+ Илова"],
     userNameLabel:["Имя","Ном"],userEmailLabel:["Email / логин","Email / логин"],userRoleLabel:["Роль","Нақш"],userActiveLabel:["Пользователь активен","Истифодабаранда фаъол аст"],saveUserBtn:["Сохранить","Захира"],
     changePasswordTitle:["Изменить пароль","Иваз кардани парол"],changePasswordSubtitle:["После смены пароля все активные сессии будут завершены.","Пас аз иваз кардани парол ҳамаи сессияҳои фаъол баста мешаванд."],
@@ -3739,7 +3801,7 @@ function applySecurityTranslations_(){
   const pass=document.getElementById("passwordInput"); if(pass)pass.placeholder=securityText_("Пароль","Парол");
   document.querySelectorAll(".login-lang-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.lang===currentLanguage));
   if(document.getElementById("authFlowModal")?.style.display==="flex")renderAuthFlow_();
-  renderUsers_(); renderAccountSecurity_(); renderNotificationPreferences_(); renderNotifications_(); renderSecurityEvents_(); renderAuditLog_();
+  renderUsers_(); renderAccountSecurity_(); renderSecurityCenter_(); renderNotificationPreferences_(); renderNotifications_(); renderSecurityEvents_(); renderAuditLog_();
   const filterNames={all:["Все","Ҳама"],unread:["Новые","Нав"],debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],security:["Безопасность","Амният"],users:["Пользователи","Истифодабарандагон"]};
   document.querySelectorAll("[data-notification-filter]").forEach(btn=>{const v=filterNames[btn.dataset.notificationFilter]||filterNames.all;btn.textContent=currentLanguage==="tj"?v[1]:v[0];});
 }
@@ -3750,7 +3812,7 @@ async function login(){
   const btn=document.getElementById("loginSubmitBtn"); if(btn){btn.disabled=true;btn.textContent=securityText_("Вход...","Вуруд...");}
   setMessage_("loginMessage",securityText_("Проверяем данные...","Санҷиши маълумот..."),"info");
   try{
-    const result=await apiPost("auth.login",{email,password},{public:true});
+    const result=await apiPost("auth.login",{email,password,device:getClientDeviceInfo_()},{public:true});
     if(!result.success){
       let msg=result.message||securityText_("Не удалось войти","Вуруд имкон нашуд");
       if(result.code==="LOCKED"&&result.retryAfterSeconds){const min=Math.ceil(Number(result.retryAfterSeconds)/60);msg=securityText_(`Вход временно заблокирован. Повторите примерно через ${min} мин.`,`Вуруд муваққатан баста шуд. Тақрибан пас аз ${min} дақиқа такрор кунед.`);}
@@ -3805,6 +3867,7 @@ function applyPermissions_(){
   const uc=document.getElementById("usersSettingsCard");if(uc)uc.style.display=users?"":"none";
   const addUser=document.getElementById("addUserBtn");if(addUser)addUser.style.display=canPermission("manageUsers")?"":"none";
   const securityCard=document.getElementById("securityEventsCard");if(securityCard)securityCard.style.display=canPermission("security")?"":"none";
+  const allSessionsCard=document.getElementById("securityAllSessionsCard");if(allSessionsCard)allSessionsCard.style.display=canPermission("security")?"":"none";
   const auditAllowed=canPermission("viewAudit");
   const auditNav=document.getElementById("auditNavBtn");if(auditNav)auditNav.style.display=auditAllowed?"":"none";
   const auditView=document.getElementById("view-audit");if(auditView)auditView.style.display=auditAllowed?"":"none";
@@ -3816,10 +3879,66 @@ function applyPermissions_(){
   if(currentView==="add"&&!create)currentView="active";if(currentView==="stats"&&!stats)currentView="active";if(currentView==="audit"&&!auditAllowed)currentView="active";
   updateDebtScopeButtons_();
 }
+function getClientDeviceInfo_(){
+  const ua=String(navigator.userAgent||"");
+  let browser="Браузер";
+  if(/Edg\//i.test(ua))browser="Microsoft Edge";else if(/OPR\//i.test(ua))browser="Opera";else if(/YaBrowser\//i.test(ua))browser="Yandex Browser";else if(/Chrome\//i.test(ua)&&!/Chromium/i.test(ua))browser="Chrome";else if(/Firefox\//i.test(ua))browser="Firefox";else if(/Safari\//i.test(ua)&&!/Chrome\//i.test(ua))browser="Safari";
+  let os="Устройство";
+  if(/Windows NT/i.test(ua))os="Windows";else if(/Android/i.test(ua))os="Android";else if(/iPhone|iPad|iPod/i.test(ua))os=/iPad/i.test(ua)?"iPadOS":"iOS";else if(/Mac OS X/i.test(ua))os="macOS";else if(/Linux/i.test(ua))os="Linux";
+  let deviceType=/iPad|Tablet/i.test(ua)?"tablet":/Mobi|Android|iPhone|iPod/i.test(ua)?"mobile":"desktop";
+  return {deviceType,browser,os,deviceLabel:`${browser} · ${os}`,userAgent:ua};
+}
+function securityDeviceIcon_(type){return type==="mobile"?"📱":type==="tablet"?"▱":"🖥";}
 function renderAccountSecurity_(){
   const box=document.getElementById("accountSecurityInfo");if(!box||!currentUser)return;
-  box.innerHTML=`<b>${escapeHtml(currentUser.name||"")}</b><br>${escapeHtml(currentUser.email||"")}<br>${securityText_("Роль","Нақш")}: <b>${escapeHtml(roleLabel_(currentUser.role))}</b>${currentUser.lastLoginAt?`<br>${securityText_("Последний вход","Вуруди охирин")}: ${escapeHtml(currentUser.lastLoginAt)}`:""}`;
+  const account=securityCenterData?.account||currentUser;
+  const pwd=account.passwordChangedAt?`<br>${securityText_("Пароль изменён","Парол иваз шуд")}: ${escapeHtml(account.passwordChangedAt)}`:"";
+  box.innerHTML=`<b>${escapeHtml(account.name||currentUser.name||"")}</b><br>${escapeHtml(account.email||currentUser.email||"")} · ${securityText_("Роль","Нақш")}: <b>${escapeHtml(roleLabel_(account.role||currentUser.role))}</b>${pwd}`;
 }
+function securitySessionHtml_(s,managed=false){
+  const current=s.current?`<span class="security-current-tag">${securityText_("ТЕКУЩАЯ","ҶОРӢ")}</span>`:"";
+  const user=managed&&s.userName?`<div class="security-session-user">👤 ${escapeHtml(s.userName)}${s.email?` · ${escapeHtml(s.email)}`:""}</div>`:"";
+  const last=s.lastSeenAt||s.createdAt||"—";
+  const title=escapeHtml(s.deviceLabel||`${s.browser||""} · ${s.os||""}`||securityText_("Неизвестное устройство","Дастгоҳи номаълум"));
+  const revokeLabel=s.current?securityText_("Завершить","Бастан"):securityText_("Завершить","Бастан");
+  return `<div class="security-session-item"><div class="security-session-main"><div class="security-device-icon">${securityDeviceIcon_(s.deviceType)}</div><div class="security-session-copy"><div class="security-session-title">${title}${current}</div>${user}<div class="security-session-sub">${securityText_("Активность","Фаъолият")}: ${escapeHtml(last)}<br>${securityText_("Истекает","Анҷом")}: ${escapeHtml(s.expiresAt||"—")}</div></div></div><div class="security-session-actions"><button class="security-session-revoke" type="button" onclick="revokeSecuritySession('${escapeAttr_(s.id)}',${s.current?"true":"false"})">${revokeLabel}</button></div></div>`;
+}
+function renderSecurityCenter_(){
+  const summary=document.getElementById("securityCenterSummary"), sessions=document.getElementById("securitySessionsList"), events=document.getElementById("securityOwnEvents"), allBox=document.getElementById("securityAllSessionsList");
+  renderAccountSecurity_();
+  if(!securityCenterData){if(summary)summary.innerHTML=`<div class="security-empty">${securityText_("Откройте настройки для загрузки данных безопасности","Барои боркунии амният танзимотро кушоед")}</div>`;return;}
+  const a=securityCenterData.account||{}, own=Array.isArray(securityCenterData.sessions)?securityCenterData.sessions:[];
+  if(summary){const attempts=Number(a.failedAttempts||0),locked=!!a.locked;summary.innerHTML=`<div class="security-summary-chip good"><span>${securityText_("Активные сессии","Сессияҳои фаъол")}</span><b>${own.length}</b></div><div class="security-summary-chip"><span>${securityText_("Последний вход","Вуруди охирин")}</span><b>${escapeHtml(a.lastLoginAt||"—")}</b></div><div class="security-summary-chip ${attempts?"warn":"good"}"><span>${securityText_("Ошибки входа","Хатои вуруд")}</span><b>${attempts}</b></div><div class="security-summary-chip ${locked?"danger":"good"}"><span>${securityText_("Статус","Ҳолат")}</span><b>${locked?securityText_("Заблокирован","Баста"):securityText_("Защищён","Ҳифзшуда")}</b></div>`;}
+  if(sessions)sessions.innerHTML=own.length?own.map(s=>securitySessionHtml_(s,false)).join(""):`<div class="security-empty">${securityText_("Активных сессий не найдено","Сессияи фаъол ёфт нашуд")}</div>`;
+  const ownEvents=Array.isArray(securityCenterData.recentEvents)?securityCenterData.recentEvents:[];
+  if(events)events.innerHTML=ownEvents.length?ownEvents.map(e=>`<div class="security-own-event"><div class="security-own-event-top"><b>${escapeHtml(securityEventLabel_(e.event))}</b><span class="security-own-event-time">${escapeHtml(e.date||"")}</span></div><div class="security-own-event-detail">${escapeHtml(e.details||"")}</div></div>`).join(""):`<div class="security-empty">${securityText_("Событий пока нет","Ҳоло рӯйдод нест")}</div>`;
+  const all=Array.isArray(securityCenterData.allSessions)?securityCenterData.allSessions:[];
+  if(allBox)allBox.innerHTML=all.length?all.map(s=>securitySessionHtml_(s,true)).join(""):`<div class="security-empty">${securityText_("Активных сессий пользователей нет","Сессияи фаъоли истифодабарандагон нест")}</div>`;
+}
+async function loadSecurityCenter(){
+  if(securityCenterLoading||!authToken)return;securityCenterLoading=true;
+  const summary=document.getElementById("securityCenterSummary");if(summary&&!securityCenterData)summary.innerHTML=`<div class="security-empty">${securityText_("Загрузка…","Боркунӣ…")}</div>`;
+  try{const r=await apiPost("security.center",{device:getClientDeviceInfo_()});if(!r.success)throw new Error(r.message||"Error");securityCenterData=r;renderSecurityCenter_();}
+  catch(e){if(summary)summary.innerHTML=`<div class="security-empty">❌ ${escapeHtml(e.message||String(e))}</div>`;}
+  finally{securityCenterLoading=false;}
+}
+async function revokeSecuritySession(id,isCurrent){
+  const text=isCurrent?securityText_("Завершить текущую сессию? Вы выйдете из программы.","Сессияи ҷориро бандед? Аз барнома мебароед."):securityText_("Завершить выбранную сессию?","Сессияи интихобшударо бандед?");
+  if(!window.confirm(text))return;
+  try{const r=await apiPost("security.session.revoke",{sessionId:id});if(!r.success)throw new Error(r.message||"Error");if(r.currentRevoked){clearAuthSession_();showLogin_();setMessage_("loginMessage",securityText_("Сессия завершена. Войдите снова.","Сессия баста шуд. Аз нав ворид шавед."),"success");return;}showToast(`✅ <b>${securityText_("Сессия завершена","Сессия баста шуд")}</b>`,"success");await loadSecurityCenter();}
+  catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
+}
+async function revokeOtherSecuritySessions(){
+  if(!window.confirm(securityText_("Завершить все другие сессии вашего аккаунта? Текущая останется активной.","Ҳама сессияҳои дигари ҳисоби худро бандед? Сессияи ҷорӣ фаъол мемонад.")))return;
+  try{const r=await apiPost("security.sessions.revokeOthers",{});if(!r.success)throw new Error(r.message||"Error");showToast(`✅ <b>${securityText_(`Завершено сессий: ${r.count||0}`,`Сессияҳои басташуда: ${r.count||0}`)}</b>`,"success");await loadSecurityCenter();}
+  catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
+}
+async function revokeAllSecuritySessions(){
+  if(!window.confirm(securityText_("Выйти со всех устройств? Текущая сессия тоже будет завершена.","Аз ҳамаи дастгоҳҳо бароед? Сессияи ҷорӣ низ баста мешавад.")))return;
+  try{const r=await apiPost("security.sessions.revokeAll",{});if(!r.success)throw new Error(r.message||"Error");clearAuthSession_();showLogin_();setMessage_("loginMessage",securityText_("Все сессии завершены. Войдите снова.","Ҳама сессияҳо баста шуданд. Аз нав ворид шавед."),"success");}
+  catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
+}
+
 async function loadUsers(){
   if(!canPermission("viewUsers"))return;
   const box=document.getElementById("usersList");if(box)box.innerHTML=`<div class="settings-hint">${securityText_("Загрузка...","Боркунӣ...")}</div>`;
@@ -4099,8 +4218,8 @@ async function openNotificationItem(id){
   else if(n.entityType==="security") {showView("settings");setTimeout(()=>document.getElementById(canPermission("security")?"securityEventsCard":"accountSecurityCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}
 }
 function securityEventLabel_(event){
-  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений"};
-  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Дастури дастрасӣ фиристода шуд",LOGOUT:"Баромад",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома"};return (currentLanguage==="tj"?tj:ru)[event]||event;
+  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",SESSION_REVOKED:"Сессия завершена",OTHER_SESSIONS_REVOKED:"Другие сессии завершены",ALL_SESSIONS_REVOKED:"Все сессии завершены",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений"};
+  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Дастури дастрасӣ фиристода шуд",LOGOUT:"Баромад",SESSION_REVOKED:"Сессия баста шуд",OTHER_SESSIONS_REVOKED:"Сессияҳои дигар баста шуданд",ALL_SESSIONS_REVOKED:"Ҳама сессияҳо баста шуданд",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома"};return (currentLanguage==="tj"?tj:ru)[event]||event;
 }
 async function loadSecurityEvents(){
   if(!canPermission("security"))return;const box=document.getElementById("securityEventsList");if(box)box.innerHTML=`<div class="settings-hint">${securityText_("Загрузка...","Боркунӣ...")}</div>`;
@@ -4873,16 +4992,16 @@ function scheduleAuditReload_(){
   auditSearchTimer_=setTimeout(()=>{auditSearchTimer_=null;loadAuditLog();},320);
 }
 function auditCategoryLabel_(v){
-  const m={debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],users:["Пользователи","Истифодабарандагон"],access:["Доступ","Дастрасӣ"],system:["Система","Система"]};
+  const m={debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],users:["Пользователи","Истифодабарандагон"],access:["Доступ","Дастрасӣ"],security:["Безопасность","Амният"],system:["Система","Система"]};
   const x=m[String(v||"system")]||m.system;return currentLanguage==="tj"?x[1]:x[0];
 }
 function auditActionLabel_(a){
-  const m={DEBT_NEW:["Новый долг","Қарзи нав"],DEBT_APPEND:["Долг увеличен","Қарз зиёд шуд"],DEBT_REDUCE:["Долг уменьшен","Қарз кам шуд"],PAYMENT_PARTIAL:["Частичная оплата","Пардохти қисман"],PAYMENT_FULL:["Полная оплата","Пардохти пурра"],DEBT_ASSIGN:["Назначен ответственный","Масъул таъин шуд"],DEBT_UNASSIGN:["Ответственный снят","Масъул хориҷ шуд"],DEBT_CLAIM:["Долг взят в работу","Қарз ба кор гирифта шуд"],USER_CREATED:["Создан пользователь","Истифодабаранда сохта шуд"],USER_UPDATED:["Изменён пользователь","Истифодабаранда тағйир ёфт"],ACCESS_INSTRUCTION_SENT:["Отправлена инструкция доступа","Дастури дастрасӣ фиристода шуд"],PASSWORD_CHANGE:["Изменён пароль","Парол иваз шуд"],EXPORT_REPORT:["Экспорт отчёта","Содироти ҳисобот"]};
+  const m={DEBT_NEW:["Новый долг","Қарзи нав"],DEBT_APPEND:["Долг увеличен","Қарз зиёд шуд"],DEBT_REDUCE:["Долг уменьшен","Қарз кам шуд"],PAYMENT_PARTIAL:["Частичная оплата","Пардохти қисман"],PAYMENT_FULL:["Полная оплата","Пардохти пурра"],DEBT_ASSIGN:["Назначен ответственный","Масъул таъин шуд"],DEBT_UNASSIGN:["Ответственный снят","Масъул хориҷ шуд"],DEBT_CLAIM:["Долг взят в работу","Қарз ба кор гирифта шуд"],USER_CREATED:["Создан пользователь","Истифодабаранда сохта шуд"],USER_UPDATED:["Изменён пользователь","Истифодабаранда тағйир ёфт"],ACCESS_INSTRUCTION_SENT:["Отправлена инструкция доступа","Дастури дастрасӣ фиристода шуд"],PASSWORD_CHANGE:["Изменён пароль","Парол иваз шуд"],SESSION_REVOKED:["Завершена сессия","Сессия баста шуд"],OTHER_SESSIONS_REVOKED:["Завершены другие сессии","Сессияҳои дигар баста шуданд"],ALL_SESSIONS_REVOKED:["Завершены все сессии","Ҳама сессияҳо баста шуданд"],EXPORT_REPORT:["Экспорт отчёта","Содироти ҳисобот"]};
   const x=m[String(a||"")];return x?(currentLanguage==="tj"?x[1]:x[0]):String(a||"").replaceAll("_"," ");
 }
 function auditIcon_(e){
   if(e.category==="payments")return e.action==="PAYMENT_FULL"?"✅":"💵";
-  if(e.category==="users")return "👥"; if(e.category==="access")return "🔐";
+  if(e.category==="users")return "👥"; if(e.category==="access"||e.category==="security")return "🔐";
   if(e.action==="DEBT_REDUCE")return "➖";if(e.action==="DEBT_APPEND")return "➕";if(e.action==="DEBT_ASSIGN"||e.action==="DEBT_CLAIM")return "👤";return "🧾";
 }
 function auditFieldLabel_(k){
@@ -4903,7 +5022,7 @@ function auditObjectHtml_(obj,title){
 }
 function renderAuditFilterOptions_(){
   const sel=document.getElementById("auditCategoryFilter");if(!sel)return;const prev=sel.value||"all";
-  const opts=[["all","Все","Ҳама"],["debts","Долги","Қарзҳо"],["payments","Оплаты","Пардохтҳо"],["users","Пользователи","Истифодабарандагон"],["access","Доступ","Дастрасӣ"],["system","Система","Система"]];
+  const opts=[["all","Все","Ҳама"],["debts","Долги","Қарзҳо"],["payments","Оплаты","Пардохтҳо"],["users","Пользователи","Истифодабарандагон"],["access","Доступ","Дастрасӣ"],["security","Безопасность","Амният"],["system","Система","Система"]];
   sel.innerHTML=opts.map(x=>`<option value="${x[0]}">${currentLanguage==="tj"?x[2]:x[1]}</option>`).join("");if([...sel.options].some(o=>o.value===prev))sel.value=prev;
 }
 function renderAuditActors_(){
@@ -4962,6 +5081,7 @@ function showView(view){
   window.scrollTo({top:0,behavior:"smooth"});
   if(view==="settings"){
     loadNotifications({silent:true});
+    loadSecurityCenter();
     if(canPermission("viewUsers"))loadUsers();
     if(canPermission("security"))loadSecurityEvents();
   }
