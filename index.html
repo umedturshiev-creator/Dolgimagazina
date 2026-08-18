@@ -2299,6 +2299,48 @@ html[data-theme="light"] .settings-mini-panel{background:#f8fafc;border-color:#e
 html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;background:#fff1f2!important;border-color:#fecdd3!important;}
 @media(max-width:900px){.settings-appearance-grid{grid-template-columns:1fr;}.account-security-card{grid-template-columns:1fr;}.account-security-card>b{grid-column:auto}.account-security-card #changePasswordBtn{width:100%!important}.settings-actions-card .settings-actions{grid-template-columns:1fr;}.notification-toolbar{align-items:flex-start;flex-direction:column}.notification-bulk-actions{width:100%;justify-content:flex-end}.security-events-list{max-height:320px}}
 @media(max-width:640px){#view-settings{max-width:none}.settings-appearance-card,.notification-settings-card,.settings-wide-card{padding:13px!important}.notification-pref-grid{grid-template-columns:1fr!important}.notification-bulk-actions{justify-content:space-between}.notification-mark-all,.notification-clear-all{font-size:10px!important;padding:7px 8px!important}.notification-item-side{gap:3px}.notification-time{font-size:9px}.notification-delete-one{width:26px!important;height:26px!important;min-width:26px!important}}
+
+/* ===== TEAM / RESPONSIBLE v5.4.0 ===== */
+.debt-scope-bar{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;
+}
+.debt-scope-btn{
+  width:auto!important;min-width:0!important;margin:0!important;padding:8px 12px!important;
+  border-radius:999px!important;background:rgba(148,163,184,.08)!important;
+  border:1px solid rgba(148,163,184,.12)!important;color:var(--text-2)!important;
+  box-shadow:none!important;font-size:11px!important;font-weight:800!important;
+}
+.debt-scope-btn.active{
+  background:linear-gradient(135deg,#2563eb,#6366f1)!important;color:#fff!important;
+  border-color:rgba(99,102,241,.36)!important;box-shadow:0 8px 18px rgba(59,130,246,.18)!important;
+}
+.debt-scope-count{font-size:11px;color:var(--text-3);font-weight:750;margin-left:auto}
+.debt-responsible-box{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:9px 10px;margin:9px 0;border-radius:13px;background:rgba(59,130,246,.07);
+  border:1px solid rgba(96,165,250,.13);
+}
+.debt-responsible-main{min-width:0;font-size:11px;color:var(--text-3);line-height:1.35}
+.debt-responsible-main b{display:block;color:var(--text-1);font-size:12px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.debt-responsible-btn{
+  width:auto!important;min-width:max-content!important;margin:0!important;padding:7px 9px!important;
+  border-radius:10px!important;background:rgba(59,130,246,.12)!important;color:#93c5fd!important;
+  border:1px solid rgba(96,165,250,.16)!important;box-shadow:none!important;font-size:10px!important;font-weight:800!important;
+}
+.responsible-form-field{margin-top:10px}
+.responsible-form-field label{display:block;font-size:11px;font-weight:800;color:var(--text-2);margin:0 0 6px}
+.responsible-form-field select{margin:0!important}
+.assign-debt-user-meta{font-size:10px;color:var(--text-3);margin-top:5px}
+html[data-theme="light"] .debt-responsible-box{background:#eff6ff;border-color:#dbeafe}
+html[data-theme="light"] .debt-responsible-btn{color:#1d4ed8!important;background:#eef2ff!important}
+html[data-theme="light"] .debt-scope-btn{background:#f8fafc!important;color:#475569!important;border-color:#e2e8f0!important}
+html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:linear-gradient(135deg,#2563eb,#6366f1)!important}
+@media(max-width:640px){
+  .debt-scope-bar{gap:6px}
+  .debt-scope-btn{padding:7px 10px!important;font-size:10px!important}
+  .debt-scope-count{width:100%;margin-left:2px}
+  .debt-responsible-box{align-items:flex-start}
+}
 </style>
 </head>
 <body>
@@ -2410,6 +2452,12 @@ html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;backgro
 <div class="container main-view-container" id="appContent" style="display:none;">
   <section id="view-active" class="app-view active">
     <h3 id="activeDebtsTitle" class="view-title">Активные долги</h3>
+    <div class="debt-scope-bar" id="debtScopeBar">
+      <button id="debtScopeAllBtn" class="debt-scope-btn active" type="button" onclick="setDebtScope('all')">Все</button>
+      <button id="debtScopeMineBtn" class="debt-scope-btn" type="button" onclick="setDebtScope('mine')">Мои</button>
+      <button id="debtScopeUnassignedBtn" class="debt-scope-btn" type="button" onclick="setDebtScope('unassigned')">Без ответственного</button>
+      <span id="debtScopeCount" class="debt-scope-count"></span>
+    </div>
     <div class="search-box">
       <input id="searchInput" placeholder="🔍 Поиск по имени или номеру">
     </div>
@@ -2425,6 +2473,11 @@ html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;backgro
       <div class="form-field-label" id="clientFieldLabel">Имя клиента</div>
       <input id="client" placeholder="Имя клиента" autocomplete="name">
       <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
+      <div id="responsibleFieldWrap" class="responsible-form-field" style="display:none;">
+        <label id="responsibleFieldLabel" for="responsibleSelect">Ответственный</label>
+        <select id="responsibleSelect" class="export-select"></select>
+        <div id="responsibleFieldHint" class="assign-debt-user-meta">Для менеджера или кассира ответственность назначается автоматически на себя.</div>
+      </div>
       <div class="date-picker-wrap" id="dueDateWrap">
         <div class="date-picker-display" id="dueDateDisplay">📅 Выберите дату оплаты</div>
         <input id="dueDate" class="date-picker-native" type="date" aria-label="Выберите дату оплаты">
@@ -2700,6 +2753,24 @@ html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;backgro
   </div>
 </div>
 
+<div class="modal" id="assignDebtModal">
+  <div class="modal-content auth-flow-content">
+    <div class="auth-flow-head">
+      <div>
+        <h3 id="assignDebtTitle">Ответственный по долгу</h3>
+        <div id="assignDebtSubtitle" class="auth-flow-subtitle">Назначьте сотрудника, который будет вести этого должника.</div>
+      </div>
+      <button type="button" class="auth-close-btn" onclick="closeAssignDebtModal()">×</button>
+    </div>
+    <label id="assignDebtUserLabel" for="assignDebtUserSelect">Ответственный</label>
+    <select id="assignDebtUserSelect" class="export-select"></select>
+    <div id="assignDebtMessage" class="login-message"></div>
+    <button id="assignDebtSaveBtn" class="login-primary-btn" type="button" onclick="saveDebtAssignment()">Сохранить</button>
+    <button id="assignDebtClearBtn" class="export-cancel-btn" type="button" onclick="clearDebtAssignment()">Оставить без ответственного</button>
+    <button class="export-cancel-btn" type="button" onclick="closeAssignDebtModal()">Отмена</button>
+  </div>
+</div>
+
 <div class="modal" id="changePasswordModal">
   <div class="modal-content auth-flow-content">
     <div class="auth-flow-head">
@@ -2745,7 +2816,7 @@ html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;backgro
 </div>
 
 <script>
-const VERSION="5.3.2";
+const VERSION="5.4.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 let authToken = sessionStorage.getItem("authToken") || "";
@@ -2772,6 +2843,9 @@ function scheduleResumeRetry_(message){
 }
 let currentSeller = null;
 let appUsers = [];
+let assignableUsers = [];
+let debtScope = "all";
+let assigningDebtRow = null;
 let appNotifications = [];
 let notificationPreferences = null;
 let notificationFilter = "all";
@@ -2845,6 +2919,13 @@ const translations = {
     mobileNavAdd: "Добавить",
     mobileNavPaid: "Оплачено",
     activeDebtsTitle: "Активные долги",
+    debtScopeAll: "Все",
+    debtScopeMine: "Мои",
+    debtScopeUnassigned: "Без ответственного",
+    responsibleLabel: "Ответственный",
+    responsibleNone: "Не назначен",
+    responsibleChange: "Изменить",
+    responsibleClaim: "Взять себе",
     paidDebtsTitle: "Оплаченные долги",
     statsPageTitle: "Статистика",
     settingsTitle: "Настройки",
@@ -3027,6 +3108,13 @@ const translations = {
     mobileNavAdd: "Илова",
     mobileNavPaid: "Пардохт",
     activeDebtsTitle: "Қарзҳои фаъол",
+    debtScopeAll: "Ҳама",
+    debtScopeMine: "Аз они ман",
+    debtScopeUnassigned: "Бе масъул",
+    responsibleLabel: "Масъул",
+    responsibleNone: "Таъин нашудааст",
+    responsibleChange: "Тағйир",
+    responsibleClaim: "Ба худ гирифтан",
     paidDebtsTitle: "Қарзҳои пардохтшуда",
     statsPageTitle: "Омор",
     settingsTitle: "Танзимот",
@@ -3195,6 +3283,7 @@ function setLanguage(lang){
   });
 
   applyTranslations();
+  if(currentUser)renderActiveDebtView_();
 }
 
 function setTheme(theme){
@@ -3257,6 +3346,12 @@ function applyTranslations(){
   const statsPageTitleEl = document.getElementById("statsPageTitle");
   const settingsTitleEl = document.getElementById("settingsTitle");
   if (activeTitleEl) activeTitleEl.textContent = t("activeDebtsTitle");
+  const scopeAll=document.getElementById("debtScopeAllBtn"),scopeMine=document.getElementById("debtScopeMineBtn"),scopeUnassigned=document.getElementById("debtScopeUnassignedBtn");
+  if(scopeAll)scopeAll.textContent=t("debtScopeAll");
+  if(scopeMine)scopeMine.textContent=t("debtScopeMine");
+  if(scopeUnassigned)scopeUnassigned.textContent=t("debtScopeUnassigned");
+  const responsibleFieldLabel=document.getElementById("responsibleFieldLabel");
+  if(responsibleFieldLabel)responsibleFieldLabel.textContent=t("responsibleLabel");
   if (addTitleEl) addTitleEl.textContent = t("addDebt");
   if (paidTitleEl) paidTitleEl.textContent = t("paidDebtsTitle");
   if (statsPageTitleEl) statsPageTitleEl.textContent = t("statsPageTitle");
@@ -3384,7 +3479,7 @@ function applyTranslations(){
   applySecurityTranslations_();
   renderAccountSecurity_();
   renderStats(lastStatsData || {});
-  renderDebts([...allDebts]);
+  renderActiveDebtView_();
   renderPaidDebts([...paidDebts]);
   if (String(phone?.value || "").replace(/\D/g, "").length === 9) {
     handlePhoneLookup(false);
@@ -3579,7 +3674,10 @@ function applySecurityTranslations_(){
     securityEventsTitle:["🛡 События безопасности","🛡 Рӯйдодҳои амниятӣ"],securityEventsHint:["Последние события. Список прокручивается.","Рӯйдодҳои охирин. Рӯйхат ҳаракат мекунад."],securityEventsRefreshBtn:["Обновить","Навсозӣ"],
     settingsAppearanceTitle:["✨ Интерфейс","✨ Интерфейс"],settingsAppearanceHint:["Язык, тема и читаемость собраны в одном месте.","Забон, мавзӯъ ва хондашавӣ дар як ҷой ҷамъ шудаанд."],
     notificationCenterTitle:["Уведомления","Огоҳиномаҳо"],notificationCenterSubtitle:["События по долгам, оплатам и безопасности","Рӯйдодҳои қарзҳо, пардохтҳо ва амният"],notificationMarkAllBtn:["Прочитать все","Ҳамаро хондан"],notificationDeleteAllBtn:["🗑 Очистить","🗑 Тоза кардан"],
-    notificationFilterAll:["Все","Ҳама"],notificationFilterUnread:["Новые","Нав"],notificationFilterDebts:["Долги","Қарзҳо"],notificationFilterPayments:["Оплаты","Пардохтҳо"],notificationFilterSecurity:["Безопасность","Амният"],notificationFilterUsers:["Пользователи","Истифодабарандагон"]
+    notificationFilterAll:["Все","Ҳама"],notificationFilterUnread:["Новые","Нав"],notificationFilterDebts:["Долги","Қарзҳо"],notificationFilterPayments:["Оплаты","Пардохтҳо"],notificationFilterSecurity:["Безопасность","Амният"],notificationFilterUsers:["Пользователи","Истифодабарандагон"],
+    assignDebtTitle:["Ответственный по долгу","Масъули қарз"],assignDebtSubtitle:["Назначьте сотрудника, который будет вести этого должника.","Кормандеро таъин кунед, ки ин қарздорро пеш мебарад."],assignDebtUserLabel:["Ответственный","Масъул"],
+    assignDebtSaveBtn:["Сохранить","Захира"],assignDebtClearBtn:["Оставить без ответственного","Бе масъул гузоштан"],
+    responsibleFieldHint:["Выберите ответственного сотрудника для нового долга.","Корманди масъулро барои қарзи нав интихоб кунед."]
   };
   Object.entries(pairs).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=currentLanguage==="tj"?v[1]:v[0];});
   const resumeText=document.getElementById("sessionResumeText");if(resumeText)resumeText.textContent=securityText_("Открываем приложение…","Барнома кушода мешавад…");
@@ -3653,7 +3751,12 @@ function applyPermissions_(){
   const uc=document.getElementById("usersSettingsCard");if(uc)uc.style.display=users?"":"none";
   const addUser=document.getElementById("addUserBtn");if(addUser)addUser.style.display=canPermission("manageUsers")?"":"none";
   const securityCard=document.getElementById("securityEventsCard");if(securityCard)securityCard.style.display=canPermission("security")?"":"none";
+  const responsibleWrap=document.getElementById("responsibleFieldWrap");if(responsibleWrap)responsibleWrap.style.display=create&&canPermission("assignDebts")?"block":"none";
+  const mineBtn=document.getElementById("debtScopeMineBtn");if(mineBtn)mineBtn.style.display=currentUser?.role==="viewer"?"none":"";
+  const unassignedBtn=document.getElementById("debtScopeUnassignedBtn");if(unassignedBtn)unassignedBtn.style.display=canPermission("assignDebts")?"":"none";
+  if((debtScope==="unassigned"&&!canPermission("assignDebts"))||(debtScope==="mine"&&currentUser?.role==="viewer"))debtScope="all";
   if(currentView==="add"&&!create)currentView="active";if(currentView==="stats"&&!stats)currentView="active";
+  updateDebtScopeButtons_();
 }
 function renderAccountSecurity_(){
   const box=document.getElementById("accountSecurityInfo");if(!box||!currentUser)return;
@@ -3695,7 +3798,7 @@ async function saveUser(){
   const name=String(document.getElementById("userNameInput")?.value||"").trim(),email=String(document.getElementById("userEmailInput")?.value||"").trim(),role=document.getElementById("userRoleSelect")?.value||"viewer",active=!!document.getElementById("userActiveInput")?.checked;
   if(!name||(!editingUserId&&!email)){setMessage_("userModalMessage",securityText_("Заполните имя и email","Ном ва email-ро пур кунед"),"error");return;}
   const btn=document.getElementById("saveUserBtn");if(btn)btn.disabled=true;
-  try{const action=editingUserId?"users.update":"users.create";const payload=editingUserId?{id:editingUserId,name,role,active}:{name,email,role};const r=await apiPost(action,payload);if(!r.success){setMessage_("userModalMessage",r.message||"Error","error");return;}closeUserModal();showToast(`✅ <b>${r.message||securityText_("Пользователь сохранён","Истифодабаранда захира шуд")}</b>`,"success");await loadUsers();}catch(e){setMessage_("userModalMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
+  try{const action=editingUserId?"users.update":"users.create";const payload=editingUserId?{id:editingUserId,name,role,active}:{name,email,role};const r=await apiPost(action,payload);if(!r.success){setMessage_("userModalMessage",r.message||"Error","error");return;}closeUserModal();showToast(`✅ <b>${r.message||securityText_("Пользователь сохранён","Истифодабаранда захира шуд")}</b>`,"success");await loadUsers();if(canPermission("assignDebts"))await loadAssignableUsers();}catch(e){setMessage_("userModalMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
 }
 async function resendInvite(id){try{const r=await apiPost("users.resendInvite",{id});if(!r.success)throw new Error(r.message||"Error");showToast(`✅ <b>${r.message}</b>`,"success");await loadUsers();}catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}}
 function openChangePasswordModal(){["oldPasswordInput","newPasswordInput","confirmNewPasswordInput"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});setMessage_("changePasswordMessage","","");document.getElementById("changePasswordModal").style.display="flex";}
@@ -3706,6 +3809,118 @@ async function changePassword(){
   const btn=document.getElementById("changePasswordSaveBtn");if(btn)btn.disabled=true;
   try{const r=await apiPost("auth.changePassword",{oldPassword,newPassword});if(!r.success){setMessage_("changePasswordMessage",r.message||"Error","error");return;}closeChangePasswordModal();clearAuthSession_();showLogin_();setMessage_("loginMessage",r.message||securityText_("Пароль изменён. Войдите снова.","Парол иваз шуд. Аз нав ворид шавед."),"success");}catch(e){setMessage_("changePasswordMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
 }
+
+
+/* ---------- RESPONSIBLE STAFF v5.4.0 ---------- */
+async function loadAssignableUsers(){
+  if(!currentUser||!canPermission("viewDebts"))return [];
+  try{
+    const r=await apiPost("users.assignable",{});
+    if(!r.success)throw new Error(r.message||"Error");
+    assignableUsers=Array.isArray(r.users)?r.users:[];
+    renderResponsibleSelects_();
+    return assignableUsers;
+  }catch(e){
+    assignableUsers=[];
+    renderResponsibleSelects_();
+    return [];
+  }
+}
+function renderResponsibleSelects_(){
+  const options=assignableUsers.map(u=>`<option value="${escapeAttr_(u.id)}">${escapeHtml(u.name||u.email||"—")}</option>`).join("");
+  const addSelect=document.getElementById("responsibleSelect");
+  if(addSelect){
+    const previous=String(addSelect.value||"");
+    addSelect.innerHTML=options;
+    const preferred=previous||String(currentUser?.id||"");
+    if(preferred&&assignableUsers.some(u=>String(u.id)===preferred))addSelect.value=preferred;
+  }
+  const assignSelect=document.getElementById("assignDebtUserSelect");
+  if(assignSelect)assignSelect.innerHTML=options;
+}
+function debtMatchesScope_(d){
+  if(debtScope==="mine")return String(d.responsibleUserId||"")===String(currentUser?.id||"");
+  if(debtScope==="unassigned")return !String(d.responsibleUserId||"").trim();
+  return true;
+}
+function activeDebtFilteredList_(){
+  const val=String(document.getElementById("searchInput")?.value||"").toLowerCase().trim();
+  return allDebts.filter(d=>{
+    if(!debtMatchesScope_(d))return false;
+    if(!val)return true;
+    const name=String(d.client||"").toLowerCase();
+    const ph=normalizePhone(d.phone);
+    return name.includes(val)||ph.includes(val.replace(/\D/g,""));
+  });
+}
+function updateDebtScopeButtons_(){
+  document.querySelectorAll(".debt-scope-btn").forEach(btn=>{
+    const map={debtScopeAllBtn:"all",debtScopeMineBtn:"mine",debtScopeUnassignedBtn:"unassigned"};
+    btn.classList.toggle("active",map[btn.id]===debtScope);
+  });
+  const count=document.getElementById("debtScopeCount");
+  if(count){
+    const shown=activeDebtFilteredList_().length;
+    count.textContent=currentLanguage==="tj"?`${shown} аз ${allDebts.length}`:`${shown} из ${allDebts.length}`;
+  }
+}
+function renderActiveDebtView_(){
+  const list=activeDebtFilteredList_();
+  renderDebts(list);
+  updateDebtScopeButtons_();
+}
+function setDebtScope(scope){
+  const allowed=["all","mine","unassigned"];
+  debtScope=allowed.includes(scope)?scope:"all";
+  if(debtScope==="unassigned"&&!canPermission("assignDebts"))debtScope="all";
+  renderActiveDebtView_();
+}
+async function openAssignDebtModal(row,currentResponsibleId=""){
+  if(!canPermission("assignDebts"))return;
+  assigningDebtRow=Number(row||0);
+  if(!assignableUsers.length)await loadAssignableUsers();
+  const select=document.getElementById("assignDebtUserSelect");
+  if(select){
+    renderResponsibleSelects_();
+    if(currentResponsibleId&&assignableUsers.some(u=>String(u.id)===String(currentResponsibleId)))select.value=String(currentResponsibleId);
+    else if(assignableUsers.length)select.value=String(assignableUsers[0].id||"");
+  }
+  setMessage_("assignDebtMessage","","");
+  document.getElementById("assignDebtModal").style.display="flex";
+}
+function closeAssignDebtModal(){document.getElementById("assignDebtModal").style.display="none";assigningDebtRow=null;}
+async function saveDebtAssignment(){
+  if(!assigningDebtRow)return;
+  const btn=document.getElementById("assignDebtSaveBtn"),select=document.getElementById("assignDebtUserSelect");
+  if(btn)btn.disabled=true;
+  try{
+    const r=await apiPost("debt.assign",{row:assigningDebtRow,userId:String(select?.value||"")});
+    if(!r.success)throw new Error(r.message||"Error");
+    closeAssignDebtModal();
+    showToast(`✅ <b>${securityText_("Ответственный изменён","Масъул иваз шуд")}</b>`,"success");
+    await loadDebts();loadNotifications({silent:true});
+  }catch(e){setMessage_("assignDebtMessage",e.message||String(e),"error");}
+  finally{if(btn)btn.disabled=false;}
+}
+async function clearDebtAssignment(){
+  if(!assigningDebtRow)return;
+  const btn=document.getElementById("assignDebtClearBtn");if(btn)btn.disabled=true;
+  try{
+    const r=await apiPost("debt.assign",{row:assigningDebtRow,userId:""});
+    if(!r.success)throw new Error(r.message||"Error");
+    closeAssignDebtModal();showToast(`✅ <b>${securityText_("Ответственный снят","Масъул хориҷ шуд")}</b>`,"success");await loadDebts();
+  }catch(e){setMessage_("assignDebtMessage",e.message||String(e),"error");}
+  finally{if(btn)btn.disabled=false;}
+}
+async function claimDebt(row){
+  try{
+    const r=await apiPost("debt.claim",{row:Number(row||0)});
+    if(!r.success)throw new Error(r.message||"Error");
+    showToast(`✅ <b>${securityText_("Долг назначен вам","Қарз ба шумо таъин шуд")}</b>`,"success");
+    await loadDebts();
+  }catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
+}
+
 
 
 /* ---------- NOTIFICATIONS v5.3.0 ---------- */
@@ -3857,6 +4072,7 @@ function openApp(options={}){
   if(options.initialData)applyDebtData_(options.initialData);
   showView(currentView || "active");
   if(!options.initialData)loadDebts();
+  if(canPermission("assignDebts"))loadAssignableUsers();
   loadNotifications({silent:true});
   startNotificationPolling_();
 }
@@ -3885,6 +4101,7 @@ async function resumeSession_(){
             if(r&&r.success&&r.user&&authToken){
               currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);
               applyPermissions_();renderAccountSecurity_();
+              if(canPermission("assignDebts"))loadAssignableUsers();
               if(userInfo)userInfo.innerHTML=t("userInfo",{name:currentSeller,version:VERSION});
             }
           }).catch(()=>{});
@@ -3973,8 +4190,7 @@ function clearPhoneLookup({clearAutoName = true, restoreList = true} = {}){
   lastAutoFilledClientName = "";
 
   if (restoreList) {
-    if (String(searchInput?.value || "").trim()) applySearch();
-    else renderDebts([...allDebts]);
+    renderActiveDebtView_();
   }
 }
 
@@ -4135,7 +4351,8 @@ async function addDebt(){
     phone: phoneValue,
     amount: amountValue,
     dueDate: dueDateValue,
-    seller: currentSeller
+    seller: currentSeller,
+    responsibleUserId: canPermission("assignDebts") ? String(document.getElementById("responsibleSelect")?.value||currentUser?.id||"") : String(currentUser?.id||"")
   };
 
   saveLoader.style.display="block";
@@ -4180,7 +4397,7 @@ function applyDebtData_(data){
   paidDebts=data.paidDebts||[];
   clientsByPhone=data.clientsByPhone||{};
   renderStats(data);
-  renderDebts([...allDebts]);
+  renderActiveDebtView_();
   renderPaidDebts([...paidDebts]);
   if (normalizePhone(phone?.value).length === 9) handlePhoneLookup(false);
   refreshOpenStatsDetail_();
@@ -4508,6 +4725,14 @@ function buildDebtCardHtml(d){
   if(canPermission("payDebt")) financialButtons.push(`<button class="pay-btn half-btn" onclick="openPayment(${d.row},${d.remainder})">${t("payBtn")}</button>`);
   if(canPermission("appendDebt")) financialButtons.push(`<button class="add-debt-btn half-btn" onclick="openAddToDebtModal(${d.row}, '${safeClientJs}', '${safePhoneJs}', ${d.remainder})">➕ ${t("addToDebtBtn")}</button>`);
   const financialActions=financialButtons.length?`<div class="action-row">${financialButtons.join("")}</div>`:"";
+  const responsibleName=String(d.responsibleName||"").trim();
+  let responsibleAction="";
+  if(canPermission("assignDebts")){
+    responsibleAction=`<button class="debt-responsible-btn" type="button" onclick="openAssignDebtModal(${Number(d.row||0)},'${escapeAttr_(String(d.responsibleUserId||""))}')">${t("responsibleChange")}</button>`;
+  } else if(!responsibleName && currentUser?.role!=="viewer"){
+    responsibleAction=`<button class="debt-responsible-btn" type="button" onclick="claimDebt(${Number(d.row||0)})">${t("responsibleClaim")}</button>`;
+  }
+  const responsibleHtml=`<div class="debt-responsible-box"><div class="debt-responsible-main">👥 ${t("responsibleLabel")}<b>${escapeHtml(responsibleName||t("responsibleNone"))}</b></div>${responsibleAction}</div>`;
 
   return `
     <div class="${cardClass}" data-debt-id="${escapeAttr_(String(d.id||d.row||''))}">
@@ -4520,6 +4745,7 @@ function buildDebtCardHtml(d){
       ${d.isPartial ? `<div style="color:#28a745;font-weight:bold;">${t("hasPayment")}</div>` : ""}
       ${sumHistoryHtml}
       ${extra}
+      ${responsibleHtml}
 
       ${financialActions}
 
@@ -4556,6 +4782,7 @@ function buildPaidDebtCardHtml(d){
       ${t("paidAmount")}: <b>${d.paid || d.total || 0} ${t("somoni")}</b><br>
       ${d.dueDate ? `${t("choosePayDate")}: ${d.dueDate}<br>` : ""}
       ${d.seller ? `👤 ${d.seller}<br>` : ""}
+      ${d.responsibleName ? `👥 ${t("responsibleLabel")}: ${escapeHtml(String(d.responsibleName))}<br>` : ""}
       <span class="paid-status">✅ ${t("statusClosed")}</span>
       <button class="history-action-btn" onclick="showHistory('${String(d.client).replace(/'/g,"\\'")}')">📂 ${t("historyBtn")}</button>
     </div>`;
@@ -4590,7 +4817,7 @@ function showView(view){
   document.querySelectorAll(".app-view").forEach(el=>el.classList.toggle("active",el.id===`view-${view}`));
   document.querySelectorAll(".nav-btn,.mobile-nav-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.view===view));
   if (view==="active") {
-    if (String(searchInput?.value||"").trim()) applySearch(); else renderDebts([...allDebts]);
+    renderActiveDebtView_();
   } else if (view==="paid") {
     applyPaidSearch();
   } else if (view==="stats") {
@@ -4607,20 +4834,7 @@ function showView(view){
 /* ---------- ПОИСК ---------- */
 
 function applySearch(){
-  let val = searchInput.value.toLowerCase().trim();
-
-  if(val === ""){
-    renderDebts([...allDebts]);
-    return;
-  }
-
-  let filtered = allDebts.filter(d => {
-    let nameMatch = d.client && d.client.toLowerCase().includes(val);
-    let phoneMatch = d.phone && d.phone.toString().includes(val);
-    return nameMatch || phoneMatch;
-  });
-
-  renderDebts(filtered);
+  renderActiveDebtView_();
 }
 
 searchInput.addEventListener("input", applySearch);
@@ -5037,6 +5251,7 @@ function debtRowsForExport(list){
     "Дата оплаты по договоренности":formatReportDate(d.dueDate||""),
     "Просрочка, дней":Number(d.daysOverdue||0),
     "Кто выдал":d.seller||"",
+    "Ответственный":d.responsibleName||"",
     "Статус":t(getDebtStatusKey(d))
   }));
 }
@@ -5186,8 +5401,8 @@ function reportDatasetTitle(dataset){
 }
 
 function buildDebtPdfTable(list){
-  const rows=debtRowsForExport(list).map(r=>`<tr><td>${r["№"]}</td><td>${escapeHtml(r["Клиент"])}</td><td>${escapeHtml(r["Телефон"])}</td><td>${escapeHtml(r["Дата оплаты по договоренности"])}</td><td>${r["Сумма долга"]}</td><td>${r["Оплачено"]}</td><td>${r["Остаток"]}</td><td>${escapeHtml(r["Статус"])}</td></tr>`).join("");
-  return `<table class="pdf-table"><thead><tr><th>№</th><th>${escapeHtml(t("clientPlaceholder"))}</th><th>${escapeHtml(t("phonePlaceholder"))}</th><th>${escapeHtml(t("choosePayDate"))}</th><th>${escapeHtml(t("debtAmount"))}</th><th>${escapeHtml(t("paidAmount"))}</th><th>${escapeHtml(t("remainder"))}</th><th>${escapeHtml(t("statusColumn"))}</th></tr></thead><tbody>${rows}</tbody></table>`;
+  const rows=debtRowsForExport(list).map(r=>`<tr><td>${r["№"]}</td><td>${escapeHtml(r["Клиент"])}</td><td>${escapeHtml(r["Телефон"])}</td><td>${escapeHtml(r["Дата оплаты по договоренности"])}</td><td>${r["Сумма долга"]}</td><td>${r["Оплачено"]}</td><td>${r["Остаток"]}</td><td>${escapeHtml(r["Ответственный"]||"")}</td><td>${escapeHtml(r["Статус"])}</td></tr>`).join("");
+  return `<table class="pdf-table"><thead><tr><th>№</th><th>${escapeHtml(t("clientPlaceholder"))}</th><th>${escapeHtml(t("phonePlaceholder"))}</th><th>${escapeHtml(t("choosePayDate"))}</th><th>${escapeHtml(t("debtAmount"))}</th><th>${escapeHtml(t("paidAmount"))}</th><th>${escapeHtml(t("remainder"))}</th><th>${escapeHtml(t("responsibleLabel"))}</th><th>${escapeHtml(t("statusColumn"))}</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function buildPaymentsPdfTable(payments){
