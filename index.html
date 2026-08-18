@@ -2192,6 +2192,49 @@ html[data-theme="light"] .header{
   box-shadow:0 24px 58px rgba(30,41,59,.13),0 6px 18px rgba(30,41,59,.07),inset 0 1px 0 rgba(255,255,255,1) !important;
 }
 
+
+
+/* ===== SECURITY / USERS v5.2.0 ===== */
+.login{z-index:2000;overflow:auto;}
+.login-card{width:min(92vw,390px);padding:24px;border-radius:28px;background:linear-gradient(145deg,rgba(30,41,59,.78),rgba(15,23,42,.68));border:1px solid rgba(255,255,255,.10);box-shadow:0 30px 80px rgba(2,6,23,.45),inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(28px) saturate(150%);-webkit-backdrop-filter:blur(28px) saturate(150%);box-sizing:border-box;}
+.login-card img{width:104px!important;margin:0 auto 14px!important;}
+.login-lang-row{display:flex;justify-content:flex-end;gap:5px;margin-bottom:4px;}
+#loginScreen .login-lang-btn{width:auto!important;min-width:38px!important;height:30px!important;margin:0!important;padding:0 9px!important;border-radius:11px!important;background:rgba(148,163,184,.12)!important;color:var(--text-2)!important;border:1px solid rgba(148,163,184,.18)!important;box-shadow:none!important;font-size:11px!important;}
+#loginScreen .login-lang-btn.active{background:linear-gradient(135deg,#2563eb,#7c3aed)!important;color:#fff!important;border-color:transparent!important;}
+.login-subtitle{font-size:13px;color:var(--text-3);margin:0 0 16px;}
+#loginScreen input{max-width:none!important;width:100%;box-sizing:border-box;margin:0 0 10px!important;}
+.password-field-wrap{position:relative;width:100%;}
+.password-field-wrap input{padding-right:48px!important;}
+#loginScreen .password-eye,.password-eye{position:absolute;right:7px;top:7px;width:36px!important;min-width:36px!important;height:36px!important;min-height:36px!important;margin:0!important;padding:0!important;border-radius:12px!important;background:rgba(148,163,184,.12)!important;color:var(--text-2)!important;border:1px solid rgba(148,163,184,.15)!important;box-shadow:none!important;}
+#loginScreen .login-primary-btn,.login-primary-btn{width:100%!important;max-width:none!important;margin:4px 0 0!important;background:linear-gradient(135deg,#2563eb,#6d28d9)!important;color:#fff!important;border:1px solid rgba(96,165,250,.35)!important;box-shadow:0 12px 28px rgba(37,99,235,.25)!important;font-weight:800!important;}
+.login-message{min-height:18px;margin-top:9px;font-size:12px;line-height:1.4;color:var(--text-3);}
+.login-message.error{color:#fca5a5;}.login-message.success{color:#86efac;}.login-message.info{color:#93c5fd;}
+.login-links{display:flex;justify-content:space-between;gap:10px;margin-top:6px;}
+#loginScreen .login-link-btn{width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0!important;padding:7px 2px!important;background:transparent!important;color:#93c5fd!important;border:0!important;box-shadow:none!important;font-size:12px!important;font-weight:700!important;}
+.auth-flow-modal{z-index:2300!important;}
+.auth-flow-content,.user-modal-content{max-width:470px;width:min(94vw,470px);}
+.auth-flow-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:15px;}
+.auth-flow-head h3{margin:0 0 4px;}
+.auth-flow-subtitle{font-size:12px;line-height:1.45;color:var(--text-3);}
+.auth-close-btn{width:36px!important;min-width:36px!important;height:36px!important;min-height:36px!important;margin:0!important;padding:0!important;border-radius:12px!important;background:rgba(148,163,184,.12)!important;color:var(--text-2)!important;border:1px solid rgba(148,163,184,.16)!important;box-shadow:none!important;font-size:22px!important;line-height:1!important;}
+.auth-flow-form label,.user-modal-content>label,#changePasswordModal label{display:block;margin:9px 0 6px!important;color:var(--text-2)!important;font-size:12px;font-weight:800;}
+.auth-flow-form input,.user-modal-content>input,#changePasswordModal input{width:100%;box-sizing:border-box;margin:0 0 7px;}
+.users-settings-card{grid-column:1/-1;}
+.users-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.compact-action-btn{width:auto!important;min-width:110px!important;margin:0!important;padding:9px 12px!important;}
+.users-list{display:grid;gap:9px;}
+.user-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px;border-radius:17px;background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.12);}
+.user-row-main{min-width:0;}.user-row-name{font-weight:850;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.user-row-email{font-size:12px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}.user-row-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;}
+.user-badge{display:inline-flex;align-items:center;padding:4px 7px;border-radius:999px;font-size:10px;font-weight:850;background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(96,165,250,.15);}.user-badge.ok{background:rgba(34,197,94,.12);color:#86efac;border-color:rgba(34,197,94,.18);}.user-badge.warn{background:rgba(245,158,11,.12);color:#fcd34d;border-color:rgba(245,158,11,.18);}.user-badge.off{background:rgba(239,68,68,.12);color:#fca5a5;border-color:rgba(239,68,68,.18);}
+.user-row-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;}.user-mini-btn{width:auto!important;min-width:0!important;margin:0!important;padding:7px 9px!important;border-radius:11px!important;font-size:11px!important;background:rgba(148,163,184,.12)!important;color:var(--text-2)!important;border:1px solid rgba(148,163,184,.15)!important;box-shadow:none!important;}
+.account-security-info{margin:10px 0 12px;padding:11px 12px;border-radius:14px;background:rgba(59,130,246,.08);border:1px solid rgba(96,165,250,.14);font-size:12px;line-height:1.6;color:var(--text-2);}
+.user-active-row{display:flex!important;align-items:center;gap:8px;margin:12px 0!important;color:var(--text-2)!important;}.user-active-row input{width:auto!important;margin:0!important;}
+html[data-theme="light"] .login-card{background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(241,245,249,.84));border-color:rgba(15,23,42,.08);box-shadow:0 30px 70px rgba(15,23,42,.15),inset 0 1px 0 #fff;}
+html[data-theme="light"] .login-subtitle,html[data-theme="light"] .auth-flow-subtitle{color:#64748b;}
+html[data-theme="light"] #loginScreen .login-link-btn{color:#2563eb!important;}
+html[data-theme="light"] .login-message.error{color:#b91c1c;}html[data-theme="light"] .login-message.success{color:#15803d;}html[data-theme="light"] .login-message.info{color:#1d4ed8;}
+html[data-theme="light"] .user-row{background:#f8fafc;border-color:#e2e8f0;}html[data-theme="light"] .user-row-name{color:#0f172a;}html[data-theme="light"] .user-row-email{color:#64748b;}html[data-theme="light"] .user-badge{color:#1d4ed8;background:#eff6ff;}html[data-theme="light"] .user-badge.ok{color:#15803d;background:#f0fdf4;}html[data-theme="light"] .user-badge.warn{color:#b45309;background:#fffbeb;}html[data-theme="light"] .user-badge.off{color:#b91c1c;background:#fff1f2;}html[data-theme="light"] .account-security-info{color:#334155;background:#eff6ff;border-color:#dbeafe;}
+@media(max-width:640px){.login{padding:14px;}.login-card{padding:20px 16px;border-radius:24px;}.user-row{grid-template-columns:1fr;}.user-row-actions{justify-content:flex-start;}.users-card-head{align-items:center;}.compact-action-btn{min-width:92px!important;font-size:12px!important;}}
 </style>
 </head>
 <body>
@@ -2212,10 +2255,57 @@ html[data-theme="light"] .header{
 </div>
 
 <div id="loginScreen" class="login">
-  <img src="logo.png">
-  <h2>Вход</h2>
-  <input type="tel" inputmode="numeric" id="pinInput" placeholder="Введите PIN">
-  <button onclick="login()">Войти</button>
+  <div class="login-card">
+    <div class="login-lang-row">
+      <button class="login-lang-btn" data-lang="ru" onclick="setLanguage('ru')">RU</button>
+      <button class="login-lang-btn" data-lang="tj" onclick="setLanguage('tj')">TJ</button>
+    </div>
+    <img src="logo.png" alt="Fashion&StyleLife">
+    <h2 id="loginTitleText">Вход</h2>
+    <div id="loginSubtitle" class="login-subtitle">Войдите по электронной почте</div>
+    <input type="email" inputmode="email" autocomplete="username" id="emailInput" placeholder="Email">
+    <div class="password-field-wrap">
+      <input type="password" autocomplete="current-password" id="passwordInput" placeholder="Пароль" onkeydown="if(event.key==='Enter')login()">
+      <button type="button" class="password-eye" onclick="togglePasswordField('passwordInput',this)" aria-label="Показать пароль">👁</button>
+    </div>
+    <button id="loginSubmitBtn" class="login-primary-btn" onclick="login()">Войти</button>
+    <div id="loginMessage" class="login-message" aria-live="polite"></div>
+    <div class="login-links">
+      <button id="forgotPasswordBtn" type="button" class="login-link-btn" onclick="openPasswordReset()">Забыли пароль?</button>
+      <button id="firstLoginBtn" type="button" class="login-link-btn" onclick="openActivation()">Первый вход</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal auth-flow-modal" id="authFlowModal">
+  <div class="modal-content auth-flow-content">
+    <div class="auth-flow-head">
+      <div>
+        <h3 id="authFlowTitle">Восстановление пароля</h3>
+        <div id="authFlowSubtitle" class="auth-flow-subtitle"></div>
+      </div>
+      <button type="button" class="auth-close-btn" onclick="closeAuthFlow()">×</button>
+    </div>
+    <div class="auth-flow-form">
+      <label id="authEmailLabel" for="authEmailInput">Email</label>
+      <input id="authEmailInput" type="email" inputmode="email" autocomplete="username" placeholder="Email">
+      <div id="authCodeFields" style="display:none;">
+        <label id="authCodeLabel" for="authCodeInput">Код из письма</label>
+        <input id="authCodeInput" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6-значный код" oninput="this.value=this.value.replace(/\D/g,'').slice(0,6)">
+        <label id="authNewPasswordLabel" for="authNewPasswordInput">Новый пароль</label>
+        <div class="password-field-wrap">
+          <input id="authNewPasswordInput" type="password" autocomplete="new-password" placeholder="Новый пароль">
+          <button type="button" class="password-eye" onclick="togglePasswordField('authNewPasswordInput',this)">👁</button>
+        </div>
+        <label id="authConfirmPasswordLabel" for="authConfirmPasswordInput">Повторите пароль</label>
+        <input id="authConfirmPasswordInput" type="password" autocomplete="new-password" placeholder="Повторите пароль">
+        <div id="passwordPolicyHint" class="settings-hint">Минимум 8 символов, буквы и цифры.</div>
+      </div>
+      <div id="authFlowMessage" class="login-message"></div>
+      <button id="authFlowPrimaryBtn" class="login-primary-btn" type="button" onclick="authFlowPrimaryAction()">Отправить код</button>
+      <button id="authFlowCancelBtn" class="export-cancel-btn" type="button" onclick="closeAuthFlow()">Отмена</button>
+    </div>
+  </div>
 </div>
 
 <div class="header" id="mainHeader" style="display:none;">
@@ -2310,6 +2400,21 @@ html[data-theme="light"] .header{
           <button id="contrastHighBtn" class="contrast-choice-btn" data-contrast-value="high" onclick="setContrast('high')"><span>◉</span><span>Повышенная</span></button>
         </div>
         <div id="contrastHint" class="settings-hint">Повышенный контраст делает текст, границы и элементы управления заметнее.</div>
+      </div>
+      <div class="card settings-card account-security-card" id="accountSecurityCard">
+        <b id="accountSecurityTitle">🔐 Безопасность аккаунта</b>
+        <div id="accountSecurityInfo" class="account-security-info"></div>
+        <button id="changePasswordBtn" class="add-debt-btn" type="button" onclick="openChangePasswordModal()">Изменить пароль</button>
+      </div>
+      <div class="card settings-card users-settings-card" id="usersSettingsCard" style="display:none;">
+        <div class="users-card-head">
+          <div>
+            <b id="usersSettingsTitle">👥 Пользователи</b>
+            <div id="usersSettingsHint" class="settings-hint">Управление доступом сотрудников</div>
+          </div>
+          <button id="addUserBtn" class="add-debt-btn compact-action-btn" type="button" onclick="openUserModal()">+ Добавить</button>
+        </div>
+        <div id="usersList" class="users-list"><div class="settings-hint">Загрузка...</div></div>
       </div>
       <div class="card settings-card">
         <b id="settingsActionsTitle">🛠 Действия</b>
@@ -2453,6 +2558,43 @@ html[data-theme="light"] .header{
   </div>
 </div>
 
+<div class="modal" id="userModal">
+  <div class="modal-content user-modal-content">
+    <div class="auth-flow-head">
+      <div><h3 id="userModalTitle">Новый пользователь</h3><div id="userModalHint" class="auth-flow-subtitle">Код активации будет отправлен на email.</div></div>
+      <button type="button" class="auth-close-btn" onclick="closeUserModal()">×</button>
+    </div>
+    <label id="userNameLabel" for="userNameInput">Имя</label>
+    <input id="userNameInput" type="text" autocomplete="name" placeholder="Имя сотрудника">
+    <label id="userEmailLabel" for="userEmailInput">Email / логин</label>
+    <input id="userEmailInput" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com">
+    <label id="userRoleLabel" for="userRoleSelect">Роль</label>
+    <select id="userRoleSelect" class="export-select"></select>
+    <label class="user-active-row" id="userActiveRow"><input id="userActiveInput" type="checkbox" checked> <span id="userActiveLabel">Пользователь активен</span></label>
+    <div id="userModalMessage" class="login-message"></div>
+    <button id="saveUserBtn" class="login-primary-btn" type="button" onclick="saveUser()">Сохранить</button>
+    <button class="export-cancel-btn" type="button" onclick="closeUserModal()">Отмена</button>
+  </div>
+</div>
+
+<div class="modal" id="changePasswordModal">
+  <div class="modal-content auth-flow-content">
+    <div class="auth-flow-head">
+      <div><h3 id="changePasswordTitle">Изменить пароль</h3><div id="changePasswordSubtitle" class="auth-flow-subtitle">После смены пароля все активные сессии будут завершены.</div></div>
+      <button type="button" class="auth-close-btn" onclick="closeChangePasswordModal()">×</button>
+    </div>
+    <label id="oldPasswordLabel" for="oldPasswordInput">Текущий пароль</label>
+    <input id="oldPasswordInput" type="password" autocomplete="current-password" placeholder="Текущий пароль">
+    <label id="newPasswordLabel" for="newPasswordInput">Новый пароль</label>
+    <input id="newPasswordInput" type="password" autocomplete="new-password" placeholder="Новый пароль">
+    <label id="confirmNewPasswordLabel" for="confirmNewPasswordInput">Повторите новый пароль</label>
+    <input id="confirmNewPasswordInput" type="password" autocomplete="new-password" placeholder="Повторите новый пароль">
+    <div id="changePasswordMessage" class="login-message"></div>
+    <button id="changePasswordSaveBtn" class="login-primary-btn" type="button" onclick="changePassword()">Изменить пароль</button>
+    <button class="export-cancel-btn" type="button" onclick="closeChangePasswordModal()">Отмена</button>
+  </div>
+</div>
+
 <div class="modal" id="reduceDebtModal">
   <div class="modal-content">
     <h3 id="reduceDebtTitle">Уменьшить долг</h3>
@@ -2480,17 +2622,16 @@ html[data-theme="light"] .header{
 </div>
 
 <script>
-const VERSION="5.1.1";
+const VERSION="5.2.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPtHF1QW_XcteUE7JUhoqOdgd-mjxZnV9YkFk2-IS-SCV7H9XQ306uByLIEebPsk60lA/exec";
 
-const USERS={
-  "1111":"Умед",
-  "0000":"Тахмина",
-  "5301":"Гульчехра",
-  "1602":"Махфират"
-};
-
-let currentSeller=null;
+let authToken = sessionStorage.getItem("authToken") || "";
+let currentUser = null;
+let currentSeller = null;
+let appUsers = [];
+let editingUserId = null;
+let authFlowMode = "reset";
+let authFlowStep = "request";
 let allDebts=[];
 let paidDebts=[];
 let currentView="active";
@@ -2943,11 +3084,8 @@ function applyTranslations(){
 
   const loginTitle = document.querySelector("#loginScreen h2");
   const loginBtn = document.querySelector('#loginScreen button[onclick="login()"]');
-  const pinInputEl = document.getElementById("pinInput");
-
   if (loginTitle) loginTitle.textContent = t("loginTitle");
   if (loginBtn) loginBtn.textContent = t("loginBtn");
-  if (pinInputEl) pinInputEl.placeholder = t("pinPlaceholder");
 
   const mainTitle = document.querySelector(".header-center h2");
   if (mainTitle) mainTitle.textContent = t("appTitle");
@@ -3090,6 +3228,8 @@ function applyTranslations(){
   if (mergeCreateBtnEl) mergeCreateBtnEl.textContent = t("mergeCreateBtn");
   if (mergeCancelBtnEl) mergeCancelBtnEl.textContent = t("mergeCancelBtn");
 
+  applySecurityTranslations_();
+  renderAccountSecurity_();
   renderStats(lastStatsData || {});
   renderDebts([...allDebts]);
   renderPaidDebts([...paidDebts]);
@@ -3231,59 +3371,217 @@ function renderSumHistory(notification){
   `;
 }
 
-/* ---------- LOGIN ---------- */
 
-function login(){
-  let pin = pinInput.value.trim();
-  if(!USERS[pin]){
-    alert(t("wrongPin"));
-    return;
+/* ---------- SECURITY / AUTH v5.2.0 ---------- */
+function securityText_(ru,tj){ return currentLanguage === "tj" ? tj : ru; }
+function canPermission(name){ return !!(currentUser && currentUser.permissions && currentUser.permissions[name]); }
+function escapeAttr_(value){ return escapeHtml(String(value||"")).replace(/'/g,"&#39;").replace(/\"/g,"&quot;"); }
+function roleLabel_(role){
+  const labels={
+    owner:["Владелец","Соҳиб"],admin:["Администратор","Администратор"],manager:["Менеджер","Менеҷер"],cashier:["Кассир","Хазинадор"],viewer:["Просмотр","Намоиш"]
+  };
+  const v=labels[String(role||"viewer")]||labels.viewer; return currentLanguage==="tj"?v[1]:v[0];
+}
+function setMessage_(id,text,type=""){
+  const el=document.getElementById(id); if(!el)return; el.textContent=text||""; el.className="login-message"+(type?` ${type}`:"");
+}
+function togglePasswordField(id,btn){ const input=document.getElementById(id); if(!input)return; input.type=input.type==="password"?"text":"password"; if(btn)btn.textContent=input.type==="password"?"👁":"🙈"; }
+async function apiPost(action,payload={},options={}){
+  const body={action,payload};
+  const publicAction=options.public===true;
+  const tokenOverride=Object.prototype.hasOwnProperty.call(options,"token")?options.token:null;
+  const token=tokenOverride!==null?tokenOverride:(publicAction?"":authToken);
+  if(token)body.token=token;
+  let response;
+  try{
+    response=await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(body)});
+  }catch(e){ throw new Error(securityText_("Нет связи с сервером","Пайвастшавӣ ба сервер нест")); }
+  let data;
+  try{data=await response.json();}catch(e){throw new Error(securityText_("Сервер вернул некорректный ответ","Ҷавоби сервер нодуруст аст"));}
+  const authCodes=["AUTH_REQUIRED","SESSION_INVALID","SESSION_EXPIRED","ACCOUNT_DISABLED"];
+  if(!publicAction && data && data.success===false && authCodes.includes(data.code)){
+    clearAuthSession_(); showLogin_(); setMessage_("loginMessage",data.message||securityText_("Войдите снова","Аз нав ворид шавед"),"error");
   }
-  currentSeller = USERS[pin];
-  sessionStorage.setItem("seller", currentSeller);
-  openApp();
+  return data||{};
+}
+function clearAuthSession_(){ authToken=""; currentUser=null; currentSeller=null; sessionStorage.removeItem("authToken"); }
+function showLogin_(){
+  const login=document.getElementById("loginScreen"); if(login)login.style.display="flex";
+  if(mainHeader)mainHeader.style.display="none"; if(appContent)appContent.style.display="none"; document.body.classList.remove("app-open");
+}
+function applySecurityTranslations_(){
+  const pairs={
+    loginTitleText:["Вход","Вуруд"],loginSubtitle:["Войдите по электронной почте","Бо почтаи электронӣ ворид шавед"],
+    loginSubmitBtn:["Войти","Даромадан"],forgotPasswordBtn:["Забыли пароль?","Паролро фаромӯш кардед?"],firstLoginBtn:["Первый вход","Вуруди аввал"],
+    accountSecurityTitle:["🔐 Безопасность аккаунта","🔐 Амнияти ҳисоб"],changePasswordBtn:["Изменить пароль","Иваз кардани парол"],
+    usersSettingsTitle:["👥 Пользователи","👥 Истифодабарандагон"],usersSettingsHint:["Управление доступом сотрудников","Идоракунии дастрасии кормандон"],addUserBtn:["+ Добавить","+ Илова"],
+    userNameLabel:["Имя","Ном"],userEmailLabel:["Email / логин","Email / логин"],userRoleLabel:["Роль","Нақш"],userActiveLabel:["Пользователь активен","Истифодабаранда фаъол аст"],saveUserBtn:["Сохранить","Захира"],
+    changePasswordTitle:["Изменить пароль","Иваз кардани парол"],changePasswordSubtitle:["После смены пароля все активные сессии будут завершены.","Пас аз иваз кардани парол ҳамаи сессияҳои фаъол баста мешаванд."],
+    oldPasswordLabel:["Текущий пароль","Пароли ҷорӣ"],newPasswordLabel:["Новый пароль","Пароли нав"],confirmNewPasswordLabel:["Повторите новый пароль","Пароли навро такрор кунед"],changePasswordSaveBtn:["Изменить пароль","Иваз кардани парол"]
+  };
+  Object.entries(pairs).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=currentLanguage==="tj"?v[1]:v[0];});
+  const email=document.getElementById("emailInput"); if(email)email.placeholder="Email";
+  const pass=document.getElementById("passwordInput"); if(pass)pass.placeholder=securityText_("Пароль","Парол");
+  document.querySelectorAll(".login-lang-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.lang===currentLanguage));
+  if(document.getElementById("authFlowModal")?.style.display==="flex")renderAuthFlow_();
+  renderUsers_(); renderAccountSecurity_();
+}
+async function login(){
+  const email=String(document.getElementById("emailInput")?.value||"").trim();
+  const password=String(document.getElementById("passwordInput")?.value||"");
+  if(!email||!password){setMessage_("loginMessage",securityText_("Введите email и пароль","Email ва паролро ворид кунед"),"error");return;}
+  const btn=document.getElementById("loginSubmitBtn"); if(btn){btn.disabled=true;btn.textContent=securityText_("Вход...","Вуруд...");}
+  setMessage_("loginMessage",securityText_("Проверяем данные...","Санҷиши маълумот..."),"info");
+  try{
+    const result=await apiPost("auth.login",{email,password},{public:true});
+    if(!result.success){
+      let msg=result.message||securityText_("Не удалось войти","Вуруд имкон нашуд");
+      if(result.code==="LOCKED"&&result.retryAfterSeconds){const min=Math.ceil(Number(result.retryAfterSeconds)/60);msg=securityText_(`Вход временно заблокирован. Повторите примерно через ${min} мин.`,`Вуруд муваққатан баста шуд. Тақрибан пас аз ${min} дақиқа такрор кунед.`);}
+      setMessage_("loginMessage",msg,"error"); return;
+    }
+    authToken=result.token||""; currentUser=result.user||null; currentSeller=currentUser?.name||""; sessionStorage.setItem("authToken",authToken);
+    document.getElementById("passwordInput").value=""; setMessage_("loginMessage","",""); openApp();
+  }catch(e){setMessage_("loginMessage",e.message||String(e),"error");}
+  finally{if(btn){btn.disabled=false;btn.textContent=securityText_("Войти","Даромадан");}}
+}
+function openPasswordReset(){authFlowMode="reset";authFlowStep="request";const src=document.getElementById("emailInput");const dst=document.getElementById("authEmailInput");if(dst)dst.value=src?.value||"";renderAuthFlow_();document.getElementById("authFlowModal").style.display="flex";}
+function openActivation(){authFlowMode="activate";authFlowStep="code";const src=document.getElementById("emailInput");const dst=document.getElementById("authEmailInput");if(dst)dst.value=src?.value||"";renderAuthFlow_();document.getElementById("authFlowModal").style.display="flex";}
+function closeAuthFlow(){document.getElementById("authFlowModal").style.display="none";setMessage_("authFlowMessage","","");["authCodeInput","authNewPasswordInput","authConfirmPasswordInput"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});}
+function renderAuthFlow_(){
+  const isReset=authFlowMode==="reset", isRequest=isReset&&authFlowStep==="request";
+  document.getElementById("authFlowTitle").textContent=isReset?securityText_("Восстановление пароля","Барқарорсозии парол"):securityText_("Первый вход","Вуруди аввал");
+  document.getElementById("authFlowSubtitle").textContent=isRequest?securityText_("Укажите email — мы отправим одноразовый код.","Email-ро ворид кунед — рамзи якдафъаина мефиристем."):securityText_("Введите код из письма и задайте новый пароль.","Рамзи аз почта гирифташударо ворид карда, пароли нав гузоред.");
+  document.getElementById("authEmailLabel").textContent="Email";
+  document.getElementById("authCodeLabel").textContent=securityText_("Код из письма","Рамз аз почта");
+  document.getElementById("authNewPasswordLabel").textContent=securityText_("Новый пароль","Пароли нав");
+  document.getElementById("authConfirmPasswordLabel").textContent=securityText_("Повторите пароль","Паролро такрор кунед");
+  document.getElementById("passwordPolicyHint").textContent=securityText_("Минимум 8 символов, буквы и цифры.","Ҳадди ақал 8 аломат, ҳарф ва рақам.");
+  document.getElementById("authCodeFields").style.display=isRequest?"none":"block";
+  document.getElementById("authFlowPrimaryBtn").textContent=isRequest?securityText_("Отправить код","Фиристодани рамз"):securityText_("Установить пароль","Гузоштани парол");
+  document.getElementById("authFlowCancelBtn").textContent=securityText_("Отмена","Бекор кардан");
+}
+async function authFlowPrimaryAction(){
+  const email=String(document.getElementById("authEmailInput")?.value||"").trim();
+  if(!email){setMessage_("authFlowMessage",securityText_("Введите email","Email-ро ворид кунед"),"error");return;}
+  const btn=document.getElementById("authFlowPrimaryBtn");if(btn)btn.disabled=true;
+  try{
+    if(authFlowMode==="reset"&&authFlowStep==="request"){
+      const r=await apiPost("auth.requestReset",{email},{public:true}); authFlowStep="code";renderAuthFlow_();setMessage_("authFlowMessage",r.message||securityText_("Если email зарегистрирован, код отправлен.","Агар email сабт шуда бошад, рамз фиристода шуд."),"success");return;
+    }
+    const code=String(document.getElementById("authCodeInput")?.value||"").replace(/\D/g,"");
+    const newPassword=String(document.getElementById("authNewPasswordInput")?.value||"");
+    const confirm=String(document.getElementById("authConfirmPasswordInput")?.value||"");
+    if(code.length!==6){setMessage_("authFlowMessage",securityText_("Введите 6-значный код","Рамзи 6-рақамаро ворид кунед"),"error");return;}
+    if(newPassword!==confirm){setMessage_("authFlowMessage",securityText_("Пароли не совпадают","Паролҳо мувофиқ нестанд"),"error");return;}
+    const action=authFlowMode==="activate"?"auth.activate":"auth.resetPassword";
+    const r=await apiPost(action,{email,code,newPassword},{public:true});
+    if(!r.success){setMessage_("authFlowMessage",r.message||securityText_("Не удалось изменить пароль","Иваз кардани парол имкон нашуд"),"error");return;}
+    closeAuthFlow(); const loginEmail=document.getElementById("emailInput"); if(loginEmail)loginEmail.value=email; setMessage_("loginMessage",r.message||securityText_("Пароль установлен. Теперь войдите.","Парол гузошта шуд. Акнун ворид шавед."),"success"); document.getElementById("passwordInput")?.focus();
+  }catch(e){setMessage_("authFlowMessage",e.message||String(e),"error");}
+  finally{if(btn)btn.disabled=false;}
+}
+function applyPermissions_(){
+  const create=canPermission("createDebt"),stats=canPermission("viewStats"),exp=canPermission("exportData"),users=canPermission("viewUsers");
+  document.querySelectorAll('[data-view="add"]').forEach(el=>el.style.display=create?"":"none");
+  document.querySelectorAll('[data-view="stats"]').forEach(el=>el.style.display=stats?"":"none");
+  const addView=document.getElementById("view-add");if(addView)addView.style.display=create?"":"none";
+  const statsView=document.getElementById("view-stats");if(statsView)statsView.style.display=stats?"":"none";
+  ["headerExportBtn","settingsExportBtn"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=exp?"":"none";});
+  const uc=document.getElementById("usersSettingsCard");if(uc)uc.style.display=users?"":"none";
+  const addUser=document.getElementById("addUserBtn");if(addUser)addUser.style.display=canPermission("manageUsers")?"":"none";
+  if(currentView==="add"&&!create)currentView="active";if(currentView==="stats"&&!stats)currentView="active";
+}
+function renderAccountSecurity_(){
+  const box=document.getElementById("accountSecurityInfo");if(!box||!currentUser)return;
+  box.innerHTML=`<b>${escapeHtml(currentUser.name||"")}</b><br>${escapeHtml(currentUser.email||"")}<br>${securityText_("Роль","Нақш")}: <b>${escapeHtml(roleLabel_(currentUser.role))}</b>${currentUser.lastLoginAt?`<br>${securityText_("Последний вход","Вуруди охирин")}: ${escapeHtml(currentUser.lastLoginAt)}`:""}`;
+}
+async function loadUsers(){
+  if(!canPermission("viewUsers"))return;
+  const box=document.getElementById("usersList");if(box)box.innerHTML=`<div class="settings-hint">${securityText_("Загрузка...","Боркунӣ...")}</div>`;
+  try{const r=await apiPost("users.list",{});if(!r.success)throw new Error(r.message||"Error");appUsers=Array.isArray(r.users)?r.users:[];renderUsers_();}catch(e){if(box)box.innerHTML=`<div class="settings-hint">❌ ${escapeHtml(e.message||String(e))}</div>`;}
+}
+function canManageUserClient_(u){if(!canPermission("manageUsers")||!currentUser)return false;if(currentUser.role==="owner")return true;return currentUser.role==="admin"&&["manager","cashier","viewer"].includes(String(u.role));}
+function renderUsers_(){
+  const box=document.getElementById("usersList");if(!box)return;
+  if(!canPermission("viewUsers")){box.innerHTML="";return;}
+  if(!appUsers.length){box.innerHTML=`<div class="settings-hint">${securityText_("Пользователей пока нет","Ҳоло истифодабаранда нест")}</div>`;return;}
+  box.innerHTML=appUsers.map(u=>{
+    const active=u.active!==false,verified=!!u.emailVerified,manageable=canManageUserClient_(u);
+    const badges=`<span class="user-badge">${escapeHtml(roleLabel_(u.role))}</span><span class="user-badge ${active?'ok':'off'}">${active?securityText_("Активен","Фаъол"):securityText_("Отключен","Хомӯш")}</span>${verified?'':`<span class="user-badge warn">${securityText_("Ожидает активации","Интизори фаъолсозӣ")}</span>`}`;
+    const actions=manageable?`<button class="user-mini-btn" onclick="openUserModal('${escapeAttr_(u.id)}')">${securityText_("Изменить","Тағйир")}</button>${!verified?`<button class="user-mini-btn" onclick="resendInvite('${escapeAttr_(u.id)}')">${securityText_("Новый код","Рамзи нав")}</button>`:""}`:"";
+    return `<div class="user-row"><div class="user-row-main"><div class="user-row-name">${escapeHtml(u.name||"—")}</div><div class="user-row-email">${escapeHtml(u.email||"")}</div><div class="user-row-meta">${badges}</div></div><div class="user-row-actions">${actions}</div></div>`;
+  }).join("");
+}
+function roleOptions_(selected,targetRole=""){
+  let roles=currentUser?.role==="owner"?["admin","manager","cashier","viewer"]:["manager","cashier","viewer"];
+  if(targetRole==="owner")roles=["owner"];
+  return roles.map(r=>`<option value="${r}" ${r===selected?'selected':''}>${escapeHtml(roleLabel_(r))}</option>`).join("");
+}
+function openUserModal(id=""){
+  if(!canPermission("manageUsers"))return;
+  editingUserId=id||null;const user=id?appUsers.find(u=>String(u.id)===String(id)):null;
+  document.getElementById("userModalTitle").textContent=user?securityText_("Редактирование пользователя","Таҳрири истифодабаранда"):securityText_("Новый пользователь","Истифодабарандаи нав");
+  document.getElementById("userModalHint").textContent=user?securityText_("Email является логином и на этом этапе не изменяется.","Email логин аст ва дар ин марҳила тағйир намеёбад."):securityText_("Код активации будет отправлен на email.","Рамзи фаъолсозӣ ба email фиристода мешавад.");
+  const name=document.getElementById("userNameInput"),email=document.getElementById("userEmailInput"),role=document.getElementById("userRoleSelect"),active=document.getElementById("userActiveInput");
+  name.value=user?.name||"";email.value=user?.email||"";email.readOnly=!!user;role.innerHTML=roleOptions_(user?.role||(currentUser?.role==="owner"?"manager":"manager"),user?.role||"");role.disabled=user?.role==="owner";active.checked=user?user.active!==false:true;active.disabled=user?.role==="owner";
+  setMessage_("userModalMessage","","");document.getElementById("userModal").style.display="flex";
+}
+function closeUserModal(){document.getElementById("userModal").style.display="none";editingUserId=null;}
+async function saveUser(){
+  const name=String(document.getElementById("userNameInput")?.value||"").trim(),email=String(document.getElementById("userEmailInput")?.value||"").trim(),role=document.getElementById("userRoleSelect")?.value||"viewer",active=!!document.getElementById("userActiveInput")?.checked;
+  if(!name||(!editingUserId&&!email)){setMessage_("userModalMessage",securityText_("Заполните имя и email","Ном ва email-ро пур кунед"),"error");return;}
+  const btn=document.getElementById("saveUserBtn");if(btn)btn.disabled=true;
+  try{const action=editingUserId?"users.update":"users.create";const payload=editingUserId?{id:editingUserId,name,role,active}:{name,email,role};const r=await apiPost(action,payload);if(!r.success){setMessage_("userModalMessage",r.message||"Error","error");return;}closeUserModal();showToast(`✅ <b>${r.message||securityText_("Пользователь сохранён","Истифодабаранда захира шуд")}</b>`,"success");await loadUsers();}catch(e){setMessage_("userModalMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
+}
+async function resendInvite(id){try{const r=await apiPost("users.resendInvite",{id});if(!r.success)throw new Error(r.message||"Error");showToast(`✅ <b>${r.message}</b>`,"success");await loadUsers();}catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}}
+function openChangePasswordModal(){["oldPasswordInput","newPasswordInput","confirmNewPasswordInput"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});setMessage_("changePasswordMessage","","");document.getElementById("changePasswordModal").style.display="flex";}
+function closeChangePasswordModal(){document.getElementById("changePasswordModal").style.display="none";}
+async function changePassword(){
+  const oldPassword=String(document.getElementById("oldPasswordInput")?.value||""),newPassword=String(document.getElementById("newPasswordInput")?.value||""),confirm=String(document.getElementById("confirmNewPasswordInput")?.value||"");
+  if(newPassword!==confirm){setMessage_("changePasswordMessage",securityText_("Пароли не совпадают","Паролҳо мувофиқ нестанд"),"error");return;}
+  const btn=document.getElementById("changePasswordSaveBtn");if(btn)btn.disabled=true;
+  try{const r=await apiPost("auth.changePassword",{oldPassword,newPassword});if(!r.success){setMessage_("changePasswordMessage",r.message||"Error","error");return;}closeChangePasswordModal();clearAuthSession_();showLogin_();setMessage_("loginMessage",r.message||securityText_("Пароль изменён. Войдите снова.","Парол иваз шуд. Аз нав ворид шавед."),"success");}catch(e){setMessage_("changePasswordMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
 }
 
+/* ---------- LOGIN ---------- */
+
 function openApp(){
+  if(!authToken||!currentUser){showLogin_();return;}
+  currentSeller=currentUser.name||currentUser.email||"";
   loginScreen.style.display = "none";
   mainHeader.style.display = "flex";
   appContent.style.display = "block";
   document.body.classList.add("app-open");
   userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
+  applyPermissions_();
+  renderAccountSecurity_();
   showView(currentView || "active");
   loadDebts();
+  if(canPermission("viewUsers"))loadUsers();
 }
 
-window.onload = function(){
+window.onload = async function(){
   applyTheme();
   applyContrast();
-
-  document.querySelectorAll(".lang-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.lang === currentLanguage);
-  });
-
-  let saved = sessionStorage.getItem("seller");
-  if(saved){
-    currentSeller = saved;
-    openApp();
-  }
+  document.querySelectorAll(".lang-btn,.login-lang-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.lang === currentLanguage));
+  applyTranslations();
 
   const fullCloseYesBtn = document.getElementById("fullCloseYesBtn");
-  if (fullCloseYesBtn) {
-    fullCloseYesBtn.onclick = confirmFullClose;
-  }
-
+  if (fullCloseYesBtn) fullCloseYesBtn.onclick = confirmFullClose;
   const addToDebtConfirmBtn = document.getElementById("addToDebtConfirmBtn");
-  if (addToDebtConfirmBtn) {
-    addToDebtConfirmBtn.onclick = confirmAddToDebt;
-  }
+  if (addToDebtConfirmBtn) addToDebtConfirmBtn.onclick = confirmAddToDebt;
 
-  applyTranslations();
+  if(authToken){
+    setMessage_("loginMessage",securityText_("Проверяем сессию...","Санҷиши сессия..."),"info");
+    try{
+      const r=await apiPost("auth.me",{});
+      if(r.success&&r.user){currentUser=r.user;currentSeller=r.user.name||r.user.email||"";setMessage_("loginMessage","","");openApp();return;}
+    }catch(e){}
+  }
+  clearAuthSession_(); showLogin_(); applySecurityTranslations_();
 };
 
-function logout(){
-  logoutModal.style.display="flex";
-}
+function logout(){ logoutModal.style.display="flex"; }
 
 /* ---------- ДОБАВЛЕНИЕ ---------- */
 
@@ -3502,12 +3800,7 @@ async function addDebt(){
   saveBtn.disabled=true;
 
   try {
-    const response = await fetch(SCRIPT_URL,{
-      method:"POST",
-      body:JSON.stringify(payload)
-    });
-
-    const result = await response.json();
+    const result = await apiPost("debt.mutate", payload);
     saveLoader.style.display="none";
 
     if (result.success) {
@@ -3539,8 +3832,7 @@ async function addDebt(){
 /* ---------- ЗАГРУЗКА ---------- */
 
 function loadDebts(){
-  return fetch(SCRIPT_URL)
-  .then(res=>res.json())
+  return apiPost("data.get", {})
   .then(data=>{
     data=data||{};
     allDebts=data.debts||[];
@@ -3737,22 +4029,13 @@ function statsDebtActionsHtml_(d){
   const phoneFull=phone?`992${phone}`:"";
   const safeClient=escapeHtml(String(d.client||"")).replace(/'/g,"&#39;");
   const safePhone=escapeHtml(phone).replace(/'/g,"&#39;");
-  if(remainder<=0){
-    return `<div class="stats-debt-paid-hint">✅ ${statsLocale_('Долг закрыт. Доступны связь с клиентом и история оплат.','Қарз баста шудааст. Тамос ва таърихи пардохтҳо дастрасанд.')}</div>
-      <div class="stats-debt-actions">
-        ${phoneFull?`<a class="stats-debt-action call" href="tel:+${phoneFull}">📞 ${t('callBtn')}</a>`:''}
-        ${phoneFull?`<a class="stats-debt-action wa" target="_blank" href="https://wa.me/${phoneFull}">💬 ${t('whatsappBtn')}</a>`:''}
-        <button class="stats-debt-action history" onclick="showHistory('${safeClient}')">📂 ${t('historyBtn')}</button>
-      </div>`;
-  }
-  const waText=encodeURIComponent(t('waReminder',{amount:remainder}));
-  return `<div class="stats-debt-actions">
-    <button class="stats-debt-action add" onclick="openAddToDebtModal(${row},'${safeClient}','${safePhone}',${remainder})">➕ ${t('addToDebtBtn')}</button>
-    <button class="stats-debt-action pay" onclick="openPayment(${row},${remainder})">💵 ${t('payBtn')}</button>
-    ${phoneFull?`<a class="stats-debt-action call" href="tel:+${phoneFull}">📞 ${t('callBtn')}</a>`:''}
-    ${phoneFull?`<a class="stats-debt-action wa" target="_blank" href="https://wa.me/${phoneFull}?text=${waText}">💬 ${t('whatsappBtn')}</a>`:''}
-    <button class="stats-debt-action history" onclick="showHistory('${safeClient}')">📂 ${t('historyBtn')}</button>
-  </div>`;
+  const actions=[];
+  if(remainder>0&&canPermission("appendDebt"))actions.push(`<button class="stats-debt-action add" onclick="openAddToDebtModal(${row},'${safeClient}','${safePhone}',${remainder})">➕ ${t('addToDebtBtn')}</button>`);
+  if(remainder>0&&canPermission("payDebt"))actions.push(`<button class="stats-debt-action pay" onclick="openPayment(${row},${remainder})">💵 ${t('payBtn')}</button>`);
+  if(phoneFull)actions.push(`<a class="stats-debt-action call" href="tel:+${phoneFull}">📞 ${t('callBtn')}</a>`);
+  if(phoneFull){const waText=encodeURIComponent(remainder>0?t('waReminder',{amount:remainder}):"");actions.push(`<a class="stats-debt-action wa" target="_blank" href="https://wa.me/${phoneFull}${waText?`?text=${waText}`:""}">💬 ${t('whatsappBtn')}</a>`);}
+  actions.push(`<button class="stats-debt-action history" onclick="showHistory('${safeClient}')">📂 ${t('historyBtn')}</button>`);
+  return `<div class="stats-debt-actions">${actions.join("")}</div>`;
 }
 function statsDebtItemsHtml_(list){
   if(!list.length) return `<div class="stats-detail-empty">${statsLocale_('По этому показателю данных нет','Аз рӯйи ин нишондиҳанда маълумот нест')}</div>`;
@@ -3778,10 +4061,9 @@ function statsPeriodLabel_(key){
   return {today:statsLocale_('Сегодня','Имрӯз'),last7:statsLocale_('Последние 7 дней','7 рӯзи охир'),thisMonth:statsLocale_('Этот месяц','Ин моҳ'),prevMonth:statsLocale_('Прошлый месяц','Моҳи гузашта')}[key]||key;
 }
 async function fetchStatsEvents_(params){
-  const q=new URLSearchParams({statsEvents:'1',...params});
-  const res=await fetch(`${SCRIPT_URL}?${q.toString()}`);
-  if(!res.ok) throw new Error('HTTP '+res.status);
-  return await res.json();
+  const data=await apiPost("stats.events",params||{});
+  if(data.success===false) throw new Error(data.message||"Stats error");
+  return data;
 }
 function statsEventItemsHtml_(events){
   if(!Array.isArray(events)||!events.length) return `<div class="stats-detail-empty">${statsLocale_('Операций за выбранный период нет','Дар давраи интихобшуда амалиёт нест')}</div>`;
@@ -3878,11 +4160,17 @@ function buildDebtCardHtml(d){
   let phoneNormalized = normalizePhone(d.phone);
   let phoneFull = "992" + phoneNormalized;
   let sumHistoryHtml = renderSumHistory(d.notification);
+  const safeClientJs = String(d.client||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  const safePhoneJs = String(phoneNormalized||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  const financialButtons=[];
+  if(canPermission("payDebt")) financialButtons.push(`<button class="pay-btn half-btn" onclick="openPayment(${d.row},${d.remainder})">${t("payBtn")}</button>`);
+  if(canPermission("appendDebt")) financialButtons.push(`<button class="add-debt-btn half-btn" onclick="openAddToDebtModal(${d.row}, '${safeClientJs}', '${safePhoneJs}', ${d.remainder})">➕ ${t("addToDebtBtn")}</button>`);
+  const financialActions=financialButtons.length?`<div class="action-row">${financialButtons.join("")}</div>`:"";
 
   return `
     <div class="${cardClass}">
-      <b>${d.client}</b> (${t("dueDateText",{date:d.dueDate})})<br>
-      ${t("phonePlaceholder")}: ${phoneNormalized}<br>
+      <b>${escapeHtml(String(d.client||""))}</b> (${t("dueDateText",{date:d.dueDate})})<br>
+      ${t("phonePlaceholder")}: ${escapeHtml(phoneNormalized)}<br>
       ${t("debtAmount")}: ${d.total} ${t("somoni")}<br>
       ${t("paidAmount")}: ${d.paid || 0} ${t("somoni")}<br>
       ${t("lastPayment")}: ${d.partialPayment || 0} ${t("somoni")}<br>
@@ -3891,26 +4179,14 @@ function buildDebtCardHtml(d){
       ${sumHistoryHtml}
       ${extra}
 
-      <div class="action-row">
-        <button class="pay-btn half-btn" onclick="openPayment(${d.row},${d.remainder})">
-          ${t("payBtn")}
-        </button>
-
-        <button class="add-debt-btn half-btn" onclick="openAddToDebtModal(${d.row}, '${String(d.client).replace(/'/g,"\\'")}', '${String(phoneNormalized).replace(/'/g,"\\'")}', ${d.remainder})">
-          ➕ ${t("addToDebtBtn")}
-        </button>
-      </div>
+      ${financialActions}
 
       <div class="action-row">
         <a class="call-btn" href="tel:+${phoneFull}">📞 ${t("callBtn")}</a>
-        <a class="wa-btn" target="_blank" href="https://wa.me/${phoneFull}?text=${waText}">
-          💬 ${t("whatsappBtn")}
-        </a>
+        <a class="wa-btn" target="_blank" href="https://wa.me/${phoneFull}?text=${waText}">💬 ${t("whatsappBtn")}</a>
       </div>
 
-      <button class="history-action-btn" onclick="showHistory('${String(d.client).replace(/'/g,"\\'")}')">
-        📂 ${t("historyBtn")}
-      </button>
+      <button class="history-action-btn" onclick="showHistory('${safeClientJs}')">📂 ${t("historyBtn")}</button>
     </div>
   `;
 }
@@ -3966,6 +4242,8 @@ function applyPaidSearch(){
 function showView(view){
   const allowed=["active","add","paid","stats","settings"];
   if (!allowed.includes(view)) view="active";
+  if(view==="add"&&!canPermission("createDebt"))view="active";
+  if(view==="stats"&&!canPermission("viewStats"))view="active";
   currentView=view;
   document.querySelectorAll(".app-view").forEach(el=>el.classList.toggle("active",el.id===`view-${view}`));
   document.querySelectorAll(".nav-btn,.mobile-nav-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.view===view));
@@ -4029,12 +4307,13 @@ function confirmPayment(){
 
   paymentLoader.style.display = "block";
 
-  fetch(SCRIPT_URL+"?paid="+currentRow+"&amount="+amount+"&seller="+currentSeller)
-  .then(()=> {
+  apiPost("debt.pay",{row:currentRow,amount})
+  .then(result=> {
     paymentLoader.style.display = "none";
+    if(result.success===false){showToast(`❌ ${escapeHtml(result.message||t("errorSaveToast"))}`,"error");return;}
     paymentModal.style.display = "none";
     loadDebts();
-  });
+  }).catch(err=>{paymentLoader.style.display="none";showToast(`❌ ${escapeHtml(err.message||String(err))}`,"error");});
 }
 
 /* ---------- ПОЛНОЕ ПОГАШЕНИЕ ---------- */
@@ -4072,9 +4351,9 @@ function confirmFullClose(){
   modal.style.display = "none";
   paymentLoader.style.display = "block";
 
-  fetch(SCRIPT_URL + "?paid=" + currentRow + "&amount=" + currentRemainder + "&seller=" + encodeURIComponent(currentSeller || ""))
-    .then(res => res.json())
-    .then(() => {
+  apiPost("debt.pay",{row:currentRow,amount:currentRemainder})
+    .then(result => {
+      if(result.success===false)throw new Error(result.message||t("errorSaveToast"));
       paymentLoader.style.display = "none";
       paymentModal.style.display = "none";
 
@@ -4147,12 +4426,7 @@ async function confirmAddToDebt(){
   };
 
   try {
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-
-    const result = await response.json();
+    const result = await apiPost("debt.mutate", payload);
 
     if (result.success) {
       closeAddToDebtModal();
@@ -4195,11 +4469,10 @@ async function confirmReduceDebt(){
   const btn=document.getElementById('reduceDebtConfirmBtn');
   if(btn)btn.disabled=true;
   try{
-    const response=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({
-      client:reduceDebtTargetClient,phone:reduceDebtTargetPhone,amount:amount,seller:currentSeller,
+    const result=await apiPost("debt.mutate",{
+      client:reduceDebtTargetClient,phone:reduceDebtTargetPhone,amount:amount,
       mode:'reduce',targetRow:reduceDebtTargetRow,noteText:`Долг уменьшен: -${amount}`
-    })});
-    const result=await response.json();
+    });
     if(result.success){
       closeReduceDebtModal();
       showToast(`✅ <b>${statsLocale_('Долг уменьшен','Қарз кам карда шуд')}</b><br>➖ ${statsMoney_(amount)} ${t('somoni')}`,'success');
@@ -4219,8 +4492,7 @@ function showHistory(name){
   historyContent.innerHTML = "";
   historyLoader.style.display = "block";
 
-  fetch(SCRIPT_URL+"?history="+encodeURIComponent(name))
-  .then(res=>res.json())
+  apiPost("debt.history",{clientName:name})
   .then(data=>{
     historyLoader.style.display = "none";
     let html = "";
@@ -4240,6 +4512,7 @@ function closeHistory(){
 }
 
 function openExportMenu(){
+  if(!canPermission("exportData")){showToast(`❌ ${securityText_("Недостаточно прав для экспорта","Барои экспорт ҳуқуқ кофӣ нест")}`,"error");return;}
   exportModal.style.display = "flex";
   localizeExportOptions();
   syncExportUi();
@@ -4386,8 +4659,8 @@ async function getDebtDatasetAsync(dataset,month){
 
 async function loadExportPayments(){
   if(exportPaymentsCache) return exportPaymentsCache;
-  const res=await fetch(SCRIPT_URL+"?exportPayments=1");
-  const data=await res.json();
+  const data=await apiPost("export.payments",{});
+  if(data.success===false)throw new Error(data.message||t("exportError"));
   exportPaymentsCache=Array.isArray(data.payments)?data.payments:[];
   return exportPaymentsCache;
 }
@@ -4623,15 +4896,12 @@ function closeLogout(){
   logoutModal.style.display="none";
 }
 
-function confirmLogout(){
-  document.body.style.transition="0.3s";
-  document.body.style.opacity="0.5";
-
-  setTimeout(()=>{
-    sessionStorage.removeItem("seller");
-  document.body.classList.remove("app-open");
-    location.reload();
-  },300);
+async function confirmLogout(){
+  const token=authToken;
+  closeLogout();
+  document.body.style.transition="0.2s";document.body.style.opacity="0.65";
+  try{if(token)await apiPost("auth.logout",{}, {public:true,token});}catch(e){}
+  clearAuthSession_();document.body.classList.remove("app-open");location.reload();
 }
 </script>
   
