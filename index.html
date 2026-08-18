@@ -2359,6 +2359,32 @@ html[data-theme="light"] .audit-item,html[data-theme="light"] .audit-diff-col{ba
 .assign-debt-user-meta{font-size:10px;color:var(--text-3);margin-top:5px}
 html[data-theme="light"] .debt-responsible-box{background:#eff6ff;border-color:#dbeafe}
 
+
+/* ===== TEAM ANALYTICS v5.8.0 ===== */
+.team-analytics-shell{display:flex;flex-direction:column;gap:12px}
+.team-analytics-toolbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.team-analytics-heading{min-width:0}.team-analytics-heading b{display:block;font-size:14px;color:var(--text-1)}.team-analytics-heading small{display:block;margin-top:4px;font-size:11px;line-height:1.45;color:var(--text-3)}
+.team-period-tabs,.team-sort-tabs{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.team-period-tabs::-webkit-scrollbar,.team-sort-tabs::-webkit-scrollbar{display:none}
+.team-chip{margin:0!important;width:auto!important;min-width:max-content!important;min-height:36px!important;padding:8px 11px!important;border-radius:12px!important;border:1px solid rgba(148,163,184,.16)!important;background:rgba(148,163,184,.07)!important;color:var(--text-2)!important;font-size:11px!important;font-weight:850!important;box-shadow:none!important}
+.team-chip.active{background:linear-gradient(135deg,#2563eb,#7c3aed)!important;color:#fff!important;border-color:rgba(255,255,255,.18)!important;box-shadow:0 8px 20px rgba(37,99,235,.18)!important}
+.team-summary-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.team-summary-card{min-width:0;padding:11px 12px;border-radius:15px;background:rgba(148,163,184,.055);border:1px solid rgba(148,163,184,.11)}
+.team-summary-label{font-size:10px;font-weight:800;color:var(--text-3);line-height:1.25}.team-summary-value{font-size:16px;font-weight:950;color:var(--text-1);margin-top:5px;line-height:1.15;word-break:break-word}.team-summary-sub{font-size:9.5px;color:var(--text-3);margin-top:4px;line-height:1.3;font-weight:700}
+.team-sort-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.team-sort-label{font-size:10.5px;color:var(--text-3);font-weight:800}
+.team-members{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.team-member-card{position:relative;overflow:hidden;border-radius:18px;padding:13px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(148,163,184,.035));border:1px solid rgba(148,163,184,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.035)}
+.team-member-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#60a5fa,#7c3aed)}
+.team-member-card.has-overdue::before{background:linear-gradient(180deg,#fb923c,#ef4444)}
+.team-member-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.team-member-name{font-size:13.5px;font-weight:950;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.team-member-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:4px}.team-role-badge,.team-status-badge{display:inline-flex;align-items:center;min-height:20px;padding:3px 7px;border-radius:999px;background:rgba(59,130,246,.11);border:1px solid rgba(96,165,250,.17);font-size:9px;font-weight:850;color:var(--text-2)}.team-status-badge.inactive{background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.18)}
+.team-member-score{text-align:right}.team-member-score b{display:block;font-size:15px;color:var(--text-1)}.team-member-score small{display:block;font-size:9px;color:var(--text-3);margin-top:2px}
+.team-member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:11px}.team-metric{min-width:0;padding:9px;border-radius:13px;background:rgba(148,163,184,.052);border:1px solid rgba(148,163,184,.09)}.team-metric-label{font-size:9px;font-weight:800;color:var(--text-3);line-height:1.2}.team-metric-value{font-size:12px;font-weight:950;color:var(--text-1);margin-top:4px;line-height:1.2;word-break:break-word}.team-metric-sub{font-size:8.5px;color:var(--text-3);margin-top:3px;line-height:1.25}
+.team-overdue-bar{height:5px;border-radius:99px;background:rgba(148,163,184,.12);overflow:hidden;margin-top:10px}.team-overdue-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#f59e0b,#ef4444);min-width:0}.team-member-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:7px;font-size:9.5px;color:var(--text-3);font-weight:700}
+.team-empty{padding:18px 12px;text-align:center;color:var(--text-3);font-size:12px;font-weight:750}.team-loading{padding:20px 12px;text-align:center;color:var(--text-3);font-size:12px;font-weight:800}
+html[data-theme="light"] .team-summary-card,html[data-theme="light"] .team-member-card,html[data-theme="light"] .team-metric{background:rgba(248,250,252,.88);border-color:rgba(148,163,184,.22)}
+html[data-theme="light"] .team-chip{background:#f8fafc!important;border-color:#e2e8f0!important;color:#475569!important}html[data-theme="light"] .team-chip.active{color:#fff!important}
+@media(max-width:1100px){.team-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.team-members{grid-template-columns:1fr}}
+@media(max-width:640px){.team-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.team-member-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.team-analytics-toolbar{flex-direction:column}.team-period-tabs{width:100%}.team-chip{min-height:38px!important}.team-member-card{padding:12px}.team-member-score b{font-size:13px}}
+
 /* ===== SECURITY CENTER v5.7.0 ===== */
 .security-center-card{padding:16px!important;}
 .security-center-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
@@ -2985,7 +3011,7 @@ html[data-theme="light"] .debt-scope-btn.active{color:#fff!important;background:
 </div>
 
 <script>
-const VERSION="5.7.0";
+const VERSION="5.8.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 let authToken = sessionStorage.getItem("authToken") || "";
@@ -3033,6 +3059,10 @@ let twoFactorSetupUri = "";
 let twoFactorBackupCodes = [];
 let auditEntries = [];
 let auditActors = [];
+let teamAnalyticsData = null;
+let teamAnalyticsLoading = false;
+let teamAnalyticsPeriod = "thisMonth";
+let teamAnalyticsSort = "collected";
 let auditLoading = false;
 let editingUserId = null;
 let authFlowMode = "reset";
@@ -3657,6 +3687,7 @@ function applyTranslations(){
   applySecurityTranslations_();
   renderAccountSecurity_();
   renderStats(lastStatsData || {});
+  if(teamAnalyticsData)renderTeamAnalytics_();
   renderActiveDebtView_();
   renderPaidDebts([...paidDebts]);
   if (String(phone?.value || "").replace(/\D/g, "").length === 9) {
@@ -4770,9 +4801,6 @@ function renderStats(data){
   const maxTrend=Math.max(1,...trend.flatMap(x=>[Number(x.issued||0),Number(x.returned||0)]));
   const trendHtml=trend.length?`<div class="stats-legend"><span><i style="background:#3b82f6"></i>${statsLocale_("Выдано","Дода шуд")}</span><span><i style="background:#22c55e"></i>${statsLocale_("Возвращено","Баргардонида шуд")}</span></div><div class="stats-trend">${trend.map(x=>{const ih=Math.max(2,Math.round(Number(x.issued||0)/maxTrend*100));const rh=Math.max(2,Math.round(Number(x.returned||0)/maxTrend*100));const ds=String(x.date||"");return `<div class="stats-trend-day stats-clickable" role="button" tabindex="0" onclick="openStatsDetail('date:${ds}','${ds}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('date:${ds}','${ds}')}" title="${ds}: ${statsLocale_("выдано","дода шуд")} ${statsMoney_(x.issued)}, ${statsLocale_("возвращено","баргардонида шуд")} ${statsMoney_(x.returned)}"><div class="stats-trend-bars"><div class="stats-trend-bar issued" style="height:${ih}%"></div><div class="stats-trend-bar returned" style="height:${rh}%"></div></div><div class="stats-trend-label">${ds.slice(5).replace('-', '.')}</div></div>`}).join('')}</div>`:`<div class="stats-empty">${statsLocale_("Динамика начнёт заполняться новыми операциями","Динамика бо амалиёти нав пур мешавад")}</div>`;
 
-  const staff=Array.isArray(ev.staff)?ev.staff:[];
-  const staffHtml=staff.length?`<div class="stats-list">${staff.map(s=>{const sn=String(s.name||"—");const safe=escapeHtml(sn).replace(/'/g,"&#39;");return `<div class="stats-list-row stats-clickable" role="button" tabindex="0" onclick="openStatsDetail('staff:${safe}','${safe}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('staff:${safe}','${safe}')}"><div class="stats-list-main"><div class="stats-list-name">👤 ${escapeHtml(sn)}</div><div class="stats-list-meta">${statsLocale_("Выдано","Дода шуд")}: ${statsMoney_(s.issued)} · ${statsLocale_("Принято оплат","Пардохт қабул шуд")}: ${statsMoney_(s.collected)}</div></div><div class="stats-list-value">${statsMoney_(Number(s.collected||0)-Number(s.issued||0))}</div></div>`}).join('')}</div>`:`<div class="stats-empty">${statsLocale_("Статистика сотрудников появится по новым операциям","Омори кормандон аз амалиёти нав пайдо мешавад")}</div>`;
-
   const periodKey=window.__statsPeriod||'thisMonth';
   statsBox.innerHTML=`<div class="stats-dashboard">
     <div class="stats-hero-grid">
@@ -4825,9 +4853,90 @@ function renderStats(data){
       <div class="stats-panel"><div class="stats-section-title">⏳ ${statsLocale_('Самые старые просрочки','Қарзҳои деринаи муҳлатгузашта')}</div>${statsDebtorRows_(a.oldestOverdue,'old')}</div>
     </div>
 
-    <div class="stats-panel"><div class="stats-section-title">👥 ${statsLocale_('По сотрудникам','Аз рӯйи кормандон')}</div>${staffHtml}</div>
+    <div class="stats-panel" id="teamAnalyticsPanel"><div class="stats-section-title">👥 ${statsLocale_('Аналитика команды','Омори даста')}</div><div id="teamAnalyticsBox"><div class="team-loading">⏳ ${statsLocale_('Откройте статистику, чтобы загрузить показатели команды','Барои бор кардани нишондиҳандаҳои даста оморро кушоед')}</div></div></div>
   </div>`;
   selectStatsPeriod(periodKey);
+  if(currentView==="stats"&&canPermission("viewStats")) setTimeout(()=>loadTeamAnalytics({silent:true}),0);
+}
+
+
+function teamPeriodLabel_(key){
+  return {today:statsLocale_('Сегодня','Имрӯз'),last7:statsLocale_('7 дней','7 рӯз'),thisMonth:statsLocale_('Этот месяц','Ин моҳ'),prevMonth:statsLocale_('Прошлый месяц','Моҳи гузашта'),all:statsLocale_('Всё время','Ҳама вақт')}[key]||key;
+}
+function teamRoleLabel_(role){ return roleLabel_(role); }
+function setTeamAnalyticsPeriod_(key){
+  teamAnalyticsPeriod=key||'thisMonth';
+  loadTeamAnalytics();
+}
+function setTeamAnalyticsSort_(key){
+  teamAnalyticsSort=key||'collected';
+  renderTeamAnalytics_();
+}
+function teamSummaryCard_(label,value,sub=''){
+  return `<div class="team-summary-card"><div class="team-summary-label">${label}</div><div class="team-summary-value">${value}</div>${sub?`<div class="team-summary-sub">${sub}</div>`:''}</div>`;
+}
+function teamMetric_(label,value,sub=''){
+  return `<div class="team-metric"><div class="team-metric-label">${label}</div><div class="team-metric-value">${value}</div>${sub?`<div class="team-metric-sub">${sub}</div>`:''}</div>`;
+}
+function teamMemberCard_(m){
+  const overdueShare=Math.max(0,Math.min(100,Number(m.overdueShare||0)));
+  const name=escapeHtml(String(m.name||m.email||'—'));
+  const status=m.active===false?`<span class="team-status-badge inactive">${statsLocale_('неактивен','ғайрифаъол')}</span>`:'';
+  const collected=Number(m.periodCollected||0),payCount=Number(m.periodPaymentCount||0),closed=Number(m.periodClosedCount||0);
+  return `<div class="team-member-card ${overdueShare>0?'has-overdue':''}">
+    <div class="team-member-head"><div style="min-width:0"><div class="team-member-name">👤 ${name}</div><div class="team-member-meta"><span class="team-role-badge">${escapeHtml(teamRoleLabel_(m.role))}</span>${status}</div></div><div class="team-member-score"><b>${statsMoney_(collected)} ${t('somoni')}</b><small>${statsLocale_('собрано за период','дар давра ҷамъ шуд')}</small></div></div>
+    <div class="team-member-grid">
+      ${teamMetric_(statsLocale_('В работе','Дар кор'),String(Number(m.activeCount||0)),`${statsMoney_(m.activeBalance)} ${t('somoni')}`)}
+      ${teamMetric_(statsLocale_('Просрочено','Муҳлат гузашта'),String(Number(m.overdueCount||0)),`${statsMoney_(m.overdueBalance)} ${t('somoni')}`)}
+      ${teamMetric_(statsLocale_('Оплат принято','Пардохт қабул шуд'),String(payCount),`${statsMoney_(collected)} ${t('somoni')}`)}
+      ${teamMetric_(statsLocale_('Закрыто','Баста шуд'),String(closed),teamPeriodLabel_(teamAnalyticsPeriod))}
+      ${teamMetric_(statsLocale_('Средний платёж','Пардохти миёна'),`${statsMoney_(m.averagePayment)} ${t('somoni')}`,`${payCount} ${statsLocale_('платежей','пардохт')}`)}
+      ${teamMetric_(statsLocale_('Возврат портфеля','Баргардонии портфел'),statsPct_(m.portfolioRecoveryRate),`${statsMoney_(m.portfolioPaid)} / ${statsMoney_(m.portfolioIssued)}`)}
+    </div>
+    <div class="team-overdue-bar" title="${statsLocale_('Доля просрочки','Ҳиссаи муҳлатгузашта')}: ${statsPct_(overdueShare)}"><div class="team-overdue-fill" style="width:${overdueShare}%"></div></div>
+    <div class="team-member-foot"><span>${statsLocale_('Доля просрочки','Ҳиссаи муҳлатгузашта')}: <b>${statsPct_(overdueShare)}</b></span><span>${statsLocale_('Всего закреплено','Ҳамагӣ вобаста')}: ${Number(m.portfolioRecords||0)}</span></div>
+  </div>`;
+}
+function renderTeamAnalytics_(){
+  const box=document.getElementById('teamAnalyticsBox');if(!box)return;
+  const d=teamAnalyticsData;
+  if(!d){box.innerHTML=`<div class="team-loading">⏳ ${statsLocale_('Загрузка показателей команды…','Боркунии нишондиҳандаҳои даста…')}</div>`;return;}
+  let members=Array.isArray(d.members)?[...d.members]:[];
+  const sorters={
+    collected:(a,b)=>Number(b.periodCollected||0)-Number(a.periodCollected||0),
+    workload:(a,b)=>Number(b.activeBalance||0)-Number(a.activeBalance||0),
+    overdue:(a,b)=>Number(b.overdueBalance||0)-Number(a.overdueBalance||0),
+    name:(a,b)=>String(a.name||'').localeCompare(String(b.name||''),currentLanguage==='tj'?'tg':'ru')
+  };members.sort(sorters[teamAnalyticsSort]||sorters.collected);
+  const s=d.summary||{}; const elevated=d.scope==='team';
+  const periodButtons=['today','last7','thisMonth','prevMonth','all'].map(k=>`<button class="team-chip ${teamAnalyticsPeriod===k?'active':''}" type="button" onclick="setTeamAnalyticsPeriod_('${k}')">${teamPeriodLabel_(k)}</button>`).join('');
+  const sortButtons=[['collected',statsLocale_('По сборам','Аз рӯйи ҷамъоварӣ')],['workload',statsLocale_('По нагрузке','Аз рӯйи сарборӣ')],['overdue',statsLocale_('По просрочке','Аз рӯйи муҳлатгузашта')],['name',statsLocale_('По имени','Аз рӯйи ном')]].map(x=>`<button class="team-chip ${teamAnalyticsSort===x[0]?'active':''}" type="button" onclick="setTeamAnalyticsSort_('${x[0]}')">${x[1]}</button>`).join('');
+  box.innerHTML=`<div class="team-analytics-shell">
+    <div class="team-analytics-toolbar"><div class="team-analytics-heading"><b>${elevated?statsLocale_('Команда целиком','Тамоми даста'):statsLocale_('Мои показатели','Нишондиҳандаҳои ман')}</b><small>${statsLocale_('Нагрузка и просрочка — на текущий момент; оплаты и закрытия — за выбранный период.','Сарборӣ ва муҳлатгузашта — ҳолати ҷорӣ; пардохт ва басташавӣ — барои давраи интихобшуда.')}</small></div><div class="team-period-tabs">${periodButtons}</div></div>
+    <div class="team-summary-grid">
+      ${teamSummaryCard_(statsLocale_('Сотрудников','Кормандон'),String(Number(s.staffCount||0)),elevated?statsLocale_('в сравнении','дар муқоиса'):statsLocale_('ваш профиль','профили шумо'))}
+      ${teamSummaryCard_(statsLocale_('В работе','Дар кор'),String(Number(s.activeCount||0)),`${statsMoney_(s.activeBalance)} ${t('somoni')}`)}
+      ${teamSummaryCard_(statsLocale_('Собрано','Ҷамъ шуд'),`${statsMoney_(s.periodCollected)} ${t('somoni')}`,`${Number(s.periodPaymentCount||0)} ${statsLocale_('платежей','пардохт')}`)}
+      ${teamSummaryCard_(statsLocale_('Просрочено','Муҳлат гузашта'),String(Number(s.overdueCount||0)),`${statsMoney_(s.overdueBalance)} ${t('somoni')}`)}
+      ${teamSummaryCard_(statsLocale_('Закрыто','Баста шуд'),String(Number(s.periodClosedCount||0)),teamPeriodLabel_(teamAnalyticsPeriod))}
+      ${teamSummaryCard_(statsLocale_('Без ответственного','Бе масъул'),elevated?String(Number(s.unassignedCount||0)):'—',elevated?`${statsMoney_(s.unassignedBalance)} ${t('somoni')}`:statsLocale_('только руководству','танҳо барои роҳбарият'))}
+    </div>
+    ${elevated?`<div class="team-sort-row"><span class="team-sort-label">${statsLocale_('Сортировка сотрудников','Тартиби кормандон')}</span><div class="team-sort-tabs">${sortButtons}</div></div>`:''}
+    <div class="team-members">${members.length?members.map(teamMemberCard_).join(''):`<div class="team-empty">${statsLocale_('Нет данных по сотрудникам','Маълумоти кормандон нест')}</div>`}</div>
+  </div>`;
+}
+async function loadTeamAnalytics(options={}){
+  const box=document.getElementById('teamAnalyticsBox');
+  if(!canPermission('viewStats'))return;
+  if(teamAnalyticsLoading)return;
+  teamAnalyticsLoading=true;
+  if(box&&!options.silent)box.innerHTML=`<div class="team-loading">⏳ ${statsLocale_('Обновляем аналитику команды…','Омори даста нав мешавад…')}</div>`;
+  try{
+    const r=await apiPost('team.analytics',{period:teamAnalyticsPeriod});
+    if(!r.success)throw new Error(r.message||'Team analytics error');
+    teamAnalyticsData=r; renderTeamAnalytics_();
+  }catch(e){if(box)box.innerHTML=`<div class="team-empty">❌ ${escapeHtml(e.message||String(e))}</div>`;}
+  finally{teamAnalyticsLoading=false;}
 }
 
 
@@ -5194,6 +5303,7 @@ function showView(view){
     applyPaidSearch();
   } else if (view==="stats") {
     renderStats(lastStatsData||{});
+    loadTeamAnalytics({silent:true});
   } else if (view==="audit") {
     loadAuditLog();
   }
