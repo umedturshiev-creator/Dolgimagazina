@@ -2525,7 +2525,7 @@ html[data-theme="dark"] .debt-head-metric-v2,html[data-theme="dark"] .debt-row-v
 .debt-load-error-v589{max-width:620px!important;display:grid!important;gap:10px!important;color:var(--text-2)!important}.debt-load-error-v589 b{color:var(--danger-1)!important}.debt-load-error-v589 button{width:auto!important;justify-self:start!important;margin:0!important}
 
 
-/* ===== MOBILE FULL WIDTH FIX v5.8.11 ===== */
+/* ===== MOBILE FULL WIDTH FIX v5.8.12 ===== */
 @media (max-width:760px){
   html,body{
     width:100%!important;
@@ -2771,7 +2771,7 @@ html[data-theme="dark"] .debt-head-metric-v2,html[data-theme="dark"] .debt-row-v
       </div>
       <div class="debt-workbar-tools-v2">
         <div class="search-box debt-search-v2">
-          <input id="searchInput" placeholder="🔍 Поиск по имени или номеру">
+          <input id="searchInput" placeholder="🔍 Имя, телефон, ответственный, сумма, статус…">
         </div>
         <label class="debt-sort-wrap-v2">
           <span id="debtSortLabel">Сортировка</span>
@@ -2818,7 +2818,7 @@ html[data-theme="dark"] .debt-head-metric-v2,html[data-theme="dark"] .debt-row-v
   <section id="view-paid" class="app-view">
     <h3 id="paidDebtsTitle" class="view-title">Оплаченные долги</h3>
     <div class="search-box">
-      <input id="paidSearchInput" placeholder="🔍 Поиск по имени или номеру">
+      <input id="paidSearchInput" placeholder="🔍 Имя, телефон, ответственный, сумма, статус…">
     </div>
     <div id="paidDebtList"></div>
   </section>
@@ -3341,7 +3341,7 @@ html[data-theme="dark"] .debt-head-metric-v2,html[data-theme="dark"] .debt-row-v
 </div>
 
 <script>
-const VERSION="5.8.11";
+const VERSION="5.8.12";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -3482,7 +3482,7 @@ const translations = {
     selectedPayDate: "Дата оплаты: {date}",
     saveBtn: "Сохранить",
     saveLoader: "⏳ Сохранение...",
-    searchPlaceholder: "🔍 Поиск по имени или номеру",
+    searchPlaceholder: "🔍 Имя, телефон, ответственный, сумма, статус…",
     debtorsList: "Список должников",
     navActive: "Активные долги",
     navAdd: "Добавить долг",
@@ -3671,7 +3671,7 @@ const translations = {
     selectedPayDate: "Санаи пардохт: {date}",
     saveBtn: "Захира кардан",
     saveLoader: "⏳ Захира шуда истодааст...",
-    searchPlaceholder: "🔍 Ҷустуҷӯ аз рӯйи ном ё рақам",
+    searchPlaceholder: "🔍 Ном, телефон, масъул, маблағ, ҳолат…",
     debtorsList: "Рӯйхати қарздорон",
     navActive: "Қарзҳои фаъол",
     navAdd: "Иловаи қарз",
@@ -4548,15 +4548,33 @@ function debtMatchesScope_(d){
   if(debtScope==="unassigned")return !String(d.responsibleUserId||"").trim();
   return true;
 }
-function activeDebtFilteredList_(){
-  const val=String(document.getElementById("searchInput")?.value||"").toLowerCase().trim();
-  return allDebts.filter(d=>{
-    if(!debtMatchesScope_(d))return false;
-    if(!val)return true;
-    const name=String(d.client||"").toLowerCase();
-    const ph=normalizePhone(d.phone);
-    return name.includes(val)||ph.includes(val.replace(/\D/g,""));
+function normalizeDebtSearchText_(value){
+  return String(value??"").toLowerCase().replace(/ё/g,"е").replace(/\s+/g," ").trim();
+}
+function debtSearchMatches_(d,query){
+  const q=normalizeDebtSearchText_(query);
+  if(!q)return true;
+  const statusParts=[];
+  if(d.isOverdue)statusParts.push("просрочено просроченный муҳлат гузашта");
+  if(d.isPartial||Number(d.paid||0)>0)statusParts.push("частично оплачено есть оплата қисман пардохт");
+  if(Number(d.remainder||0)<=0)statusParts.push("оплачено закрыт погашен пардохт баста");
+  if(!String(d.responsibleUserId||"").trim())statusParts.push("без ответственного не назначен бе масъул таъин нашуда");
+  const values=[
+    d.client,d.phone,normalizePhone(d.phone),d.responsibleName,d.seller,d.total,d.paid,d.remainder,
+    d.partialPayment,d.dueDate,d.paymentDate,d.notification,statusParts.join(" ")
+  ];
+  const haystack=normalizeDebtSearchText_(values.join(" "));
+  const digitHaystack=values.map(v=>String(v??"")).join(" ").replace(/\D/g,"");
+  const tokens=q.split(" ").filter(Boolean);
+  return tokens.every(token=>{
+    if(haystack.includes(token))return true;
+    const digits=token.replace(/\D/g,"");
+    return digits.length>0 && digitHaystack.includes(digits);
   });
+}
+function activeDebtFilteredList_(){
+  const val=String(document.getElementById("searchInput")?.value||"").trim();
+  return allDebts.filter(d=>debtMatchesScope_(d)&&debtSearchMatches_(d,val));
 }
 function updateDebtScopeButtons_(){
   document.querySelectorAll(".debt-scope-btn").forEach(btn=>{
@@ -5721,13 +5739,9 @@ function renderPaidDebts(list){
 
 function applyPaidSearch(){
   const input=document.getElementById("paidSearchInput");
-  const val=String(input?.value||"").toLowerCase().trim();
-  if (!val) return renderPaidDebts([...paidDebts]);
-  renderPaidDebts(paidDebts.filter(d=>{
-    const name=String(d.client||"").toLowerCase();
-    const ph=normalizePhone(d.phone);
-    return name.includes(val)||ph.includes(val.replace(/\D/g,""));
-  }));
+  const val=String(input?.value||"").trim();
+  if(!val)return renderPaidDebts([...paidDebts]);
+  renderPaidDebts(paidDebts.filter(d=>debtSearchMatches_(d,val)));
 }
 
 
