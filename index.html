@@ -3165,7 +3165,7 @@ html[data-theme="light"] .settings-search-input,html[data-theme="light"] .help-s
 </div>
 
 <script>
-const VERSION="5.8.6";
+const VERSION="5.8.7";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4099,8 +4099,12 @@ async function login(){
   if(!email||!password){setMessage_("loginMessage",securityText_("Введите email и пароль","Email ва паролро ворид кунед"),"error");return;}
   const btn=document.getElementById("loginSubmitBtn"); if(btn){btn.disabled=true;btn.textContent=securityText_("Вход...","Вуруд...");}
   setMessage_("loginMessage",securityText_("Проверяем данные...","Санҷиши маълумот..."),"info");
+  let loginSlowTimer=setTimeout(()=>{
+    setMessage_("loginMessage",securityText_("Сервер отвечает дольше обычного. Продолжаем вход…","Сервер дертар ҷавоб медиҳад. Вуруд идома дорад…"),"info");
+  },8000);
   try{
     const result=await apiPost("auth.login",{email,password,device:getClientDeviceInfo_()},{public:true});
+    clearTimeout(loginSlowTimer);
     if(!result.success){
       let msg=result.message||securityText_("Не удалось войти","Вуруд имкон нашуд");
       if(result.code==="LOCKED"&&result.retryAfterSeconds){const min=Math.ceil(Number(result.retryAfterSeconds)/60);msg=securityText_(`Вход временно заблокирован. Повторите примерно через ${min} мин.`,`Вуруд муваққатан баста шуд. Тақрибан пас аз ${min} дақиқа такрор кунед.`);}
@@ -4112,8 +4116,8 @@ async function login(){
     }
     authToken=result.token||""; currentUser=result.user||null; currentSeller=currentUser?.name||""; sessionStorage.setItem("authToken",authToken); cacheAuthUser_(currentUser);
     document.getElementById("passwordInput").value=""; setMessage_("loginMessage","",""); hideSessionResume_(); openApp();
-  }catch(e){setMessage_("loginMessage",e.message||String(e),"error");}
-  finally{if(btn){btn.disabled=false;btn.textContent=securityText_("Войти","Даромадан");}}
+  }catch(e){clearTimeout(loginSlowTimer);setMessage_("loginMessage",e.message||String(e),"error");}
+  finally{clearTimeout(loginSlowTimer);if(btn){btn.disabled=false;btn.textContent=securityText_("Войти","Даромадан");}}
 }
 
 function openTwoFactorLogin(){
@@ -6257,12 +6261,24 @@ function closeLogout(){
   logoutModal.style.display="none";
 }
 
-async function confirmLogout(){
+function confirmLogout(){
   const token=authToken;
   closeLogout();
-  document.body.style.transition="0.2s";document.body.style.opacity="0.65";
-  try{if(token)await apiPost("auth.logout",{}, {public:true,token});}catch(e){}
-  clearAuthSession_();document.body.classList.remove("app-open");location.reload();
+  // Пользователь выходит мгновенно. Серверное закрытие сессии не блокирует интерфейс.
+  clearAuthSession_();
+  document.body.classList.remove("app-open");
+  document.body.style.opacity="";
+  showLogin_();
+  setMessage_("loginMessage",securityText_("Вы вышли из системы","Шумо аз система баромадед"),"success");
+  if(token){
+    try{
+      fetch(SCRIPT_URL,{
+        method:"POST",
+        body:JSON.stringify({action:"auth.logout",payload:{},token}),
+        keepalive:true
+      }).catch(()=>{});
+    }catch(e){}
+  }
 }
 </script>
   
