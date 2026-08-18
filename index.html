@@ -29,9 +29,6 @@ try {
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 :root{
@@ -3070,8 +3067,25 @@ html[data-theme="light"] .settings-search-input,html[data-theme="light"] .help-s
 </div>
 
 <script>
-const VERSION="5.8.1";
+const VERSION="5.8.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
+
+const externalScriptPromises_={};
+function loadExternalScript_(key,url,ready){
+  try{if(ready&&ready())return Promise.resolve(true);}catch(e){}
+  if(externalScriptPromises_[key])return externalScriptPromises_[key];
+  externalScriptPromises_[key]=new Promise((resolve,reject)=>{
+    const script=document.createElement("script");
+    script.src=url;script.async=true;script.crossOrigin="anonymous";
+    script.onload=()=>resolve(true);
+    script.onerror=()=>{delete externalScriptPromises_[key];reject(new Error(securityText_("Не удалось загрузить дополнительный модуль","Модули иловагӣ бор нашуд")));};
+    document.head.appendChild(script);
+  });
+  return externalScriptPromises_[key];
+}
+function ensureXlsxLibrary_(){return loadExternalScript_("xlsx","https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js",()=>typeof window.XLSX!=="undefined");}
+function ensurePdfLibrary_(){return loadExternalScript_("html2pdf","https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js",()=>typeof window.html2pdf!=="undefined");}
+function ensureQrLibrary_(){return loadExternalScript_("qrcode","https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",()=>typeof window.QRCode!=="undefined");}
 
 let authToken = sessionStorage.getItem("authToken") || "";
 let currentUser = null;
@@ -3083,6 +3097,21 @@ function readCachedAuthUser_(){
 function cacheAuthUser_(user){
   try { if(user)sessionStorage.setItem("authUser",JSON.stringify(user)); else sessionStorage.removeItem("authUser"); } catch(e){}
 }
+const DEBT_SESSION_CACHE_KEY = "debtDataCache_v582";
+function readCachedDebtData_(){
+  try{
+    const raw=sessionStorage.getItem(DEBT_SESSION_CACHE_KEY);if(!raw)return null;
+    const box=JSON.parse(raw);if(!box||!box.data)return null;
+    return box.data;
+  }catch(e){return null;}
+}
+function cacheDebtData_(data){
+  try{
+    if(!data||data.success===false)return;
+    sessionStorage.setItem(DEBT_SESSION_CACHE_KEY,JSON.stringify({at:Date.now(),data:data}));
+  }catch(e){}
+}
+function clearDebtSessionCache_(){try{sessionStorage.removeItem(DEBT_SESSION_CACHE_KEY);}catch(e){}}
 function hideSessionResume_(){
   document.documentElement.dataset.resume="0";
   if(resumeRetryTimer){clearTimeout(resumeRetryTimer);resumeRetryTimer=null;}
@@ -3920,7 +3949,7 @@ async function apiPost(action,payload={},options={}){
   }
   return data||{};
 }
-function clearAuthSession_(){ stopNotificationPolling_(); authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; securityCenterData=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); cacheAuthUser_(null); document.documentElement.dataset.resume="0"; }
+function clearAuthSession_(){ stopNotificationPolling_(); authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; securityCenterData=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); cacheAuthUser_(null); clearDebtSessionCache_(); document.documentElement.dataset.resume="0"; }
 function showLogin_(){
   hideSessionResume_();
   const login=document.getElementById("loginScreen"); if(login)login.style.display="flex";
@@ -4009,7 +4038,7 @@ function openTwoFactorManager(){
 function closeTwoFactorModal(){const m=document.getElementById("twoFactorModal");if(m)m.style.display="none";setMessage_("twoFactorMessage","","");}
 async function startTwoFactorSetup(){
   const currentPassword=String(document.getElementById("twoFactorCurrentPassword")?.value||"");if(!currentPassword){setMessage_("twoFactorMessage",securityText_("Введите текущий пароль","Пароли ҷориро ворид кунед"),"error");return;}const btn=document.getElementById("twoFactorStartBtn");if(btn)btn.disabled=true;
-  try{const r=await apiPost("auth.2fa.setup",{currentPassword});if(!r.success){setMessage_("twoFactorMessage",r.message||"Error","error");return;}twoFactorSetupSecret=String(r.secret||"");twoFactorSetupUri=String(r.otpauthUri||"");document.getElementById("twoFactorSecret").textContent=twoFactorSetupSecret;const qr=document.getElementById("twoFactorQr");if(qr){qr.innerHTML="";try{if(window.QRCode)new QRCode(qr,{text:twoFactorSetupUri,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});else qr.innerHTML=`<div style="color:#111;text-align:center;padding:12px">${securityText_("QR недоступен — введите ключ вручную","QR дастнорас аст — калидро дастӣ ворид кунед")}</div>`;}catch(e){qr.innerHTML=`<div style="color:#111;text-align:center;padding:12px">${securityText_("Введите ключ вручную","Калидро дастӣ ворид кунед")}</div>`;}}setTwoFactorStep_("twoFactorScanStep");setMessage_("twoFactorMessage",securityText_("Добавьте аккаунт в Authenticator и введите текущий код.","Ҳисобро ба Authenticator илова карда, рамзи ҷориро ворид кунед."),"info");}
+  try{const r=await apiPost("auth.2fa.setup",{currentPassword});if(!r.success){setMessage_("twoFactorMessage",r.message||"Error","error");return;}twoFactorSetupSecret=String(r.secret||"");twoFactorSetupUri=String(r.otpauthUri||"");document.getElementById("twoFactorSecret").textContent=twoFactorSetupSecret;try{await ensureQrLibrary_();}catch(e){}const qr=document.getElementById("twoFactorQr");if(qr){qr.innerHTML="";try{if(window.QRCode)new QRCode(qr,{text:twoFactorSetupUri,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});else qr.innerHTML=`<div style="color:#111;text-align:center;padding:12px">${securityText_("QR недоступен — введите ключ вручную","QR дастнорас аст — калидро дастӣ ворид кунед")}</div>`;}catch(e){qr.innerHTML=`<div style="color:#111;text-align:center;padding:12px">${securityText_("Введите ключ вручную","Калидро дастӣ ворид кунед")}</div>`;}}setTwoFactorStep_("twoFactorScanStep");setMessage_("twoFactorMessage",securityText_("Добавьте аккаунт в Authenticator и введите текущий код.","Ҳисобро ба Authenticator илова карда, рамзи ҷориро ворид кунед."),"info");}
   catch(e){setMessage_("twoFactorMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
 }
 async function confirmTwoFactorEnable(){
@@ -4486,10 +4515,12 @@ function openApp(options={}){
   renderAccountSecurity_();
   if(options.initialData)applyDebtData_(options.initialData);
   showView(currentView || "active");
-  if(!options.initialData)loadDebts();
-  if(canPermission("assignDebts"))loadAssignableUsers();
-  loadNotifications({silent:true});
-  startNotificationPolling_();
+  if(!options.skipDataLoad&&!options.initialData)loadDebts();
+  if(!options.skipBackground){
+    if(canPermission("assignDebts"))loadAssignableUsers();
+    loadNotifications({silent:true});
+    startNotificationPolling_();
+  }
 }
 
 async function resumeSession_(){
@@ -4498,50 +4529,58 @@ async function resumeSession_(){
   let lastError=null;
   try{
     if(!authToken){clearAuthSession_();showLogin_();applySecurityTranslations_();return;}
-    document.documentElement.dataset.resume="1";
-    const resumeText=document.getElementById("sessionResumeText");if(resumeText)resumeText.textContent=securityText_("Открываем приложение…","Барнома кушода мешавад…");
     const cachedUser=readCachedAuthUser_();
+    const cachedData=readCachedDebtData_();
+
+    // Быстрый старт: если вкладка уже была авторизована, сразу возвращаем интерфейс.
+    // Серверная проверка и синхронизация выполняются параллельно в фоне.
     if(cachedUser){
       currentUser=cachedUser;
       currentSeller=cachedUser.name||cachedUser.email||"";
-      try{
-        // data.get одновременно проверяет серверную сессию и возвращает основные данные.
-        // При обычном F5 это убирает лишний последовательный auth.me перед загрузкой данных.
-        const data=await apiPost("data.get",{});
-        if(!authToken)return; // сервер уже признал сессию недействительной и показал вход
-        if(data&&data.success!==false){
-          openApp({initialData:data});
-          // Имя, роль и права актуализируем уже в фоне, не задерживая открытие приложения.
-          apiPost("auth.me",{}).then(r=>{
-            if(r&&r.success&&r.user&&authToken){
-              currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);
-              applyPermissions_();renderAccountSecurity_();
-              if(canPermission("assignDebts"))loadAssignableUsers();
-              if(userInfo)userInfo.innerHTML=t("userInfo",{name:currentSeller,version:VERSION});
-            }
-          }).catch(()=>{});
-          return;
-        }
-      }catch(e){lastError=e;}
+      openApp({initialData:cachedData,skipDataLoad:true,skipBackground:true});
+    }else{
+      document.documentElement.dataset.resume="1";
+      const resumeText=document.getElementById("sessionResumeText");
+      if(resumeText)resumeText.textContent=securityText_("Проверяем сессию…","Сессия санҷида мешавад…");
     }
-    if(!authToken)return;
-    // Совместимость с сессиями предыдущей версии и запасная проверка при ошибке основного запроса.
+
+    // auth.me лёгкий: сначала подтверждаем сессию и актуальные права.
     try{
       const r=await apiPost("auth.me",{});
       if(!authToken)return;
       if(r&&r.success&&r.user){
-        currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);openApp();return;
+        currentUser=r.user;
+        currentSeller=r.user.name||r.user.email||"";
+        cacheAuthUser_(currentUser);
+        if(!cachedUser) openApp({initialData:cachedData,skipDataLoad:true,skipBackground:false});
+        else{
+          applyPermissions_();renderAccountSecurity_();
+          if(userInfo)userInfo.innerHTML=t("userInfo",{name:currentSeller,version:VERSION});
+          if(canPermission("assignDebts"))loadAssignableUsers();
+          loadNotifications({silent:true});
+          startNotificationPolling_();
+        }
+
+        // Тяжёлые данные обновляются уже после открытия интерфейса.
+        loadDebts().catch(()=>{});
+        return;
       }
     }catch(e){lastError=e;}
+
     if(!authToken)return;
-    // Сетевой сбой не считается выходом: токен сохраняем и автоматически пробуем снова.
+    if(cachedUser){
+      // При сетевом сбое не закрываем уже открытый интерфейс: повторяем проверку позже.
+      if(resumeRetryTimer)clearTimeout(resumeRetryTimer);
+      resumeRetryTimer=setTimeout(()=>{resumeRetryTimer=null;resumeSession_();},3000);
+      return;
+    }
     scheduleResumeRetry_(lastError?.message||securityText_("Нет связи с сервером. Повторяем…","Пайвастшавӣ ба сервер нест. Такрор мекунем…"));
   } finally {
     resumeSessionInFlight=false;
   }
 }
 
-window.onload = async function(){
+window.addEventListener("DOMContentLoaded", async function(){
   applyTheme();
   applyContrast();
   document.querySelectorAll(".lang-btn,.login-lang-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.lang === currentLanguage));
@@ -4553,7 +4592,7 @@ window.onload = async function(){
   if (addToDebtConfirmBtn) addToDebtConfirmBtn.onclick = confirmAddToDebt;
 
   await resumeSession_();
-};
+});
 
 function logout(){ logoutModal.style.display="flex"; }
 
@@ -4808,6 +4847,7 @@ async function addDebt(){
 
 function applyDebtData_(data){
   data=data||{};
+  cacheDebtData_(data);
   allDebts=data.debts||[];
   paidDebts=data.paidDebts||[];
   clientsByPhone=data.clientsByPhone||{};
@@ -5936,6 +5976,7 @@ function excelFileName(dataset,month){
 }
 
 async function exportExcel(dataset,month){
+  await ensureXlsxLibrary_();
   if(typeof XLSX==="undefined") throw new Error("XLSX library unavailable");
   const wb=XLSX.utils.book_new();
   let payments=[];
@@ -6003,6 +6044,7 @@ async function buildSelectedPdfHtml(dataset,month){
 }
 
 async function exportPdf(dataset,month){
+  await ensurePdfLibrary_();
   const html=await buildSelectedPdfHtml(dataset,month);
   const wrapper=document.createElement("div");
   Object.assign(wrapper.style,{position:"fixed",left:"0",top:"0",width:"1120px",background:"#fff",zIndex:"9999",opacity:"0.01",pointerEvents:"none"});
