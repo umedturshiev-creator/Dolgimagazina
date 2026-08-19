@@ -2780,9 +2780,6 @@ html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94)
       <button type="button" class="password-eye" onclick="togglePasswordField('passwordInput',this)" aria-label="Показать пароль">👁</button>
     </div>
     <button id="loginSubmitBtn" class="login-primary-btn" onclick="login()">Войти</button>
-    <div id="passkeyLoginDividerV512" class="passkey-login-divider-v512"><span>или</span></div>
-    <button id="passkeyLoginBtnV512" class="passkey-login-btn-v512" type="button" onclick="loginWithPasskeyV512_()">🔐 Войти по Face ID / отпечатку</button>
-    <div id="passkeyLoginHintV512" class="passkey-login-hint-v512"></div>
     <div id="loginMessage" class="login-message" aria-live="polite"></div>
     <div class="login-links">
       <button id="forgotPasswordBtn" type="button" class="login-link-btn" onclick="openPasswordReset()">Забыли пароль?</button>
@@ -3630,7 +3627,7 @@ html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94)
 </div>
 
 <script>
-const VERSION="5.12.2";
+const VERSION="5.12.3";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4706,6 +4703,12 @@ function applySecurityTranslations_(){
 }
 // ===== PASSKEY / FACE ID / FINGERPRINT v5.12.0 =====
 let passkeyItemsV512_=[];
+const PASSKEY_AUTO_DEVICE_KEY_V5123="fsl_passkey_auto_device_v5123";
+let passkeyAutoLoginInFlightV5123_=false;
+function passkeyAutoStateV5123_(){try{return JSON.parse(localStorage.getItem(PASSKEY_AUTO_DEVICE_KEY_V5123)||"null");}catch(e){return null;}}
+function setPasskeyAutoStateV5123_(enabled,extra={}){try{localStorage.setItem(PASSKEY_AUTO_DEVICE_KEY_V5123,JSON.stringify({enabled:!!enabled,deviceLabel:passkeyDeviceLabelV512_(),updatedAt:Date.now(),...extra}));}catch(e){}}
+function passkeyAutoEnabledV5123_(){const s=passkeyAutoStateV5123_();return !!(s&&s.enabled);}
+function isPhoneDeviceV5123_(){try{return getClientDeviceInfo_().deviceType==="mobile";}catch(e){return window.matchMedia("(max-width:760px)").matches;}}
 function passkeySupportedV512_(){return !!(window.isSecureContext&&window.PublicKeyCredential&&navigator.credentials&&navigator.credentials.create&&navigator.credentials.get);}
 async function passkeyPlatformAvailableV512_(){try{return !!(passkeySupportedV512_()&&PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable());}catch(e){return false;}}
 function passkeyB64uToBufV512_(value){
@@ -4718,27 +4721,43 @@ function passkeyClientRpV512_(){return {origin:location.origin,rpId:location.hos
 function passkeyDeviceLabelV512_(){const d=getClientDeviceInfo_();return d.deviceLabel||`${d.browser||""} · ${d.os||""}`;}
 function passkeyLoginButtonTextV512_(){return securityText_("🔐 Войти по Face ID / отпечатку","🔐 Вуруд бо Face ID / изи ангушт");}
 function initPasskeyUiV512_(){
-  const btn=document.getElementById("passkeyLoginBtnV512"),hint=document.getElementById("passkeyLoginHintV512");if(!btn)return;
-  const supported=passkeySupportedV512_();btn.style.display=supported?"flex":"none";const divider=document.getElementById("passkeyLoginDividerV512");if(divider)divider.style.display=supported?"flex":"none";btn.textContent=passkeyLoginButtonTextV512_();
-  if(hint){hint.style.display=supported?"block":"none";hint.textContent=securityText_("Используется системная защита устройства: Face ID, Touch ID, отпечаток, Windows Hello или PIN.","Муҳофизати системавии дастгоҳ истифода мешавад: Face ID, Touch ID, изи ангушт, Windows Hello ё PIN.");}
+  const supported=passkeySupportedV512_();
+  // На экране входа отдельной кнопки больше нет: на телефоне Passkey запускается автоматически.
   const add=document.getElementById("profilePasskeyAddBtnV512");if(add){add.disabled=!supported;add.textContent=supported?securityText_("Включить на этом устройстве","Пайваст кардани дастгоҳ"):securityText_("Не поддерживается","Дастгирӣ намешавад");}
-  const support=document.getElementById("profilePasskeySupportV512");if(support) support.textContent=supported?securityText_("Passkey поддерживается этим браузером.","Passkey дар ин браузер дастгирӣ мешавад."):securityText_("Откройте приложение через HTTPS в Safari/Chrome/Edge с поддержкой Passkeys.","Барномаро тавассути HTTPS дар Safari/Chrome/Edge бо дастгирии Passkeys кушоед.");
+  const support=document.getElementById("profilePasskeySupportV512");if(support) support.textContent=supported?securityText_("После подключения на этом телефоне Face ID / отпечаток будет запрашиваться автоматически при следующем входе.","Пас аз пайвасткунӣ дар ин телефон Face ID / изи ангушт ҳангоми вуруди навбатӣ худкор дархост мешавад."):securityText_("Откройте приложение через HTTPS в Safari/Chrome/Edge с поддержкой Passkeys.","Барномаро тавассути HTTPS дар Safari/Chrome/Edge бо дастгирии Passkeys кушоед.");
 }
 function completePasskeyLoginV512_(r){
   authToken=r.token||"";currentUser=r.user||null;currentSeller=currentUser?.name||"";sessionStorage.setItem("authToken",authToken);cacheAuthUser_(currentUser);setAuthSessionExpiryV510_(r.sessionExpiresAt,r.sessionExpiresHours||12);setMessage_("loginMessage","","");hideSessionResume_();openApp();
 }
-async function loginWithPasskeyV512_(){
-  if(!passkeySupportedV512_()){setMessage_("loginMessage",securityText_("Passkey не поддерживается этим браузером","Passkey дар ин браузер дастгирӣ намешавад"),"error");return;}
-  const btn=document.getElementById("passkeyLoginBtnV512");if(btn){btn.disabled=true;btn.textContent=securityText_("Ожидаем подтверждение…","Интизори тасдиқ…");}setMessage_("loginMessage",securityText_("Подтвердите вход на устройстве…","Вурудро дар дастгоҳ тасдиқ кунед…"),"info");
+async function loginWithPasskeyV512_(opts={}){
+  const auto=!!opts.auto;
+  if(!passkeySupportedV512_()){if(!auto)setMessage_("loginMessage",securityText_("Passkey не поддерживается этим браузером","Passkey дар ин браузер дастгирӣ намешавад"),"error");return false;}
+  if(passkeyAutoLoginInFlightV5123_)return false;
+  passkeyAutoLoginInFlightV5123_=true;
+  if(!auto)setMessage_("loginMessage",securityText_("Подтвердите вход на устройстве…","Вурудро дар дастгоҳ тасдиқ кунед…"),"info");
   try{
     const start=await apiPost("passkey.login.options",passkeyClientRpV512_(),{public:true,timeoutMs:20000});if(!start.success)throw new Error(start.message||"Passkey");
     const credential=await navigator.credentials.get({publicKey:{challenge:passkeyB64uToBufV512_(start.challenge),rpId:start.rpId,timeout:Number(start.timeout||60000),userVerification:"required",hints:["client-device"]}});
     if(!credential)throw new Error(securityText_("Passkey не выбран","Passkey интихоб нашуд"));
     const payload={challengeToken:start.challengeToken,credential:{id:credential.id,rawId:passkeyBufToB64uV512_(credential.rawId),type:credential.type,response:{clientDataJSON:passkeyBufToB64uV512_(credential.response.clientDataJSON),authenticatorData:passkeyBufToB64uV512_(credential.response.authenticatorData),signature:passkeyBufToB64uV512_(credential.response.signature),userHandle:credential.response.userHandle?passkeyBufToB64uV512_(credential.response.userHandle):""}},device:getClientDeviceInfo_()};
-    const r=await apiPost("passkey.login.finish",payload,{public:true,timeoutMs:30000});if(!r.success)throw new Error(r.message||securityText_("Не удалось войти по Passkey","Вуруд бо Passkey имкон нашуд"));completePasskeyLoginV512_(r);
+    const r=await apiPost("passkey.login.finish",payload,{public:true,timeoutMs:30000});if(!r.success)throw new Error(r.message||securityText_("Не удалось войти по Passkey","Вуруд бо Passkey имкон нашуд"));
+    setPasskeyAutoStateV5123_(true,{credentialId:credential.id});
+    completePasskeyLoginV512_(r);return true;
   }catch(e){
-    const cancelled=e&&(["NotAllowedError","AbortError"].includes(e.name));setMessage_("loginMessage",cancelled?securityText_("Вход по Passkey отменён","Вуруд бо Passkey бекор шуд"):(e.message||String(e)),cancelled?"info":"error");
-  }finally{if(btn){btn.disabled=false;btn.textContent=passkeyLoginButtonTextV512_();}}
+    const cancelled=e&&(["NotAllowedError","AbortError"].includes(e.name));
+    if(!auto){setMessage_("loginMessage",cancelled?securityText_("Вход по Passkey отменён","Вуруд бо Passkey бекор шуд"):(e.message||String(e)),cancelled?"info":"error");}
+    else if(!cancelled){setMessage_("loginMessage",securityText_("Face ID / отпечаток не сработал. Войдите по email и паролю.","Face ID / изи ангушт кор накард. Бо email ва парол ворид шавед."),"info");}
+    return false;
+  }finally{passkeyAutoLoginInFlightV5123_=false;}
+}
+async function maybeAutoPasskeyLoginV5123_(){
+  if(!isPhoneDeviceV5123_()||!passkeyAutoEnabledV5123_()||!passkeySupportedV512_())return;
+  if(sessionStorage.getItem("authToken")||authToken)return;
+  if(sessionStorage.getItem("fsl_passkey_auto_attempted_v5123")==="1")return;
+  const login=document.getElementById("loginScreen");if(!login||login.style.display==="none")return;
+  const platformReady=await passkeyPlatformAvailableV512_();if(!platformReady)return;
+  sessionStorage.setItem("fsl_passkey_auto_attempted_v5123","1");
+  await loginWithPasskeyV512_({auto:true});
 }
 async function loadPasskeysV512_(){
   const box=document.getElementById("profilePasskeyListV512");if(!authToken||!box)return;if(!passkeySupportedV512_()){renderPasskeysV512_();return;}if(!passkeyItemsV512_.length)box.innerHTML=`<div class="passkey-empty-v512">${securityText_("Загрузка…","Боркунӣ…")}</div>`;
@@ -4747,6 +4766,7 @@ async function loadPasskeysV512_(){
 function renderPasskeysV512_(){
   const box=document.getElementById("profilePasskeyListV512"),status=document.getElementById("profilePasskeyStatusV512");if(!box)return;const list=Array.isArray(passkeyItemsV512_)?passkeyItemsV512_:[];
   if(status){status.textContent=list.length?securityText_(`✅ Подключено: ${list.length}`,`✅ Пайваст: ${list.length}`):securityText_("Passkey пока не подключён","Passkey ҳоло пайваст нест");status.classList.toggle("on",list.length>0);}
+  if(authToken){const label=passkeyDeviceLabelV512_();const sameDevice=list.find(p=>String(p.deviceLabel||"")===String(label));if(sameDevice)setPasskeyAutoStateV5123_(true,{credentialId:String(sameDevice.id||"")});else if(!list.length)setPasskeyAutoStateV5123_(false);}
   box.innerHTML=list.length?list.map(p=>`<div class="passkey-item-v512"><div class="passkey-item-icon-v512">🔐</div><div class="passkey-item-copy-v512"><b>${escapeHtml(p.deviceLabel||"Passkey")}</b><small>${securityText_("Создан","Сохта шуд")}: ${escapeHtml(p.createdAt||"—")}${p.lastUsedAt?` · ${securityText_("вход","вуруд")}: ${escapeHtml(p.lastUsedAt)}`:""}</small></div><button class="passkey-remove-v512" type="button" onclick="removePasskeyV512_('${escapeAttr_(p.id)}')">${securityText_("Удалить","Нест кардан")}</button></div>`).join(""):`<div class="passkey-empty-v512">${securityText_("Сначала войдите обычным способом и включите Face ID / отпечаток в Профиле на этом устройстве.","Ин дастгоҳро пайваст кунед, то бе ворид кардани парол дароед.")}</div>`;
 }
 async function registerPasskeyV512_(){
@@ -4760,13 +4780,13 @@ async function registerPasskeyV512_(){
     const credential=await navigator.credentials.create({publicKey:pub});if(!credential)throw new Error(securityText_("Passkey не создан","Passkey сохта нашуд"));
     const transports=typeof credential.response.getTransports==="function"?credential.response.getTransports():[];
     const payload={challengeToken:start.challengeToken,credential:{id:credential.id,rawId:passkeyBufToB64uV512_(credential.rawId),type:credential.type,response:{clientDataJSON:passkeyBufToB64uV512_(credential.response.clientDataJSON),attestationObject:passkeyBufToB64uV512_(credential.response.attestationObject),transports}},device:getClientDeviceInfo_()};
-    const r=await apiPost("passkey.register.finish",payload,{timeoutMs:30000});if(!r.success)throw new Error(r.message||"Passkey");passkeyItemsV512_=Array.isArray(r.passkeys)?r.passkeys:passkeyItemsV512_;renderPasskeysV512_();if(msg)msg.textContent=securityText_("✅ Устройство подключено. На следующем входе используйте Passkey.","✅ Дастгоҳ пайваст шуд. Дар вуруди навбатӣ Passkey-ро истифода баред.");showToast(`✅ <b>${securityText_("Passkey подключён","Passkey пайваст шуд")}</b>`,"success");
+    const r=await apiPost("passkey.register.finish",payload,{timeoutMs:30000});if(!r.success)throw new Error(r.message||"Passkey");setPasskeyAutoStateV5123_(true,{credentialId:credential.id});passkeyItemsV512_=Array.isArray(r.passkeys)?r.passkeys:passkeyItemsV512_;renderPasskeysV512_();if(msg)msg.textContent=securityText_("✅ Устройство подключено. При следующем открытии приложения Face ID / отпечаток запустится автоматически.","✅ Дастгоҳ пайваст шуд. Ҳангоми кушодани навбатӣ Face ID / изи ангушт худкор оғоз мешавад.");showToast(`✅ <b>${securityText_("Face ID / отпечаток подключён","Face ID / изи ангушт пайваст шуд")}</b>`,"success");
   }catch(e){const cancelled=e&&(["NotAllowedError","AbortError"].includes(e.name));if(msg)msg.textContent=cancelled?securityText_("Настройка отменена","Танзим бекор шуд"):(e.message||String(e));if(!cancelled)showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
   finally{if(btn)btn.disabled=false;initPasskeyUiV512_();}
 }
 async function removePasskeyV512_(id){
   if(!window.confirm(securityText_("Удалить этот Passkey? На этом устройстве быстрый вход перестанет работать для этой записи.","Ин Passkey-ро нест кунед? Вуруди зуд барои ин сабт дигар кор намекунад.")))return;
-  try{const r=await apiPost("passkey.remove",{id});if(!r.success)throw new Error(r.message||"Passkey");passkeyItemsV512_=Array.isArray(r.passkeys)?r.passkeys:[];renderPasskeysV512_();showToast(`✅ <b>${securityText_("Passkey удалён","Passkey нест шуд")}</b>`,"success");}catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
+  try{const r=await apiPost("passkey.remove",{id});if(!r.success)throw new Error(r.message||"Passkey");passkeyItemsV512_=Array.isArray(r.passkeys)?r.passkeys:[];const local=passkeyAutoStateV5123_();if(!passkeyItemsV512_.length||(local&&String(local.credentialId||"")===String(id)))setPasskeyAutoStateV5123_(false);renderPasskeysV512_();showToast(`✅ <b>${securityText_("Passkey удалён","Passkey нест шуд")}</b>`,"success");}catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
 }
 
 
@@ -5415,6 +5435,9 @@ function openApp(options={}){
       startNotificationPolling_();
     },250));
   }
+  // Один раз на телефоне определяем, подключён ли Passkey на этом устройстве.
+  // Запускаем позже основной загрузки, чтобы не замедлять долги и восстановление сессии.
+  if(isPhoneDeviceV5123_()&&!passkeyAutoStateV5123_())setTimeout(()=>{if(authToken)loadPasskeysV512_();},2200);
 }
 
 async function resumeSession_(){
@@ -7221,7 +7244,10 @@ if ("serviceWorker" in navigator) {
 
 
 <script>
-document.addEventListener("DOMContentLoaded",()=>{setTimeout(()=>{try{initPasskeyUiV512_();}catch(e){}},0);});
+document.addEventListener("DOMContentLoaded",()=>{
+  setTimeout(()=>{try{initPasskeyUiV512_();}catch(e){}},0);
+  setTimeout(()=>{try{maybeAutoPasskeyLoginV5123_();}catch(e){}},650);
+});
 </script>
 </body>
 </html>
