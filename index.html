@@ -3583,7 +3583,7 @@ html[data-theme="dark"] .profile-field-v510 input{background:rgba(15,23,42,.78);
 </div>
 
 <script>
-const VERSION="5.10.1";
+const VERSION="5.10.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4853,7 +4853,7 @@ async function saveOwnProfileV510_(){
 /* ---------- DEBT CARD EDIT v5.10.0 ---------- */
 function openDebtEditV510_(row){
   if(!canPermission("adjustDebt"))return;const d=(Array.isArray(allDebts)?allDebts:[]).find(x=>Number(x.row||0)===Number(row));if(!d)return;
-  document.getElementById("debtEditRowV510").value=Number(d.row||0);document.getElementById("debtEditClientV510").value=String(d.client||"");document.getElementById("debtEditPhoneV510").value=normalizePhone(d.phone);document.getElementById("debtEditTotalV510").value=Number(d.total||0);document.getElementById("debtEditDueV510").value=String(d.dueDate||"").slice(0,10);const msg=document.getElementById("debtEditMessageV510");if(msg)msg.textContent="";const wrap=document.getElementById("debtEditResponsibleWrapV510"),sel=document.getElementById("debtEditResponsibleV510");if(wrap){wrap.style.display=canPermission("assignDebts")?"":"none";}if(sel&&wrap&&canPermission("assignDebts")){const fill=()=>{const currentList=Array.isArray(assignableUsers)?assignableUsers:[];sel.innerHTML=`<option value="">— ${securityText_("Без ответственного","Бе масъул")} —</option>`+currentList.map(u=>`<option value="${escapeAttr_(u.id)}">${escapeHtml(u.name||u.email||"—")}</option>`).join("");sel.value=String(d.responsibleUserId||"");};if(Array.isArray(assignableUsers)&&assignableUsers.length){fill();}else{loadAssignableUsers().then(()=>{fill();}).catch(()=>{fill();});}}
+  document.getElementById("debtEditRowV510").value=Number(d.row||0);document.getElementById("debtEditClientV510").value=String(d.client||"");document.getElementById("debtEditPhoneV510").value=normalizePhone(d.phone);document.getElementById("debtEditTotalV510").value=Number(d.total||0);document.getElementById("debtEditDueV510").value=String(d.dueDate||"").slice(0,10);const msg=document.getElementById("debtEditMessageV510");if(msg)msg.textContent="";const wrap=document.getElementById("debtEditResponsibleWrapV510"),sel=document.getElementById("debtEditResponsibleV510");if(wrap){wrap.style.display=canPermission("assignDebts")?"":"none";}if(sel&&wrap&&canPermission("assignDebts")){hydrateAssignableUsersCacheV5102_();const fill=()=>{const currentList=Array.isArray(assignableUsers)?assignableUsers:[];sel.innerHTML=`<option value="">— ${securityText_("Без ответственного","Бе масъул")} —</option>`+currentList.map(u=>`<option value="${escapeAttr_(u.id)}">${escapeHtml(u.name||u.email||"—")}</option>`).join("");sel.value=String(d.responsibleUserId||"");};fill();if(!Array.isArray(assignableUsers)||!assignableUsers.length){loadAssignableUsers().then(fill).catch(fill);}}
   document.getElementById("debtEditModalV510").style.display="flex";document.body.style.overflow="hidden";
 }
 function closeDebtEditV510_(){const m=document.getElementById("debtEditModalV510");if(m)m.style.display="none";document.body.style.overflow="";}
@@ -4867,31 +4867,45 @@ async function saveDebtEditV510_(){
 }
 
 /* ---------- RESPONSIBLE STAFF v5.4.0 ---------- */
+const ASSIGNABLE_USERS_LOCAL_CACHE_PREFIX_V5102="fsl_assignable_users_v5102_";
+function assignableUsersLocalCacheKeyV5102_(){return ASSIGNABLE_USERS_LOCAL_CACHE_PREFIX_V5102+String(currentUser?.id||currentUser?.email||"unknown");}
+function hydrateAssignableUsersCacheV5102_(){
+  if(!currentUser)return false;
+  try{const raw=localStorage.getItem(assignableUsersLocalCacheKeyV5102_());if(!raw)return false;const parsed=JSON.parse(raw),list=Array.isArray(parsed)?parsed:(Array.isArray(parsed?.users)?parsed.users:[]);if(!list.length)return false;assignableUsers=list;renderResponsibleSelects_();return true;}catch(e){return false;}
+}
+function saveAssignableUsersCacheV5102_(){try{if(currentUser&&Array.isArray(assignableUsers)&&assignableUsers.length)localStorage.setItem(assignableUsersLocalCacheKeyV5102_(),JSON.stringify({savedAt:Date.now(),users:assignableUsers}));}catch(e){}}
 async function loadAssignableUsers(){
   if(!currentUser||!canPermission("viewDebts"))return [];
+  const hadCache=(Array.isArray(assignableUsers)&&assignableUsers.length>0)||hydrateAssignableUsersCacheV5102_();
+  if(hadCache)renderResponsibleSelects_();
+  else renderResponsibleSelects_(true);
   try{
-    const r=await apiPost("users.assignable",{});
+    const r=await apiPost("users.assignable",{},{timeoutMs:15000});
     if(!r.success)throw new Error(r.message||"Error");
-    assignableUsers=Array.isArray(r.users)?r.users:[];
+    const fresh=Array.isArray(r.users)?r.users:[];
+    if(fresh.length||!hadCache){assignableUsers=fresh;saveAssignableUsersCacheV5102_();}
     renderResponsibleSelects_();
     return assignableUsers;
   }catch(e){
-    assignableUsers=[];
-    renderResponsibleSelects_();
-    return [];
+    console.warn("Assignable users refresh failed",e);
+    if(!hadCache&&!assignableUsers.length)renderResponsibleSelects_(false);
+    return Array.isArray(assignableUsers)?assignableUsers:[];
   }
 }
-function renderResponsibleSelects_(){
-  const options=assignableUsers.map(u=>`<option value="${escapeAttr_(u.id)}">${escapeHtml(u.name||u.email||"—")}</option>`).join("");
+function renderResponsibleSelects_(loading=false){
+  const list=Array.isArray(assignableUsers)?assignableUsers:[];
+  const options=list.map(u=>`<option value="${escapeAttr_(u.id)}">${escapeHtml(u.name||u.email||"—")}</option>`).join("");
+  const emptyOption=loading?`<option value="" disabled>${securityText_("Загружаем сотрудников…","Кормандон бор мешаванд…")}</option>`:`<option value="" disabled>${securityText_("Нет доступных сотрудников","Корманди дастрас нест")}</option>`;
   const addSelect=document.getElementById("responsibleSelect");
   if(addSelect){
     const previous=String(addSelect.value||"");
-    addSelect.innerHTML=options;
+    addSelect.innerHTML=options||emptyOption;
     const preferred=previous||String(currentUser?.id||"");
-    if(preferred&&assignableUsers.some(u=>String(u.id)===preferred))addSelect.value=preferred;
+    if(preferred&&list.some(u=>String(u.id)===preferred))addSelect.value=preferred;
+    else if(list.length&&!addSelect.value)addSelect.value=String(list[0].id||"");
   }
   const assignSelect=document.getElementById("assignDebtUserSelect");
-  if(assignSelect)assignSelect.innerHTML=options;
+  if(assignSelect){const previous=String(assignSelect.value||"");assignSelect.innerHTML=options||emptyOption;if(previous&&list.some(u=>String(u.id)===previous))assignSelect.value=previous;}
 }
 function debtMatchesScope_(d){
   if(debtScope==="mine")return String(d.responsibleUserId||"")===String(currentUser?.id||"");
@@ -5210,6 +5224,7 @@ function openApp(options={}){
   userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
   applyPermissions_();
   renderAccountSecurity_();
+  if(canPermission("assignDebts")){hydrateAssignableUsersCacheV5102_();renderResponsibleSelects_();loadAssignableUsers();}
   if(options.initialData)applyDebtData_(options.initialData);
   else debtDataReady=false;
   showView(currentView || "active");
@@ -5219,7 +5234,6 @@ function openApp(options={}){
     // Сначала рабочие долги, затем второстепенные запросы.
     primaryLoad.finally(()=>setTimeout(()=>{
       if(!authToken)return;
-      if(canPermission("assignDebts"))loadAssignableUsers();
       loadNotifications({silent:true});
       startNotificationPolling_();
     },250));
@@ -5249,7 +5263,6 @@ async function resumeSession_(){
         // чтобы они не конкурировали с ним за Apps Script / Sheets.
         setTimeout(()=>{
           if(!authToken)return;
-          if(canPermission("assignDebts"))loadAssignableUsers();
           loadNotifications({silent:true});
           startNotificationPolling_();
         },350);
@@ -5279,7 +5292,7 @@ async function resumeSession_(){
         currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);setAuthSessionExpiryV510_(r.sessionExpiresAt,12);
         openApp({initialData:cachedData,skipDataLoad:true,skipBackground:true});
         await loadDebts();
-        setTimeout(()=>{if(!authToken)return;if(canPermission("assignDebts"))loadAssignableUsers();loadNotifications({silent:true});startNotificationPolling_();},350);
+        setTimeout(()=>{if(!authToken)return;loadNotifications({silent:true});startNotificationPolling_();},350);
         return;
       }
     }catch(e){lastError=e;}
