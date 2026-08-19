@@ -2531,7 +2531,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
 @media(max-width:760px){#view-smartpay{width:100%!important;max-width:none!important}.smartpay-webhook-secret-grid,.smartpay-webhook-url{grid-template-columns:1fr}.smartpay-webhook-url button{width:100%!important}.smartpay-hero{padding:15px;border-radius:20px!important}.smartpay-hero h3{font-size:21px}.smartpay-hero-badge{display:none}.smartpay-profile-grid{grid-template-columns:1fr 1fr;gap:7px}.smartpay-profile-card{padding:10px}.smartpay-profile-name{font-size:12px}.smartpay-profile-meta{font-size:9px}.smartpay-layout{display:block}.smartpay-create-card,.smartpay-history-card{padding:12px;margin-bottom:10px}.smartpay-form-grid{grid-template-columns:1fr}.smartpay-field.full{grid-column:auto}.smartpay-invoice-row{display:grid;grid-template-columns:1fr auto;padding:11px}.smartpay-invoice-row>div:nth-child(3){grid-column:1/2}.smartpay-row-actions{grid-column:1/-1;justify-content:flex-start}.smartpay-settings-grid,.smartpay-settings-common{grid-template-columns:1fr}.smartpay-history-toolbar{align-items:stretch}.smartpay-history-toolbar input{min-width:0}.smartpay-list{max-height:none}.smartpay-debt-modal .modal-content{width:min(96vw,560px)}}
 
 
-/* ===== MOBILE UX v5.9.3 ===== */
+/* ===== MOBILE REFINEMENT v5.9.4 ===== */
 .debt-phone-link-v593{color:inherit;text-decoration:none;}
 .paid-phone-link-v593,.stats-phone-link-v593{color:inherit;text-decoration:none;font-weight:850}.stats-wa-mini-v593{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;margin-left:5px;border-radius:9px;background:#f0fdf4;border:1px solid #dcfce7;text-decoration:none;font-size:12px;vertical-align:middle}
 .mobile-smartpay-fab,.mobile-more-overlay-v593{display:none;}
@@ -2546,19 +2546,21 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
   html[data-theme="dark"] .debt-phone-link-v593{color:#e2e8f0!important}
   .debt-copy-btn-v2{display:none!important}
   .debt-mobile-extra-v2{display:none!important}
-  .debt-row-v2{position:relative!important}
-  .debt-client-v2{padding-right:126px!important;min-height:72px!important}
-  .debt-client-name-v2{padding-right:0!important;align-items:flex-start!important;flex-wrap:wrap!important}
-  .debt-client-name-v2>span:first-child{max-width:100%!important}
-  .debt-responsible-v2{position:absolute!important;top:11px!important;right:10px!important;width:116px!important;min-width:0!important;margin:0!important;padding:7px 8px!important;border-radius:13px!important;background:rgba(239,246,255,.94)!important;border:1px solid #dbeafe!important;box-shadow:0 6px 16px rgba(37,99,235,.06)!important;z-index:2}
+  .debt-row-v2{position:relative!important;overflow:hidden!important;padding-top:15px!important;border-top-width:2px!important}
+  .debt-row-v2.is-overdue{border-color:rgba(239,68,68,.22)!important;border-left-color:#ef4444!important;border-top-color:rgba(239,68,68,.55)!important}
+  .debt-client-v2{padding-right:138px!important;min-height:78px!important}
+  .debt-client-name-v2{padding:0 10px 0 0!important;align-items:flex-start!important;flex-wrap:wrap!important}
+  .debt-client-name-v2>span:first-child{display:block!important;max-width:calc(100% - 4px)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .debt-responsible-v2{position:absolute!important;top:10px!important;right:10px!important;width:122px!important;min-width:0!important;margin:0!important;padding:8px 9px!important;border-radius:13px!important;background:rgba(239,246,255,.96)!important;border:1px solid #dbeafe!important;box-shadow:0 6px 16px rgba(37,99,235,.06)!important;z-index:2}
   .debt-responsible-title-v2{font-size:0!important;line-height:1!important}.debt-responsible-title-v2:before{content:"👥";font-size:11px!important}
-  .debt-responsible-name-v2{font-size:10px!important;line-height:1.2!important;margin-top:3px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-  .debt-responsible-v2 .debt-responsible-btn{float:none!important;width:100%!important;min-height:26px!important;margin:5px 0 0!important;padding:4px 5px!important;border-radius:8px!important;font-size:9px!important}
+  .debt-responsible-name-v2{font-size:11px!important;line-height:1.25!important;margin-top:3px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .debt-responsible-v2 .debt-responsible-btn{display:none!important}
   html[data-theme="dark"] .debt-responsible-v2{background:rgba(37,99,235,.13)!important;border-color:rgba(96,165,250,.16)!important}
   .debt-actions-v2{margin-top:9px!important}
   .stats-debt-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}.stats-debt-actions .history{grid-column:1/-1!important}
   .debt-actions-v2.has-smartpay .history-action-btn{grid-column:auto!important}
-  .mobile-smartpay-fab{position:fixed!important;display:flex;right:16px;bottom:calc(86px + env(safe-area-inset-bottom));width:58px!important;height:58px!important;min-width:58px!important;margin:0!important;padding:0!important;border:0!important;border-radius:19px!important;z-index:66;align-items:center;justify-content:center;background:linear-gradient(145deg,#0ea5e9,#2563eb 58%,#4f46e5)!important;color:#fff!important;box-shadow:0 16px 34px rgba(37,99,235,.35)!important;font-size:25px!important;-webkit-tap-highlight-color:transparent}
+  .mobile-smartpay-fab{position:fixed!important;display:flex;left:auto;right:16px;bottom:calc(86px + env(safe-area-inset-bottom));width:58px!important;height:58px!important;min-width:58px!important;margin:0!important;padding:0!important;border:0!important;border-radius:19px!important;z-index:66;align-items:center;justify-content:center;background:linear-gradient(145deg,#0ea5e9,#2563eb 58%,#4f46e5)!important;color:#fff!important;box-shadow:0 16px 34px rgba(37,99,235,.35)!important;font-size:25px!important;-webkit-tap-highlight-color:transparent;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+  .mobile-smartpay-fab.dragging{cursor:grabbing;box-shadow:0 18px 36px rgba(37,99,235,.42)!important;transform:scale(1.03)}
   .mobile-smartpay-fab span{position:absolute;right:8px;top:5px;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;color:#2563eb;font-size:13px;font-weight:1000;box-shadow:0 2px 7px rgba(15,23,42,.18)}
   .app-view:not(.active) .mobile-smartpay-fab{display:none!important}
   .mobile-more-overlay-v593{position:fixed;inset:0;z-index:120;background:rgba(15,23,42,.34);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:flex-end;justify-content:center;padding:0 7px max(7px,env(safe-area-inset-bottom))}
@@ -2573,8 +2575,28 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
   .mobile-actions-card-v593{padding:13px!important}.mobile-actions-grid-v593{grid-template-columns:1fr!important;gap:8px}.mobile-action-tile-v593{min-height:86px!important;padding:13px 14px!important;display:grid!important;grid-template-columns:36px minmax(0,1fr)!important;grid-template-rows:auto auto!important;column-gap:10px!important;row-gap:2px!important}.mobile-action-tile-v593>span{grid-row:1/3;align-self:center}.mobile-action-tile-v593>b,.mobile-action-tile-v593>small{grid-column:2}.mobile-action-tile-v593>b{align-self:end}.mobile-action-tile-v593>small{align-self:start}
   .mobile-bottom-nav{grid-template-columns:repeat(5,1fr)!important}
 }
-@media(max-width:390px){.debt-client-v2{padding-right:112px!important}.debt-responsible-v2{width:104px!important;right:8px!important}.mobile-more-grid-v593{grid-template-columns:1fr 1fr}}
+@media(max-width:390px){.debt-client-v2{padding-right:126px!important}.debt-responsible-v2{width:112px!important;right:8px!important}.mobile-more-grid-v593{grid-template-columns:1fr 1fr}}
 @keyframes mobileMoreUp593{from{transform:translateY(20px);opacity:.5}to{transform:translateY(0);opacity:1}}
+
+
+/* ===== MOBILE CARD POLISH v5.9.4 ===== */
+.resp-none-mobile-v594{display:none}
+@media(max-width:760px){
+  #debtList.debt-list-v2>.debt-row-v2{padding:14px 12px 13px!important;border-top:1px solid rgba(239,68,68,.22)!important;overflow:hidden!important}
+  #debtList.debt-list-v2>.debt-row-v2:not(.is-overdue){border-top-color:rgba(148,163,184,.20)!important}
+  .debt-client-v2{padding-right:112px!important;min-height:58px!important;min-width:0!important}
+  .debt-client-name-v2{display:flex!important;flex-wrap:nowrap!important;gap:6px!important;min-width:0!important;max-width:100%!important;line-height:1.2!important}
+  .debt-client-name-v2>span:first-child{display:block!important;flex:1 1 auto!important;min-width:0!important;max-width:none!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .debt-status-v2{flex:0 0 auto!important;max-width:105px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .debt-responsible-v2{top:12px!important;right:11px!important;width:102px!important;padding:7px 8px!important;min-height:43px!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+  .debt-responsible-v2 .debt-responsible-btn{display:none!important}
+  .debt-responsible-title-v2{display:none!important}
+  .debt-responsible-name-v2{margin:0!important;font-size:10px!important;line-height:1.25!important;text-align:left!important;font-weight:900!important}
+  .resp-none-desktop-v594{display:none!important}.resp-none-mobile-v594{display:inline!important}
+  .mobile-smartpay-fab{touch-action:none!important;user-select:none!important;-webkit-user-select:none!important;cursor:grab!important;transition:box-shadow .16s ease,transform .12s ease!important}
+  .mobile-smartpay-fab.is-dragging-v594{cursor:grabbing!important;transform:scale(1.06)!important;box-shadow:0 20px 42px rgba(37,99,235,.45)!important;transition:none!important}
+}
+@media(max-width:390px){.debt-client-v2{padding-right:102px!important}.debt-responsible-v2{width:94px!important;right:9px!important}.debt-status-v2{max-width:94px!important}}
 
 /* ===== FAST AUTH / DATA FIX v5.8.9 ===== */
 .debt-load-error-v589{max-width:620px!important;display:grid!important;gap:10px!important;color:var(--text-2)!important}.debt-load-error-v589 b{color:var(--danger-1)!important}.debt-load-error-v589 button{width:auto!important;justify-self:start!important;margin:0!important}
@@ -2846,7 +2868,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
       <div>Клиент / срок</div><div>Финансы</div><div>Ответственный</div><div>Действия</div>
     </div>
     <div id="debtList" class="debt-list-v2"></div>
-    <button id="mobileSmartPayFab" class="mobile-smartpay-fab" type="button" onclick="openMobileSmartPayCreate_()" aria-label="Создать счет SmartPay" title="Создать счет SmartPay">🔗<span>+</span></button>
+    <button id="mobileSmartPayFab" class="mobile-smartpay-fab" type="button" onclick="mobileSmartPayFabClick_(event)" aria-label="Создать счет SmartPay" title="Создать счет SmartPay">🔗<span>+</span></button>
   </section>
 
   <section id="view-add" class="app-view">
@@ -3506,7 +3528,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
 </div>
 
 <script>
-const VERSION="5.9.3";
+const VERSION="5.9.4";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -5157,11 +5179,13 @@ window.addEventListener("DOMContentLoaded", async function(){
   applyContrast();
   document.querySelectorAll(".lang-btn,.login-lang-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.lang === currentLanguage));
   applyTranslations();
+  initMobileSmartPayFab_();
 
   const fullCloseYesBtn = document.getElementById("fullCloseYesBtn");
   if (fullCloseYesBtn) fullCloseYesBtn.onclick = confirmFullClose;
   const addToDebtConfirmBtn = document.getElementById("addToDebtConfirmBtn");
   if (addToDebtConfirmBtn) addToDebtConfirmBtn.onclick = confirmAddToDebt;
+  initMobileSmartPayFabDrag_();
 
   await resumeSession_();
 });
@@ -5882,9 +5906,8 @@ function buildDebtCardHtml(d){
   const historyItems=parseSumHistory(d.notification);
   const latestChange=historyItems.length?historyItems[historyItems.length-1]:"";
   const responsibleName=String(d.responsibleName||"").trim();
+  const responsibleDisplay=responsibleName||"—";
   let responsibleAction="";
-  if(canPermission("assignDebts"))responsibleAction=`<button class="debt-responsible-btn" type="button" onclick="openAssignDebtModal(${Number(d.row||0)},'${escapeAttr_(String(d.responsibleUserId||""))}')">${t("responsibleChange")}</button>`;
-  else if(!responsibleName&&currentUser?.role!=="viewer")responsibleAction=`<button class="debt-responsible-btn" type="button" onclick="claimDebt(${Number(d.row||0)})">${t("responsibleClaim")}</button>`;
   const payBtn=canPermission("payDebt")?`<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">💵 ${t("payBtn")}</button>`:"";
   const appendBtn=canPermission("appendDebt")?`<button class="add-debt-btn" onclick="openAddToDebtModal(${d.row},'${safeClientJs}','${safePhoneJs}',${d.remainder})">➕ ${t("addToDebtBtn")}</button>`:"";
   const smartPayBtn=canPermission("smartpayInvoices")?`<button class="smartpay-debt-btn" type="button" onclick="openSmartPayDebtInvoice_(${Number(d.row||0)})">🔗 ${securityText_("Счет SmartPay","Ҳисоби SmartPay")}</button>`:"";
@@ -5907,7 +5930,7 @@ function buildDebtCardHtml(d){
       <div class="debt-finance-cell-v2 paid"><span>${securityText_("Оплачено","Пардохт")}</span><b>${debtMoneyCompact_(d.paid||0)} ${t("somoni")}</b></div>
       <div class="debt-finance-cell-v2 balance"><span>${securityText_("Остаток","Бақия")}</span><b>${debtMoneyCompact_(d.remainder)} ${t("somoni")}</b></div>
     </div>
-    <div class="debt-responsible-v2"><div class="debt-responsible-title-v2">👥 ${t("responsibleLabel")}</div><div class="debt-responsible-name-v2">${escapeHtml(responsibleName||t("responsibleNone"))}</div>${responsibleAction}</div>
+    <div class="debt-responsible-v2"><div class="debt-responsible-title-v2">👥 ${t("responsibleLabel")}</div><div class="debt-responsible-name-v2">${escapeHtml(responsibleDisplay)}</div>${responsibleAction}</div>
     <div>
       <div class="debt-actions-v2 ${canPermission("smartpayInvoices")?"has-smartpay":""}">${payBtn}${appendBtn}${smartPayBtn}<button class="history-action-btn" onclick="showHistory('${safeClientJs}')">📂 ${t("historyBtn")}</button></div>
     </div>
@@ -6064,10 +6087,102 @@ async function saveSmartPaySettings_(){if(!canPermission("smartpayManage"))retur
 async function copySmartPayWebhookUrl_(){const url=String(document.getElementById("smartPayWebhookUrl")?.value||"").trim();if(!url){showToast("❌ Webhook URL пока недоступен","error");return;}try{await navigator.clipboard.writeText(url);showToast("✅ <b>Webhook URL скопирован</b>","success");}catch(e){const el=document.getElementById("smartPayWebhookUrl");el?.select();document.execCommand("copy");showToast("✅ <b>Webhook URL скопирован</b>","success");}}
 async function testSmartPayProfile_(profile){if(!canPermission("smartpayManage"))return;const id=profile==="general"?"smartPayGeneralTestStatus":"smartPayDebtTestStatus",box=document.getElementById(id);if(box)box.textContent=securityText_("Проверяем…","Санҷиш…");try{const r=await apiPost("smartpay.settings.test",{profile},{timeoutMs:30000});if(!r.success)throw new Error(r.message||"SmartPay");if(box)box.textContent=`✅ ${securityText_("Подключено","Пайваст шуд")}${r.merchantUnitUuid?" · "+r.merchantUnitUuid:""}`;}catch(e){if(box)box.textContent=`❌ ${e.message||String(e)}`;}}
 
+
+const MOBILE_SMARTPAY_FAB_POS_KEY_V594="fsl_mobile_smartpay_fab_pos_v594";
+let mobileSmartPayFabDraggedV594_=false;
+function mobileSmartPayFabClick_(e){
+  if(mobileSmartPayFabDraggedV594_){e?.preventDefault?.();e?.stopPropagation?.();mobileSmartPayFabDraggedV594_=false;return;}
+  openMobileSmartPayCreate_();
+}
+function clampMobileSmartPayFabV594_(fab,left,top){
+  const pad=8,w=fab.offsetWidth||58,h=fab.offsetHeight||58;
+  const nav=document.querySelector('.mobile-bottom-nav');
+  const navTop=nav&&getComputedStyle(nav).display!=="none"?nav.getBoundingClientRect().top:window.innerHeight-78;
+  const minTop=Math.max(pad,(window.visualViewport?.offsetTop||0)+pad);
+  const maxTop=Math.max(minTop,Math.min(window.innerHeight-h-pad,navTop-h-10));
+  return {left:Math.max(pad,Math.min(Number(left)||pad,window.innerWidth-w-pad)),top:Math.max(minTop,Math.min(Number(top)||minTop,maxTop))};
+}
+function setMobileSmartPayFabPosV594_(fab,left,top,save){
+  const p=clampMobileSmartPayFabV594_(fab,left,top);
+  fab.style.left=p.left+"px";fab.style.top=p.top+"px";fab.style.right="auto";fab.style.bottom="auto";
+  if(save){try{localStorage.setItem(MOBILE_SMARTPAY_FAB_POS_KEY_V594,JSON.stringify(p));}catch(e){}}
+}
+function initMobileSmartPayFab_(){
+  const fab=document.getElementById("mobileSmartPayFab");if(!fab||fab.dataset.dragReadyV594==="1")return;
+  fab.dataset.dragReadyV594="1";
+  if(window.matchMedia("(max-width:760px)").matches){try{const p=JSON.parse(localStorage.getItem(MOBILE_SMARTPAY_FAB_POS_KEY_V594)||"null");if(p&&Number.isFinite(Number(p.left))&&Number.isFinite(Number(p.top)))setMobileSmartPayFabPosV594_(fab,p.left,p.top,false);}catch(e){}}
+  let pointerId=null,startX=0,startY=0,startLeft=0,startTop=0,moved=false;
+  fab.addEventListener("pointerdown",e=>{if(!window.matchMedia("(max-width:760px)").matches)return;pointerId=e.pointerId;startX=e.clientX;startY=e.clientY;const r=fab.getBoundingClientRect();startLeft=r.left;startTop=r.top;moved=false;fab.setPointerCapture?.(pointerId);fab.classList.add("is-dragging-v594");});
+  fab.addEventListener("pointermove",e=>{if(pointerId===null||e.pointerId!==pointerId)return;const dx=e.clientX-startX,dy=e.clientY-startY;if(Math.hypot(dx,dy)>6)moved=true;if(moved){e.preventDefault();setMobileSmartPayFabPosV594_(fab,startLeft+dx,startTop+dy,false);}});
+  const finish=e=>{if(pointerId===null||(e.pointerId!==undefined&&e.pointerId!==pointerId))return;fab.classList.remove("is-dragging-v594");if(moved){mobileSmartPayFabDraggedV594_=true;const r=fab.getBoundingClientRect();setMobileSmartPayFabPosV594_(fab,r.left,r.top,true);setTimeout(()=>{mobileSmartPayFabDraggedV594_=false;},350);}try{fab.releasePointerCapture?.(pointerId);}catch(err){}pointerId=null;};
+  fab.addEventListener("pointerup",finish);fab.addEventListener("pointercancel",finish);
+  window.addEventListener("resize",()=>{if(!window.matchMedia("(max-width:760px)").matches)return;const r=fab.getBoundingClientRect();if(fab.style.left)setMobileSmartPayFabPosV594_(fab,r.left,r.top,false);});
+}
+
 function openMobileMore_(){const el=document.getElementById("mobileMoreSheet");if(!el)return;el.classList.add("show");el.setAttribute("aria-hidden","false");document.body.classList.add("mobile-more-open-v593");}
 function closeMobileMore_(){const el=document.getElementById("mobileMoreSheet");if(!el)return;el.classList.remove("show");el.setAttribute("aria-hidden","true");document.body.classList.remove("mobile-more-open-v593");}
 function mobileMoreBackdropClose_(e){if(e?.target?.id==="mobileMoreSheet")closeMobileMore_();}
 function mobileMoreGo_(view){closeMobileMore_();showView(view);}
+function initMobileSmartPayFabDrag_(){
+  const fab=document.getElementById("mobileSmartPayFab");
+  if(!fab||fab.dataset.dragReady==="1")return;
+  fab.dataset.dragReady="1";
+  const key="debts_mobile_smartpay_fab_pos_v594";
+  let startX=0,startY=0,originLeft=0,originTop=0,moved=false,pointerId=null;
+  const applyPos=(left,top)=>{
+    const w=fab.offsetWidth||58,h=fab.offsetHeight||58;
+    const minLeft=8,maxLeft=Math.max(8,window.innerWidth-w-8);
+    const minTop=Math.max(80,8+((window.visualViewport&&window.visualViewport.offsetTop)||0));
+    const bottomNav=document.getElementById("mobileBottomNav");
+    const navGap=(bottomNav&&getComputedStyle(bottomNav).display!=="none")?(bottomNav.offsetHeight+18):92;
+    const maxTop=Math.max(minTop,window.innerHeight-h-navGap);
+    const clampedLeft=Math.min(maxLeft,Math.max(minLeft,left));
+    const clampedTop=Math.min(maxTop,Math.max(minTop,top));
+    fab.style.left=clampedLeft+"px";
+    fab.style.top=clampedTop+"px";
+    fab.style.right="auto";
+    fab.style.bottom="auto";
+    return {left:clampedLeft,top:clampedTop};
+  };
+  const saved=localStorage.getItem(key);
+  if(saved){
+    try{const p=JSON.parse(saved||"{}");if(Number.isFinite(p.left)&&Number.isFinite(p.top))applyPos(p.left,p.top);}catch(e){}
+  }
+  const persist=()=>{const left=parseFloat(fab.style.left||"0"),top=parseFloat(fab.style.top||"0");if(Number.isFinite(left)&&Number.isFinite(top))localStorage.setItem(key,JSON.stringify({left,top}));};
+  const onDown=(ev)=>{
+    if(window.innerWidth>760)return;
+    pointerId=ev.pointerId;
+    startX=ev.clientX; startY=ev.clientY;
+    const rect=fab.getBoundingClientRect();
+    originLeft=rect.left; originTop=rect.top;
+    moved=false;
+    fab.classList.add("dragging");
+    try{fab.setPointerCapture(pointerId);}catch(e){}
+  };
+  const onMove=(ev)=>{
+    if(pointerId===null||ev.pointerId!==pointerId)return;
+    const dx=ev.clientX-startX, dy=ev.clientY-startY;
+    if(!moved && Math.hypot(dx,dy)>6)moved=true;
+    if(moved){ev.preventDefault();applyPos(originLeft+dx,originTop+dy);}
+  };
+  const endDrag=(ev)=>{
+    if(pointerId===null|| (ev && ev.pointerId!==undefined && ev.pointerId!==pointerId))return;
+    fab.classList.remove("dragging");
+    if(pointerId!==null){try{fab.releasePointerCapture(pointerId);}catch(e){}}
+    if(moved){persist();fab.dataset.skipClick="1";setTimeout(()=>{delete fab.dataset.skipClick;},220);}
+    pointerId=null;
+  };
+  fab.addEventListener("pointerdown",onDown);
+  fab.addEventListener("pointermove",onMove);
+  fab.addEventListener("pointerup",endDrag);
+  fab.addEventListener("pointercancel",endDrag);
+  fab.addEventListener("click",function(ev){if(fab.dataset.skipClick==="1"){ev.preventDefault();ev.stopPropagation();return false;}} ,true);
+  window.addEventListener("resize",()=>{
+    const rect=fab.getBoundingClientRect();
+    if(rect.left||rect.top){const pos=applyPos(rect.left,rect.top);localStorage.setItem(key,JSON.stringify(pos));}
+  });
+}
+
 function openMobileSmartPayCreate_(){if(!canPermission("smartpayGeneral"))return;showView("smartpay");setTimeout(()=>{const el=document.getElementById("smartPayGeneralName");if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.focus({preventScroll:true});}},180);}
 
 function showView(view){
