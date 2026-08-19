@@ -2714,6 +2714,16 @@ html[data-theme="dark"] .profile-field-v510 input{background:rgba(15,23,42,.78);
   .debt-head-metric-v2 b{font-size:12px!important;}
 }
 
+
+/* ===== BACKGROUND SAVE v5.11.0 ===== */
+.background-sync-bar-v511{position:fixed;right:18px;bottom:18px;z-index:1450;display:none;align-items:center;gap:10px;max-width:min(520px,calc(100vw - 28px));padding:10px 12px;border-radius:16px;background:rgba(15,23,42,.94);border:1px solid rgba(148,163,184,.22);box-shadow:0 16px 42px rgba(15,23,42,.26);color:#f8fafc;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.background-sync-bar-v511.show{display:flex}.background-sync-bar-v511.failed{background:rgba(127,29,29,.96);border-color:rgba(248,113,113,.35)}
+.background-sync-main-v511{min-width:0;flex:1}.background-sync-title-v511{font-size:12px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.background-sync-sub-v511{margin-top:2px;font-size:10px;color:rgba(248,250,252,.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.background-sync-retry-v511{display:none!important;flex:0 0 auto;min-height:34px!important;padding:7px 11px!important;margin:0!important;border-radius:11px!important;border:1px solid rgba(255,255,255,.22)!important;background:#fff!important;color:#991b1b!important;font-size:11px!important;font-weight:900!important;box-shadow:none!important}.background-sync-bar-v511.failed .background-sync-retry-v511{display:inline-flex!important;align-items:center;justify-content:center}
+.debt-row-v2.sync-pending-v511{box-shadow:0 0 0 2px rgba(245,158,11,.18),0 8px 22px rgba(15,23,42,.055)!important}.debt-sync-badge-v511{display:inline-flex;align-items:center;padding:3px 7px;border-radius:999px;background:#fef3c7;color:#b45309;font-size:8px;font-weight:950;white-space:nowrap;flex:0 0 auto}
+html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94);color:#fff}
+@media(max-width:760px){.background-sync-bar-v511{left:10px;right:10px;bottom:calc(86px + env(safe-area-inset-bottom));max-width:none;padding:9px 10px;border-radius:14px}.background-sync-title-v511{font-size:11px}.background-sync-sub-v511{font-size:9px}.background-sync-retry-v511{min-height:32px!important;padding:6px 9px!important}.debt-sync-badge-v511{font-size:7px;padding:3px 6px}}
+
 </style>
 </head>
 <body>
@@ -3268,6 +3278,12 @@ html[data-theme="dark"] .profile-field-v510 input{background:rgba(15,23,42,.78);
   </section>
 </div>
 
+
+<div id="backgroundSyncBarV511" class="background-sync-bar-v511" role="status" aria-live="polite">
+  <div class="background-sync-main-v511"><div id="backgroundSyncTitleV511" class="background-sync-title-v511">Сохраняем в фоне…</div><div id="backgroundSyncSubV511" class="background-sync-sub-v511"></div></div>
+  <button id="backgroundSyncRetryV511" class="background-sync-retry-v511" type="button" onclick="retryBackgroundSyncV511_()">Повторить</button>
+</div>
+
 <button id="mobileSmartPayFab" class="mobile-smartpay-fab" type="button" onclick="mobileSmartPayFabClick_(event)" aria-label="Создать счет SmartPay" title="Создать счет SmartPay">🔗<span>+</span></button>
 
 <nav class="mobile-bottom-nav" id="mobileBottomNav">
@@ -3590,7 +3606,7 @@ html[data-theme="dark"] .profile-field-v510 input{background:rgba(15,23,42,.78);
 </div>
 
 <script>
-const VERSION="5.10.5";
+const VERSION="5.11.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -3725,6 +3741,64 @@ let activeDebtForEnteredPhone = null;
 let lastAutoFilledClientName = "";
 let exportFormat = "xlsx";
 let exportPaymentsCache = null;
+
+/* ---------- BACKGROUND SAVE v5.11.0 ---------- */
+const BACKGROUND_SYNC_QUEUE_PREFIX_V511="fsl_bg_sync_queue_v511_";
+let backgroundSyncQueueV511_=[];
+let backgroundSyncBusyV511_=false;
+let backgroundSyncLoadedForV511_="";
+let backgroundSyncRefreshTimerV511_=null;
+function backgroundSyncQueueKeyV511_(){return BACKGROUND_SYNC_QUEUE_PREFIX_V511+String(currentUser?.id||currentUser?.email||"unknown");}
+function backgroundSyncMakeIdV511_(){return "bg-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);}
+function loadBackgroundSyncQueueV511_(){
+  const key=backgroundSyncQueueKeyV511_();if(backgroundSyncLoadedForV511_===key)return;backgroundSyncLoadedForV511_=key;
+  try{const raw=localStorage.getItem(key),list=raw?JSON.parse(raw):[];backgroundSyncQueueV511_=Array.isArray(list)?list.filter(x=>x&&x.id&&x.action):[];backgroundSyncQueueV511_.forEach(op=>{if(op.status==="sending")op.status="pending";});}catch(e){backgroundSyncQueueV511_=[];}
+  saveBackgroundSyncQueueV511_();renderBackgroundSyncStateV511_();
+}
+function saveBackgroundSyncQueueV511_(){try{if(currentUser)localStorage.setItem(backgroundSyncQueueKeyV511_(),JSON.stringify(backgroundSyncQueueV511_));}catch(e){}}
+function backgroundSyncFailedV511_(){return backgroundSyncQueueV511_.filter(op=>op.status==="failed");}
+function backgroundSyncActiveV511_(){return backgroundSyncQueueV511_.filter(op=>op.status==="pending"||op.status==="sending");}
+function backgroundSyncRowsV511_(){return new Set(backgroundSyncQueueV511_.filter(op=>op.status!=="done").map(op=>Number(op?.meta?.row||op?.payload?.row||op?.payload?.targetRow||0)).filter(Boolean));}
+function renderBackgroundSyncStateV511_(){
+  const bar=document.getElementById("backgroundSyncBarV511"),title=document.getElementById("backgroundSyncTitleV511"),sub=document.getElementById("backgroundSyncSubV511");if(!bar)return;
+  const failed=backgroundSyncFailedV511_(),active=backgroundSyncActiveV511_();bar.classList.toggle("failed",failed.length>0);
+  if(failed.length){bar.classList.add("show");if(title)title.textContent=currentLanguage==="tj"?`⚠️ ${failed.length} тағйирот захира нашуд`:`⚠️ Не сохранено: ${failed.length}`;if(sub)sub.textContent=String(failed[0].error||securityText_("Нажмите «Повторить» после проверки связи.","Пас аз санҷиши пайвастшавӣ «Такрор»-ро пахш кунед."));return;}
+  if(active.length){bar.classList.add("show");if(title)title.textContent=securityText_("⏳ Сохраняем в фоне…","⏳ Дар замина захира мешавад…");if(sub)sub.textContent=currentLanguage==="tj"?`Дар навбат: ${active.length}`:`В очереди: ${active.length}`;return;}
+  bar.classList.remove("show","failed");if(sub)sub.textContent="";
+}
+function backgroundSyncFindDebtV511_(row){row=Number(row||0);return (allDebts||[]).find(d=>Number(d.row||0)===row)||(paidDebts||[]).find(d=>Number(d.row||0)===row)||null;}
+function backgroundSyncResponsibleNameV511_(id){id=String(id||"");if(!id)return "";const u=(assignableUsers||[]).find(x=>String(x.id||"")===id);return String(u?.name||u?.email||"");}
+function backgroundSyncMoveToPaidV511_(d){if(!d)return;allDebts=(allDebts||[]).filter(x=>Number(x.row||0)!==Number(d.row||0));const copy={...d,isPaid:true,status:"Оплачен",remainder:0};paidDebts=[copy,...(paidDebts||[]).filter(x=>Number(x.row||0)!==Number(d.row||0))];}
+function applyBackgroundSyncOpV511_(op){
+  if(!op||!op.payload)return;const p=op.payload,row=Number(op?.meta?.row||p.row||p.targetRow||0),d=backgroundSyncFindDebtV511_(row);if(!d)return;
+  if(op.action==="debt.update"){
+    d.client=String(p.client||d.client||"");d.phone=normalizePhone(p.phone||d.phone);d.dueDate=String(p.dueDate||d.dueDate||"");d.total=Number(p.total||d.total||0);d.remainder=Math.max(0,Math.round((Number(d.total||0)-Number(d.paid||0))*100)/100);
+    if(Object.prototype.hasOwnProperty.call(p,"responsibleUserId")){d.responsibleUserId=String(p.responsibleUserId||"");d.responsibleName=backgroundSyncResponsibleNameV511_(d.responsibleUserId);}
+    d.status=d.remainder<=0?"Оплачен":Number(d.paid||0)>0?"Частично оплачен":"Активный";if(d.remainder<=0)backgroundSyncMoveToPaidV511_(d);return;
+  }
+  if(op.action==="debt.assign"){d.responsibleUserId=String(p.userId||"");d.responsibleName=backgroundSyncResponsibleNameV511_(d.responsibleUserId);return;}
+  if(op.action==="debt.claim"){d.responsibleUserId=String(currentUser?.id||"");d.responsibleName=String(currentUser?.name||currentUser?.email||"");return;}
+  if(op.action==="debt.pay"){
+    const a=Number(p.amount||0);d.paid=Math.round((Number(d.paid||0)+a)*100)/100;d.partialPayment=a;d.remainder=Math.max(0,Math.round((Number(d.remainder||0)-a)*100)/100);d.status=d.remainder<=0?"Оплачен":"Частично оплачен";d.isPartial=d.remainder>0&&d.paid>0;if(d.remainder<=0)backgroundSyncMoveToPaidV511_(d);return;
+  }
+  if(op.action==="debt.mutate"){
+    const a=Number(p.amount||0);if(p.mode==="append"){d.total=Math.round((Number(d.total||0)+a)*100)/100;d.remainder=Math.round((Number(d.remainder||0)+a)*100)/100;}else if(p.mode==="reduce"){d.total=Math.max(0,Math.round((Number(d.total||0)-a)*100)/100);d.remainder=Math.max(0,Math.round((Number(d.remainder||0)-a)*100)/100);}d.status=Number(d.paid||0)>0?"Частично оплачен":"Активный";return;
+  }
+}
+function applyBackgroundSyncOptimisticV511_(){loadBackgroundSyncQueueV511_();backgroundSyncQueueV511_.forEach(op=>{if(op.status!=="done")applyBackgroundSyncOpV511_(op);});}
+function rerenderDebtDataV511_(){renderActiveDebtView_();renderPaidDebts([...(paidDebts||[])]);refreshOpenStatsDetail_();renderBackgroundSyncStateV511_();}
+function enqueueBackgroundSyncV511_(action,payload,meta={}){
+  loadBackgroundSyncQueueV511_();const row=Number(meta?.row||payload?.row||payload?.targetRow||0);
+  if(["debt.update","debt.assign","debt.claim"].includes(action)&&row){backgroundSyncQueueV511_=backgroundSyncQueueV511_.filter(op=>!(op.action===action&&Number(op?.meta?.row||op?.payload?.row||0)===row&&op.status!=="sending"));}
+  const id=backgroundSyncMakeIdV511_(),op={id,action,payload:{...(payload||{}),operationId:id},meta:{...(meta||{})},createdAt:Date.now(),status:"pending",error:""};backgroundSyncQueueV511_.push(op);saveBackgroundSyncQueueV511_();applyBackgroundSyncOpV511_(op);rerenderDebtDataV511_();setTimeout(processBackgroundSyncQueueV511_,0);return op;
+}
+async function processBackgroundSyncQueueV511_(){
+  if(backgroundSyncBusyV511_||!authToken)return;if(backgroundSyncFailedV511_().length){renderBackgroundSyncStateV511_();return;}const op=backgroundSyncQueueV511_.find(x=>x.status==="pending");if(!op){renderBackgroundSyncStateV511_();return;}
+  backgroundSyncBusyV511_=true;op.status="sending";op.error="";saveBackgroundSyncQueueV511_();renderBackgroundSyncStateV511_();
+  try{const r=await apiPost(op.action,op.payload,{timeoutMs:35000});if(!r||r.success===false)throw new Error(r?.message||securityText_("Не удалось сохранить изменение","Тағйирот захира нашуд"));backgroundSyncQueueV511_=backgroundSyncQueueV511_.filter(x=>x.id!==op.id);saveBackgroundSyncQueueV511_();renderBackgroundSyncStateV511_();backgroundSyncBusyV511_=false;if(backgroundSyncQueueV511_.some(x=>x.status==="pending")){setTimeout(processBackgroundSyncQueueV511_,10);}else{clearTimeout(backgroundSyncRefreshTimerV511_);backgroundSyncRefreshTimerV511_=setTimeout(()=>{if(authToken){loadDebts({forceFresh:true});loadNotifications({silent:true});}},650);}return;
+  }catch(e){op.status="failed";op.error=String(e?.message||e||securityText_("Ошибка сохранения","Хатои захира"));saveBackgroundSyncQueueV511_();backgroundSyncBusyV511_=false;renderBackgroundSyncStateV511_();showToast(`⚠️ <b>${securityText_("Изменение не сохранено","Тағйирот захира нашуд")}</b><br>${escapeHtml(op.error)}<br>${securityText_("Исправьте причину и нажмите «Повторить». Данные на экране не откатились.","Сабабро ислоҳ карда «Такрор»-ро пахш кунед. Маълумоти экран барнагашт.")}`,"error");}
+}
+function retryBackgroundSyncV511_(){loadBackgroundSyncQueueV511_();const failed=backgroundSyncFailedV511_();if(!failed.length)return;failed.forEach(op=>{op.status="pending";op.error="";});saveBackgroundSyncQueueV511_();renderBackgroundSyncStateV511_();processBackgroundSyncQueueV511_();}
 
 const translations = {
   ru: {
@@ -4541,7 +4615,7 @@ async function apiPost(action,payload={},options={}){
   }
   return data||{};
 }
-function clearAuthSession_(){ stopNotificationPolling_(); if(authSessionExpiryTimerV510_)clearTimeout(authSessionExpiryTimerV510_);authSessionExpiryTimerV510_=null; authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; securityCenterData=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); sessionStorage.removeItem(AUTH_SESSION_EXPIRES_KEY_V510); cacheAuthUser_(null); clearDebtSessionCache_(); document.documentElement.dataset.resume="0"; }
+function clearAuthSession_(){ const syncBar=document.getElementById("backgroundSyncBarV511");if(syncBar)syncBar.classList.remove("show","failed"); stopNotificationPolling_(); if(authSessionExpiryTimerV510_)clearTimeout(authSessionExpiryTimerV510_);authSessionExpiryTimerV510_=null; authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; securityCenterData=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); sessionStorage.removeItem(AUTH_SESSION_EXPIRES_KEY_V510); cacheAuthUser_(null); clearDebtSessionCache_(); document.documentElement.dataset.resume="0"; }
 function showLogin_(){
   hideSessionResume_();
   const login=document.getElementById("loginScreen"); if(login)login.style.display="flex";
@@ -4877,13 +4951,12 @@ function openDebtEditV510_(row){
 function closeDebtEditV510_(){const m=document.getElementById("debtEditModalV510");if(m)m.style.display="none";document.body.style.overflow="";}
 function debtEditBackdropCloseV510_(e){if(e?.target?.id==="debtEditModalV510")closeDebtEditV510_();}
 async function saveDebtEditV510_(){
-  const row=Number(document.getElementById("debtEditRowV510")?.value||0),client=String(document.getElementById("debtEditClientV510")?.value||"").trim(),phone=String(document.getElementById("debtEditPhoneV510")?.value||"").trim(),dueDate=String(document.getElementById("debtEditDueV510")?.value||""),total=Number(document.getElementById("debtEditTotalV510")?.value||0),responsibleUserId=String(document.getElementById("debtEditResponsibleV510")?.value||"");const btn=document.getElementById("debtEditSaveBtnV510"),msg=document.getElementById("debtEditMessageV510");
+  const row=Number(document.getElementById("debtEditRowV510")?.value||0),client=String(document.getElementById("debtEditClientV510")?.value||"").trim(),phone=String(document.getElementById("debtEditPhoneV510")?.value||"").trim(),dueDate=String(document.getElementById("debtEditDueV510")?.value||""),total=Number(document.getElementById("debtEditTotalV510")?.value||0),responsibleUserId=String(document.getElementById("debtEditResponsibleV510")?.value||"");const msg=document.getElementById("debtEditMessageV510");
   if(!row||!client||normalizePhone(phone).length!==9||!dueDate||!Number.isFinite(total)||total<=0){if(msg)msg.textContent=securityText_("Проверьте имя, телефон, сумму и дату","Ном, телефон, маблағ ва санаро санҷед");return;}
-  if(btn)btn.disabled=true;if(msg)msg.textContent=securityText_("Сохранение…","Захира…");
-  try{const payload={row,client,phone,dueDate,total};if(canPermission("assignDebts"))payload.responsibleUserId=responsibleUserId;const r=await apiPost("debt.update",payload);if(!r.success)throw new Error(r.message||"Error");closeDebtEditV510_();showToast(`✅ <b>${securityText_("Карточка обновлена","Корт нав шуд")}</b>`,"success");await loadDebts();}
-  catch(e){if(msg)msg.textContent=e.message||String(e);}finally{if(btn)btn.disabled=false;}
+  const current=(allDebts||[]).find(x=>Number(x.row||0)===row);if(current&&total<Number(current.paid||0)){if(msg)msg.textContent=securityText_("Сумма долга не может быть меньше уже оплаченной суммы","Маблағи қарз аз маблағи пардохтшуда кам буда наметавонад");return;}
+  const payload={row,client,phone,dueDate,total};if(canPermission("assignDebts"))payload.responsibleUserId=responsibleUserId;
+  closeDebtEditV510_();enqueueBackgroundSyncV511_("debt.update",payload,{row,label:client});showToast(`⏳ <b>${securityText_("Изменения сохраняются в фоне","Тағйирот дар замина захира мешавад")}</b>`,"success");
 }
-
 /* ---------- RESPONSIBLE STAFF v5.10.3 ---------- */
 const ASSIGNABLE_USERS_LOCAL_CACHE_PREFIX_V5103="fsl_assignable_users_v5103_";
 function assignableUsersLocalCacheKeyV5103_(){return ASSIGNABLE_USERS_LOCAL_CACHE_PREFIX_V5103+String(currentUser?.id||currentUser?.email||"unknown");}
@@ -5015,37 +5088,14 @@ async function openAssignDebtModal(row,currentResponsibleId=""){
 }
 function closeAssignDebtModal(){document.getElementById("assignDebtModal").style.display="none";assigningDebtRow=null;}
 async function saveDebtAssignment(){
-  if(!assigningDebtRow)return;
-  const btn=document.getElementById("assignDebtSaveBtn"),select=document.getElementById("assignDebtUserSelect");
-  if(btn)btn.disabled=true;
-  try{
-    const r=await apiPost("debt.assign",{row:assigningDebtRow,userId:String(select?.value||"")});
-    if(!r.success)throw new Error(r.message||"Error");
-    closeAssignDebtModal();
-    showToast(`✅ <b>${securityText_("Ответственный изменён","Масъул иваз шуд")}</b>`,"success");
-    await loadDebts();loadNotifications({silent:true});
-  }catch(e){setMessage_("assignDebtMessage",e.message||String(e),"error");}
-  finally{if(btn)btn.disabled=false;}
+  if(!assigningDebtRow)return;const row=Number(assigningDebtRow),select=document.getElementById("assignDebtUserSelect"),userId=String(select?.value||"");closeAssignDebtModal();enqueueBackgroundSyncV511_("debt.assign",{row,userId},{row,label:securityText_("Ответственный","Масъул")});showToast(`⏳ <b>${securityText_("Ответственный сохраняется в фоне","Масъул дар замина захира мешавад")}</b>`,"success");
 }
 async function clearDebtAssignment(){
-  if(!assigningDebtRow)return;
-  const btn=document.getElementById("assignDebtClearBtn");if(btn)btn.disabled=true;
-  try{
-    const r=await apiPost("debt.assign",{row:assigningDebtRow,userId:""});
-    if(!r.success)throw new Error(r.message||"Error");
-    closeAssignDebtModal();showToast(`✅ <b>${securityText_("Ответственный снят","Масъул хориҷ шуд")}</b>`,"success");await loadDebts();
-  }catch(e){setMessage_("assignDebtMessage",e.message||String(e),"error");}
-  finally{if(btn)btn.disabled=false;}
+  if(!assigningDebtRow)return;const row=Number(assigningDebtRow);closeAssignDebtModal();enqueueBackgroundSyncV511_("debt.assign",{row,userId:""},{row,label:securityText_("Ответственный","Масъул")});showToast(`⏳ <b>${securityText_("Изменение сохраняется в фоне","Тағйирот дар замина захира мешавад")}</b>`,"success");
 }
 async function claimDebt(row){
-  try{
-    const r=await apiPost("debt.claim",{row:Number(row||0)});
-    if(!r.success)throw new Error(r.message||"Error");
-    showToast(`✅ <b>${securityText_("Долг назначен вам","Қарз ба шумо таъин шуд")}</b>`,"success");
-    await loadDebts();
-  }catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
+  row=Number(row||0);if(!row)return;enqueueBackgroundSyncV511_("debt.claim",{row},{row,label:securityText_("Назначение долга","Таъини қарз")});showToast(`⏳ <b>${securityText_("Назначение сохраняется в фоне","Таъин дар замина захира мешавад")}</b>`,"success");
 }
-
 
 
 /* ---------- NOTIFICATIONS v5.3.0 ---------- */
@@ -5231,6 +5281,7 @@ function openApp(options={}){
   hideSessionResume_();
   currentSeller=currentUser.name||currentUser.email||"";
   cacheAuthUser_(currentUser);
+  loadBackgroundSyncQueueV511_();
   loginScreen.style.display = "none";
   mainHeader.style.display = "flex";
   appContent.style.display = "block";
@@ -5597,6 +5648,7 @@ function applyDebtData_(data){
   }else if(!assignableUsers.length){
     hydrateAssignableUsersCacheV5103_();
   }
+  applyBackgroundSyncOptimisticV511_();
   // Быстрый список не должен строить всю тяжёлую статистику в скрытой вкладке.
   // Расширенная статистика загружается только при открытии раздела «Статистика».
   lastStatsData=data;
@@ -6047,7 +6099,8 @@ function copyDebtPhone_(phone){
 }
 function buildDebtCardHtml(d){
   const state=debtDueState_(d);
-  const rowClass=["debt-row-v2",state.kind==="overdue"?"is-overdue":"",state.kind==="warning"?"is-warning":"",state.kind==="paidpart"?"has-payment":""].filter(Boolean).join(" ");
+  const syncPendingV511_=backgroundSyncRowsV511_().has(Number(d.row||0));
+  const rowClass=["debt-row-v2",state.kind==="overdue"?"is-overdue":"",state.kind==="warning"?"is-warning":"",state.kind==="paidpart"?"has-payment":"",syncPendingV511_?"sync-pending-v511":""].filter(Boolean).join(" ");
   const phone=normalizePhone(d.phone),phoneFull="992"+phone,waText=encodeURIComponent(t("waReminder",{amount:d.remainder}));
   const safeClientJs=String(d.client||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
   const safePhoneJs=String(phone||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
@@ -6060,7 +6113,7 @@ function buildDebtCardHtml(d){
   const payBtn=canPermission("payDebt")?`<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">💵 ${t("payBtn")}</button>`:"";
   const appendBtn=canPermission("appendDebt")?`<button class="add-debt-btn" onclick="openAddToDebtModal(${d.row},'${safeClientJs}','${safePhoneJs}',${d.remainder})">➕ ${t("addToDebtBtn")}</button>`:"";
   const smartPayBtn=canPermission("smartpayInvoices")?`<button class="smartpay-debt-btn" type="button" onclick="openSmartPayDebtInvoice_(${Number(d.row||0)})">🔗 ${securityText_("Счет SmartPay","Ҳисоби SmartPay")}</button>`:"";
-  const status=state.label?`<span class="debt-status-v2 status-${state.kind}">${escapeHtml(state.label)}</span>`:"";
+  const status=(state.label?`<span class="debt-status-v2 status-${state.kind}">${escapeHtml(state.label)}</span>`:"")+(syncPendingV511_?`<span class="debt-sync-badge-v511">${securityText_("Не синхр.","Ҳамоҳанг нашуд")}</span>`:"");
   return `<div class="${rowClass}" data-debt-id="${escapeAttr_(String(d.id||d.row||''))}">
     <div class="debt-client-v2">
       <div class="debt-client-name-v2"><span>${escapeHtml(String(d.client||""))}</span>${status}</div>
@@ -6415,22 +6468,8 @@ function closePayment(){
 }
 
 function confirmPayment(){
-  let amount = Number(paymentAmount.value);
-  if(!amount || amount <= 0){ alert(t("invalidAmount")); return; }
-  if(amount > currentRemainder){ alert(t("amountTooBig")); return; }
-
-  paymentLoader.style.display = "block";
-
-  apiPost("debt.pay",{row:currentRow,amount})
-  .then(result=> {
-    paymentLoader.style.display = "none";
-    if(result.success===false){showToast(`❌ ${escapeHtml(result.message||t("errorSaveToast"))}`,"error");return;}
-    paymentModal.style.display = "none";
-    loadDebts();
-    loadNotifications({silent:true});
-  }).catch(err=>{paymentLoader.style.display="none";showToast(`❌ ${escapeHtml(err.message||String(err))}`,"error");});
+  const amount=Number(paymentAmount.value);if(!amount||amount<=0){alert(t("invalidAmount"));return;}if(amount>currentRemainder){alert(t("amountTooBig"));return;}const row=Number(currentRow||0);paymentModal.style.display="none";paymentLoader.style.display="none";enqueueBackgroundSyncV511_("debt.pay",{row,amount},{row,label:securityText_("Оплата","Пардохт")});showToast(`⏳ <b>${securityText_("Оплата сохраняется в фоне","Пардохт дар замина захира мешавад")}</b>`,"success");
 }
-
 /* ---------- ПОЛНОЕ ПОГАШЕНИЕ ---------- */
 
 function statsOpenFullClose_(row,remainder){
@@ -6461,27 +6500,8 @@ function closeFullCloseModal(){
 }
 
 function confirmFullClose(){
-  const modal = document.getElementById("fullCloseConfirmModal");
-
-  modal.style.display = "none";
-  paymentLoader.style.display = "block";
-
-  apiPost("debt.pay",{row:currentRow,amount:currentRemainder})
-    .then(result => {
-      if(result.success===false)throw new Error(result.message||t("errorSaveToast"));
-      paymentLoader.style.display = "none";
-      paymentModal.style.display = "none";
-
-      showToast(`✅ <b>${t("closeDebtSuccess")}</b>`, "success");
-      loadDebts();
-      loadNotifications({silent:true});
-    })
-    .catch(err => {
-      console.error(err);
-      paymentLoader.style.display = "none";
-      showToast(`❌ ${t("errorSaveToast")}`, "error");
-    });
-}  
+  const row=Number(currentRow||0),amount=Number(currentRemainder||0);if(!row||amount<=0)return;document.getElementById("fullCloseConfirmModal").style.display="none";paymentModal.style.display="none";paymentLoader.style.display="none";enqueueBackgroundSyncV511_("debt.pay",{row,amount},{row,label:securityText_("Полное погашение","Пардохти пурра")});showToast(`⏳ <b>${securityText_("Погашение сохраняется в фоне","Пардохт дар замина захира мешавад")}</b>`,"success");
+}
 
 function openAddToDebtModal(row, clientName, phone, remainder){
   addDebtTargetRow = row;
@@ -6515,49 +6535,8 @@ function closeAddToDebtModal(){
 }
 
 async function confirmAddToDebt(){
-  const amountInput = document.getElementById("addToDebtAmountInput");
-  const amount = Number(amountInput?.value || 0);
-
-  if (!amount || amount <= 0) {
-    alert(t("invalidAmount"));
-    return;
-  }
-
-  const now = new Date();
-  const formattedDate =
-    String(now.getDate()).padStart(2, "0") + "." +
-    String(now.getMonth() + 1).padStart(2, "0") + "." +
-    now.getFullYear() + " " +
-    String(now.getHours()).padStart(2, "0") + ":" +
-    String(now.getMinutes()).padStart(2, "0");
-
-  const payload = {
-    client: addDebtTargetClient,
-    phone: addDebtTargetPhone,
-    amount: amount,
-    seller: currentSeller,
-    mode: "append",
-    targetRow: addDebtTargetRow,
-    noteText: `Долг суммирован: +${amount} (${formattedDate})`
-  };
-
-  try {
-    const result = await apiPost("debt.mutate", payload);
-
-    if (result.success) {
-      closeAddToDebtModal();
-      showToast(`✅ <b>${t("addToDebtSuccess")}</b><br>💰 +${amount} ${t("somoni")}`, "append");
-      loadDebts();
-      loadNotifications({silent:true});
-    } else {
-      showToast(`❌ ${t("errorSaveToast")}`, "error");
-    }
-  } catch (e) {
-    console.error(e);
-    showToast(`❌ ${t("errorSaveToast")}`, "error");
-  }
+  const amount=Number(document.getElementById("addToDebtAmountInput")?.value||0);if(!amount||amount<=0){alert(t("invalidAmount"));return;}const row=Number(addDebtTargetRow||0),clientName=String(addDebtTargetClient||""),phoneValue=String(addDebtTargetPhone||"");const now=new Date(),formattedDate=String(now.getDate()).padStart(2,"0")+"."+String(now.getMonth()+1).padStart(2,"0")+"."+now.getFullYear()+" "+String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");closeAddToDebtModal();enqueueBackgroundSyncV511_("debt.mutate",{client:clientName,phone:phoneValue,amount,seller:currentSeller,mode:"append",targetRow:row,noteText:`Долг суммирован: +${amount} (${formattedDate})`},{row,label:clientName});showToast(`⏳ <b>${securityText_("Увеличение долга сохраняется в фоне","Зиёдшавии қарз дар замина захира мешавад")}</b><br>💰 +${amount} ${t("somoni")}`,"append");
 }
-
 /* ---------- УМЕНЬШЕНИЕ / КОРРЕКТИРОВКА ДОЛГА ---------- */
 function openReduceDebtModal(row,clientName,phone,remainder){
   reduceDebtTargetRow=Number(row||0);
@@ -6576,33 +6555,8 @@ function closeReduceDebtModal(){
   reduceDebtTargetRow=null;reduceDebtTargetClient='';reduceDebtTargetPhone='';reduceDebtTargetRemainder=0;
 }
 async function confirmReduceDebt(){
-  const input=document.getElementById('reduceDebtAmountInput');
-  const amount=Number(String(input?.value||'').replace(',','.'));
-  if(!amount||amount<=0){alert(t('invalidAmount'));return;}
-  if(amount>=reduceDebtTargetRemainder){
-    alert(statsLocale_('Сумма уменьшения должна быть меньше текущего остатка. Для полного закрытия используйте «Погасить».','Маблағи камкунӣ бояд аз бақияи ҷорӣ камтар бошад. Барои бастани пурра «Пурра пардохт»-ро истифода баред.'));
-    return;
-  }
-  const btn=document.getElementById('reduceDebtConfirmBtn');
-  if(btn)btn.disabled=true;
-  try{
-    const result=await apiPost("debt.mutate",{
-      client:reduceDebtTargetClient,phone:reduceDebtTargetPhone,amount:amount,
-      mode:'reduce',targetRow:reduceDebtTargetRow,noteText:`Долг уменьшен: -${amount}`
-    });
-    if(result.success){
-      closeReduceDebtModal();
-      showToast(`✅ <b>${statsLocale_('Долг уменьшен','Қарз кам карда шуд')}</b><br>➖ ${statsMoney_(amount)} ${t('somoni')}`,'success');
-      await loadDebts();
-      loadNotifications({silent:true});
-    }else{
-      const msg=result?.message||t('errorSaveToast');
-      showToast(`❌ ${escapeHtml(String(msg))}`,'error');
-    }
-  }catch(e){console.error(e);showToast(`❌ ${t('errorSaveToast')}`,'error');}
-  finally{if(btn)btn.disabled=false;}
+  const amount=Number(String(document.getElementById("reduceDebtAmountInput")?.value||"").replace(",","."));if(!amount||amount<=0){alert(t("invalidAmount"));return;}if(amount>=reduceDebtTargetRemainder){alert(statsLocale_("Сумма уменьшения должна быть меньше текущего остатка. Для полного закрытия используйте «Погасить».","Маблағи камкунӣ бояд аз бақияи ҷорӣ камтар бошад. Барои бастани пурра «Пурра пардохт»-ро истифода баред."));return;}const row=Number(reduceDebtTargetRow||0),clientName=String(reduceDebtTargetClient||""),phoneValue=String(reduceDebtTargetPhone||"");closeReduceDebtModal();enqueueBackgroundSyncV511_("debt.mutate",{client:clientName,phone:phoneValue,amount,mode:"reduce",targetRow:row,noteText:`Долг уменьшен: -${amount}`},{row,label:clientName});showToast(`⏳ <b>${statsLocale_("Уменьшение долга сохраняется в фоне","Камкунии қарз дар замина захира мешавад")}</b><br>➖ ${statsMoney_(amount)} ${t("somoni")}`,"success");
 }
-
 /* ---------- ИСТОРИЯ ---------- */
 
 function showHistory(name){
