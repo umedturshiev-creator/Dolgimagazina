@@ -1229,6 +1229,8 @@ html[data-theme="light"]{color-scheme:light;}
 
 .date-picker-wrap{
   position:relative;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
   width:100%;
   margin:10px 0 6px;
   min-height:56px;
@@ -1271,6 +1273,9 @@ html[data-theme="light"]{color-scheme:light;}
   opacity:0 !important;
   cursor:pointer;
   z-index:2;
+  -webkit-appearance:auto!important;
+  appearance:auto!important;
+  touch-action:manipulation;
 }
 html[data-theme="light"] .date-picker-display{
   background:#f8fafc;
@@ -2904,7 +2909,7 @@ html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94)
         <select id="responsibleSelect" class="export-select"></select>
         <div id="responsibleFieldHint" class="assign-debt-user-meta">Для менеджера или кассира ответственность назначается автоматически на себя.</div>
       </div>
-      <div class="date-picker-wrap" id="dueDateWrap">
+      <div class="date-picker-wrap" id="dueDateWrap" role="button" tabindex="0" onclick="openDueDatePicker_(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDueDatePicker_(event);}">
         <div class="date-picker-display" id="dueDateDisplay">📅 Выберите дату оплаты</div>
         <input id="dueDate" class="date-picker-native" type="date" aria-label="Выберите дату оплаты">
       </div>
@@ -3606,7 +3611,7 @@ html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94)
 </div>
 
 <script>
-const VERSION="5.11.1";
+const VERSION="5.11.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -5407,6 +5412,29 @@ window.addEventListener("DOMContentLoaded", async function(){
 function logout(){ logoutModal.style.display="flex"; }
 
 /* ---------- ДОБАВЛЕНИЕ ---------- */
+
+// Явные ссылки на поля формы: не полагаемся на автоматические window-переменные по id.
+const client = document.getElementById("client");
+const phone = document.getElementById("phone");
+const amount = document.getElementById("amount");
+const dueDate = document.getElementById("dueDate");
+const saveBtn = document.getElementById("saveBtn");
+
+function openDueDatePicker_(event){
+  if(!dueDate)return;
+  // Срабатываем только на реальном действии пользователя. Это предотвращает рекурсию fallback-click.
+  if(event && event.isTrusted===false)return;
+  try{
+    dueDate.focus({preventScroll:true});
+  }catch(e){try{dueDate.focus();}catch(_){}}
+  try{
+    if(typeof dueDate.showPicker==="function"){
+      dueDate.showPicker();
+      return;
+    }
+  }catch(e){}
+  // Старые браузеры: нативный input всё равно лежит поверх блока и получает исходный tap/click.
+}
 
 function normalizePhone(value){
   let digits = String(value || "").replace(/\D/g, "");
