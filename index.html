@@ -3583,7 +3583,7 @@ html[data-theme="dark"] .profile-field-v510 input{background:rgba(15,23,42,.78);
 </div>
 
 <script>
-const VERSION="5.10.2";
+const VERSION="5.10.3";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4853,7 +4853,7 @@ async function saveOwnProfileV510_(){
 /* ---------- DEBT CARD EDIT v5.10.0 ---------- */
 function openDebtEditV510_(row){
   if(!canPermission("adjustDebt"))return;const d=(Array.isArray(allDebts)?allDebts:[]).find(x=>Number(x.row||0)===Number(row));if(!d)return;
-  document.getElementById("debtEditRowV510").value=Number(d.row||0);document.getElementById("debtEditClientV510").value=String(d.client||"");document.getElementById("debtEditPhoneV510").value=normalizePhone(d.phone);document.getElementById("debtEditTotalV510").value=Number(d.total||0);document.getElementById("debtEditDueV510").value=String(d.dueDate||"").slice(0,10);const msg=document.getElementById("debtEditMessageV510");if(msg)msg.textContent="";const wrap=document.getElementById("debtEditResponsibleWrapV510"),sel=document.getElementById("debtEditResponsibleV510");if(wrap){wrap.style.display=canPermission("assignDebts")?"":"none";}if(sel&&wrap&&canPermission("assignDebts")){hydrateAssignableUsersCacheV5102_();const fill=()=>{const currentList=Array.isArray(assignableUsers)?assignableUsers:[];sel.innerHTML=`<option value="">— ${securityText_("Без ответственного","Бе масъул")} —</option>`+currentList.map(u=>`<option value="${escapeAttr_(u.id)}">${escapeHtml(u.name||u.email||"—")}</option>`).join("");sel.value=String(d.responsibleUserId||"");};fill();if(!Array.isArray(assignableUsers)||!assignableUsers.length){loadAssignableUsers().then(fill).catch(fill);}}
+  document.getElementById("debtEditRowV510").value=Number(d.row||0);document.getElementById("debtEditClientV510").value=String(d.client||"");document.getElementById("debtEditPhoneV510").value=normalizePhone(d.phone);document.getElementById("debtEditTotalV510").value=Number(d.total||0);document.getElementById("debtEditDueV510").value=String(d.dueDate||"").slice(0,10);const msg=document.getElementById("debtEditMessageV510");if(msg)msg.textContent="";const wrap=document.getElementById("debtEditResponsibleWrapV510"),sel=document.getElementById("debtEditResponsibleV510");if(wrap){wrap.style.display=canPermission("assignDebts")?"":"none";}if(sel&&wrap&&canPermission("assignDebts")){const fill=()=>{const currentList=Array.isArray(assignableUsers)?assignableUsers:[];sel.innerHTML=`<option value="">— ${securityText_("Без ответственного","Бе масъул")} —</option>`+currentList.map(u=>`<option value="${escapeAttr_(u.id)}">${escapeHtml(u.name||u.email||"—")}</option>`).join("");sel.value=String(d.responsibleUserId||"");};if(Array.isArray(assignableUsers)&&assignableUsers.length){fill();}else if(hydrateAssignableUsersCacheV5103_()){fill();}else{sel.innerHTML=`<option value="" disabled>${securityText_("Загружаем сотрудников…","Кормандон бор мешаванд…")}</option>`;loadAssignableUsers().then(()=>{fill();}).catch(()=>{fill();});}}
   document.getElementById("debtEditModalV510").style.display="flex";document.body.style.overflow="hidden";
 }
 function closeDebtEditV510_(){const m=document.getElementById("debtEditModalV510");if(m)m.style.display="none";document.body.style.overflow="";}
@@ -4866,46 +4866,43 @@ async function saveDebtEditV510_(){
   catch(e){if(msg)msg.textContent=e.message||String(e);}finally{if(btn)btn.disabled=false;}
 }
 
-/* ---------- RESPONSIBLE STAFF v5.4.0 ---------- */
-const ASSIGNABLE_USERS_LOCAL_CACHE_PREFIX_V5102="fsl_assignable_users_v5102_";
-function assignableUsersLocalCacheKeyV5102_(){return ASSIGNABLE_USERS_LOCAL_CACHE_PREFIX_V5102+String(currentUser?.id||currentUser?.email||"unknown");}
-function hydrateAssignableUsersCacheV5102_(){
+/* ---------- RESPONSIBLE STAFF v5.10.3 ---------- */
+const ASSIGNABLE_USERS_LOCAL_CACHE_PREFIX_V5103="fsl_assignable_users_v5103_";
+function assignableUsersLocalCacheKeyV5103_(){return ASSIGNABLE_USERS_LOCAL_CACHE_PREFIX_V5103+String(currentUser?.id||currentUser?.email||"unknown");}
+function hydrateAssignableUsersCacheV5103_(){
   if(!currentUser)return false;
-  try{const raw=localStorage.getItem(assignableUsersLocalCacheKeyV5102_());if(!raw)return false;const parsed=JSON.parse(raw),list=Array.isArray(parsed)?parsed:(Array.isArray(parsed?.users)?parsed.users:[]);if(!list.length)return false;assignableUsers=list;renderResponsibleSelects_();return true;}catch(e){return false;}
+  try{const raw=localStorage.getItem(assignableUsersLocalCacheKeyV5103_());if(!raw)return false;const parsed=JSON.parse(raw),list=Array.isArray(parsed?.users)?parsed.users:(Array.isArray(parsed)?parsed:[]);if(!list.length)return false;assignableUsers=list;renderResponsibleSelects_();return true;}catch(e){return false;}
 }
-function saveAssignableUsersCacheV5102_(){try{if(currentUser&&Array.isArray(assignableUsers)&&assignableUsers.length)localStorage.setItem(assignableUsersLocalCacheKeyV5102_(),JSON.stringify({savedAt:Date.now(),users:assignableUsers}));}catch(e){}}
+function saveAssignableUsersCacheV5103_(){try{if(currentUser&&Array.isArray(assignableUsers)&&assignableUsers.length)localStorage.setItem(assignableUsersLocalCacheKeyV5103_(),JSON.stringify({savedAt:Date.now(),users:assignableUsers}));}catch(e){}}
 async function loadAssignableUsers(){
   if(!currentUser||!canPermission("viewDebts"))return [];
-  const hadCache=(Array.isArray(assignableUsers)&&assignableUsers.length>0)||hydrateAssignableUsersCacheV5102_();
-  if(hadCache)renderResponsibleSelects_();
-  else renderResponsibleSelects_(true);
+  const hadCache=(Array.isArray(assignableUsers)&&assignableUsers.length>0)||hydrateAssignableUsersCacheV5103_();
   try{
-    const r=await apiPost("users.assignable",{},{timeoutMs:15000});
+    const r=await apiPost("users.assignable",{},{timeoutMs:20000});
     if(!r.success)throw new Error(r.message||"Error");
     const fresh=Array.isArray(r.users)?r.users:[];
-    if(fresh.length||!hadCache){assignableUsers=fresh;saveAssignableUsersCacheV5102_();}
+    if(fresh.length||!hadCache){assignableUsers=fresh;saveAssignableUsersCacheV5103_();}
     renderResponsibleSelects_();
     return assignableUsers;
   }catch(e){
-    console.warn("Assignable users refresh failed",e);
-    if(!hadCache&&!assignableUsers.length)renderResponsibleSelects_(false);
+    console.warn("Assignable users fallback refresh failed",e);
+    if(!hadCache&&!assignableUsers.length)renderResponsibleSelects_();
     return Array.isArray(assignableUsers)?assignableUsers:[];
   }
 }
-function renderResponsibleSelects_(loading=false){
+function renderResponsibleSelects_(){
   const list=Array.isArray(assignableUsers)?assignableUsers:[];
   const options=list.map(u=>`<option value="${escapeAttr_(u.id)}">${escapeHtml(u.name||u.email||"—")}</option>`).join("");
-  const emptyOption=loading?`<option value="" disabled>${securityText_("Загружаем сотрудников…","Кормандон бор мешаванд…")}</option>`:`<option value="" disabled>${securityText_("Нет доступных сотрудников","Корманди дастрас нест")}</option>`;
   const addSelect=document.getElementById("responsibleSelect");
   if(addSelect){
     const previous=String(addSelect.value||"");
-    addSelect.innerHTML=options||emptyOption;
+    addSelect.innerHTML=options||`<option value="" disabled>${securityText_("Нет доступных сотрудников","Корманди дастрас нест")}</option>`;
     const preferred=previous||String(currentUser?.id||"");
     if(preferred&&list.some(u=>String(u.id)===preferred))addSelect.value=preferred;
     else if(list.length&&!addSelect.value)addSelect.value=String(list[0].id||"");
   }
   const assignSelect=document.getElementById("assignDebtUserSelect");
-  if(assignSelect){const previous=String(assignSelect.value||"");assignSelect.innerHTML=options||emptyOption;if(previous&&list.some(u=>String(u.id)===previous))assignSelect.value=previous;}
+  if(assignSelect){const previous=String(assignSelect.value||"");assignSelect.innerHTML=options||`<option value="" disabled>${securityText_("Нет доступных сотрудников","Корманди дастрас нест")}</option>`;if(previous&&list.some(u=>String(u.id)===previous))assignSelect.value=previous;}
 }
 function debtMatchesScope_(d){
   if(debtScope==="mine")return String(d.responsibleUserId||"")===String(currentUser?.id||"");
@@ -5224,7 +5221,6 @@ function openApp(options={}){
   userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
   applyPermissions_();
   renderAccountSecurity_();
-  if(canPermission("assignDebts")){hydrateAssignableUsersCacheV5102_();renderResponsibleSelects_();loadAssignableUsers();}
   if(options.initialData)applyDebtData_(options.initialData);
   else debtDataReady=false;
   showView(currentView || "active");
@@ -5576,6 +5572,13 @@ function applyDebtData_(data){
   allDebts=data.debts||[];
   paidDebts=data.paidDebts||[];
   clientsByPhone=data.clientsByPhone||{};
+  if(Array.isArray(data.assignableUsers)){
+    assignableUsers=data.assignableUsers;
+    saveAssignableUsersCacheV5103_();
+    renderResponsibleSelects_();
+  }else if(!assignableUsers.length){
+    hydrateAssignableUsersCacheV5103_();
+  }
   // Быстрый список не должен строить всю тяжёлую статистику в скрытой вкладке.
   // Расширенная статистика загружается только при открытии раздела «Статистика».
   lastStatsData=data;
@@ -6345,6 +6348,8 @@ function showView(view){
     loadSmartPayInvoices_(true);
   } else if (view==="guide") {
     renderGuideHub_();
+  } else if (view==="add") {
+    if(canPermission("assignDebts")&&!assignableUsers.length&&!hydrateAssignableUsersCacheV5103_()) loadAssignableUsers();
   } else if (view==="profile") {
     renderProfileViewV510_();
     loadSecurityCenter();
