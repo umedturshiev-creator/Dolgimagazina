@@ -2598,6 +2598,13 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
 }
 @media(max-width:390px){.debt-client-v2{padding-right:102px!important}.debt-responsible-v2{width:94px!important;right:9px!important}.debt-status-v2{max-width:94px!important}}
 
+/* ===== PROFILE / DEBT EDIT / FIXED FAB v5.10.0 ===== */
+.user-profile-trigger-v510{cursor:pointer;border-radius:999px;padding:2px 6px;transition:background .15s ease}.user-profile-trigger-v510:hover{background:rgba(59,130,246,.08)}
+.profile-view-v510{max-width:1180px!important}.profile-hero-v510{display:flex;align-items:center;gap:16px;padding:20px!important}.profile-avatar-v510{width:64px;height:64px;border-radius:22px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2563eb,#6d28d9);color:#fff;font-size:26px;font-weight:1000;box-shadow:0 14px 30px rgba(37,99,235,.22);flex:0 0 auto}.profile-hero-main-v510{min-width:0;flex:1}.profile-hero-main-v510 h3{margin:0 0 5px;font-size:22px}.profile-hero-name-v510{font-size:17px;font-weight:900;color:var(--text-1)}.profile-hero-email-v510{margin-top:3px;font-size:12px;color:var(--text-3)}.profile-session-badge-v510{padding:9px 12px;border-radius:14px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.14);font-size:11px;font-weight:850;color:var(--text-2)}
+.profile-grid-v510{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.profile-card-v510{padding:16px!important}.profile-card-title-v510{font-size:16px;font-weight:950;margin-bottom:12px;color:var(--text-1)}.profile-field-v510{display:grid;gap:5px;margin-bottom:10px}.profile-field-v510 label{font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:900;color:var(--text-3)}.profile-field-v510 input{width:100%;border:1px solid rgba(148,163,184,.18);border-radius:13px;padding:11px 12px;background:rgba(248,250,252,.82);color:var(--text-1);font:inherit;outline:none}.profile-field-v510 input[readonly]{opacity:.72}.profile-security-row-v510{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid rgba(148,163,184,.12)}.profile-security-row-v510 b{display:block;font-size:13px}.profile-security-row-v510 small{display:block;margin-top:3px;font-size:10px;color:var(--text-3)}.profile-2fa-status-v510{margin-top:11px;padding:9px 11px;border-radius:12px;background:rgba(148,163,184,.08);font-size:11px;font-weight:850}.profile-2fa-status-v510.on{background:rgba(34,197,94,.09);color:#15803d}.profile-sessions-card-v510{grid-column:1/-1}.profile-sessions-head-v510{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}.debt-edit-modal-v510{max-width:560px}.debt-edit-trigger-v510{width:28px!important;height:28px!important;min-width:28px!important;margin:0!important;padding:0!important;border:1px solid rgba(148,163,184,.16)!important;border-radius:9px!important;background:rgba(255,255,255,.72)!important;color:#475569!important;box-shadow:none!important;font-size:12px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important}.debt-client-name-v2 .debt-edit-trigger-v510{order:3}.mobile-smartpay-fab{position:fixed!important;transform:translateZ(0);will-change:left,top;z-index:80!important}
+html[data-theme="dark"] .profile-field-v510 input{background:rgba(15,23,42,.78);border-color:rgba(148,163,184,.16)}html[data-theme="dark"] .debt-edit-trigger-v510{background:rgba(30,41,59,.82)!important;color:#e2e8f0!important}
+@media(max-width:760px){.profile-hero-v510{padding:14px!important;gap:11px}.profile-avatar-v510{width:52px;height:52px;border-radius:17px;font-size:21px}.profile-hero-main-v510 h3{font-size:18px}.profile-session-badge-v510{display:none}.profile-grid-v510{grid-template-columns:1fr;gap:10px}.profile-sessions-card-v510{grid-column:auto}.profile-card-v510{padding:13px!important}.profile-security-row-v510{align-items:flex-start}.debt-edit-trigger-v510{width:25px!important;height:25px!important;min-width:25px!important;font-size:11px!important}.debt-client-name-v2>span:first-child{max-width:calc(100% - 30px)!important}.mobile-smartpay-fab{position:fixed!important}}
+
 /* ===== FAST AUTH / DATA FIX v5.8.9 ===== */
 .debt-load-error-v589{max-width:620px!important;display:grid!important;gap:10px!important;color:var(--text-2)!important}.debt-load-error-v589 b{color:var(--danger-1)!important}.debt-load-error-v589 button{width:auto!important;justify-self:start!important;margin:0!important}
 
@@ -2802,7 +2809,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
 <div class="header-center">
   <h2>Fashion&StyleLife - Долги</h2>
   <div class="user-meta">
-    <div id="userInfo"></div>
+    <div id="userInfo" class="user-profile-trigger-v510" role="button" tabindex="0" onclick="showView('profile')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showView('profile');}" title="Профиль"></div>
     <button id="refreshBtn" class="mini-refresh-btn" onclick="forceAppUpdate()">
   Обновить
 </button>
@@ -2824,6 +2831,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
   <button class="nav-btn" data-view="stats" onclick="showView('stats')"><span class="nav-icon">📊</span><span data-nav-label="stats">Статистика</span></button>
   <button class="nav-btn" id="auditNavBtn" data-view="audit" onclick="showView('audit')"><span class="nav-icon">🧾</span><span id="auditNavLabel">Журнал</span></button>
   <button class="nav-btn" data-view="guide" onclick="showView('guide')"><span class="nav-icon">📘</span><span>Инструкция</span></button>
+  <button class="nav-btn" data-view="profile" onclick="showView('profile')"><span class="nav-icon">👤</span><span>Профиль</span></button>
   <button class="nav-btn" data-view="settings" onclick="showView('settings')"><span class="nav-icon">⚙️</span><span data-nav-label="settings">Настройки</span></button>
 </aside>
 
@@ -2868,7 +2876,6 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
       <div>Клиент / срок</div><div>Финансы</div><div>Ответственный</div><div>Действия</div>
     </div>
     <div id="debtList" class="debt-list-v2"></div>
-    <button id="mobileSmartPayFab" class="mobile-smartpay-fab" type="button" onclick="mobileSmartPayFabClick_(event)" aria-label="Создать счет SmartPay" title="Создать счет SmartPay">🔗<span>+</span></button>
   </section>
 
   <section id="view-add" class="app-view">
@@ -3033,6 +3040,35 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
     </div>
   </section>
 
+  <section id="view-profile" class="app-view profile-view-v510">
+    <div class="profile-hero-v510 card">
+      <div class="profile-avatar-v510" id="profileAvatarV510">U</div>
+      <div class="profile-hero-main-v510"><h3 id="profileTitleV510">Профиль пользователя</h3><div id="profileHeroNameV510" class="profile-hero-name-v510">—</div><div id="profileHeroEmailV510" class="profile-hero-email-v510">—</div></div>
+      <div class="profile-session-badge-v510">⏱ <span id="profileSessionBadgeV510">Сессия · 12 часов</span></div>
+    </div>
+    <div class="profile-grid-v510">
+      <div class="card profile-card-v510">
+        <div class="profile-card-title-v510">👤 Личные данные</div>
+        <div class="profile-field-v510"><label for="profileNameInputV510">Имя</label><input id="profileNameInputV510" type="text" maxlength="80" autocomplete="name"></div>
+        <div class="profile-field-v510"><label>Email / логин</label><input id="profileEmailInputV510" type="text" readonly></div>
+        <div class="profile-field-v510"><label>Роль</label><input id="profileRoleInputV510" type="text" readonly></div>
+        <button id="profileSaveNameBtnV510" class="add-debt-btn" type="button" onclick="saveOwnProfileV510_()">Сохранить имя</button>
+        <div id="profileMessageV510" class="notification-settings-status"></div>
+      </div>
+      <div class="card profile-card-v510">
+        <div class="profile-card-title-v510">🛡 Защита аккаунта</div>
+        <div class="profile-security-row-v510"><div><b>Пароль</b><small>После изменения потребуется войти заново.</small></div><button class="user-mini-btn" type="button" onclick="openChangePasswordModal()">Изменить</button></div>
+        <div class="profile-security-row-v510"><div><b>Двухфакторная защита</b><small id="profileTwoFactorHintV510">Дополнительный код Authenticator.</small></div><button id="profileTwoFactorBtnV510" class="user-mini-btn" type="button" onclick="openTwoFactorManager()">Настроить</button></div>
+        <div id="profileTwoFactorStatusV510" class="profile-2fa-status-v510">—</div>
+      </div>
+      <div class="card profile-card-v510 profile-sessions-card-v510">
+        <div class="profile-sessions-head-v510"><div><div class="profile-card-title-v510">📱 Активные устройства</div><div class="settings-hint">Каждая сессия автоматически завершается через 12 часов после входа.</div></div><button class="user-mini-btn" type="button" onclick="loadSecurityCenter()">Обновить</button></div>
+        <div id="profileSessionsListV510" class="security-sessions-list"><div class="security-empty">Загрузка…</div></div>
+        <div class="security-center-actions"><button class="user-mini-btn" type="button" onclick="revokeOtherSecuritySessions()">Завершить другие сессии</button><button class="security-center-danger" type="button" onclick="revokeAllSecuritySessions()">Выйти со всех устройств</button></div>
+      </div>
+    </div>
+  </section>
+
   <section id="view-settings" class="app-view settings-view-v2">
     <h3 id="settingsTitle" class="view-title">Настройки</h3>
     <div class="settings-shell-v2">
@@ -3047,7 +3083,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
           <button class="settings-side-btn" data-settings-cat="appearance" type="button" onclick="setSettingsCategory_('appearance')">🎨 Интерфейс</button>
           <button class="settings-side-btn" data-settings-cat="notifications" type="button" onclick="setSettingsCategory_('notifications')">🔔 Уведомления</button>
           <button id="smartPaySettingsCategoryBtn" class="settings-side-btn" data-settings-cat="integrations" type="button" onclick="setSettingsCategory_('integrations')">🔗 Интеграции</button>
-          <button class="settings-side-btn" data-settings-cat="security" type="button" onclick="setSettingsCategory_('security')">🔐 Безопасность</button>
+          <button id="settingsSecurityCategoryBtn" class="settings-side-btn" data-settings-cat="security" type="button" onclick="setSettingsCategory_('security')">🔐 Безопасность</button>
           <button class="settings-side-btn" data-settings-cat="users" type="button" onclick="setSettingsCategory_('users')">👥 Пользователи</button>
           <button class="settings-side-btn" data-settings-cat="guide" type="button" onclick="setSettingsCategory_('guide')">📘 Инструкция</button>
         </div>
@@ -3147,7 +3183,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
           <div id="smartPaySettingsMessage" class="notification-settings-status"></div>
         </div>
 
-        <div id="accountSecurityCard" data-settings-card="security" data-settings-keywords="security center пароль сессии устройства 2fa двухфакторная защита безопасность" class="card settings-card security-center-card settings-wide-card">
+        <div id="accountSecurityCard" style="display:none!important" data-settings-card="security" data-settings-keywords="security center пароль сессии устройства 2fa двухфакторная защита безопасность" class="card settings-card security-center-card settings-wide-card">
           <div class="security-center-head">
             <div><b id="accountSecurityTitle">🔐 Security Center</b><div id="securityCenterHint" class="settings-hint">Устройства, активные сессии и защита аккаунта.</div></div>
             <div class="security-center-head-actions"><button id="securityCenterRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityCenter()">Обновить</button></div>
@@ -3230,6 +3266,8 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
   </section>
 </div>
 
+<button id="mobileSmartPayFab" class="mobile-smartpay-fab" type="button" onclick="mobileSmartPayFabClick_(event)" aria-label="Создать счет SmartPay" title="Создать счет SmartPay">🔗<span>+</span></button>
+
 <nav class="mobile-bottom-nav" id="mobileBottomNav">
   <button class="mobile-nav-btn active" data-view="active" onclick="showView('active')"><span class="nav-icon">💳</span><span data-nav-label="active">Долги</span></button>
   <button class="mobile-nav-btn" data-view="add" onclick="showView('add')"><span class="nav-icon">➕</span><span data-nav-label="add">Добавить</span></button>
@@ -3246,9 +3284,22 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
       <button id="moreSmartPayBtn" type="button" onclick="mobileMoreGo_('smartpay')"><span>🔗</span><b id="moreSmartPayLabel">Счета SmartPay</b></button>
       <button id="moreAuditBtn" type="button" onclick="mobileMoreGo_('audit')"><span>🧾</span><b id="moreAuditLabel">Журнал</b></button>
       <button type="button" onclick="mobileMoreGo_('guide')"><span>📘</span><b id="moreGuideLabel">Инструкция</b></button>
+      <button type="button" onclick="mobileMoreGo_('profile')"><span>👤</span><b id="moreProfileLabel">Профиль</b></button>
       <button type="button" onclick="mobileMoreGo_('settings')"><span>⚙️</span><b id="moreSettingsLabel">Настройки</b></button>
       <button type="button" onclick="mobileMoreGo_('actions')"><span>🛠</span><b id="moreActionsLabel">Действия</b></button>
     </div>
+  </div>
+</div>
+
+<div class="modal" id="debtEditModalV510" onclick="debtEditBackdropCloseV510_(event)">
+  <div class="modal-content debt-edit-modal-v510" onclick="event.stopPropagation()">
+    <div class="auth-flow-head"><div><h3>✏️ Редактировать должника</h3><div class="auth-flow-subtitle">Имя, телефон и срок оплаты. Сумма долга меняется отдельными действиями.</div></div><button type="button" class="auth-close-btn" onclick="closeDebtEditV510_()">×</button></div>
+    <input id="debtEditRowV510" type="hidden">
+    <div class="profile-field-v510"><label for="debtEditClientV510">Имя должника</label><input id="debtEditClientV510" type="text" maxlength="120"></div>
+    <div class="profile-field-v510"><label for="debtEditPhoneV510">Телефон</label><input id="debtEditPhoneV510" type="tel" inputmode="numeric" maxlength="12" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
+    <div class="profile-field-v510"><label for="debtEditDueV510">Дата оплаты</label><input id="debtEditDueV510" type="date"></div>
+    <div id="debtEditMessageV510" class="notification-settings-status"></div>
+    <button id="debtEditSaveBtnV510" class="add-debt-btn" type="button" onclick="saveDebtEditV510_()">Сохранить изменения</button>
   </div>
 </div>
 
@@ -3528,7 +3579,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
 </div>
 
 <script>
-const VERSION="5.9.4";
+const VERSION="5.10.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -3549,6 +3600,23 @@ function ensurePdfLibrary_(){return loadExternalScript_("html2pdf","https://cdnj
 function ensureQrLibrary_(){return loadExternalScript_("qrcode","https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",()=>typeof window.QRCode!=="undefined");}
 
 let authToken = sessionStorage.getItem("authToken") || "";
+const AUTH_SESSION_EXPIRES_KEY_V510="authSessionExpiresAtV510";
+let authSessionExpiryTimerV510_=null;
+function setAuthSessionExpiryV510_(expiresAt,hours){
+  let ms=Date.parse(String(expiresAt||""));if(!Number.isFinite(ms)&&Number(hours)>0)ms=Date.now()+Number(hours)*3600000;
+  if(!Number.isFinite(ms))return;
+  try{sessionStorage.setItem(AUTH_SESSION_EXPIRES_KEY_V510,String(ms));}catch(e){}
+  scheduleAuthSessionExpiryV510_();
+}
+function getAuthSessionExpiryV510_(){try{return Number(sessionStorage.getItem(AUTH_SESSION_EXPIRES_KEY_V510)||0);}catch(e){return 0;}}
+function scheduleAuthSessionExpiryV510_(){
+  if(authSessionExpiryTimerV510_)clearTimeout(authSessionExpiryTimerV510_);authSessionExpiryTimerV510_=null;
+  const exp=getAuthSessionExpiryV510_();if(!authToken||!exp)return;const remain=exp-Date.now();
+  if(remain<=0){expireAuthSessionV510_();return;}authSessionExpiryTimerV510_=setTimeout(expireAuthSessionV510_,Math.min(remain,2147480000));
+}
+function expireAuthSessionV510_(){if(!authToken)return;clearAuthSession_();showLogin_();setMessage_("loginMessage",securityText_("Сессия завершена через 12 часов. Войдите снова.","Сессия пас аз 12 соат анҷом ёфт. Аз нав ворид шавед."),"info");}
+function localSessionExpiredV510_(){const exp=getAuthSessionExpiryV510_();return !!(exp&&Date.now()>=exp);}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){if(localSessionExpiredV510_())expireAuthSessionV510_();else scheduleAuthSessionExpiryV510_();}});
 let debtDataReady = false;
 let currentUser = null;
 let resumeRetryTimer = null;
@@ -4462,7 +4530,7 @@ async function apiPost(action,payload={},options={}){
   }
   return data||{};
 }
-function clearAuthSession_(){ stopNotificationPolling_(); authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; securityCenterData=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); cacheAuthUser_(null); clearDebtSessionCache_(); document.documentElement.dataset.resume="0"; }
+function clearAuthSession_(){ stopNotificationPolling_(); if(authSessionExpiryTimerV510_)clearTimeout(authSessionExpiryTimerV510_);authSessionExpiryTimerV510_=null; authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; securityCenterData=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); sessionStorage.removeItem(AUTH_SESSION_EXPIRES_KEY_V510); cacheAuthUser_(null); clearDebtSessionCache_(); document.documentElement.dataset.resume="0"; }
 function showLogin_(){
   hideSessionResume_();
   const login=document.getElementById("loginScreen"); if(login)login.style.display="flex";
@@ -4501,7 +4569,7 @@ function applySecurityTranslations_(){
   const pass=document.getElementById("passwordInput"); if(pass)pass.placeholder=securityText_("Пароль","Парол");
   document.querySelectorAll(".login-lang-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.lang===currentLanguage));
   if(document.getElementById("authFlowModal")?.style.display==="flex")renderAuthFlow_();
-  renderUsers_(); renderAccountSecurity_(); renderSecurityCenter_(); renderTwoFactorStatus_(); renderNotificationPreferences_(); renderNotifications_(); renderSecurityEvents_(); renderAuditLog_();
+  renderUsers_(); renderAccountSecurity_(); renderSecurityCenter_(); renderTwoFactorStatus_(); renderProfileViewV510_(); renderNotificationPreferences_(); renderNotifications_(); renderSecurityEvents_(); renderAuditLog_();
   const filterNames={all:["Все","Ҳама"],unread:["Новые","Нав"],debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],security:["Безопасность","Амният"],users:["Пользователи","Истифодабарандагон"]};
   document.querySelectorAll("[data-notification-filter]").forEach(btn=>{const v=filterNames[btn.dataset.notificationFilter]||filterNames.all;btn.textContent=currentLanguage==="tj"?v[1]:v[0];});
 }
@@ -4526,7 +4594,7 @@ async function login(){
       twoFactorLoginChallenge=String(result.challengeToken||"");
       document.getElementById("passwordInput").value="";setMessage_("loginMessage","","");openTwoFactorLogin();return;
     }
-    authToken=result.token||""; currentUser=result.user||null; currentSeller=currentUser?.name||""; sessionStorage.setItem("authToken",authToken); cacheAuthUser_(currentUser);
+    authToken=result.token||""; currentUser=result.user||null; currentSeller=currentUser?.name||""; sessionStorage.setItem("authToken",authToken); cacheAuthUser_(currentUser); setAuthSessionExpiryV510_(result.sessionExpiresAt,result.sessionExpiresHours||12);
     document.getElementById("passwordInput").value=""; setMessage_("loginMessage","",""); hideSessionResume_(); openApp();
   }catch(e){clearTimeout(loginSlowTimer);setMessage_("loginMessage",e.message||String(e),"error");}
   finally{clearTimeout(loginSlowTimer);if(btn){btn.disabled=false;btn.textContent=securityText_("Войти","Даромадан");}}
@@ -4539,7 +4607,7 @@ function closeTwoFactorLogin(){const m=document.getElementById("twoFactorLoginMo
 async function verifyTwoFactorLogin(){
   const code=String(document.getElementById("twoFactorLoginCode")?.value||"").trim();if(!code){setMessage_("twoFactorLoginMessage",securityText_("Введите код","Рамзро ворид кунед"),"error");return;}
   const btn=document.getElementById("twoFactorLoginSubmitBtn");if(btn)btn.disabled=true;
-  try{const r=await apiPost("auth.verify2fa",{challengeToken:twoFactorLoginChallenge,code},{public:true});if(!r.success){setMessage_("twoFactorLoginMessage",r.message||securityText_("Неверный код","Рамзи нодуруст"),"error");return;}document.getElementById("twoFactorLoginModal").style.display="none";twoFactorLoginChallenge="";authToken=r.token||"";currentUser=r.user||null;currentSeller=currentUser?.name||"";sessionStorage.setItem("authToken",authToken);cacheAuthUser_(currentUser);hideSessionResume_();openApp();}
+  try{const r=await apiPost("auth.verify2fa",{challengeToken:twoFactorLoginChallenge,code},{public:true});if(!r.success){setMessage_("twoFactorLoginMessage",r.message||securityText_("Неверный код","Рамзи нодуруст"),"error");return;}document.getElementById("twoFactorLoginModal").style.display="none";twoFactorLoginChallenge="";authToken=r.token||"";currentUser=r.user||null;currentSeller=currentUser?.name||"";sessionStorage.setItem("authToken",authToken);cacheAuthUser_(currentUser);setAuthSessionExpiryV510_(r.sessionExpiresAt,r.sessionExpiresHours||12);hideSessionResume_();openApp();}
   catch(e){setMessage_("twoFactorLoginMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
 }
 function renderTwoFactorStatus_(){
@@ -4547,6 +4615,10 @@ function renderTwoFactorStatus_(){
   if(status){status.textContent=enabled?securityText_("Включена","Фаъол"):securityText_("Выключена","Хомӯш");status.classList.toggle("on",enabled);status.classList.toggle("off",!enabled);}
   if(btn)btn.textContent=enabled?securityText_("Управление 2FA","Идораи 2FA"):securityText_("Включить 2FA","Фаъол кардани 2FA");
   if(hint){if(enabled){const when=a.twoFactorEnabledAt?` · ${securityText_("с","аз")} ${a.twoFactorEnabledAt}`:"",remaining=Number.isFinite(Number(a.backupCodesRemaining))?` · ${securityText_("резервных кодов","рамзҳои эҳтиётӣ")}: ${Number(a.backupCodesRemaining)}`:"";hint.textContent=securityText_("Дополнительная защита активна","Муҳофизати иловагӣ фаъол аст")+when+remaining;}else hint.textContent=securityText_("Дополнительный код из Google/Microsoft Authenticator или Authy. По умолчанию выключена.","Рамзи иловагӣ аз Google/Microsoft Authenticator ё Authy. Бо нобаёнӣ хомӯш аст.");}
+  const ps=document.getElementById("profileTwoFactorStatusV510"),pb=document.getElementById("profileTwoFactorBtnV510"),ph=document.getElementById("profileTwoFactorHintV510");
+  if(ps){ps.textContent=enabled?securityText_("✅ 2FA включена","✅ 2FA фаъол аст"):securityText_("2FA выключена","2FA хомӯш аст");ps.classList.toggle("on",enabled);}
+  if(pb)pb.textContent=enabled?securityText_("Управлять","Идора"):securityText_("Включить","Фаъол кардан");
+  if(ph)ph.textContent=enabled?securityText_("Authenticator подключён к вашему аккаунту.","Authenticator ба ҳисоби шумо пайваст аст."):securityText_("Опционально: Google/Microsoft Authenticator или Authy.","Ихтиёрӣ: Google/Microsoft Authenticator ё Authy.");
 }
 function setTwoFactorStep_(step){["twoFactorEnablePasswordStep","twoFactorScanStep","twoFactorBackupStep"].forEach(id=>document.getElementById(id)?.classList.remove("active"));document.getElementById(step)?.classList.add("active");}
 function openTwoFactorManager(){
@@ -4633,7 +4705,8 @@ function applyPermissions_(){
   const smartPaySettingsCard=document.getElementById("smartPaySettingsCard");if(smartPaySettingsCard)smartPaySettingsCard.style.display=canPermission("smartpayManage")?"":"none";
   const smartPaySettingsCat=document.getElementById("smartPaySettingsCategoryBtn");if(smartPaySettingsCat)smartPaySettingsCat.style.display=canPermission("smartpayManage")?"":"none";
   const smartPayGeneralCard=document.getElementById("smartPayGeneralCreateCard");if(smartPayGeneralCard)smartPayGeneralCard.style.display=canPermission("smartpayGeneral")?"":"none";
-  const smartPayFab=document.getElementById("mobileSmartPayFab");if(smartPayFab)smartPayFab.style.display=(smartPayAllowed&&canPermission("smartpayGeneral"))?"":"none";
+  syncMobileSmartPayFabVisibilityV510_();
+  const settingsSecurityCat=document.getElementById("settingsSecurityCategoryBtn");if(settingsSecurityCat)settingsSecurityCat.style.display=canPermission("security")?"":"none";
   const mobileExport=document.getElementById("mobileActionExportBtn");if(mobileExport)mobileExport.style.display=exp?"":"none";
   const responsibleWrap=document.getElementById("responsibleFieldWrap");if(responsibleWrap)responsibleWrap.style.display=create&&canPermission("assignDebts")?"block":"none";
   const mineBtn=document.getElementById("debtScopeMineBtn");if(mineBtn)mineBtn.style.display=currentUser?.role==="viewer"?"none":"";
@@ -4678,6 +4751,7 @@ function renderSecurityCenter_(){
   const all=Array.isArray(securityCenterData.allSessions)?securityCenterData.allSessions:[];
   if(allBox)allBox.innerHTML=all.length?all.map(s=>securitySessionHtml_(s,true)).join(""):`<div class="security-empty">${securityText_("Активных сессий пользователей нет","Сессияи фаъоли истифодабарандагон нест")}</div>`;
   renderTwoFactorStatus_();
+  renderProfileViewV510_();
 }
 async function loadSecurityCenter(){
   if(securityCenterLoading||!authToken)return;securityCenterLoading=true;
@@ -4751,6 +4825,40 @@ async function changePassword(){
   try{const r=await apiPost("auth.changePassword",{oldPassword,newPassword});if(!r.success){setMessage_("changePasswordMessage",r.message||"Error","error");return;}closeChangePasswordModal();clearAuthSession_();showLogin_();setMessage_("loginMessage",r.message||securityText_("Пароль изменён. Войдите снова.","Парол иваз шуд. Аз нав ворид шавед."),"success");}catch(e){setMessage_("changePasswordMessage",e.message||String(e),"error");}finally{if(btn)btn.disabled=false;}
 }
 
+
+/* ---------- PROFILE v5.10.0 ---------- */
+function renderProfileViewV510_(){
+  if(!currentUser)return;
+  const account=securityCenterData?.account||currentUser,name=String(account.name||currentUser.name||""),email=String(account.email||currentUser.email||"");
+  const avatar=document.getElementById("profileAvatarV510");if(avatar)avatar.textContent=(name||email||"U").trim().charAt(0).toUpperCase()||"U";
+  const hn=document.getElementById("profileHeroNameV510");if(hn)hn.textContent=name||"—";const he=document.getElementById("profileHeroEmailV510");if(he)he.textContent=email||"—";
+  const ni=document.getElementById("profileNameInputV510");if(ni&&document.activeElement!==ni)ni.value=name;const ei=document.getElementById("profileEmailInputV510");if(ei)ei.value=email;const ri=document.getElementById("profileRoleInputV510");if(ri)ri.value=roleLabel_(account.role||currentUser.role);
+  const list=document.getElementById("profileSessionsListV510"),own=Array.isArray(securityCenterData?.sessions)?securityCenterData.sessions:[];
+  if(list)list.innerHTML=securityCenterData?(own.length?own.map(x=>securitySessionHtml_(x,false)).join(""):`<div class="security-empty">${securityText_("Активных устройств не найдено","Дастгоҳи фаъол ёфт нашуд")}</div>`):`<div class="security-empty">${securityText_("Загрузка…","Боркунӣ…")}</div>`;
+  renderTwoFactorStatus_();
+}
+async function saveOwnProfileV510_(){
+  const name=String(document.getElementById("profileNameInputV510")?.value||"").trim();const btn=document.getElementById("profileSaveNameBtnV510"),msg=document.getElementById("profileMessageV510");
+  if(name.length<2){if(msg)msg.textContent=securityText_("Укажите имя не короче 2 символов","Номро аз 2 аломат кам ворид накунед");return;}
+  if(btn)btn.disabled=true;if(msg)msg.textContent=securityText_("Сохранение…","Захира…");
+  try{const r=await apiPost("auth.profile.update",{name});if(!r.success)throw new Error(r.message||"Error");if(r.user){currentUser={...(currentUser||{}),...r.user};currentSeller=currentUser.name||currentUser.email||"";cacheAuthUser_(currentUser);if(userInfo)userInfo.innerHTML=t("userInfo",{name:currentSeller,version:VERSION});}securityCenterData=null;renderProfileViewV510_();if(msg)msg.textContent=r.message||securityText_("Профиль обновлён","Профил нав шуд");showToast(`✅ <b>${securityText_("Профиль обновлён","Профил нав шуд")}</b>`,"success");await loadDebts();}
+  catch(e){if(msg)msg.textContent=e.message||String(e);}finally{if(btn)btn.disabled=false;}
+}
+
+/* ---------- DEBT CARD EDIT v5.10.0 ---------- */
+function openDebtEditV510_(row){
+  if(!canPermission("adjustDebt"))return;const d=(Array.isArray(allDebts)?allDebts:[]).find(x=>Number(x.row||0)===Number(row));if(!d)return;
+  document.getElementById("debtEditRowV510").value=Number(d.row||0);document.getElementById("debtEditClientV510").value=String(d.client||"");document.getElementById("debtEditPhoneV510").value=normalizePhone(d.phone);document.getElementById("debtEditDueV510").value=String(d.dueDate||"").slice(0,10);const msg=document.getElementById("debtEditMessageV510");if(msg)msg.textContent="";document.getElementById("debtEditModalV510").style.display="flex";document.body.style.overflow="hidden";
+}
+function closeDebtEditV510_(){const m=document.getElementById("debtEditModalV510");if(m)m.style.display="none";document.body.style.overflow="";}
+function debtEditBackdropCloseV510_(e){if(e?.target?.id==="debtEditModalV510")closeDebtEditV510_();}
+async function saveDebtEditV510_(){
+  const row=Number(document.getElementById("debtEditRowV510")?.value||0),client=String(document.getElementById("debtEditClientV510")?.value||"").trim(),phone=String(document.getElementById("debtEditPhoneV510")?.value||"").trim(),dueDate=String(document.getElementById("debtEditDueV510")?.value||"");const btn=document.getElementById("debtEditSaveBtnV510"),msg=document.getElementById("debtEditMessageV510");
+  if(!row||!client||normalizePhone(phone).length!==9||!dueDate){if(msg)msg.textContent=securityText_("Проверьте имя, телефон и дату","Ном, телефон ва санаро санҷед");return;}
+  if(btn)btn.disabled=true;if(msg)msg.textContent=securityText_("Сохранение…","Захира…");
+  try{const r=await apiPost("debt.update",{row,client,phone,dueDate});if(!r.success)throw new Error(r.message||"Error");closeDebtEditV510_();showToast(`✅ <b>${securityText_("Карточка обновлена","Корт нав шуд")}</b>`,"success");await loadDebts();}
+  catch(e){if(msg)msg.textContent=e.message||String(e);}finally{if(btn)btn.disabled=false;}
+}
 
 /* ---------- RESPONSIBLE STAFF v5.4.0 ---------- */
 async function loadAssignableUsers(){
@@ -5064,7 +5172,7 @@ async function openNotificationItem(id){
     if(!el){await loadDebts();el=document.querySelector(selector);}
     if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("notification-focus");setTimeout(()=>el.classList.remove("notification-focus"),1400);}
   } else if(n.entityType==="user") {showView("settings");setTimeout(()=>document.getElementById("usersSettingsCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}
-  else if(n.entityType==="security") {showView("settings");setTimeout(()=>document.getElementById(canPermission("security")?"securityEventsCard":"accountSecurityCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}
+  else if(n.entityType==="security") {if(canPermission("security")){showView("settings");setTimeout(()=>document.getElementById("securityEventsCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}else showView("profile");}
 }
 function securityEventLabel_(event){
   const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",SESSION_REVOKED:"Сессия завершена",OTHER_SESSIONS_REVOKED:"Другие сессии завершены",ALL_SESSIONS_REVOKED:"Все сессии завершены",TWO_FACTOR_SETUP_STARTED:"Настройка 2FA",TWO_FACTOR_ENABLED:"2FA включена",TWO_FACTOR_DISABLED:"2FA отключена",TWO_FACTOR_BACKUP_REGENERATED:"Резервные коды 2FA",LOGIN_2FA_REQUIRED:"Ожидание 2FA",LOGIN_2FA_SUCCESS:"2FA подтверждена",LOGIN_2FA_FAILED:"Ошибка 2FA",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений"};
@@ -5092,6 +5200,7 @@ function openApp(options={}){
   mainHeader.style.display = "flex";
   appContent.style.display = "block";
   document.body.classList.add("app-open");
+  scheduleAuthSessionExpiryV510_();
   userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
   applyPermissions_();
   renderAccountSecurity_();
@@ -5117,6 +5226,7 @@ async function resumeSession_(){
   let lastError=null;
   try{
     if(!authToken){clearAuthSession_();showLogin_();applySecurityTranslations_();return;}
+    if(localSessionExpiredV510_()){expireAuthSessionV510_();return;}
     const cachedUser=readCachedAuthUser_();
     const cachedData=readCachedDebtData_();
 
@@ -5142,7 +5252,7 @@ async function resumeSession_(){
           if(!authToken)return;
           try{
             const r=await apiPost("auth.me",{});
-            if(r&&r.success&&r.user){currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);applyPermissions_();renderAccountSecurity_();if(userInfo)userInfo.innerHTML=t("userInfo",{name:currentSeller,version:VERSION});}
+            if(r&&r.success&&r.user){currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);setAuthSessionExpiryV510_(r.sessionExpiresAt,12);applyPermissions_();renderAccountSecurity_();renderProfileViewV510_();if(userInfo)userInfo.innerHTML=t("userInfo",{name:currentSeller,version:VERSION});}
           }catch(e){}
         },1200);
         return data;
@@ -5160,7 +5270,7 @@ async function resumeSession_(){
       const r=await apiPost("auth.me",{});
       if(!authToken)return;
       if(r&&r.success&&r.user){
-        currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);
+        currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);setAuthSessionExpiryV510_(r.sessionExpiresAt,12);
         openApp({initialData:cachedData,skipDataLoad:true,skipBackground:true});
         await loadDebts();
         setTimeout(()=>{if(!authToken)return;if(canPermission("assignDebts"))loadAssignableUsers();loadNotifications({silent:true});startNotificationPolling_();},350);
@@ -5180,13 +5290,12 @@ window.addEventListener("DOMContentLoaded", async function(){
   document.querySelectorAll(".lang-btn,.login-lang-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.lang === currentLanguage));
   applyTranslations();
   initMobileSmartPayFab_();
+  syncMobileSmartPayFabVisibilityV510_();
 
   const fullCloseYesBtn = document.getElementById("fullCloseYesBtn");
   if (fullCloseYesBtn) fullCloseYesBtn.onclick = confirmFullClose;
   const addToDebtConfirmBtn = document.getElementById("addToDebtConfirmBtn");
   if (addToDebtConfirmBtn) addToDebtConfirmBtn.onclick = confirmAddToDebt;
-  initMobileSmartPayFabDrag_();
-
   await resumeSession_();
 });
 
@@ -5914,7 +6023,7 @@ function buildDebtCardHtml(d){
   const status=state.label?`<span class="debt-status-v2 status-${state.kind}">${escapeHtml(state.label)}</span>`:"";
   return `<div class="${rowClass}" data-debt-id="${escapeAttr_(String(d.id||d.row||''))}">
     <div class="debt-client-v2">
-      <div class="debt-client-name-v2"><span>${escapeHtml(String(d.client||""))}</span>${status}</div>
+      <div class="debt-client-name-v2"><span>${escapeHtml(String(d.client||""))}</span>${status}${canPermission("adjustDebt")?`<button class="debt-edit-trigger-v510" type="button" title="${securityText_("Редактировать карточку","Таҳрири корт")}" onclick="openDebtEditV510_(${Number(d.row||0)})">✏️</button>`:""}</div>
       <div class="debt-client-meta-v2">
         <span>📅 ${escapeHtml(String(d.dueDate||"—"))}</span>
         ${phone?`<a class="debt-phone-v2 debt-phone-link-v593" href="tel:+${phoneFull}" title="${securityText_("Позвонить","Занг задан")}">📞 ${escapeHtml(phone)}</a>`:`<span class="debt-phone-v2">📞 —</span>`}
@@ -6183,10 +6292,11 @@ function initMobileSmartPayFabDrag_(){
   });
 }
 
+function syncMobileSmartPayFabVisibilityV510_(){const fab=document.getElementById("mobileSmartPayFab");if(!fab)return;const show=window.matchMedia("(max-width:760px)").matches&&currentView==="active"&&canPermission("smartpayGeneral");fab.style.display=show?"flex":"none";}
 function openMobileSmartPayCreate_(){if(!canPermission("smartpayGeneral"))return;showView("smartpay");setTimeout(()=>{const el=document.getElementById("smartPayGeneralName");if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.focus({preventScroll:true});}},180);}
 
 function showView(view){
-  const allowed=["active","add","paid","stats","smartpay","audit","guide","settings","actions"];
+  const allowed=["active","add","paid","stats","smartpay","audit","guide","profile","settings","actions"];
   if (!allowed.includes(view)) view="active";
   if(view==="add"&&!canPermission("createDebt"))view="active";
   if(view==="stats"&&!canPermission("viewStats"))view="active";
@@ -6195,7 +6305,7 @@ function showView(view){
   currentView=view;
   document.querySelectorAll(".app-view").forEach(el=>el.classList.toggle("active",el.id===`view-${view}`));
   closeMobileMore_();
-  const moreViews=["smartpay","audit","guide","settings","actions"];
+  const moreViews=["smartpay","audit","guide","profile","settings","actions"];
   document.querySelectorAll(".nav-btn,.mobile-nav-btn").forEach(btn=>{
     const active=btn.id==="mobileMoreBtn"?moreViews.includes(view):btn.dataset.view===view;
     btn.classList.toggle("active",active);
@@ -6215,12 +6325,16 @@ function showView(view){
     loadSmartPayInvoices_(true);
   } else if (view==="guide") {
     renderGuideHub_();
+  } else if (view==="profile") {
+    renderProfileViewV510_();
+    loadSecurityCenter();
   }
+  syncMobileSmartPayFabVisibilityV510_();
   window.scrollTo({top:0,behavior:"smooth"});
   if(view==="settings"){
     if(typeof setSettingsCategory_==="function") setSettingsCategory_(settingsCategoryFilter_||"all");
     loadNotifications({silent:true});
-    loadSecurityCenter();
+    if(canPermission("security"))loadSecurityCenter();
     if(canPermission("viewUsers"))loadUsers();
     if(canPermission("security"))loadSecurityEvents();
     if(canPermission("smartpayManage"))loadSmartPaySettings_();
