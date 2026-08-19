@@ -3090,7 +3090,7 @@ html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94)
         <div class="profile-security-row-v510"><div><b>Двухфакторная защита</b><small id="profileTwoFactorHintV510">Дополнительный код Authenticator.</small></div><button id="profileTwoFactorBtnV510" class="user-mini-btn" type="button" onclick="openTwoFactorManager()">Настроить</button></div>
         <div id="profileTwoFactorStatusV510" class="profile-2fa-status-v510">—</div>
         <div class="profile-passkey-wrap-v512">
-          <div class="profile-passkey-head-v512"><div><b>🔐 Face ID / отпечаток / Passkey</b><small>Быстрый вход без ввода пароля. Биометрия остаётся на устройстве.</small></div><button id="profilePasskeyAddBtnV512" class="user-mini-btn" type="button" onclick="registerPasskeyV512_()">Подключить устройство</button></div>
+          <div class="profile-passkey-head-v512"><div><b>🔐 Face ID / отпечаток</b><small>Быстрый вход через встроенную защиту этого устройства. Внешние USB-ключи не используются.</small></div><button id="profilePasskeyAddBtnV512" class="user-mini-btn" type="button" onclick="registerPasskeyV512_()">Включить на этом устройстве</button></div>
           <div id="profilePasskeyStatusV512" class="profile-passkey-status-v512">Passkey пока не подключён</div>
           <div id="profilePasskeySupportV512" class="profile-passkey-support-v512"></div>
           <div id="profilePasskeyMessageV512" class="profile-passkey-message-v512"></div>
@@ -3630,7 +3630,7 @@ html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94)
 </div>
 
 <script>
-const VERSION="5.12.1";
+const VERSION="5.12.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4707,6 +4707,7 @@ function applySecurityTranslations_(){
 // ===== PASSKEY / FACE ID / FINGERPRINT v5.12.0 =====
 let passkeyItemsV512_=[];
 function passkeySupportedV512_(){return !!(window.isSecureContext&&window.PublicKeyCredential&&navigator.credentials&&navigator.credentials.create&&navigator.credentials.get);}
+async function passkeyPlatformAvailableV512_(){try{return !!(passkeySupportedV512_()&&PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable());}catch(e){return false;}}
 function passkeyB64uToBufV512_(value){
   let s=String(value||"").replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";const raw=atob(s),out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out.buffer;
 }
@@ -4720,7 +4721,7 @@ function initPasskeyUiV512_(){
   const btn=document.getElementById("passkeyLoginBtnV512"),hint=document.getElementById("passkeyLoginHintV512");if(!btn)return;
   const supported=passkeySupportedV512_();btn.style.display=supported?"flex":"none";const divider=document.getElementById("passkeyLoginDividerV512");if(divider)divider.style.display=supported?"flex":"none";btn.textContent=passkeyLoginButtonTextV512_();
   if(hint){hint.style.display=supported?"block":"none";hint.textContent=securityText_("Используется системная защита устройства: Face ID, Touch ID, отпечаток, Windows Hello или PIN.","Муҳофизати системавии дастгоҳ истифода мешавад: Face ID, Touch ID, изи ангушт, Windows Hello ё PIN.");}
-  const add=document.getElementById("profilePasskeyAddBtnV512");if(add){add.disabled=!supported;add.textContent=supported?securityText_("Подключить устройство","Пайваст кардани дастгоҳ"):securityText_("Не поддерживается","Дастгирӣ намешавад");}
+  const add=document.getElementById("profilePasskeyAddBtnV512");if(add){add.disabled=!supported;add.textContent=supported?securityText_("Включить на этом устройстве","Пайваст кардани дастгоҳ"):securityText_("Не поддерживается","Дастгирӣ намешавад");}
   const support=document.getElementById("profilePasskeySupportV512");if(support) support.textContent=supported?securityText_("Passkey поддерживается этим браузером.","Passkey дар ин браузер дастгирӣ мешавад."):securityText_("Откройте приложение через HTTPS в Safari/Chrome/Edge с поддержкой Passkeys.","Барномаро тавассути HTTPS дар Safari/Chrome/Edge бо дастгирии Passkeys кушоед.");
 }
 function completePasskeyLoginV512_(r){
@@ -4731,7 +4732,7 @@ async function loginWithPasskeyV512_(){
   const btn=document.getElementById("passkeyLoginBtnV512");if(btn){btn.disabled=true;btn.textContent=securityText_("Ожидаем подтверждение…","Интизори тасдиқ…");}setMessage_("loginMessage",securityText_("Подтвердите вход на устройстве…","Вурудро дар дастгоҳ тасдиқ кунед…"),"info");
   try{
     const start=await apiPost("passkey.login.options",passkeyClientRpV512_(),{public:true,timeoutMs:20000});if(!start.success)throw new Error(start.message||"Passkey");
-    const credential=await navigator.credentials.get({publicKey:{challenge:passkeyB64uToBufV512_(start.challenge),rpId:start.rpId,timeout:Number(start.timeout||60000),userVerification:"required"}});
+    const credential=await navigator.credentials.get({publicKey:{challenge:passkeyB64uToBufV512_(start.challenge),rpId:start.rpId,timeout:Number(start.timeout||60000),userVerification:"required",hints:["client-device"]}});
     if(!credential)throw new Error(securityText_("Passkey не выбран","Passkey интихоб нашуд"));
     const payload={challengeToken:start.challengeToken,credential:{id:credential.id,rawId:passkeyBufToB64uV512_(credential.rawId),type:credential.type,response:{clientDataJSON:passkeyBufToB64uV512_(credential.response.clientDataJSON),authenticatorData:passkeyBufToB64uV512_(credential.response.authenticatorData),signature:passkeyBufToB64uV512_(credential.response.signature),userHandle:credential.response.userHandle?passkeyBufToB64uV512_(credential.response.userHandle):""}},device:getClientDeviceInfo_()};
     const r=await apiPost("passkey.login.finish",payload,{public:true,timeoutMs:30000});if(!r.success)throw new Error(r.message||securityText_("Не удалось войти по Passkey","Вуруд бо Passkey имкон нашуд"));completePasskeyLoginV512_(r);
@@ -4746,14 +4747,16 @@ async function loadPasskeysV512_(){
 function renderPasskeysV512_(){
   const box=document.getElementById("profilePasskeyListV512"),status=document.getElementById("profilePasskeyStatusV512");if(!box)return;const list=Array.isArray(passkeyItemsV512_)?passkeyItemsV512_:[];
   if(status){status.textContent=list.length?securityText_(`✅ Подключено: ${list.length}`,`✅ Пайваст: ${list.length}`):securityText_("Passkey пока не подключён","Passkey ҳоло пайваст нест");status.classList.toggle("on",list.length>0);}
-  box.innerHTML=list.length?list.map(p=>`<div class="passkey-item-v512"><div class="passkey-item-icon-v512">🔐</div><div class="passkey-item-copy-v512"><b>${escapeHtml(p.deviceLabel||"Passkey")}</b><small>${securityText_("Создан","Сохта шуд")}: ${escapeHtml(p.createdAt||"—")}${p.lastUsedAt?` · ${securityText_("вход","вуруд")}: ${escapeHtml(p.lastUsedAt)}`:""}</small></div><button class="passkey-remove-v512" type="button" onclick="removePasskeyV512_('${escapeAttr_(p.id)}')">${securityText_("Удалить","Нест кардан")}</button></div>`).join(""):`<div class="passkey-empty-v512">${securityText_("Подключите это устройство, чтобы входить без ввода пароля.","Ин дастгоҳро пайваст кунед, то бе ворид кардани парол дароед.")}</div>`;
+  box.innerHTML=list.length?list.map(p=>`<div class="passkey-item-v512"><div class="passkey-item-icon-v512">🔐</div><div class="passkey-item-copy-v512"><b>${escapeHtml(p.deviceLabel||"Passkey")}</b><small>${securityText_("Создан","Сохта шуд")}: ${escapeHtml(p.createdAt||"—")}${p.lastUsedAt?` · ${securityText_("вход","вуруд")}: ${escapeHtml(p.lastUsedAt)}`:""}</small></div><button class="passkey-remove-v512" type="button" onclick="removePasskeyV512_('${escapeAttr_(p.id)}')">${securityText_("Удалить","Нест кардан")}</button></div>`).join(""):`<div class="passkey-empty-v512">${securityText_("Сначала войдите обычным способом и включите Face ID / отпечаток в Профиле на этом устройстве.","Ин дастгоҳро пайваст кунед, то бе ворид кардани парол дароед.")}</div>`;
 }
 async function registerPasskeyV512_(){
   if(!passkeySupportedV512_()){showToast(`❌ ${securityText_("Passkey не поддерживается этим браузером","Passkey дар ин браузер дастгирӣ намешавад")}`,"error");return;}
+  const platformReady=await passkeyPlatformAvailableV512_();
+  if(!platformReady){showToast(`❌ ${securityText_("На этом устройстве не доступен встроенный Face ID / отпечаток / Windows Hello. Сначала включите биометрию или блокировку устройства.","Дар ин дастгоҳ Face ID / изи ангушт / Windows Hello дастрас нест. Аввал биометрия ё қулфи дастгоҳро фаъол кунед.")}`,"error");return;}
   const btn=document.getElementById("profilePasskeyAddBtnV512"),msg=document.getElementById("profilePasskeyMessageV512");if(btn)btn.disabled=true;if(msg)msg.textContent=securityText_("Подготовка Passkey…","Омодасозии Passkey…");
   try{
     const start=await apiPost("passkey.register.options",passkeyClientRpV512_(),{timeoutMs:20000});if(!start.success)throw new Error(start.message||"Passkey");
-    const pub={challenge:passkeyB64uToBufV512_(start.challenge),rp:{id:start.rpId,name:start.rpName||"Fashion&StyleLife"},user:{id:passkeyB64uToBufV512_(start.user.id),name:start.user.name,displayName:start.user.displayName},pubKeyCredParams:[{type:"public-key",alg:-7}],timeout:Number(start.timeout||60000),attestation:"none",authenticatorSelection:{residentKey:"required",requireResidentKey:true,userVerification:"required"},excludeCredentials:(start.excludeCredentials||[]).map(c=>({type:"public-key",id:passkeyB64uToBufV512_(c.id)}))};
+    const pub={challenge:passkeyB64uToBufV512_(start.challenge),rp:{id:start.rpId,name:start.rpName||"Fashion&StyleLife"},user:{id:passkeyB64uToBufV512_(start.user.id),name:start.user.name,displayName:start.user.displayName},pubKeyCredParams:[{type:"public-key",alg:-7}],timeout:Number(start.timeout||60000),attestation:"none",authenticatorSelection:{authenticatorAttachment:"platform",residentKey:"required",requireResidentKey:true,userVerification:"required"},hints:["client-device"],excludeCredentials:(start.excludeCredentials||[]).map(c=>({type:"public-key",id:passkeyB64uToBufV512_(c.id),transports:["internal"]}))};
     const credential=await navigator.credentials.create({publicKey:pub});if(!credential)throw new Error(securityText_("Passkey не создан","Passkey сохта нашуд"));
     const transports=typeof credential.response.getTransports==="function"?credential.response.getTransports():[];
     const payload={challengeToken:start.challengeToken,credential:{id:credential.id,rawId:passkeyBufToB64uV512_(credential.rawId),type:credential.type,response:{clientDataJSON:passkeyBufToB64uV512_(credential.response.clientDataJSON),attestationObject:passkeyBufToB64uV512_(credential.response.attestationObject),transports}},device:getClientDeviceInfo_()};
