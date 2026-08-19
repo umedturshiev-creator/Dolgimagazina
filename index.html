@@ -2460,7 +2460,7 @@ html[data-theme="light"] .settings-search-input,html[data-theme="light"] .help-s
 
 /* ===== STABLE COMPACT LAYOUT v5.8.6 ===== */
 .main-view-container{max-width:1280px!important;margin:0 auto 0 284px!important;padding:18px 22px 34px!important}
-#view-active,#view-paid,#view-stats,#view-audit,#view-guide,#view-settings{max-width:1220px}
+#view-active,#view-paid,#view-stats,#view-audit,#view-guide,#view-settings,#view-actions{max-width:1220px}
 #debtList,#paidDebtList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
 #debtList>.card,#paidDebtList>.card{margin:0;height:100%;padding:15px 16px!important;font-size:14px!important;line-height:1.48}
 #view-active .search-box,#view-paid .search-box{max-width:none}
@@ -2530,6 +2530,52 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
 .smartpay-webhook-box{margin-top:12px;padding:13px;border-radius:16px;background:rgba(14,165,233,.07);border:1px solid rgba(14,165,233,.16)}.smartpay-webhook-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}.smartpay-webhook-head b{font-size:14px;color:var(--text-1)}.smartpay-webhook-head span{font-size:10px;color:var(--text-3)}.smartpay-webhook-url{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;align-items:end}.smartpay-webhook-url input{font-size:11px!important;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.smartpay-webhook-secret-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}.smartpay-webhook-state{margin-top:8px;padding:9px 10px;border-radius:12px;background:rgba(148,163,184,.08);font-size:10px;color:var(--text-2);line-height:1.45}.smartpay-webhook-state.ok{background:rgba(34,197,94,.08);color:#15803d}.smartpay-webhook-state.warn{background:rgba(245,158,11,.08);color:#b45309}.smartpay-webhook-pill{display:inline-flex;padding:4px 7px;border-radius:999px;background:rgba(255,255,255,.12);font-size:9px;font-weight:900}.smartpay-webhook-summary{margin:0 0 12px;padding:10px 12px;border-radius:14px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.14);font-size:11px;color:var(--text-2);line-height:1.45}.smartpay-webhook-summary.off{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.16)}html[data-theme="dark"] .smartpay-webhook-box{background:rgba(14,165,233,.07);border-color:rgba(56,189,248,.16)}html[data-theme="dark"] .smartpay-webhook-state{background:rgba(30,41,59,.65)}
 @media(max-width:760px){#view-smartpay{width:100%!important;max-width:none!important}.smartpay-webhook-secret-grid,.smartpay-webhook-url{grid-template-columns:1fr}.smartpay-webhook-url button{width:100%!important}.smartpay-hero{padding:15px;border-radius:20px!important}.smartpay-hero h3{font-size:21px}.smartpay-hero-badge{display:none}.smartpay-profile-grid{grid-template-columns:1fr 1fr;gap:7px}.smartpay-profile-card{padding:10px}.smartpay-profile-name{font-size:12px}.smartpay-profile-meta{font-size:9px}.smartpay-layout{display:block}.smartpay-create-card,.smartpay-history-card{padding:12px;margin-bottom:10px}.smartpay-form-grid{grid-template-columns:1fr}.smartpay-field.full{grid-column:auto}.smartpay-invoice-row{display:grid;grid-template-columns:1fr auto;padding:11px}.smartpay-invoice-row>div:nth-child(3){grid-column:1/2}.smartpay-row-actions{grid-column:1/-1;justify-content:flex-start}.smartpay-settings-grid,.smartpay-settings-common{grid-template-columns:1fr}.smartpay-history-toolbar{align-items:stretch}.smartpay-history-toolbar input{min-width:0}.smartpay-list{max-height:none}.smartpay-debt-modal .modal-content{width:min(96vw,560px)}}
 
+
+/* ===== MOBILE UX v5.9.3 ===== */
+.debt-phone-link-v593{color:inherit;text-decoration:none;}
+.paid-phone-link-v593,.stats-phone-link-v593{color:inherit;text-decoration:none;font-weight:850}.stats-wa-mini-v593{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;margin-left:5px;border-radius:9px;background:#f0fdf4;border:1px solid #dcfce7;text-decoration:none;font-size:12px;vertical-align:middle}
+.mobile-smartpay-fab,.mobile-more-overlay-v593{display:none;}
+.mobile-actions-view{max-width:760px!important;}
+.mobile-actions-card-v593{padding:16px;}
+.mobile-actions-head-v593{display:grid;gap:4px;margin-bottom:12px}.mobile-actions-head-v593 b{font-size:18px}.mobile-actions-head-v593 span{font-size:12px;color:var(--text-3)}
+.mobile-actions-grid-v593{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.mobile-action-tile-v593{margin:0!important;min-height:120px!important;padding:16px!important;border-radius:18px!important;background:rgba(59,130,246,.09)!important;border:1px solid rgba(59,130,246,.15)!important;color:var(--text-1)!important;box-shadow:none!important;display:flex!important;flex-direction:column;align-items:flex-start!important;justify-content:center!important;gap:5px!important;text-align:left!important}
+.mobile-action-tile-v593>span{font-size:25px}.mobile-action-tile-v593>b{font-size:14px}.mobile-action-tile-v593>small{font-size:10px;line-height:1.35;color:var(--text-3)}.mobile-action-tile-v593.danger{background:rgba(239,68,68,.08)!important;border-color:rgba(239,68,68,.16)!important;color:#dc2626!important}
+@media(max-width:760px){
+  .debt-phone-link-v593{display:inline-flex!important;align-items:center;gap:2px;color:#334155!important;font-weight:900!important;text-decoration:none!important;-webkit-tap-highlight-color:transparent}
+  html[data-theme="dark"] .debt-phone-link-v593{color:#e2e8f0!important}
+  .debt-copy-btn-v2{display:none!important}
+  .debt-mobile-extra-v2{display:none!important}
+  .debt-row-v2{position:relative!important}
+  .debt-client-v2{padding-right:126px!important;min-height:72px!important}
+  .debt-client-name-v2{padding-right:0!important;align-items:flex-start!important;flex-wrap:wrap!important}
+  .debt-client-name-v2>span:first-child{max-width:100%!important}
+  .debt-responsible-v2{position:absolute!important;top:11px!important;right:10px!important;width:116px!important;min-width:0!important;margin:0!important;padding:7px 8px!important;border-radius:13px!important;background:rgba(239,246,255,.94)!important;border:1px solid #dbeafe!important;box-shadow:0 6px 16px rgba(37,99,235,.06)!important;z-index:2}
+  .debt-responsible-title-v2{font-size:0!important;line-height:1!important}.debt-responsible-title-v2:before{content:"👥";font-size:11px!important}
+  .debt-responsible-name-v2{font-size:10px!important;line-height:1.2!important;margin-top:3px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .debt-responsible-v2 .debt-responsible-btn{float:none!important;width:100%!important;min-height:26px!important;margin:5px 0 0!important;padding:4px 5px!important;border-radius:8px!important;font-size:9px!important}
+  html[data-theme="dark"] .debt-responsible-v2{background:rgba(37,99,235,.13)!important;border-color:rgba(96,165,250,.16)!important}
+  .debt-actions-v2{margin-top:9px!important}
+  .stats-debt-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}.stats-debt-actions .history{grid-column:1/-1!important}
+  .debt-actions-v2.has-smartpay .history-action-btn{grid-column:auto!important}
+  .mobile-smartpay-fab{position:fixed!important;display:flex;right:16px;bottom:calc(86px + env(safe-area-inset-bottom));width:58px!important;height:58px!important;min-width:58px!important;margin:0!important;padding:0!important;border:0!important;border-radius:19px!important;z-index:66;align-items:center;justify-content:center;background:linear-gradient(145deg,#0ea5e9,#2563eb 58%,#4f46e5)!important;color:#fff!important;box-shadow:0 16px 34px rgba(37,99,235,.35)!important;font-size:25px!important;-webkit-tap-highlight-color:transparent}
+  .mobile-smartpay-fab span{position:absolute;right:8px;top:5px;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;color:#2563eb;font-size:13px;font-weight:1000;box-shadow:0 2px 7px rgba(15,23,42,.18)}
+  .app-view:not(.active) .mobile-smartpay-fab{display:none!important}
+  .mobile-more-overlay-v593{position:fixed;inset:0;z-index:120;background:rgba(15,23,42,.34);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:flex-end;justify-content:center;padding:0 7px max(7px,env(safe-area-inset-bottom))}
+  .mobile-more-overlay-v593.show{display:flex!important}
+  .mobile-more-sheet-v593{width:100%;max-width:620px;padding:8px 12px 16px;border-radius:26px 26px 22px 22px;background:rgba(248,250,252,.96);border:1px solid rgba(255,255,255,.7);box-shadow:0 -18px 50px rgba(15,23,42,.23);animation:mobileMoreUp593 .18s ease-out}
+  html[data-theme="dark"] .mobile-more-sheet-v593{background:rgba(15,23,42,.97);border-color:rgba(148,163,184,.14)}
+  .mobile-more-handle-v593{width:42px;height:4px;border-radius:999px;background:#cbd5e1;margin:2px auto 10px}
+  .mobile-more-head-v593{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.mobile-more-head-v593>div{display:grid;gap:2px}.mobile-more-head-v593 b{font-size:22px;color:var(--text-1)}.mobile-more-head-v593 span{font-size:11px;color:var(--text-3)}.mobile-more-head-v593 button{width:38px!important;height:38px!important;min-width:38px!important;margin:0!important;padding:0!important;border-radius:12px!important;background:rgba(148,163,184,.12)!important;color:var(--text-1)!important;box-shadow:none!important;font-size:22px!important}
+  .mobile-more-grid-v593{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mobile-more-grid-v593 button{min-height:72px!important;margin:0!important;padding:10px 12px!important;border-radius:17px!important;background:rgba(255,255,255,.82)!important;border:1px solid #e2e8f0!important;color:#0f172a!important;box-shadow:none!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;text-align:left!important}.mobile-more-grid-v593 button>span{font-size:21px}.mobile-more-grid-v593 button>b{font-size:13px}
+  html[data-theme="dark"] .mobile-more-grid-v593 button{background:rgba(30,41,59,.82)!important;border-color:rgba(148,163,184,.14)!important;color:#f8fafc!important}
+  body.mobile-more-open-v593{overflow:hidden!important}
+  .mobile-actions-card-v593{padding:13px!important}.mobile-actions-grid-v593{grid-template-columns:1fr!important;gap:8px}.mobile-action-tile-v593{min-height:86px!important;padding:13px 14px!important;display:grid!important;grid-template-columns:36px minmax(0,1fr)!important;grid-template-rows:auto auto!important;column-gap:10px!important;row-gap:2px!important}.mobile-action-tile-v593>span{grid-row:1/3;align-self:center}.mobile-action-tile-v593>b,.mobile-action-tile-v593>small{grid-column:2}.mobile-action-tile-v593>b{align-self:end}.mobile-action-tile-v593>small{align-self:start}
+  .mobile-bottom-nav{grid-template-columns:repeat(5,1fr)!important}
+}
+@media(max-width:390px){.debt-client-v2{padding-right:112px!important}.debt-responsible-v2{width:104px!important;right:8px!important}.mobile-more-grid-v593{grid-template-columns:1fr 1fr}}
+@keyframes mobileMoreUp593{from{transform:translateY(20px);opacity:.5}to{transform:translateY(0);opacity:1}}
+
 /* ===== FAST AUTH / DATA FIX v5.8.9 ===== */
 .debt-load-error-v589{max-width:620px!important;display:grid!important;gap:10px!important;color:var(--text-2)!important}.debt-load-error-v589 b{color:var(--danger-1)!important}.debt-load-error-v589 button{width:auto!important;justify-self:start!important;margin:0!important}
 
@@ -2568,7 +2614,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
     padding:8px 10px calc(100px + env(safe-area-inset-bottom))!important;
   }
   .app-view,
-  #view-active,#view-add,#view-paid,#view-stats,#view-audit,#view-guide,#view-settings,
+  #view-active,#view-add,#view-paid,#view-stats,#view-audit,#view-guide,#view-settings,#view-actions,
   .debt-workspace-v2,
   .settings-view-v2,
   .guide-view{
@@ -2800,6 +2846,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
       <div>Клиент / срок</div><div>Финансы</div><div>Ответственный</div><div>Действия</div>
     </div>
     <div id="debtList" class="debt-list-v2"></div>
+    <button id="mobileSmartPayFab" class="mobile-smartpay-fab" type="button" onclick="openMobileSmartPayCreate_()" aria-label="Создать счет SmartPay" title="Создать счет SmartPay">🔗<span>+</span></button>
   </section>
 
   <section id="view-add" class="app-view">
@@ -2981,7 +3028,6 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
           <button class="settings-side-btn" data-settings-cat="security" type="button" onclick="setSettingsCategory_('security')">🔐 Безопасность</button>
           <button class="settings-side-btn" data-settings-cat="users" type="button" onclick="setSettingsCategory_('users')">👥 Пользователи</button>
           <button class="settings-side-btn" data-settings-cat="guide" type="button" onclick="setSettingsCategory_('guide')">📘 Инструкция</button>
-          <button class="settings-side-btn" data-settings-cat="actions" type="button" onclick="setSettingsCategory_('actions')">🛠 Действия</button>
         </div>
         <div class="settings-side-note">
           <b>💡 Как пользоваться</b>
@@ -3142,16 +3188,21 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
           </div>
         </div>
 
-        <div id="settingsSectionActions" data-settings-card="actions" data-settings-keywords="действия журнал обновить выйти" class="card settings-card settings-actions-card settings-wide-card">
-          <b id="settingsActionsTitle">🛠 Действия</b>
-          <div class="settings-actions">
-            <button id="settingsRefreshBtn" class="add-debt-btn" onclick="forceAppUpdate()">Обновить данные</button>
-            <button id="settingsAuditBtn" class="add-debt-btn" onclick="showView('audit')">Журнал действий</button>
-            <button id="settingsGuideBtn" class="add-debt-btn" onclick="showView('guide')">Инструкция</button>
-            <button id="settingsSmartPayBtn" class="add-debt-btn" onclick="showView('smartpay')">Счета SmartPay</button>
-            <button id="settingsLogoutBtn" onclick="logout()" style="background:linear-gradient(135deg,#ef4444,#dc2626);">Выйти</button>
-          </div>
-        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-actions" class="app-view mobile-actions-view">
+    <h3 class="view-title" id="mobileActionsTitle">Действия</h3>
+    <div class="card mobile-actions-card-v593">
+      <div class="mobile-actions-head-v593">
+        <b id="mobileActionsQuickTitle">Быстрые действия</b>
+        <span id="mobileActionsQuickSub">Системные команды вынесены из настроек.</span>
+      </div>
+      <div class="mobile-actions-grid-v593">
+        <button id="mobileActionRefreshBtn" class="mobile-action-tile-v593" type="button" onclick="forceAppUpdate()"><span>↻</span><b id="mobileActionRefreshLabel">Обновить данные</b><small id="mobileActionRefreshSub">Получить свежие долги и оплаты</small></button>
+        <button id="mobileActionExportBtn" class="mobile-action-tile-v593" type="button" onclick="openExportMenu()"><span>📤</span><b id="mobileActionExportLabel">Экспорт</b><small id="mobileActionExportSub">Excel / PDF отчёты</small></button>
+        <button id="mobileActionLogoutBtn" class="mobile-action-tile-v593 danger" type="button" onclick="logout()"><span>🚪</span><b id="mobileActionLogoutLabel">Выйти</b><small id="mobileActionLogoutSub">Завершить текущую сессию</small></button>
       </div>
     </div>
   </section>
@@ -3162,8 +3213,22 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
   <button class="mobile-nav-btn" data-view="add" onclick="showView('add')"><span class="nav-icon">➕</span><span data-nav-label="add">Добавить</span></button>
   <button class="mobile-nav-btn" data-view="paid" onclick="showView('paid')"><span class="nav-icon">✅</span><span data-nav-label="paid">Оплачено</span></button>
   <button class="mobile-nav-btn" data-view="stats" onclick="showView('stats')"><span class="nav-icon">📊</span><span data-nav-label="stats">Статистика</span></button>
-  <button class="mobile-nav-btn" data-view="settings" onclick="showView('settings')"><span class="nav-icon">⚙️</span><span data-nav-label="settings">Настройки</span></button>
+  <button id="mobileMoreBtn" class="mobile-nav-btn" type="button" onclick="openMobileMore_()"><span class="nav-icon">•••</span><span id="mobileMoreNavLabel">Ещё</span></button>
 </nav>
+
+<div id="mobileMoreSheet" class="mobile-more-overlay-v593" aria-hidden="true" onclick="mobileMoreBackdropClose_(event)">
+  <div class="mobile-more-sheet-v593" onclick="event.stopPropagation()">
+    <div class="mobile-more-handle-v593"></div>
+    <div class="mobile-more-head-v593"><div><b id="mobileMoreTitle">Ещё</b><span id="mobileMoreSubtitle">Дополнительные разделы</span></div><button type="button" onclick="closeMobileMore_()">×</button></div>
+    <div class="mobile-more-grid-v593">
+      <button id="moreSmartPayBtn" type="button" onclick="mobileMoreGo_('smartpay')"><span>🔗</span><b id="moreSmartPayLabel">Счета SmartPay</b></button>
+      <button id="moreAuditBtn" type="button" onclick="mobileMoreGo_('audit')"><span>🧾</span><b id="moreAuditLabel">Журнал</b></button>
+      <button type="button" onclick="mobileMoreGo_('guide')"><span>📘</span><b id="moreGuideLabel">Инструкция</b></button>
+      <button type="button" onclick="mobileMoreGo_('settings')"><span>⚙️</span><b id="moreSettingsLabel">Настройки</b></button>
+      <button type="button" onclick="mobileMoreGo_('actions')"><span>🛠</span><b id="moreActionsLabel">Действия</b></button>
+    </div>
+  </div>
+</div>
 
 <div class="modal" id="paymentModal">
   <div class="modal-content">
@@ -3441,7 +3506,7 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
 </div>
 
 <script>
-const VERSION="5.9.2";
+const VERSION="5.9.3";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -3590,6 +3655,16 @@ const translations = {
     navSmartPay: "Счета SmartPay",
     navStats: "Статистика",
     navSettings: "Настройки",
+    mobileNavMore: "Ещё",
+    navAudit: "Журнал",
+    navGuide: "Инструкция",
+    navActions: "Действия",
+    moreSubtitle: "Дополнительные разделы",
+    actionsQuick: "Быстрые действия",
+    actionsQuickSub: "Системные команды вынесены из настроек.",
+    actionRefreshSub: "Получить свежие долги и оплаты",
+    actionExportSub: "Excel / PDF отчёты",
+    actionLogoutSub: "Завершить текущую сессию",
     mobileNavActive: "Долги",
     mobileNavAdd: "Добавить",
     mobileNavPaid: "Оплачено",
@@ -3780,6 +3855,16 @@ const translations = {
     navSmartPay: "Ҳисобҳои SmartPay",
     navStats: "Омор",
     navSettings: "Танзимот",
+    mobileNavMore: "Бештар",
+    navAudit: "Журнал",
+    navGuide: "Дастур",
+    navActions: "Амалҳо",
+    moreSubtitle: "Бахшҳои иловагӣ",
+    actionsQuick: "Амалҳои зуд",
+    actionsQuickSub: "Фармонҳои системавӣ аз танзимот ҷудо карда шуданд.",
+    actionRefreshSub: "Қарзҳо ва пардохтҳои навро бор кунед",
+    actionExportSub: "Ҳисоботҳои Excel / PDF",
+    actionLogoutSub: "Сессияи ҷориро анҷом диҳед",
     mobileNavActive: "Қарзҳо",
     mobileNavAdd: "Илова",
     mobileNavPaid: "Пардохт",
@@ -4044,6 +4129,23 @@ function applyTranslations(){
   document.querySelectorAll('.mobile-bottom-nav [data-nav-label="paid"]').forEach(el=>el.textContent=t("mobileNavPaid"));
   document.querySelectorAll('.mobile-bottom-nav [data-nav-label="stats"]').forEach(el=>el.textContent=t("navStats"));
   document.querySelectorAll('.mobile-bottom-nav [data-nav-label="settings"]').forEach(el=>el.textContent=t("navSettings"));
+  const mobileMoreNavLabel=document.getElementById("mobileMoreNavLabel");if(mobileMoreNavLabel)mobileMoreNavLabel.textContent=t("mobileNavMore");
+  const mobileMoreTitle=document.getElementById("mobileMoreTitle");if(mobileMoreTitle)mobileMoreTitle.textContent=t("mobileNavMore");
+  const mobileMoreSubtitle=document.getElementById("mobileMoreSubtitle");if(mobileMoreSubtitle)mobileMoreSubtitle.textContent=t("moreSubtitle");
+  const moreSmartPayLabel=document.getElementById("moreSmartPayLabel");if(moreSmartPayLabel)moreSmartPayLabel.textContent=t("navSmartPay");
+  const moreAuditLabel=document.getElementById("moreAuditLabel");if(moreAuditLabel)moreAuditLabel.textContent=t("navAudit");
+  const moreGuideLabel=document.getElementById("moreGuideLabel");if(moreGuideLabel)moreGuideLabel.textContent=t("navGuide");
+  const moreSettingsLabel=document.getElementById("moreSettingsLabel");if(moreSettingsLabel)moreSettingsLabel.textContent=t("navSettings");
+  const moreActionsLabel=document.getElementById("moreActionsLabel");if(moreActionsLabel)moreActionsLabel.textContent=t("navActions");
+  const mobileActionsTitle=document.getElementById("mobileActionsTitle");if(mobileActionsTitle)mobileActionsTitle.textContent=t("navActions");
+  const mobileActionsQuickTitle=document.getElementById("mobileActionsQuickTitle");if(mobileActionsQuickTitle)mobileActionsQuickTitle.textContent=t("actionsQuick");
+  const mobileActionsQuickSub=document.getElementById("mobileActionsQuickSub");if(mobileActionsQuickSub)mobileActionsQuickSub.textContent=t("actionsQuickSub");
+  const mobileActionRefreshLabel=document.getElementById("mobileActionRefreshLabel");if(mobileActionRefreshLabel)mobileActionRefreshLabel.textContent=t("settingsRefresh");
+  const mobileActionRefreshSub=document.getElementById("mobileActionRefreshSub");if(mobileActionRefreshSub)mobileActionRefreshSub.textContent=t("actionRefreshSub");
+  const mobileActionExportLabel=document.getElementById("mobileActionExportLabel");if(mobileActionExportLabel)mobileActionExportLabel.textContent=t("exportBtn");
+  const mobileActionExportSub=document.getElementById("mobileActionExportSub");if(mobileActionExportSub)mobileActionExportSub.textContent=t("actionExportSub");
+  const mobileActionLogoutLabel=document.getElementById("mobileActionLogoutLabel");if(mobileActionLogoutLabel)mobileActionLogoutLabel.textContent=t("settingsLogout");
+  const mobileActionLogoutSub=document.getElementById("mobileActionLogoutSub");if(mobileActionLogoutSub)mobileActionLogoutSub.textContent=t("actionLogoutSub");
 
   const settingsLanguageTitle = document.getElementById("settingsLanguageTitle");
   const settingsThemeTitle = document.getElementById("settingsThemeTitle");
@@ -4501,14 +4603,16 @@ function applyPermissions_(){
   const auditAllowed=canPermission("viewAudit");
   const auditNav=document.getElementById("auditNavBtn");if(auditNav)auditNav.style.display=auditAllowed?"":"none";
   const auditView=document.getElementById("view-audit");if(auditView)auditView.style.display=auditAllowed?"":"none";
-  const auditBtn=document.getElementById("settingsAuditBtn");if(auditBtn)auditBtn.style.display=auditAllowed?"":"none";
+  const moreAudit=document.getElementById("moreAuditBtn");if(moreAudit)moreAudit.style.display=auditAllowed?"":"none";
   const smartPayAllowed=canPermission("smartpayInvoices");
   const smartPayNav=document.getElementById("smartPayNavBtn");if(smartPayNav)smartPayNav.style.display=smartPayAllowed?"":"none";
   const smartPayView=document.getElementById("view-smartpay");if(smartPayView)smartPayView.style.display=smartPayAllowed?"":"none";
-  const smartPaySettingsBtn=document.getElementById("settingsSmartPayBtn");if(smartPaySettingsBtn)smartPaySettingsBtn.style.display=smartPayAllowed?"":"none";
+  const moreSmartPay=document.getElementById("moreSmartPayBtn");if(moreSmartPay)moreSmartPay.style.display=smartPayAllowed?"":"none";
   const smartPaySettingsCard=document.getElementById("smartPaySettingsCard");if(smartPaySettingsCard)smartPaySettingsCard.style.display=canPermission("smartpayManage")?"":"none";
   const smartPaySettingsCat=document.getElementById("smartPaySettingsCategoryBtn");if(smartPaySettingsCat)smartPaySettingsCat.style.display=canPermission("smartpayManage")?"":"none";
   const smartPayGeneralCard=document.getElementById("smartPayGeneralCreateCard");if(smartPayGeneralCard)smartPayGeneralCard.style.display=canPermission("smartpayGeneral")?"":"none";
+  const smartPayFab=document.getElementById("mobileSmartPayFab");if(smartPayFab)smartPayFab.style.display=(smartPayAllowed&&canPermission("smartpayGeneral"))?"":"none";
+  const mobileExport=document.getElementById("mobileActionExportBtn");if(mobileExport)mobileExport.style.display=exp?"":"none";
   const responsibleWrap=document.getElementById("responsibleFieldWrap");if(responsibleWrap)responsibleWrap.style.display=create&&canPermission("assignDebts")?"block":"none";
   const mineBtn=document.getElementById("debtScopeMineBtn");if(mineBtn)mineBtn.style.display=currentUser?.role==="viewer"?"none":"";
   const unassignedBtn=document.getElementById("debtScopeUnassignedBtn");if(unassignedBtn)unassignedBtn.style.display=canPermission("assignDebts")?"":"none";
@@ -5642,8 +5746,6 @@ function statsDebtActionsHtml_(d){
   const actions=[];
   if(remainder>0&&canPermission("appendDebt"))actions.push(`<button class="stats-debt-action add" onclick="openAddToDebtModal(${row},'${safeClient}','${safePhone}',${remainder})">➕ ${t('addToDebtBtn')}</button>`);
   if(remainder>0&&canPermission("payDebt"))actions.push(`<button class="stats-debt-action pay" onclick="openPayment(${row},${remainder})">💵 ${t('payBtn')}</button>`);
-  if(phoneFull)actions.push(`<a class="stats-debt-action call" href="tel:+${phoneFull}">📞 ${t('callBtn')}</a>`);
-  if(phoneFull){const waText=encodeURIComponent(remainder>0?t('waReminder',{amount:remainder}):"");actions.push(`<a class="stats-debt-action wa" target="_blank" href="https://wa.me/${phoneFull}${waText?`?text=${waText}`:""}">💬 ${t('whatsappBtn')}</a>`);}
   actions.push(`<button class="stats-debt-action history" onclick="showHistory('${safeClient}')">📂 ${t('historyBtn')}</button>`);
   return `<div class="stats-debt-actions">${actions.join("")}</div>`;
 }
@@ -5654,7 +5756,10 @@ function statsDebtItemsHtml_(list){
     const phone=normalizePhone(d.phone);
     const days=Number(d.daysOverdue||0);
     const cls=Number(d.remainder||0)<=0?' paid-item':(d.isOverdue||days>0?' overdue-item':'');
-    return `<div class="stats-detail-item${cls}"><div class="stats-detail-item-title">${escapeHtml(String(d.client||'—'))}</div><div class="stats-detail-item-meta">📞 ${escapeHtml(phone||String(d.phone||''))}${d.dueDate?` · 📅 ${escapeHtml(String(d.dueDate))}`:''}${days>0?` · ⚠️ ${days} ${statsLocale_('дн. просрочки','рӯз гузашта')}`:''}</div><div class="stats-detail-item-value"><span>${statsLocale_('Долг','Қарз')}: ${statsMoney_(d.total)} ${t('somoni')}</span><span>${statsLocale_('Оплачено','Пардохт')}: ${statsMoney_(d.paid)} ${t('somoni')}</span><span>${statsLocale_('Остаток','Бақия')}: ${statsMoney_(d.remainder)} ${t('somoni')}</span></div>${statsDebtActionsHtml_(d)}</div>`;
+    const phoneFull=phone?`992${phone}`:"";
+    const waText=encodeURIComponent(Number(d.remainder||0)>0?t('waReminder',{amount:d.remainder}):"");
+    const phoneMeta=phoneFull?`<a class="stats-phone-link-v593" href="tel:+${phoneFull}">📞 ${escapeHtml(phone)}</a><a class="stats-wa-mini-v593" target="_blank" href="https://wa.me/${phoneFull}${waText?`?text=${waText}`:""}" title="WhatsApp">💬</a>`:`📞 ${escapeHtml(String(d.phone||''))}`;
+    return `<div class="stats-detail-item${cls}"><div class="stats-detail-item-title">${escapeHtml(String(d.client||'—'))}</div><div class="stats-detail-item-meta">${phoneMeta}${d.dueDate?` · 📅 ${escapeHtml(String(d.dueDate))}`:''}${days>0?` · ⚠️ ${days} ${statsLocale_('дн. просрочки','рӯз гузашта')}`:''}</div><div class="stats-detail-item-value"><span>${statsLocale_('Долг','Қарз')}: ${statsMoney_(d.total)} ${t('somoni')}</span><span>${statsLocale_('Оплачено','Пардохт')}: ${statsMoney_(d.paid)} ${t('somoni')}</span><span>${statsLocale_('Остаток','Бақия')}: ${statsMoney_(d.remainder)} ${t('somoni')}</span></div>${statsDebtActionsHtml_(d)}</div>`;
   }).join('')}</div>`;
 }
 function showStatsDetailLocal_(action,label){
@@ -5789,7 +5894,7 @@ function buildDebtCardHtml(d){
       <div class="debt-client-name-v2"><span>${escapeHtml(String(d.client||""))}</span>${status}</div>
       <div class="debt-client-meta-v2">
         <span>📅 ${escapeHtml(String(d.dueDate||"—"))}</span>
-        <span class="debt-phone-v2">📞 ${escapeHtml(phone)}</span>
+        ${phone?`<a class="debt-phone-v2 debt-phone-link-v593" href="tel:+${phoneFull}" title="${securityText_("Позвонить","Занг задан")}">📞 ${escapeHtml(phone)}</a>`:`<span class="debt-phone-v2">📞 —</span>`}
         <button class="debt-copy-btn-v2" type="button" title="${securityText_("Скопировать номер","Рақамро нусха кардан")}" onclick="copyDebtPhone_('${safePhoneJs}')">⧉</button>
         <a class="debt-wa-icon-v2" target="_blank" title="WhatsApp" href="https://wa.me/${phoneFull}?text=${waText}">💬</a>
       </div>
@@ -5805,7 +5910,6 @@ function buildDebtCardHtml(d){
     <div class="debt-responsible-v2"><div class="debt-responsible-title-v2">👥 ${t("responsibleLabel")}</div><div class="debt-responsible-name-v2">${escapeHtml(responsibleName||t("responsibleNone"))}</div>${responsibleAction}</div>
     <div>
       <div class="debt-actions-v2 ${canPermission("smartpayInvoices")?"has-smartpay":""}">${payBtn}${appendBtn}${smartPayBtn}<button class="history-action-btn" onclick="showHistory('${safeClientJs}')">📂 ${t("historyBtn")}</button></div>
-      <div class="debt-mobile-extra-v2"><a class="debt-mobile-call-v2" href="tel:+${phoneFull}">📞 ${t("callBtn")}</a><a class="debt-mobile-wa-v2" target="_blank" href="https://wa.me/${phoneFull}?text=${waText}">💬 WhatsApp</a></div>
     </div>
   </div>`;
 }
@@ -5829,7 +5933,7 @@ function buildPaidDebtCardHtml(d){
   return `
     <div class="card paid-card" data-debt-id="${escapeAttr_(String(d.id||d.row||''))}">
       <b>${d.client}</b><br>
-      ${t("phonePlaceholder")}: ${phoneNormalized}<br>
+      ${t("phonePlaceholder")}: ${phoneNormalized?`<a class="paid-phone-link-v593" href="tel:+992${phoneNormalized}">${escapeHtml(phoneNormalized)}</a>`:"—"}<br>
       ${t("debtAmount")}: ${d.total} ${t("somoni")}<br>
       ${t("paidAmount")}: <b>${d.paid || d.total || 0} ${t("somoni")}</b><br>
       ${d.dueDate ? `${t("choosePayDate")}: ${d.dueDate}<br>` : ""}
@@ -5960,8 +6064,14 @@ async function saveSmartPaySettings_(){if(!canPermission("smartpayManage"))retur
 async function copySmartPayWebhookUrl_(){const url=String(document.getElementById("smartPayWebhookUrl")?.value||"").trim();if(!url){showToast("❌ Webhook URL пока недоступен","error");return;}try{await navigator.clipboard.writeText(url);showToast("✅ <b>Webhook URL скопирован</b>","success");}catch(e){const el=document.getElementById("smartPayWebhookUrl");el?.select();document.execCommand("copy");showToast("✅ <b>Webhook URL скопирован</b>","success");}}
 async function testSmartPayProfile_(profile){if(!canPermission("smartpayManage"))return;const id=profile==="general"?"smartPayGeneralTestStatus":"smartPayDebtTestStatus",box=document.getElementById(id);if(box)box.textContent=securityText_("Проверяем…","Санҷиш…");try{const r=await apiPost("smartpay.settings.test",{profile},{timeoutMs:30000});if(!r.success)throw new Error(r.message||"SmartPay");if(box)box.textContent=`✅ ${securityText_("Подключено","Пайваст шуд")}${r.merchantUnitUuid?" · "+r.merchantUnitUuid:""}`;}catch(e){if(box)box.textContent=`❌ ${e.message||String(e)}`;}}
 
+function openMobileMore_(){const el=document.getElementById("mobileMoreSheet");if(!el)return;el.classList.add("show");el.setAttribute("aria-hidden","false");document.body.classList.add("mobile-more-open-v593");}
+function closeMobileMore_(){const el=document.getElementById("mobileMoreSheet");if(!el)return;el.classList.remove("show");el.setAttribute("aria-hidden","true");document.body.classList.remove("mobile-more-open-v593");}
+function mobileMoreBackdropClose_(e){if(e?.target?.id==="mobileMoreSheet")closeMobileMore_();}
+function mobileMoreGo_(view){closeMobileMore_();showView(view);}
+function openMobileSmartPayCreate_(){if(!canPermission("smartpayGeneral"))return;showView("smartpay");setTimeout(()=>{const el=document.getElementById("smartPayGeneralName");if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.focus({preventScroll:true});}},180);}
+
 function showView(view){
-  const allowed=["active","add","paid","stats","smartpay","audit","guide","settings"];
+  const allowed=["active","add","paid","stats","smartpay","audit","guide","settings","actions"];
   if (!allowed.includes(view)) view="active";
   if(view==="add"&&!canPermission("createDebt"))view="active";
   if(view==="stats"&&!canPermission("viewStats"))view="active";
@@ -5969,7 +6079,12 @@ function showView(view){
   if(view==="smartpay"&&!canPermission("smartpayInvoices"))view="active";
   currentView=view;
   document.querySelectorAll(".app-view").forEach(el=>el.classList.toggle("active",el.id===`view-${view}`));
-  document.querySelectorAll(".nav-btn,.mobile-nav-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.view===view||(view==="audit"&&btn.classList.contains("mobile-nav-btn")&&btn.dataset.view==="settings")));
+  closeMobileMore_();
+  const moreViews=["smartpay","audit","guide","settings","actions"];
+  document.querySelectorAll(".nav-btn,.mobile-nav-btn").forEach(btn=>{
+    const active=btn.id==="mobileMoreBtn"?moreViews.includes(view):btn.dataset.view===view;
+    btn.classList.toggle("active",active);
+  });
   if (view==="active") {
     renderActiveDebtView_();
   } else if (view==="paid") {
