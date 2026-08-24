@@ -3264,7 +3264,7 @@ html[data-theme="dark"] .security-protection-v517{background:rgba(15,23,42,.42);
           <button class="settings-side-btn" data-settings-cat="appearance" type="button" onclick="setSettingsCategory_('appearance')">🎨 Интерфейс</button>
           <button class="settings-side-btn" data-settings-cat="notifications" type="button" onclick="setSettingsCategory_('notifications')">🔔 Уведомления</button>
           <button id="smartPaySettingsCategoryBtn" class="settings-side-btn" data-settings-cat="integrations" type="button" onclick="setSettingsCategory_('integrations')">🔗 Интеграции</button>
-          <button id="settingsSecurityCategoryBtn" class="settings-side-btn" data-settings-cat="security" type="button" onclick="setSettingsCategory_('security')">🔐 Безопасность</button>
+          <button id="settingsSecurityCategoryBtn" class="settings-side-btn" data-settings-cat="security" type="button" onclick="setSettingsCategory_('security')">🛡 Безопасность</button>
           <button id="settingsBackupCategoryBtn" class="settings-side-btn" data-settings-cat="backup" type="button" onclick="setSettingsCategory_('backup')">💾 Резервные копии</button>
           <button class="settings-side-btn" data-settings-cat="users" type="button" onclick="setSettingsCategory_('users')">👥 Пользователи</button>
           <button class="settings-side-btn" data-settings-cat="guide" type="button" onclick="setSettingsCategory_('guide')">📘 Инструкция</button>
@@ -3403,7 +3403,7 @@ html[data-theme="dark"] .security-protection-v517{background:rgba(15,23,42,.42);
           <div id="backupFileListV516" class="backup-file-list-v516"><div class="security-empty">Загрузка…</div></div>
         </div>
 
-        <div id="accountSecurityCard" style="display:none!important" data-settings-card="security" data-settings-keywords="security center пароль сессии устройства 2fa двухфакторная защита безопасность" class="card settings-card security-center-card settings-wide-card">
+        <div id="accountSecurityCard" data-settings-card="security" data-settings-keywords="security center пароль сессии устройства 2fa двухфакторная защита безопасность" class="card settings-card security-center-card settings-wide-card">
           <div class="security-center-head">
             <div><b id="accountSecurityTitle">🔐 Security Center</b><div id="securityCenterHint" class="settings-hint">Устройства, активные сессии и защита аккаунта.</div></div>
             <div class="security-center-head-actions"><button id="securityCenterRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityCenter()">Обновить</button></div>
@@ -3836,7 +3836,7 @@ html[data-theme="dark"] .security-protection-v517{background:rgba(15,23,42,.42);
 </div>
 
 <script>
-const VERSION="5.17.0";
+const VERSION="5.17.1";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -5211,9 +5211,12 @@ function applyPermissions_(){
   ["headerExportBtn","statsExportBtn","settingsExportBtn"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=exp?"":"none";});
   const uc=document.getElementById("usersSettingsCard");if(uc)uc.style.display=users?"":"none";
   const addUser=document.getElementById("addUserBtn");if(addUser)addUser.style.display=canPermission("manageUsers")?"":"none";
-  const securityCard=document.getElementById("securityEventsCard");if(securityCard)securityCard.style.display="none";
-  const allSessionsCard=document.getElementById("securityAllSessionsCard");if(allSessionsCard)allSessionsCard.style.display="none";
-  const securityCatBtn=document.getElementById("settingsSecurityCategoryBtn");if(securityCatBtn)securityCatBtn.style.display="none";
+  const hasSecurityPermission=canPermission("security");
+  const accountSecurityCard=document.getElementById("accountSecurityCard");if(accountSecurityCard)accountSecurityCard.style.display="";
+  const securityCard=document.getElementById("securityEventsCard");if(securityCard)securityCard.style.display=hasSecurityPermission?"":"none";
+  const allSessionsCard=document.getElementById("securityAllSessionsCard");if(allSessionsCard)allSessionsCard.style.display=hasSecurityPermission?"":"none";
+  const securityCatBtn=document.getElementById("settingsSecurityCategoryBtn");if(securityCatBtn)securityCatBtn.style.display="";
+  const protectionBox=document.getElementById("securityProtectionV517");if(protectionBox)protectionBox.style.display=hasSecurityPermission?"":"none";
   const auditAllowed=canPermission("viewAudit");
   const auditNav=document.getElementById("auditNavBtn");if(auditNav)auditNav.style.display=auditAllowed?"":"none";
   const auditView=document.getElementById("view-audit");if(auditView)auditView.style.display=auditAllowed?"":"none";
@@ -5230,7 +5233,6 @@ function applyPermissions_(){
   const smartPaySettingsCat=document.getElementById("smartPaySettingsCategoryBtn");if(smartPaySettingsCat)smartPaySettingsCat.style.display=ownerIntegrations?"":"none";
   const smartPayGeneralCard=document.getElementById("smartPayGeneralCreateCard");if(smartPayGeneralCard)smartPayGeneralCard.style.display=canPermission("smartpayGeneral")?"":"none";
   syncMobileSmartPayFabVisibilityV510_();
-  const settingsSecurityCat=document.getElementById("settingsSecurityCategoryBtn");if(settingsSecurityCat)settingsSecurityCat.style.display="none";
   const mobileExport=document.getElementById("mobileActionExportBtn");if(mobileExport)mobileExport.style.display=exp?"":"none";
   const responsibleWrap=document.getElementById("responsibleFieldWrap");if(responsibleWrap)responsibleWrap.style.display=create&&canPermission("assignDebts")?"block":"none";
   const mineBtn=document.getElementById("debtScopeMineBtn");if(mineBtn)mineBtn.style.display=currentUser?.role==="viewer"?"none":"";
@@ -7018,7 +7020,7 @@ function showView(view){
   if(view==="settings"){
     if(typeof setSettingsCategory_==="function") setSettingsCategory_(settingsCategoryFilter_||"all");
     loadNotifications({silent:true});
-    if(canPermission("security"))loadSecurityCenter();
+    loadSecurityCenter();
     if(canPermission("viewUsers"))loadUsers();
     if(canPermission("security"))loadSecurityEvents();
     if(currentUser?.role==="owner"){loadSmartPaySettings_();loadTelegramSecuritySettings_();loadBackupSecuritySettingsV516_();}
