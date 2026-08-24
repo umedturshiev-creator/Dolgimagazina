@@ -3908,7 +3908,7 @@ html[data-theme="light"] .security-explainer-v519{background:linear-gradient(135
 </div>
 
 <script>
-const VERSION="5.18.0";
+const VERSION="5.20.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4771,7 +4771,7 @@ function applyTranslations(){
   if (historyCloseBtn) historyCloseBtn.textContent = t("closeBtn");
 
   if (currentSeller) {
-    userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
+    userInfo.textContent = t("userInfo", { name: currentSeller, version: VERSION });
   }
 
   const exportTitleEl = document.getElementById("exportTitle");
@@ -4891,8 +4891,8 @@ function askDebtSaveMode(existingDebt, newDebt){
 
     info.innerHTML = `
       <div>${t("mergeDebtText")}</div>
-      <div style="margin-top:10px;"><b>${t("mergeClient")}:</b> ${clientName}</div>
-      <div><b>${t("mergePhone")}:</b> ${phone}</div>
+      <div style="margin-top:10px;"><b>${t("mergeClient")}:</b> ${escapeHtml(clientName)}</div>
+      <div><b>${t("mergePhone")}:</b> ${escapeHtml(phone)}</div>
       <div><b>${t("mergeCurrentRemainder")}:</b> ${currentRemainder} ${t("somoni")}</div>
       <div><b>${t("mergeNewAmount")}:</b> ${newAmount} ${t("somoni")}</div>
     `;
@@ -4960,6 +4960,13 @@ function renderSumHistory(notification){
 function securityText_(ru,tj){ return currentLanguage === "tj" ? tj : ru; }
 function canPermission(name){ return !!(currentUser && currentUser.permissions && currentUser.permissions[name]); }
 function escapeAttr_(value){ return escapeHtml(String(value||"")).replace(/'/g,"&#39;").replace(/\"/g,"&quot;"); }
+function escapeInlineJs_(value){
+  return String(value==null?"":value)
+    .replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"\\x22")
+    .replace(/</g,"\\x3C").replace(/>/g,"\\x3E").replace(/&/g,"\\x26")
+    .replace(/\r/g,"\\r").replace(/\n/g,"\\n").replace(/\u2028/g,"\\u2028").replace(/\u2029/g,"\\u2029");
+}
+function safeHttpsUrl_(value){try{const u=new URL(String(value||""),window.location.href);return u.protocol==="https:"?u.href:"";}catch(e){return "";}}
 function roleLabel_(role){
   const labels={
     owner:["Владелец","Соҳиб"],admin:["Администратор","Администратор"],manager:["Менеджер","Менеҷер"],cashier:["Кассир","Хазинадор"],viewer:["Просмотр","Намоиш"]
@@ -5364,7 +5371,7 @@ function renderSecurityDataProtectionV518_(){
   set("securityFormulaGuardV518",d.formulaInjectionProtection?securityText_("Защищено","Ҳифзшуда"):securityText_("Нет","Не"));
   set("securityDebtIntegrityV518",d.debtRecordIntegrity?securityText_("Проверяется","Санҷида мешавад"):securityText_("Нет","Не"));
   set("securityDataBlockedV518",String(Number(d.blocked24h||0)));
-  const badge=document.getElementById("securityDataBadgeV518");if(badge)badge.textContent=securityText_("Активна · v"+String(d.version||"5.18.0"),"Фаъол · v"+String(d.version||"5.18.0"));
+  const badge=document.getElementById("securityDataBadgeV518");if(badge)badge.textContent=securityText_("Активна · v"+String(d.version||"5.20.0"),"Фаъол · v"+String(d.version||"5.20.0"));
 }
 function renderSecurityCenter_(){
   const summary=document.getElementById("securityCenterSummary"), sessions=document.getElementById("securitySessionsList"), events=document.getElementById("securityOwnEvents"), allBox=document.getElementById("securityAllSessionsList");
@@ -5480,7 +5487,7 @@ async function saveOwnProfileV510_(){
   const name=String(document.getElementById("profileNameInputV510")?.value||"").trim();const btn=document.getElementById("profileSaveNameBtnV510"),msg=document.getElementById("profileMessageV510");
   if(name.length<2){if(msg)msg.textContent=securityText_("Укажите имя не короче 2 символов","Номро аз 2 аломат кам ворид накунед");return;}
   if(btn)btn.disabled=true;if(msg)msg.textContent=securityText_("Сохранение…","Захира…");
-  try{const r=await apiPost("auth.profile.update",{name});if(!r.success)throw new Error(r.message||"Error");if(r.user){currentUser={...(currentUser||{}),...r.user};currentSeller=currentUser.name||currentUser.email||"";cacheAuthUser_(currentUser);if(userInfo)userInfo.innerHTML=t("userInfo",{name:currentSeller,version:VERSION});}securityCenterData=null;renderProfileViewV510_();if(msg)msg.textContent=r.message||securityText_("Профиль обновлён","Профил нав шуд");showToast(`✅ <b>${securityText_("Профиль обновлён","Профил нав шуд")}</b>`,"success");await loadDebts();}
+  try{const r=await apiPost("auth.profile.update",{name});if(!r.success)throw new Error(r.message||"Error");if(r.user){currentUser={...(currentUser||{}),...r.user};currentSeller=currentUser.name||currentUser.email||"";cacheAuthUser_(currentUser);if(userInfo)userInfo.textContent=t("userInfo",{name:currentSeller,version:VERSION});}securityCenterData=null;renderProfileViewV510_();if(msg)msg.textContent=r.message||securityText_("Профиль обновлён","Профил нав шуд");showToast(`✅ <b>${securityText_("Профиль обновлён","Профил нав шуд")}</b>`,"success");await loadDebts();}
   catch(e){if(msg)msg.textContent=e.message||String(e);}finally{if(btn)btn.disabled=false;}
 }
 
@@ -5855,7 +5862,7 @@ function openApp(options={}){
   appContent.style.display = "block";
   document.body.classList.add("app-open");
   scheduleAuthSessionExpiryV510_();
-  userInfo.innerHTML = t("userInfo", { name: currentSeller, version: VERSION });
+  userInfo.textContent = t("userInfo", { name: currentSeller, version: VERSION });
   applyPermissions_();
   renderAccountSecurity_();
   if(options.initialData)applyDebtData_(options.initialData);
@@ -5907,7 +5914,7 @@ async function resumeSession_(){
           if(!authToken)return;
           try{
             const r=await apiPost("auth.me",{});
-            if(r&&r.success&&r.user){currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);setAuthSessionExpiryV510_(r.sessionExpiresAt,12);applyPermissions_();renderAccountSecurity_();renderProfileViewV510_();if(userInfo)userInfo.innerHTML=t("userInfo",{name:currentSeller,version:VERSION});}
+            if(r&&r.success&&r.user){currentUser=r.user;currentSeller=r.user.name||r.user.email||"";cacheAuthUser_(currentUser);setAuthSessionExpiryV510_(r.sessionExpiresAt,12);applyPermissions_();renderAccountSecurity_();renderProfileViewV510_();if(userInfo)userInfo.textContent=t("userInfo",{name:currentSeller,version:VERSION});}
           }catch(e){}
         },1200);
         return data;
@@ -6091,7 +6098,7 @@ function handlePhoneLookup(scrollToPreview = true){
     if (box) {
       box.className = "phone-lookup-box known-client";
       box.style.display = "block";
-      box.innerHTML = `<b>✅ ${t("phoneKnownClientTitle")}:</b> ${knownClient.client}<br>${t("phoneKnownClientText")}`;
+      box.innerHTML = `<b>✅ ${t("phoneKnownClientTitle")}:</b> ${escapeHtml(knownClient.client)}<br>${t("phoneKnownClientText")}`;
     }
   } else {
     if (lastAutoFilledClientName && client.value.trim() === lastAutoFilledClientName) {
@@ -6289,7 +6296,7 @@ function applyDebtData_(data){
 function renderDebtLoadError_(message){
   debtDataReady=false;
   const msg=escapeHtml(String(message||securityText_("Не удалось загрузить данные","Маълумот бор нашуд")));
-  if(debtList)debtList.innerHTML=`<div class="card debt-empty-v2 debt-load-error-v589"><b>⚠️ ${securityText_("Данные не загрузились","Маълумот бор нашуд")}</b><div>${msg}</div><button class="add-debt-btn" type="button" onclick="loadDebts({forceFresh:true})">${securityText_("Повторить","Такрор")}</button></div>`;
+  if(debtList)debtList.innerHTML=`<div class="card debt-empty-v2 debt-load-error-v589"><b>⚠️ ${securityText_("Данные не загрузились","Маълумот бор нашуд")}</b><div>${escapeHtml(msg)}</div><button class="add-debt-btn" type="button" onclick="loadDebts({forceFresh:true})">${securityText_("Повторить","Такрор")}</button></div>`;
   const count=document.getElementById("debtScopeCount");if(count)count.textContent=securityText_("Ошибка загрузки","Хатои боркунӣ");
 }
 async function loadDebts(options={}){
@@ -6350,9 +6357,10 @@ function statsPct_(value){ return `${Number(value||0).toFixed(1)}%`; }
 function statsCountText_(count){ return `${Number(count||0)} ${statsLocale_("зап.","сабт")}`; }
 function statsActionAttrs_(action,label=""){
   if(!action) return "";
-  const safeAction=escapeHtml(String(action)).replace(/'/g,"&#39;");
-  const safeLabel=escapeHtml(String(label||"")).replace(/'/g,"&#39;");
-  return ` stats-clickable" role="button" tabindex="0" data-stats-action="${safeAction}" onclick="openStatsDetail('${safeAction}','${safeLabel}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('${safeAction}','${safeLabel}')}"`;
+  const safeDataAction=escapeAttr_(String(action));
+  const safeAction=escapeInlineJs_(String(action));
+  const safeLabel=escapeInlineJs_(String(label||""));
+  return ` stats-clickable" role="button" tabindex="0" data-stats-action="${safeDataAction}" onclick="openStatsDetail('${safeAction}','${safeLabel}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('${safeAction}','${safeLabel}')}"`;
 }
 function statsKpi_(cls,icon,label,value,note="",action=""){
   const actionAttrs=statsActionAttrs_(action,label);
@@ -6364,7 +6372,7 @@ function statsMini_(label,value,sub="",extra="",action=""){
 }
 function statsDebtorRows_(list,mode){
   if(!Array.isArray(list)||!list.length) return `<div class="stats-empty">${statsLocale_("Нет данных","Маълумот нест")}</div>`;
-  return `<div class="stats-list">${list.map((d,i)=>`<div class="stats-list-row stats-clickable" role="button" tabindex="0" onclick="openStatsDetail('debt-row:${Number(d.row||0)}','${escapeHtml(String(d.client||'' )).replace(/'/g,"&#39;")}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('debt-row:${Number(d.row||0)}','${escapeHtml(String(d.client||'' )).replace(/'/g,"&#39;")}')}"><div class="stats-list-main"><div class="stats-list-name">${i+1}. ${escapeHtml(String(d.client||"—"))}</div><div class="stats-list-meta">${escapeHtml(String(d.phone||""))}${d.dueDate?` · ${statsLocale_("до","то")} ${escapeHtml(String(d.dueDate))}`:""}${Number(d.daysOverdue||0)>0?` · ${Number(d.daysOverdue)} ${statsLocale_("дн. просрочки","рӯз гузашта")}`:""}</div></div><div class="stats-list-value">${statsMoney_(d.remainder)} ${t("somoni")}</div></div>`).join("")}</div>`;
+  return `<div class="stats-list">${list.map((d,i)=>`<div class="stats-list-row stats-clickable" role="button" tabindex="0" onclick="openStatsDetail('debt-row:${Number(d.row||0)}','${escapeInlineJs_(String(d.client||''))}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatsDetail('debt-row:${Number(d.row||0)}','${escapeInlineJs_(String(d.client||''))}')}"><div class="stats-list-main"><div class="stats-list-name">${i+1}. ${escapeHtml(String(d.client||"—"))}</div><div class="stats-list-meta">${escapeHtml(String(d.phone||""))}${d.dueDate?` · ${statsLocale_("до","то")} ${escapeHtml(String(d.dueDate))}`:""}${Number(d.daysOverdue||0)>0?` · ${Number(d.daysOverdue)} ${statsLocale_("дн. просрочки","рӯз гузашта")}`:""}</div></div><div class="stats-list-value">${statsMoney_(d.remainder)} ${t("somoni")}</div></div>`).join("")}</div>`;
 }
 function statsPeriodData_(key){
   const e=lastStatsData?.analytics?.events||{};
@@ -6592,9 +6600,9 @@ function statsDebtActionsHtml_(d){
   const remainder=Number(d.remainder||0);
   const phone=normalizePhone(d.phone);
   const phoneFull=phone?`992${phone}`:"";
-  const safeClient=escapeHtml(String(d.client||"")).replace(/'/g,"&#39;");
-  const safePhone=escapeHtml(phone).replace(/'/g,"&#39;");
-  const safeDebtId=escapeHtml(String(d.id||"")).replace(/'/g,"&#39;");
+  const safeClient=escapeInlineJs_(String(d.client||""));
+  const safePhone=escapeInlineJs_(phone);
+  const safeDebtId=escapeInlineJs_(String(d.id||""));
   const actions=[];
   if(remainder>0&&canPermission("appendDebt"))actions.push(`<button class="stats-debt-action add" onclick="openAddToDebtModal(${row},'${safeClient}','${safePhone}',${remainder},'${safeDebtId}')">➕ ${t('addToDebtBtn')}</button>`);
   if(remainder>0&&canPermission("payDebt"))actions.push(`<button class="stats-debt-action pay" onclick="openPayment(${row},${remainder},'${safeDebtId}')">💵 ${t('payBtn')}</button>`);
@@ -6610,7 +6618,7 @@ function statsDebtItemsHtml_(list){
     const cls=Number(d.remainder||0)<=0?' paid-item':(d.isOverdue||days>0?' overdue-item':'');
     const phoneFull=phone?`992${phone}`:"";
     const waText=encodeURIComponent(Number(d.remainder||0)>0?t('waReminder',{amount:d.remainder}):"");
-    const phoneMeta=phoneFull?`<a class="stats-phone-link-v593" href="tel:+${phoneFull}">📞 ${escapeHtml(phone)}</a><a class="stats-wa-mini-v593" target="_blank" href="https://wa.me/${phoneFull}${waText?`?text=${waText}`:""}" title="WhatsApp">💬</a>`:`📞 ${escapeHtml(String(d.phone||''))}`;
+    const phoneMeta=phoneFull?`<a class="stats-phone-link-v593" href="tel:+${phoneFull}">📞 ${escapeHtml(phone)}</a><a class="stats-wa-mini-v593" target="_blank" rel="noopener" href="https://wa.me/${phoneFull}${waText?`?text=${waText}`:""}" title="WhatsApp">💬</a>`:`📞 ${escapeHtml(String(d.phone||''))}`;
     return `<div class="stats-detail-item${cls}"><div class="stats-detail-item-title">${escapeHtml(String(d.client||'—'))}</div><div class="stats-detail-item-meta">${phoneMeta}${d.dueDate?` · 📅 ${escapeHtml(String(d.dueDate))}`:''}${days>0?` · ⚠️ ${days} ${statsLocale_('дн. просрочки','рӯз гузашта')}`:''}</div><div class="stats-detail-item-value"><span>${statsLocale_('Долг','Қарз')}: ${statsMoney_(d.total)} ${t('somoni')}</span><span>${statsLocale_('Оплачено','Пардохт')}: ${statsMoney_(d.paid)} ${t('somoni')}</span><span>${statsLocale_('Остаток','Бақия')}: ${statsMoney_(d.remainder)} ${t('somoni')}</span></div>${statsDebtActionsHtml_(d)}</div>`;
   }).join('')}</div>`;
 }
@@ -6730,13 +6738,13 @@ function buildDebtCardHtml(d){
   const syncActiveV511_=backgroundSyncRowsV511_("active").has(Number(d.row||0));
   const rowClass=["debt-row-v2",state.kind==="overdue"?"is-overdue":"",state.kind==="warning"?"is-warning":"",state.kind==="paidpart"?"has-payment":"",syncFailedV511_?"sync-failed-v511":syncActiveV511_?"sync-pending-v511":""].filter(Boolean).join(" ");
   const phone=normalizePhone(d.phone),phoneFull="992"+phone,waText=encodeURIComponent(t("waReminder",{amount:d.remainder}));
-  const safeClientJs=String(d.client||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
-  const safePhoneJs=String(phone||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  const safeClientJs=escapeInlineJs_(String(d.client||""));
+  const safePhoneJs=escapeInlineJs_(String(phone||""));
   const sumHistoryHtml=renderSumHistory(d.notification);
   const historyItems=parseSumHistory(d.notification);
   const latestChange=historyItems.length?historyItems[historyItems.length-1]:"";
   const debtDetailSummary=String(d.debtDetailSummary||"").trim();
-  const safeDebtIdJs=String(d.id||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  const safeDebtIdJs=escapeInlineJs_(String(d.id||""));
   const responsibleName=String(d.responsibleName||"").trim();
   const responsibleDisplay=responsibleName||"—";
   let responsibleAction="";
@@ -6794,17 +6802,17 @@ function buildPaidDebtCardHtml(d){
   const closeBadge=manualClosed?securityText_("Закрыт вручную","Дастӣ баста шуд"):t("statusClosed");
   return `
     <div class="card paid-card" data-debt-id="${escapeAttr_(String(d.id||d.row||''))}">
-      <b>${d.client}</b><br>
+      <b>${escapeHtml(String(d.client||""))}</b><br>
       ${t("phonePlaceholder")}: ${phoneNormalized?`<a class="paid-phone-link-v593" href="tel:+992${phoneNormalized}">${escapeHtml(phoneNormalized)}</a>`:"—"}<br>
-      ${t("debtAmount")}: ${d.total} ${t("somoni")}<br>
+      ${t("debtAmount")}: ${debtMoneyCompact_(d.total)} ${t("somoni")}<br>
       ${t("paidAmount")}: <b>${debtMoneyCompact_(actualPaid)} ${t("somoni")}</b><br>
       ${manualClosed&&Number(d.manualClosedRemainder||0)>0?`${securityText_("Остаток при закрытии","Бақия ҳангоми бастан")}: <b>${debtMoneyCompact_(d.manualClosedRemainder)} ${t("somoni")}</b><br>`:""}
-      ${d.dueDate ? `${t("choosePayDate")}: ${d.dueDate}<br>` : ""}
-      ${d.seller ? `👤 ${d.seller}<br>` : ""}
+      ${d.dueDate ? `${t("choosePayDate")}: ${escapeHtml(String(d.dueDate))}<br>` : ""}
+      ${d.seller ? `👤 ${escapeHtml(String(d.seller))}<br>` : ""}
       ${d.responsibleName ? `👥 ${t("responsibleLabel")}: ${escapeHtml(String(d.responsibleName))}<br>` : ""}
-      ${d.debtDetailSummary?`<button type="button" class="debt-detail-chip-v513" onclick="openDebtDetailsV513_('${String(d.id||'').replace(/\\/g,"\\\\").replace(/'/g,"\\'")}','${String(d.client||'').replace(/\\/g,"\\\\").replace(/'/g,"\\'")}')">🛍 ${escapeHtml(String(d.debtDetailSummary))}</button><br>`:""}
-      <span class="paid-status">${manualClosed?"⛔":"✅"} ${closeBadge}</span>
-      <button class="history-action-btn" onclick="showHistory('${String(d.client).replace(/'/g,"\\'")}')">📂 ${t("historyBtn")}</button>
+      ${d.debtDetailSummary?`<button type="button" class="debt-detail-chip-v513" onclick="openDebtDetailsV513_('${escapeInlineJs_(String(d.id||''))}','${escapeInlineJs_(String(d.client||''))}')">🛍 ${escapeHtml(String(d.debtDetailSummary))}</button><br>`:""}
+      <span class="paid-status">${manualClosed?"⛔":"✅"} ${escapeHtml(closeBadge)}</span>
+      <button class="history-action-btn" onclick="showHistory('${escapeInlineJs_(String(d.client||''))}')">📂 ${t("historyBtn")}</button>
     </div>`;
 }
 
@@ -6910,17 +6918,17 @@ function smartPayRequestId_(){try{return crypto.randomUUID().replace(/-/g,"");}c
 function smartPayWaPhone_(phone){let d=String(phone||"").replace(/\D/g,"");if(d.startsWith("992")&&d.length>=12)return d;if(d.length>9)d=d.slice(-9);return d.length===9?"992"+d:d;}
 function smartPayStatusLabel_(status){const s=String(status||"open").toLowerCase();if(s==="charged")return securityText_("Оплачен","Пардохт шуд");if(s==="authorized")return securityText_("Удержан","Нигоҳ дошта шуд");if(s==="void")return securityText_("Отменен","Бекор шуд");if(s==="open")return securityText_("Ожидает оплаты","Интизори пардохт");return status||"open";}
 function copySmartPayLink_(link){if(!link)return;const ok=()=>showToast(`✅ <b>${securityText_("Ссылка скопирована","Пайванд нусха шуд")}</b>`,"success");if(navigator.clipboard?.writeText){navigator.clipboard.writeText(link).then(ok).catch(()=>{});return;}const ta=document.createElement("textarea");ta.value=link;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");ok();}catch(e){}ta.remove();}
-function smartPayResultHtml_(invoice){if(!invoice)return "";const link=String(invoice.paymentLink||"");const waPhone=smartPayWaPhone_(invoice.phone);const waText=encodeURIComponent(`${securityText_("Здравствуйте! Ссылка для оплаты SmartPay на сумму","Салом! Пайванди SmartPay барои пардохти")} ${debtMoneyCompact_(invoice.amount)} ${t("somoni")}: ${link}`);return `<b>${securityText_("Счет создан","Ҳисоб сохта шуд")}</b><div style="margin-top:4px">${escapeHtml(invoice.client||"")} · ${debtMoneyCompact_(invoice.amount)} ${t("somoni")}</div><div class="smartpay-link-actions"><button type="button" class="user-mini-btn" onclick="copySmartPayLink_('${escapeAttr_(link)}')">⧉ ${securityText_("Копировать","Нусха")}</button>${link?`<a class="add-debt-btn" target="_blank" href="${escapeAttr_(link)}">↗ ${securityText_("Открыть","Кушодан")}</a>`:""}${link&&waPhone?`<a class="add-debt-btn" target="_blank" href="https://wa.me/${waPhone}?text=${waText}">💬 WhatsApp</a>`:""}</div>`;}
+function smartPayResultHtml_(invoice){if(!invoice)return "";const link=safeHttpsUrl_(invoice.paymentLink||"");const safeLinkJs=escapeInlineJs_(link);const waPhone=smartPayWaPhone_(invoice.phone);const waText=encodeURIComponent(`${securityText_("Здравствуйте! Ссылка для оплаты SmartPay на сумму","Салом! Пайванди SmartPay барои пардохти")} ${debtMoneyCompact_(invoice.amount)} ${t("somoni")}: ${link}`);return `<b>${securityText_("Счет создан","Ҳисоб сохта шуд")}</b><div style="margin-top:4px">${escapeHtml(invoice.client||"")} · ${debtMoneyCompact_(invoice.amount)} ${t("somoni")}</div><div class="smartpay-link-actions">${link?`<button type="button" class="user-mini-btn" onclick="copySmartPayLink_('${safeLinkJs}')">⧉ ${securityText_("Копировать","Нусха")}</button><a class="add-debt-btn" target="_blank" rel="noopener" href="${escapeAttr_(link)}">↗ ${securityText_("Открыть","Кушодан")}</a>${waPhone?`<a class="add-debt-btn" target="_blank" rel="noopener" href="https://wa.me/${waPhone}?text=${waText}">💬 WhatsApp</a>`:""}`:`<span class="smartpay-empty">${securityText_("Ссылка SmartPay отклонена проверкой безопасности","Пайванди SmartPay аз санҷиши амният нагузашт")}</span>`}</div>`;}
 function renderSmartPayProfileInfo_(){const info=smartPayInfo_;if(!info)return;[["debt","smartPayDebtStatus","smartPayDebtMeta"],["general","smartPayGeneralStatus","smartPayGeneralMeta"]].forEach(([key,statusId,metaId])=>{const p=info.profiles?.[key]||{};const st=document.getElementById(statusId),meta=document.getElementById(metaId);if(st){st.textContent=p.configured?securityText_("Настроено","Танзим шуд"):securityText_("Не настроено","Танзим нашуд");st.className=`smartpay-status-badge ${p.configured?"ok":"off"}`;}if(meta)meta.textContent=`${p.environment==="production"?"Production":"Sandbox"} · SMS ${p.sms?securityText_("вкл.","фаъол"):securityText_("выкл.","хомӯш")}${p.keyMask?" · "+p.keyMask:""}`;});const w=info.webhook||{},box=document.getElementById("smartPayWebhookSummary");if(box){const ready=!!(w.debtConfigured||w.generalConfigured);const last=w.last;box.className=`smartpay-webhook-summary ${ready?"":"off"}`;box.innerHTML=ready?`⚡ <b>Webhook настроен.</b> Автопогашение долгов: <b>${w.autoDebtPayment?"включено":"выключено"}</b>${last?` · Последнее событие: ${escapeHtml(last.receivedAt||"")} · ${escapeHtml(last.result||last.status||"")}`:""}`:`⚠️ Webhook secret еще не настроен. Оплата не будет подтверждаться автоматически.`;}}
 async function loadSmartPayInfo_(){if(!canPermission("smartpayInvoices"))return;try{const r=await apiPost("smartpay.info",{});if(r.success){smartPayInfo_=r;renderSmartPayProfileInfo_();}}catch(e){}}
 async function loadSmartPayInvoices_(showLoader=false){if(!canPermission("smartpayInvoices"))return;const box=document.getElementById("smartPayInvoiceList");if(showLoader&&box)box.innerHTML=`<div class="smartpay-empty">⏳ ${securityText_("Загрузка счетов…","Боркунии ҳисобҳо…")}</div>`;try{const r=await apiPost("smartpay.invoice.list",{});if(!r.success)throw new Error(r.message||"SmartPay");smartPayInvoices_=Array.isArray(r.invoices)?r.invoices:[];if(r.info){smartPayInfo_=r.info;renderSmartPayProfileInfo_();}renderSmartPayInvoiceList_();}catch(e){if(box)box.innerHTML=`<div class="smartpay-empty">❌ ${escapeHtml(e.message||String(e))}</div>`;}}
-function renderSmartPayInvoiceList_(){const box=document.getElementById("smartPayInvoiceList");if(!box)return;const q=String(document.getElementById("smartPayInvoiceSearch")?.value||"").trim().toLowerCase();const list=smartPayInvoices_.filter(inv=>{const hay=[inv.client,inv.phone,inv.orderId,inv.invoiceUuid,inv.smartpayId,inv.status,inv.description,inv.createdByName].join(" ").toLowerCase();return !q||hay.includes(q);});if(!list.length){box.innerHTML=`<div class="smartpay-empty">${securityText_("Счетов пока нет","Ҳоло ҳисоб нест")}</div>`;return;}box.innerHTML=list.map(inv=>{const status=String(inv.status||"open"),statusClass=status.toLowerCase()==="charged"?"charged":status.toLowerCase()==="open"?"open":"";const link=String(inv.paymentLink||"");return `<div class="smartpay-invoice-row"><div><div class="smartpay-invoice-client">${escapeHtml(inv.client||"—")}</div><div class="smartpay-invoice-meta">${escapeHtml(inv.createdAt||"")} · ${escapeHtml(inv.phone||"")}</div></div><div><span class="smartpay-kind ${inv.profile==="debt"?"debt":""}">${inv.profile==="debt"?securityText_("Долг","Қарз"):securityText_("Счет","Ҳисоб")}</span><div class="smartpay-invoice-meta">${escapeHtml(inv.orderId||"")}</div></div><div><div class="smartpay-invoice-amount">${debtMoneyCompact_(inv.amount)} ${t("somoni")}</div><div class="smartpay-invoice-status ${statusClass}">${escapeHtml(smartPayStatusLabel_(status))}</div></div><div class="smartpay-row-actions">${link?`<button class="user-mini-btn" type="button" onclick="copySmartPayLink_('${escapeAttr_(link)}')">⧉</button><a class="user-mini-btn" target="_blank" href="${escapeAttr_(link)}">↗ ${securityText_("Ссылка","Пайванд")}</a>`:""}<button class="user-mini-btn" type="button" onclick="refreshSmartPayInvoice_('${escapeAttr_(inv.id)}')">↻ ${securityText_("Статус","Ҳолат")}</button></div></div>`;}).join("");}
+function renderSmartPayInvoiceList_(){const box=document.getElementById("smartPayInvoiceList");if(!box)return;const q=String(document.getElementById("smartPayInvoiceSearch")?.value||"").trim().toLowerCase();const list=smartPayInvoices_.filter(inv=>{const hay=[inv.client,inv.phone,inv.orderId,inv.invoiceUuid,inv.smartpayId,inv.status,inv.description,inv.createdByName].join(" ").toLowerCase();return !q||hay.includes(q);});if(!list.length){box.innerHTML=`<div class="smartpay-empty">${securityText_("Счетов пока нет","Ҳоло ҳисоб нест")}</div>`;return;}box.innerHTML=list.map(inv=>{const status=String(inv.status||"open"),statusClass=status.toLowerCase()==="charged"?"charged":status.toLowerCase()==="open"?"open":"";const link=safeHttpsUrl_(inv.paymentLink||"");const safeLinkJs=escapeInlineJs_(link);return `<div class="smartpay-invoice-row"><div><div class="smartpay-invoice-client">${escapeHtml(inv.client||"—")}</div><div class="smartpay-invoice-meta">${escapeHtml(inv.createdAt||"")} · ${escapeHtml(inv.phone||"")}</div></div><div><span class="smartpay-kind ${inv.profile==="debt"?"debt":""}">${inv.profile==="debt"?securityText_("Долг","Қарз"):securityText_("Счет","Ҳисоб")}</span><div class="smartpay-invoice-meta">${escapeHtml(inv.orderId||"")}</div></div><div><div class="smartpay-invoice-amount">${debtMoneyCompact_(inv.amount)} ${t("somoni")}</div><div class="smartpay-invoice-status ${statusClass}">${escapeHtml(smartPayStatusLabel_(status))}</div></div><div class="smartpay-row-actions">${link?`<button class="user-mini-btn" type="button" onclick="copySmartPayLink_('${safeLinkJs}')">⧉</button><a class="user-mini-btn" target="_blank" rel="noopener" href="${escapeAttr_(link)}">↗ ${securityText_("Ссылка","Пайванд")}</a>`:""}<button class="user-mini-btn" type="button" onclick="refreshSmartPayInvoice_('${escapeAttr_(inv.id)}')">↻ ${securityText_("Статус","Ҳолат")}</button></div></div>`;}).join("");}
 async function refreshSmartPayInvoice_(id){try{const r=await apiPost("smartpay.invoice.refresh",{id},{timeoutMs:30000});if(!r.success)throw new Error(r.message||"SmartPay");const idx=smartPayInvoices_.findIndex(x=>String(x.id)===String(id));if(idx>=0)smartPayInvoices_[idx]=r.invoice;renderSmartPayInvoiceList_();showToast(`✅ <b>${securityText_("Статус SmartPay обновлен","Ҳолати SmartPay нав шуд")}</b>`,"success");}catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}}
 function smartPayGeneralDirty_(){smartPayGeneralRequestId_=smartPayRequestId_();const r=document.getElementById("smartPayGeneralResult");if(r){r.className="smartpay-result";r.innerHTML="";}}
 async function createSmartPayGeneralInvoice_(){if(!canPermission("smartpayGeneral"))return;const client=String(document.getElementById("smartPayGeneralName")?.value||"").trim(),phone=String(document.getElementById("smartPayGeneralPhone")?.value||"").trim(),amount=Number(document.getElementById("smartPayGeneralAmount")?.value||0),description=String(document.getElementById("smartPayGeneralDescription")?.value||"").trim();if(!client||!phone||amount<2){showToast(`❌ ${securityText_("Заполните имя, телефон и сумму от 2 сомони","Ном, телефон ва маблағи аз 2 сомониро пур кунед")}`,"error");return;}if(!smartPayGeneralRequestId_)smartPayGeneralRequestId_=smartPayRequestId_();const btn=document.getElementById("smartPayGeneralCreateBtn"),box=document.getElementById("smartPayGeneralResult");if(btn)btn.disabled=true;if(box){box.className="smartpay-result show";box.innerHTML=`⏳ ${securityText_("Создаем счет…","Ҳисоб сохта мешавад…")}`;}try{const r=await apiPost("smartpay.invoice.create",{profile:"general",client,phone,amount,description,requestId:smartPayGeneralRequestId_},{timeoutMs:40000});if(!r.success)throw new Error(r.message||"SmartPay");if(box){box.className="smartpay-result show";box.innerHTML=smartPayResultHtml_(r.invoice);}await loadSmartPayInvoices_(false);}catch(e){if(box){box.className="smartpay-result show error";box.textContent=e.message||String(e);}}finally{if(btn)btn.disabled=false;}}
 function openSmartPayDebtInvoice_(row){if(!canPermission("smartpayInvoices"))return;const source=Array.isArray(allDebts)?allDebts:[];const d=source.find(x=>Number(x.row||0)===Number(row));if(!d){showToast(`❌ ${securityText_("Долг не найден","Қарз ёфт нашуд")}`,"error");return;}smartPayDebtContext_=d;smartPayDebtRequestId_=smartPayRequestId_();const sum=document.getElementById("smartPayDebtSummary"),amount=document.getElementById("smartPayDebtAmount"),desc=document.getElementById("smartPayDebtDescription"),result=document.getElementById("smartPayDebtResult");if(sum)sum.innerHTML=`<b>${escapeHtml(d.client||"")}</b><div>${escapeHtml(String(d.phone||""))} · ${securityText_("остаток","бақия")}: <b>${debtMoneyCompact_(d.remainder)} ${t("somoni")}</b></div>`;if(amount)amount.value=Number(d.remainder||0);if(desc)desc.value=`${securityText_("Оплата долга","Пардохти қарз")} — ${d.client||""}`;if(result){result.className="smartpay-result";result.innerHTML="";}const modal=document.getElementById("smartPayDebtInvoiceModal");if(modal)modal.style.display="flex";document.body.style.overflow="hidden";}
 function smartPayDebtDirty_(){smartPayDebtRequestId_=smartPayRequestId_();const r=document.getElementById("smartPayDebtResult");if(r){r.className="smartpay-result";r.innerHTML="";}}
-async function createSmartPayDebtInvoice_(){const d=smartPayDebtContext_;if(!d)return;const amount=Number(document.getElementById("smartPayDebtAmount")?.value||0),description=String(document.getElementById("smartPayDebtDescription")?.value||"").trim();if(amount<2||amount>Number(d.remainder||0)){showToast(`❌ ${securityText_("Проверьте сумму счета","Маблағи ҳисобро санҷед")}`,"error");return;}if(!smartPayDebtRequestId_)smartPayDebtRequestId_=smartPayRequestId_();const btn=document.getElementById("smartPayDebtCreateBtn"),box=document.getElementById("smartPayDebtResult");if(btn)btn.disabled=true;if(box){box.className="smartpay-result show";box.innerHTML=`⏳ ${securityText_("Создаем платежную ссылку…","Пайванди пардохт сохта мешавад…")}`;}try{const r=await apiPost("smartpay.invoice.create",{profile:"debt",debtRow:Number(d.row||0),amount,description,requestId:smartPayDebtRequestId_},{timeoutMs:40000});if(!r.success)throw new Error(r.message||"SmartPay");if(box){box.className="smartpay-result show";box.innerHTML=smartPayResultHtml_(r.invoice);}smartPayInvoices_=[r.invoice,...smartPayInvoices_.filter(x=>String(x.id)!==String(r.invoice.id))];renderSmartPayInvoiceList_();}catch(e){if(box){box.className="smartpay-result show error";box.textContent=e.message||String(e);}}finally{if(btn)btn.disabled=false;}}
+async function createSmartPayDebtInvoice_(){const d=smartPayDebtContext_;if(!d)return;const amount=Number(document.getElementById("smartPayDebtAmount")?.value||0),description=String(document.getElementById("smartPayDebtDescription")?.value||"").trim();if(amount<2||amount>Number(d.remainder||0)){showToast(`❌ ${securityText_("Проверьте сумму счета","Маблағи ҳисобро санҷед")}`,"error");return;}if(!smartPayDebtRequestId_)smartPayDebtRequestId_=smartPayRequestId_();const btn=document.getElementById("smartPayDebtCreateBtn"),box=document.getElementById("smartPayDebtResult");if(btn)btn.disabled=true;if(box){box.className="smartpay-result show";box.innerHTML=`⏳ ${securityText_("Создаем платежную ссылку…","Пайванди пардохт сохта мешавад…")}`;}try{const r=await apiPost("smartpay.invoice.create",{profile:"debt",debtRow:Number(d.row||0),debtId:String(d.id||""),amount,description,requestId:smartPayDebtRequestId_},{timeoutMs:40000});if(!r.success)throw new Error(r.message||"SmartPay");if(box){box.className="smartpay-result show";box.innerHTML=smartPayResultHtml_(r.invoice);}smartPayInvoices_=[r.invoice,...smartPayInvoices_.filter(x=>String(x.id)!==String(r.invoice.id))];renderSmartPayInvoiceList_();}catch(e){if(box){box.className="smartpay-result show error";box.textContent=e.message||String(e);}}finally{if(btn)btn.disabled=false;}}
 function closeSmartPayDebtInvoice_(){const m=document.getElementById("smartPayDebtInvoiceModal");if(m)m.style.display="none";document.body.style.overflow="";}
 function smartPayDebtBackdropClose_(e){if(e?.target?.id==="smartPayDebtInvoiceModal")closeSmartPayDebtInvoice_();}
 async function loadSmartPaySettings_(){if(currentUser?.role!=="owner")return;const msg=document.getElementById("smartPaySettingsMessage");if(msg)msg.textContent=securityText_("Загрузка…","Боркунӣ…");try{const r=await apiPost("smartpay.settings.get",{});if(!r.success)throw new Error(r.message||"SmartPay");document.getElementById("smartPayDebtKeyStatus").textContent=r.debt.configured?`${securityText_("Настроен","Танзим шуд")} · ${r.debt.keyMask}`:securityText_("Не настроен","Танзим нашуд");document.getElementById("smartPayGeneralKeyStatus").textContent=r.general.configured?`${securityText_("Настроен","Танзим шуд")} · ${r.general.keyMask}`:securityText_("Не настроен","Танзим нашуд");document.getElementById("smartPayDebtEnv").value=r.debt.environment||"sandbox";document.getElementById("smartPayGeneralEnv").value=r.general.environment||"sandbox";document.getElementById("smartPayDebtSms").checked=!!r.debt.sms;document.getElementById("smartPayGeneralSms").checked=!!r.general.sms;document.getElementById("smartPayLifetimeMinutes").value=Number(r.lifetimeMinutes||30);document.getElementById("smartPayReturnUrl").value=r.returnUrl||"";document.getElementById("smartPayDebtKeyInput").value="";document.getElementById("smartPayGeneralKeyInput").value="";const w=r.webhook||{};document.getElementById("smartPayWebhookUrl").value=w.url||"";document.getElementById("smartPayDebtWebhookStatus").textContent=w.debtConfigured?`${securityText_("Настроен","Танзим шуд")} · ${w.debtMask||""}`:securityText_("Не настроен","Танзим нашуд");document.getElementById("smartPayGeneralWebhookStatus").textContent=w.generalConfigured?`${securityText_("Настроен","Танзим шуд")} · ${w.generalMask||""}`:securityText_("Не настроен","Танзим нашуд");document.getElementById("smartPayDebtWebhookSecret").value="";document.getElementById("smartPayGeneralWebhookSecret").value="";document.getElementById("smartPayAutoDebtPayment").checked=w.autoDebtPayment!==false;const state=document.getElementById("smartPayWebhookState");if(state){const last=w.last;if(last){state.className=`smartpay-webhook-state ${String(last.status||"")==="PROCESSED"?"ok":"warn"}`;state.textContent=`Последнее событие: ${last.receivedAt||"—"} · ${last.orderId||""} · ${last.amountSomoni||0} сомони · ${last.result||last.status||""}${last.bank?" · "+last.bank:""}`;}else{state.className="smartpay-webhook-state";state.textContent="Webhook еще не получал событий.";}}if(msg)msg.textContent="";}catch(e){if(msg)msg.textContent=e.message||String(e);}}
@@ -6972,7 +6980,7 @@ function renderBackupSecurityV516_(){
   if(folder){folder.href=r.folderUrl||"#";folder.style.display=r.folderUrl?"inline-flex":"none";}
   if(summary)summary.innerHTML=`<div class="backup-chip-v516 ${r.enabled&&r.triggerActive?"ok":"warn"}"><span>${securityText_("Автобэкап","Автонусха")}</span><b>${r.enabled&&r.triggerActive?securityText_("Включён","Фаъол"):securityText_("Выключен","Хомӯш")}</b></div><div class="backup-chip-v516"><span>${securityText_("Последняя копия","Нусхаи охирин")}</span><b>${r.lastAt?escapeHtml(backupDateLabelV516_(r.lastAt)):"—"}</b></div><div class="backup-chip-v516"><span>${securityText_("Хранение","Нигоҳдорӣ")}</span><b>${Number(r.retentionDays||30)} ${securityText_("дн.","рӯз")}</b></div>`;
   const files=Array.isArray(r.files)?r.files:[];
-  if(list)list.innerHTML=files.length?files.map(f=>`<div class="backup-file-v516"><div class="backup-file-icon-v516">💾</div><div class="backup-file-main-v516"><b>${escapeHtml(backupReasonLabelV516_(f.reason))} · ${escapeHtml(backupDateLabelV516_(f.createdAt))}</b><small>${escapeHtml(f.name||"")}${f.version?` · v${escapeHtml(f.version)}`:""}</small></div><div class="backup-file-actions-v516"><a class="user-mini-btn" href="${escapeAttr_(f.url||"#")}" target="_blank" rel="noopener">Drive</a><button class="backup-restore-btn-v516" type="button" onclick="restoreBackupV516_('${escapeAttr_(f.id)}','${escapeAttr_(f.name)}')">Восстановить</button></div></div>`).join(""):`<div class="security-empty">${securityText_("Резервных копий пока нет","Ҳоло нусхаи эҳтиётӣ нест")}</div>`;
+  if(list)list.innerHTML=files.length?files.map(f=>`<div class="backup-file-v516"><div class="backup-file-icon-v516">💾</div><div class="backup-file-main-v516"><b>${escapeHtml(backupReasonLabelV516_(f.reason))} · ${escapeHtml(backupDateLabelV516_(f.createdAt))}</b><small>${escapeHtml(f.name||"")}${f.version?` · v${escapeHtml(f.version)}`:""}</small></div><div class="backup-file-actions-v516"><a class="user-mini-btn" href="${escapeAttr_(f.url||"#")}" target="_blank" rel="noopener">Drive</a><button class="backup-restore-btn-v516" type="button" onclick="restoreBackupV516_('${escapeInlineJs_(f.id)}','${escapeInlineJs_(f.name)}')">Восстановить</button></div></div>`).join(""):`<div class="security-empty">${securityText_("Резервных копий пока нет","Ҳоло нусхаи эҳтиётӣ нест")}</div>`;
 }
 async function loadBackupSecuritySettingsV516_(){
   if(currentUser?.role!=="owner")return;initBackupHourOptionsV516_();const msg=document.getElementById("backupSecurityMessageV516");if(msg)msg.textContent=securityText_("Проверяем резервные копии…","Нусхаҳои эҳтиётӣ санҷида мешаванд…");
@@ -7312,7 +7320,7 @@ function showHistory(name){
     let html = "";
     if(data.history && data.history.length>0){
       data.history.forEach(h=>{
-        html += `📅 ${h.date}<br>💰 ${h.amount} ${t("somoni")}<br>👤 ${h.seller}<hr>`;
+        html += `📅 ${escapeHtml(h.date)}<br>💰 ${escapeHtml(h.amount)} ${t("somoni")}<br>👤 ${escapeHtml(h.seller)}<hr>`;
       });
     } else {
       html = t("noPayments");
