@@ -3940,7 +3940,7 @@ html[data-theme="dark"] .trash-card-v521{background:linear-gradient(145deg,rgba(
 </div>
 
 <script>
-const VERSION="5.21.0";
+const VERSION="5.21.1";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -5552,7 +5552,10 @@ let trashDeleteTargetV521_=null;
 function deleteDebtFromEditV521_(){
   if(currentUser?.role!=="owner")return;
   const row=Number(document.getElementById("debtEditRowV510")?.value||0),d=(allDebts||[]).find(x=>Number(x.row||0)===row);if(!d)return;
-  closeDebtEditV510_();openTrashDeleteV521_(row,String(d.id||""),String(d.client||""),Number(d.total||0),Number(d.paid||0),Number(d.remainder||0),String(d.status||""));
+  // Не накладываем модальные окна: сначала полностью закрываем редактор,
+  // даём браузеру отрисовать основную страницу и только потом открываем удаление.
+  closeDebtEditV510_();
+  requestAnimationFrame(()=>setTimeout(()=>openTrashDeleteV521_(row,String(d.id||""),String(d.client||""),Number(d.total||0),Number(d.paid||0),Number(d.remainder||0),String(d.status||"")),70));
 }
 function setupTrashReasonOptionsV521_(){
   const sel=document.getElementById("trashDeleteReasonSelectV521");if(!sel)return;
@@ -5578,7 +5581,27 @@ async function confirmTrashDeleteV521_(){
   if(currentUser?.role!=="owner"||!trashDeleteTargetV521_)return;
   const sel=String(document.getElementById("trashDeleteReasonSelectV521")?.value||""),other=String(document.getElementById("trashDeleteOtherV521")?.value||"").trim(),reason=sel==="Другое"?other:(sel+(other?": "+other:""));
   const msg=document.getElementById("trashDeleteMessageV521"),btn=document.getElementById("trashDeleteConfirmBtnV521");if(!reason||reason.length<2){if(msg)msg.textContent=securityText_("Укажите причину удаления","Сабаби ҳазфро нишон диҳед");return;}
-  if(btn)btn.disabled=true;try{const target={...trashDeleteTargetV521_};const r=await apiPost("debt.trash.delete",{row:target.row,debtId:target.debtId,reason},{timeoutMs:35000});if(!r.success)throw new Error(r.message||securityText_("Не удалось удалить запись","Ҳазфи сабт имкон нашуд"));closeTrashDeleteModalV521_();showToast(`✅ <b>${securityText_("Запись перемещена в удалённые","Сабт ба рӯйхати ҳазфшуда гузашт")}</b>`,"success");await loadDebts({forceFresh:true});if(currentView==="trash")await loadDeletedDebtsV521_(true);}catch(e){if(msg)msg.textContent=e.message||String(e);}finally{if(btn)btn.disabled=false;}
+  const target={...trashDeleteTargetV521_};
+  if(btn)btn.disabled=true;
+  // Критическое действие может запросить повторное подтверждение личности.
+  // Сначала полностью закрываем окно удаления, затем разрешаем открыть подтверждение,
+  // чтобы модальные окна никогда не отображались одно поверх другого.
+  closeTrashDeleteModalV521_();
+  await new Promise(resolve=>requestAnimationFrame(()=>setTimeout(resolve,70)));
+  try{
+    const r=await apiPost("debt.trash.delete",{row:target.row,debtId:target.debtId,reason},{timeoutMs:35000});
+    if(!r.success){
+      if(r.code==="REAUTH_REQUIRED"){
+        showToast(`ℹ️ <b>${securityText_("Удаление отменено","Ҳазф бекор шуд")}</b>`,"info");
+        return;
+      }
+      throw new Error(r.message||securityText_("Не удалось удалить запись","Ҳазфи сабт имкон нашуд"));
+    }
+    showToast(`✅ <b>${securityText_("Запись перемещена в удалённые","Сабт ба рӯйхати ҳазфшуда гузашт")}</b>`,"success");
+    await loadDebts({forceFresh:true});if(currentView==="trash")await loadDeletedDebtsV521_(true);
+  }catch(e){
+    showToast(`❌ <b>${securityText_("Не удалось удалить запись","Ҳазфи сабт имкон нашуд")}</b><br>${escapeHtml(e.message||String(e))}`,"error");
+  }finally{if(btn)btn.disabled=false;}
 }
 function trashSearchMatchesV521_(d,q){q=normalizeDebtSearchText_(q);if(!q)return true;const hay=normalizeDebtSearchText_([d.debtId,d.client,d.phone,d.status,d.reason,d.deletedByUserName,d.responsibleName,d.total,d.paid,d.remainder].join(" "));return q.split(" ").filter(Boolean).every(x=>hay.includes(x));}
 function renderDeletedDebtsV521_(){
