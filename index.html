@@ -2871,6 +2871,12 @@ html[data-theme="dark"] .security-protection-v517{background:rgba(15,23,42,.42);
 html[data-theme="dark"] .security-data-v518{background:linear-gradient(135deg,rgba(37,99,235,.10),rgba(16,185,129,.055));border-color:rgba(96,165,250,.14)}html[data-theme="dark"] .security-data-item-v518{background:rgba(30,41,59,.70);border-color:rgba(148,163,184,.10)}html[data-theme="dark"] .security-data-badge-v518{color:#86efac;background:rgba(34,197,94,.12)}
 @media(max-width:900px){.security-data-grid-v518{grid-template-columns:repeat(2,minmax(0,1fr))}.security-data-item-v518:last-child{grid-column:1/-1}}@media(max-width:480px){.security-data-head-v518{align-items:flex-start;flex-direction:column}.security-data-grid-v518{grid-template-columns:1fr 1fr}}
 
+/* ===== SECURITY DATA CARD VISIBILITY FIX v5.18.1 ===== */
+.security-data-card-v518{padding:0!important;overflow:hidden!important;border:1px solid rgba(96,165,250,.18)!important;box-shadow:0 12px 30px rgba(37,99,235,.06)!important}
+.security-data-card-v518 .security-data-v518{margin:0!important;border:0!important;border-radius:20px!important;padding:16px 17px!important;background:linear-gradient(135deg,rgba(37,99,235,.075),rgba(16,185,129,.045))!important}
+.security-data-card-v518 .security-data-head-v518 b{font-size:15px!important}.security-data-card-v518 .security-data-head-v518 small{font-size:10px!important;max-width:860px}.security-data-card-v518 .security-data-grid-v518{margin-top:13px!important}.security-data-card-v518 .security-data-item-v518{min-height:68px!important;padding:11px 12px!important;border-radius:13px!important;display:flex!important;flex-direction:column!important;justify-content:center!important}.security-data-card-v518 .security-data-item-v518 span{font-size:9px!important}.security-data-card-v518 .security-data-item-v518 b{margin-top:4px!important;font-size:12px!important}
+html[data-theme="dark"] .security-data-card-v518{border-color:rgba(96,165,250,.14)!important}.security-data-standalone-v518{display:block!important;visibility:visible!important}
+
 </style>
 </head>
 <body>
@@ -3408,6 +3414,19 @@ html[data-theme="dark"] .security-data-v518{background:linear-gradient(135deg,rg
           <div id="backupFileListV516" class="backup-file-list-v516"><div class="security-empty">Загрузка…</div></div>
         </div>
 
+        <div id="securityDataProtectionCardV518" data-settings-card="security" data-settings-keywords="защита данных операций integrity инъекции повтор операций финансовая целостность безопасность" class="card settings-card settings-wide-card security-data-card-v518">
+          <div id="securityDataProtectionV518" class="security-data-v518 security-data-standalone-v518">
+            <div class="security-data-head-v518"><div><b>🔒 Защита данных и операций</b><small>Контроль серверных запросов, защита от повторного выполнения, инъекций и повреждения финансовых данных.</small></div><span id="securityDataBadgeV518" class="security-data-badge-v518">Активна</span></div>
+            <div class="security-data-grid-v518">
+              <div class="security-data-item-v518 good"><span>Проверка запросов</span><b id="securityStrictValidationV518">Включена</b></div>
+              <div class="security-data-item-v518 good"><span>Повтор операций</span><b id="securityAntiReplayV518">Защищён</b></div>
+              <div class="security-data-item-v518 good"><span>Формулы / инъекции</span><b id="securityFormulaGuardV518">Защищено</b></div>
+              <div class="security-data-item-v518 good"><span>Целостность долга</span><b id="securityDebtIntegrityV518">Проверяется</b></div>
+              <div class="security-data-item-v518"><span>Блокировок за 24 ч</span><b id="securityDataBlockedV518">0</b></div>
+            </div>
+          </div>
+        </div>
+
         <div id="accountSecurityCard" data-settings-card="security" data-settings-keywords="security center пароль сессии устройства 2fa двухфакторная защита безопасность" class="card settings-card security-center-card settings-wide-card">
           <div class="security-center-head">
             <div><b id="accountSecurityTitle">🔐 Security Center</b><div id="securityCenterHint" class="settings-hint">Устройства, активные сессии и защита аккаунта.</div></div>
@@ -3418,16 +3437,6 @@ html[data-theme="dark"] .security-data-v518{background:linear-gradient(135deg,rg
             <div class="security-protection-head-v517"><div><b>🛡 Мониторинг угроз</b><small>Оценка подозрительной активности за последние 24 часа и аварийная блокировка доступа сотрудников.</small></div><span id="securityRiskBadgeV517" class="security-risk-badge-v517 low">Низкий риск</span></div>
             <div class="security-protection-grid-v517"><div class="security-protection-metric-v517"><span>Уровень риска</span><b id="securityRiskLevelV517">—</b></div><div class="security-protection-metric-v517"><span>Индекс угроз</span><b id="securityThreatScoreV517">0 / 100</b></div><div class="security-protection-metric-v517"><span>Сигналы за 24 ч</span><b id="securityThreatSignalsV517">0</b></div></div>
             <div id="securityLockdownBoxV517" class="security-lockdown-v517"><div class="security-lockdown-copy-v517"><b id="securityLockdownTitleV517">Аварийная защита выключена</b><small id="securityLockdownHintV517">При подозрении на взлом владелец может одним действием завершить сессии сотрудников и временно запретить им вход.</small></div><button id="securityLockdownBtnV517" class="security-lockdown-btn-v517 enable" type="button" onclick="toggleSecurityLockdownV517_(true)">Включить защиту</button></div>
-          </div>
-          <div id="securityDataProtectionV518" class="security-data-v518">
-            <div class="security-data-head-v518"><div><b>🔒 Защита данных и операций</b><small>Сервер проверяет содержимое запросов, финансовую целостность долга и повторное выполнение операций.</small></div><span id="securityDataBadgeV518" class="security-data-badge-v518">Активна</span></div>
-            <div class="security-data-grid-v518">
-              <div class="security-data-item-v518 good"><span>Проверка запросов</span><b id="securityStrictValidationV518">Включена</b></div>
-              <div class="security-data-item-v518 good"><span>Повтор операций</span><b id="securityAntiReplayV518">Защищён</b></div>
-              <div class="security-data-item-v518 good"><span>Формулы / инъекции</span><b id="securityFormulaGuardV518">Защищено</b></div>
-              <div class="security-data-item-v518 good"><span>Целостность долга</span><b id="securityDebtIntegrityV518">Проверяется</b></div>
-              <div class="security-data-item-v518"><span>Блокировок за 24 ч</span><b id="securityDataBlockedV518">0</b></div>
-            </div>
           </div>
           <div class="security-account-line"><div id="accountSecurityInfo" class="security-account-main"></div><button id="changePasswordBtn" class="add-debt-btn" type="button" onclick="openChangePasswordModal()">Изменить пароль</button></div>
           <div class="two-factor-box" id="twoFactorBox">
