@@ -2844,9 +2844,26 @@ html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94)
 html[data-theme="dark"] .debt-details-comment-v513,html[data-theme="dark"] .debt-item-row-v513 input,html[data-theme="dark"] .debt-detail-item-view-v513{background:rgba(30,41,59,.78);border-color:rgba(148,163,184,.14)}html[data-theme="dark"] .debt-detail-chip-v513{color:#fbbf24;background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.15)}
 @media(max-width:760px){.debt-details-toggle-v513{font-size:12px!important}.debt-item-row-v513{grid-template-columns:minmax(0,1fr) 58px 78px 30px;gap:5px}.debt-item-row-v513 input{font-size:11px;padding:8px 7px}.debt-detail-chip-v513{display:flex!important;width:fit-content!important;max-width:100%!important;font-size:10px!important}.debt-details-modal-v513 .modal-content{width:min(96vw,650px)}.debt-details-modal-list-v513{max-height:66vh}}
 
+
+/* ===== SECURITY HARDENING PHASE 2 v5.15.0 ===== */
+.reauth-modal-v515 .modal-content{max-width:460px!important}
+.reauth-head-v515{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px}.reauth-icon-v515{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(59,130,246,.10);font-size:20px;flex:0 0 auto}.reauth-copy-v515 h3{margin:0 0 4px}.reauth-copy-v515 p{margin:0;color:var(--text-3);font-size:11px;line-height:1.45}.reauth-actions-v515{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}.reauth-actions-v515 button{margin:0!important}.reauth-note-v515{margin-top:9px;padding:9px 10px;border-radius:12px;background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.13);font-size:10px;color:var(--text-3);line-height:1.45}
+@media(max-width:640px){.reauth-modal-v515 .modal-content{width:min(94vw,460px)!important}.reauth-actions-v515{grid-template-columns:1fr}.reauth-actions-v515 button{width:100%!important}}
+
 </style>
 </head>
 <body>
+
+<div class="modal reauth-modal-v515" id="reauthModalV515" style="display:none;">
+  <div class="modal-content">
+    <div class="reauth-head-v515"><div class="reauth-icon-v515">🔐</div><div class="reauth-copy-v515"><h3 id="reauthTitleV515">Подтверждение личности</h3><p id="reauthSubtitleV515">Для критического действия повторно подтвердите вход.</p></div></div>
+    <div class="smartpay-field"><label id="reauthPasswordLabelV515">Текущий пароль</label><input id="reauthPasswordV515" type="password" autocomplete="current-password" placeholder="Введите текущий пароль"></div>
+    <div id="reauth2faWrapV515" class="smartpay-field" style="display:none;margin-top:9px"><label id="reauth2faLabelV515">Код 2FA</label><input id="reauth2faV515" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="6-значный код или резервный код"></div>
+    <div id="reauthMessageV515" class="login-message"></div>
+    <div class="reauth-note-v515" id="reauthNoteV515">Подтверждение действует 5 минут только в текущей сессии.</div>
+    <div class="reauth-actions-v515"><button id="reauthConfirmBtnV515" class="add-debt-btn" type="button" onclick="submitReauthV515_()">Подтвердить</button><button class="user-mini-btn" type="button" onclick="cancelReauthV515_()">Отмена</button></div>
+  </div>
+</div>
 
 <div class="modal" id="logoutModal">
   <div class="modal-content" style="text-align:center;">
@@ -3778,7 +3795,7 @@ html[data-theme="dark"] .debt-details-comment-v513,html[data-theme="dark"] .debt
 </div>
 
 <script>
-const VERSION="5.13.0";
+const VERSION="5.15.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4837,8 +4854,42 @@ function setMessage_(id,text,type=""){
   const el=document.getElementById(id); if(!el)return; el.textContent=text||""; el.className="login-message"+(type?` ${type}`:"");
 }
 function togglePasswordField(id,btn){ const input=document.getElementById(id); if(!input)return; input.type=input.type==="password"?"text":"password"; if(btn)btn.textContent=input.type==="password"?"👁":"🙈"; }
+let securityReauthTokenV515_="";
+let securityReauthExpiresAtV515_=0;
+let reauthResolverV515_=null;
+const SECURITY_CRITICAL_ACTIONS_V515=new Set(["users.create","users.update","passkey.remove","smartpay.settings.save","security.telegram.save"]);
+function validReauthTokenV515_(){return !!securityReauthTokenV515_&&Date.now()<securityReauthExpiresAtV515_-5000;}
+function closeReauthModalV515_(){const m=document.getElementById("reauthModalV515");if(m)m.style.display="none";const p=document.getElementById("reauthPasswordV515"),c=document.getElementById("reauth2faV515");if(p)p.value="";if(c)c.value="";}
+function cancelReauthV515_(){closeReauthModalV515_();if(reauthResolverV515_){const r=reauthResolverV515_;reauthResolverV515_=null;r("");}}
+function requestReauthV515_(reason=""){
+  if(validReauthTokenV515_())return Promise.resolve(securityReauthTokenV515_);
+  if(reauthResolverV515_)return Promise.resolve("");
+  const modal=document.getElementById("reauthModalV515"),wrap=document.getElementById("reauth2faWrapV515"),msg=document.getElementById("reauthMessageV515"),sub=document.getElementById("reauthSubtitleV515"),note=document.getElementById("reauthNoteV515");
+  if(wrap)wrap.style.display=currentUser?.twoFactorEnabled?"block":"none";
+  if(msg){msg.textContent="";msg.className="login-message";}
+  if(sub)sub.textContent=reason||securityText_("Для критического действия повторно подтвердите вход.","Барои амали муҳим воридшавиро аз нав тасдиқ кунед.");
+  if(note)note.textContent=securityText_("Подтверждение действует 5 минут только в текущей сессии.","Тасдиқ 5 дақиқа танҳо дар сессияи ҷорӣ амал мекунад.");
+  if(modal)modal.style.display="flex";
+  setTimeout(()=>document.getElementById("reauthPasswordV515")?.focus(),50);
+  return new Promise(resolve=>{reauthResolverV515_=resolve;});
+}
+async function submitReauthV515_(){
+  const password=String(document.getElementById("reauthPasswordV515")?.value||""),code=String(document.getElementById("reauth2faV515")?.value||"").trim(),msg=document.getElementById("reauthMessageV515"),btn=document.getElementById("reauthConfirmBtnV515");
+  if(!password){if(msg){msg.textContent=securityText_("Введите текущий пароль","Пароли ҷориро ворид кунед");msg.className="login-message error";}return;}
+  if(currentUser?.twoFactorEnabled&&!code){if(msg){msg.textContent=securityText_("Введите код 2FA","Рамзи 2FA-ро ворид кунед");msg.className="login-message error";}return;}
+  if(btn)btn.disabled=true;
+  try{
+    const r=await apiPost("auth.reauth",{currentPassword:password,code},{_skipReauth:true});
+    if(!r.success){if(msg){msg.textContent=r.message||"Error";msg.className="login-message error";}return;}
+    securityReauthTokenV515_=String(r.reauthToken||"");securityReauthExpiresAtV515_=Date.now()+Number(r.expiresSeconds||300)*1000;
+    closeReauthModalV515_();if(reauthResolverV515_){const resolve=reauthResolverV515_;reauthResolverV515_=null;resolve(securityReauthTokenV515_);}
+  }catch(e){if(msg){msg.textContent=e.message||String(e);msg.className="login-message error";}}
+  finally{if(btn)btn.disabled=false;}
+}
 async function apiPost(action,payload={},options={}){
-  const body={action,payload};
+  let requestPayload={...(payload||{})};
+  if(!options._skipReauth&&SECURITY_CRITICAL_ACTIONS_V515.has(String(action||""))&&validReauthTokenV515_()&&!requestPayload.reauthToken)requestPayload.reauthToken=securityReauthTokenV515_;
+  const body={action,payload:requestPayload};
   const publicAction=options.public===true;
   const tokenOverride=Object.prototype.hasOwnProperty.call(options,"token")?options.token:null;
   const token=tokenOverride!==null?tokenOverride:(publicAction?"":authToken);
@@ -4861,9 +4912,14 @@ async function apiPost(action,payload={},options={}){
   if(!publicAction && data && data.success===false && authCodes.includes(data.code)){
     clearAuthSession_(); showLogin_(); setMessage_("loginMessage",data.message||securityText_("Войдите снова","Аз нав ворид шавед"),"error");
   }
+  if(!publicAction&&!options._skipReauth&&data&&data.success===false&&data.code==="REAUTH_REQUIRED"){
+    securityReauthTokenV515_="";securityReauthExpiresAtV515_=0;
+    const stepToken=await requestReauthV515_(data.message||"");
+    if(stepToken)return apiPost(action,{...(payload||{}),reauthToken:stepToken},{...options,_skipReauth:true});
+  }
   return data||{};
 }
-function clearAuthSession_(){ const syncBar=document.getElementById("backgroundSyncBarV511");if(syncBar)syncBar.classList.remove("show","failed"); stopNotificationPolling_(); if(authSessionExpiryTimerV510_)clearTimeout(authSessionExpiryTimerV510_);authSessionExpiryTimerV510_=null; authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; securityCenterData=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); sessionStorage.removeItem(AUTH_SESSION_EXPIRES_KEY_V510); cacheAuthUser_(null); clearDebtSessionCache_(); document.documentElement.dataset.resume="0"; }
+function clearAuthSession_(){ const syncBar=document.getElementById("backgroundSyncBarV511");if(syncBar)syncBar.classList.remove("show","failed"); stopNotificationPolling_(); if(authSessionExpiryTimerV510_)clearTimeout(authSessionExpiryTimerV510_);authSessionExpiryTimerV510_=null; securityReauthTokenV515_="";securityReauthExpiresAtV515_=0;closeReauthModalV515_(); authToken=""; currentUser=null; currentSeller=null; appNotifications=[]; notificationPreferences=null; securityCenterData=null; updateNotificationBadge_(0); sessionStorage.removeItem("authToken"); sessionStorage.removeItem(AUTH_SESSION_EXPIRES_KEY_V510); cacheAuthUser_(null); clearDebtSessionCache_(); document.documentElement.dataset.resume="0"; }
 function showLogin_(){
   hideSessionResume_();
   const login=document.getElementById("loginScreen"); if(login)login.style.display="flex";
@@ -5169,7 +5225,7 @@ function renderSecurityCenter_(){
   renderAccountSecurity_();
   if(!securityCenterData){if(summary)summary.innerHTML=`<div class="security-empty">${securityText_("Откройте настройки для загрузки данных безопасности","Барои боркунии амният танзимотро кушоед")}</div>`;return;}
   const a=securityCenterData.account||{}, own=Array.isArray(securityCenterData.sessions)?securityCenterData.sessions:[];
-  if(summary){const attempts=Number(a.failedAttempts||0),locked=!!a.locked;summary.innerHTML=`<div class="security-summary-chip good"><span>${securityText_("Активные сессии","Сессияҳои фаъол")}</span><b>${own.length}</b></div><div class="security-summary-chip"><span>${securityText_("Последний вход","Вуруди охирин")}</span><b>${escapeHtml(a.lastLoginAt||"—")}</b></div><div class="security-summary-chip ${attempts?"warn":"good"}"><span>${securityText_("Ошибки входа","Хатои вуруд")}</span><b>${attempts}</b></div><div class="security-summary-chip ${locked?"danger":"good"}"><span>${securityText_("Статус","Ҳолат")}</span><b>${locked?securityText_("Заблокирован","Баста"):securityText_("Защищён","Ҳифзшуда")}</b></div>`;}
+  if(summary){const attempts=Number(a.failedAttempts||0),locked=!!a.locked,maxSessions=Number(a.maxActiveSessions||5),known=Number(a.knownDevices||0);summary.innerHTML=`<div class="security-summary-chip good"><span>${securityText_("Сессии / лимит","Сессияҳо / маҳдудият")}</span><b>${own.length} / ${maxSessions}</b></div><div class="security-summary-chip"><span>${securityText_("Известные устройства","Дастгоҳҳои шинос")}</span><b>${known}</b></div><div class="security-summary-chip ${attempts?"warn":"good"}"><span>${securityText_("Ошибки входа","Хатои вуруд")}</span><b>${attempts}</b></div><div class="security-summary-chip ${locked?"danger":"good"}"><span>${securityText_("Статус","Ҳолат")}</span><b>${locked?securityText_("Заблокирован","Баста"):securityText_("Защищён","Ҳифзшуда")}</b></div>`;}
   if(sessions)sessions.innerHTML=own.length?own.map(s=>securitySessionHtml_(s,false)).join(""):`<div class="security-empty">${securityText_("Активных сессий не найдено","Сессияи фаъол ёфт нашуд")}</div>`;
   const ownEvents=Array.isArray(securityCenterData.recentEvents)?securityCenterData.recentEvents:[];
   if(events)events.innerHTML=ownEvents.length?ownEvents.map(e=>`<div class="security-own-event"><div class="security-own-event-top"><b>${escapeHtml(securityEventLabel_(e.event))}</b><span class="security-own-event-time">${escapeHtml(e.date||"")}</span></div><div class="security-own-event-detail">${escapeHtml(e.details||"")}</div></div>`).join(""):`<div class="security-empty">${securityText_("Событий пока нет","Ҳоло рӯйдод нест")}</div>`;
@@ -5598,8 +5654,8 @@ async function openNotificationItem(id){
   else if(n.entityType==="security") {if(canPermission("security")){showView("settings");setTimeout(()=>document.getElementById("securityEventsCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}else showView("profile");}
 }
 function securityEventLabel_(event){
-  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",SESSION_REVOKED:"Сессия завершена",OTHER_SESSIONS_REVOKED:"Другие сессии завершены",ALL_SESSIONS_REVOKED:"Все сессии завершены",TWO_FACTOR_SETUP_STARTED:"Настройка 2FA",TWO_FACTOR_ENABLED:"2FA включена",TWO_FACTOR_DISABLED:"2FA отключена",TWO_FACTOR_BACKUP_REGENERATED:"Резервные коды 2FA",LOGIN_2FA_REQUIRED:"Ожидание 2FA",LOGIN_2FA_SUCCESS:"2FA подтверждена",LOGIN_2FA_FAILED:"Ошибка 2FA",PASSKEY_ADDED:"Passkey подключён",PASSKEY_REMOVED:"Passkey удалён",PASSKEY_LOGIN:"Вход по Passkey",PASSKEY_LOGIN_FAILED:"Ошибка Passkey",PASSKEY_COUNTER_WARNING:"Проверка Passkey",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений"};
-  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Дастури дастрасӣ фиристода шуд",LOGOUT:"Баромад",SESSION_REVOKED:"Сессия баста шуд",OTHER_SESSIONS_REVOKED:"Сессияҳои дигар баста шуданд",ALL_SESSIONS_REVOKED:"Ҳама сессияҳо баста шуданд",TWO_FACTOR_SETUP_STARTED:"Танзими 2FA",TWO_FACTOR_ENABLED:"2FA фаъол шуд",TWO_FACTOR_DISABLED:"2FA хомӯш шуд",TWO_FACTOR_BACKUP_REGENERATED:"Рамзҳои эҳтиётии 2FA",LOGIN_2FA_REQUIRED:"Интизории 2FA",LOGIN_2FA_SUCCESS:"2FA тасдиқ шуд",LOGIN_2FA_FAILED:"Хатои 2FA",PASSKEY_ADDED:"Passkey пайваст шуд",PASSKEY_REMOVED:"Passkey нест шуд",PASSKEY_LOGIN:"Вуруд бо Passkey",PASSKEY_LOGIN_FAILED:"Хатои Passkey",PASSKEY_COUNTER_WARNING:"Санҷиши Passkey",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома"};return (currentLanguage==="tj"?tj:ru)[event]||event;
+  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",SESSION_REVOKED:"Сессия завершена",OTHER_SESSIONS_REVOKED:"Другие сессии завершены",ALL_SESSIONS_REVOKED:"Все сессии завершены",TWO_FACTOR_SETUP_STARTED:"Настройка 2FA",TWO_FACTOR_ENABLED:"2FA включена",TWO_FACTOR_DISABLED:"2FA отключена",TWO_FACTOR_BACKUP_REGENERATED:"Резервные коды 2FA",LOGIN_2FA_REQUIRED:"Ожидание 2FA",LOGIN_2FA_SUCCESS:"2FA подтверждена",LOGIN_2FA_FAILED:"Ошибка 2FA",PASSKEY_ADDED:"Passkey подключён",PASSKEY_REMOVED:"Passkey удалён",PASSKEY_LOGIN:"Вход по Passkey",PASSKEY_LOGIN_FAILED:"Ошибка Passkey",PASSKEY_COUNTER_WARNING:"Проверка Passkey",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений",NEW_DEVICE_LOGIN:"Вход с нового устройства",SESSION_LIMIT_ENFORCED:"Лимит сессий",REAUTH_REQUIRED:"Повторное подтверждение",REAUTH_SUCCESS:"Подтверждение личности",REAUTH_FAILED:"Ошибка подтверждения",REAUTH_RATE_LIMIT:"Подтверждение заблокировано"};
+  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Дастури дастрасӣ фиристода шуд",LOGOUT:"Баромад",SESSION_REVOKED:"Сессия баста шуд",OTHER_SESSIONS_REVOKED:"Сессияҳои дигар баста шуданд",ALL_SESSIONS_REVOKED:"Ҳама сессияҳо баста шуданд",TWO_FACTOR_SETUP_STARTED:"Танзими 2FA",TWO_FACTOR_ENABLED:"2FA фаъол шуд",TWO_FACTOR_DISABLED:"2FA хомӯш шуд",TWO_FACTOR_BACKUP_REGENERATED:"Рамзҳои эҳтиётии 2FA",LOGIN_2FA_REQUIRED:"Интизории 2FA",LOGIN_2FA_SUCCESS:"2FA тасдиқ шуд",LOGIN_2FA_FAILED:"Хатои 2FA",PASSKEY_ADDED:"Passkey пайваст шуд",PASSKEY_REMOVED:"Passkey нест шуд",PASSKEY_LOGIN:"Вуруд бо Passkey",PASSKEY_LOGIN_FAILED:"Хатои Passkey",PASSKEY_COUNTER_WARNING:"Санҷиши Passkey",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома",NEW_DEVICE_LOGIN:"Вуруд аз дастгоҳи нав",SESSION_LIMIT_ENFORCED:"Маҳдудияти сессияҳо",REAUTH_REQUIRED:"Тасдиқи такрорӣ",REAUTH_SUCCESS:"Тасдиқи шахсият",REAUTH_FAILED:"Хатои тасдиқ",REAUTH_RATE_LIMIT:"Тасдиқ баста шуд"};return (currentLanguage==="tj"?tj:ru)[event]||event;
 }
 async function loadSecurityEvents(){
   if(!canPermission("security"))return;const box=document.getElementById("securityEventsList");if(box)box.innerHTML=`<div class="settings-hint">${securityText_("Загрузка...","Боркунӣ...")}</div>`;
