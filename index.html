@@ -3326,9 +3326,28 @@ html[data-theme="dark"] .debt-details-comment-v513,html[data-theme="dark"] .debt
             <label class="notification-pref" style="margin-top:9px"><span><span>Автоматически учитывать оплату долга</span><small>После проверенного webhook сумма счета будет записана как оплата и уменьшит остаток. Дубли по payment_id блокируются.</small></span><input id="smartPayAutoDebtPayment" type="checkbox" checked></label>
             <div id="smartPayWebhookState" class="smartpay-webhook-state">Webhook еще не получал событий.</div>
           </div>
+          <div class="smartpay-field" style="margin-top:10px"><label>Текущий пароль владельца · подтверждение изменений</label><input id="smartPayCurrentPassword" type="password" autocomplete="current-password" placeholder="Введите пароль перед сохранением"></div>
           <div class="smartpay-help-note"><b>Безопасность:</b> API-ключи и webhook secrets хранятся только в Script Properties и обратно в браузер не передаются. Для webhook обязательно включите электронную подпись HMAC-SHA256 в SmartPay.</div>
           <div class="smartpay-settings-actions"><button id="smartPaySettingsSaveBtn" class="add-debt-btn" type="button" onclick="saveSmartPaySettings_()">Сохранить настройки SmartPay</button><button class="user-mini-btn" type="button" onclick="showView('smartpay')">Открыть счета</button></div>
           <div id="smartPaySettingsMessage" class="notification-settings-status"></div>
+        </div>
+
+        <div id="telegramSecurityCard" data-settings-card="integrations" data-settings-keywords="telegram бот уведомления токен chat id безопасность секреты" class="card settings-card smartpay-settings-card settings-wide-card" style="display:none;">
+          <div class="users-card-head"><div><b>✈️ Telegram · системные уведомления</b><div class="settings-hint">Токен бота больше не хранится в коде. Он сохраняется только в Script Properties.</div></div><button class="user-mini-btn" type="button" onclick="loadTelegramSecuritySettings_()">Обновить</button></div>
+          <div class="smartpay-settings-grid">
+            <div class="smartpay-settings-profile">
+              <h4>🤖 Telegram Bot</h4><div id="telegramTokenStatus" class="smartpay-key-status">Не настроен</div>
+              <div class="smartpay-field"><label>Новый токен бота</label><input id="telegramBotTokenInput" type="password" autocomplete="new-password" placeholder="Оставьте пустым, если не меняете"></div>
+            </div>
+            <div class="smartpay-settings-profile">
+              <h4>💬 Получатель</h4><div id="telegramChatStatus" class="smartpay-key-status">Chat ID не настроен</div>
+              <div class="smartpay-field"><label>Chat ID / Group ID</label><input id="telegramChatIdInput" type="text" inputmode="numeric" placeholder="Например: -100... или -... "></div>
+            </div>
+          </div>
+          <div class="smartpay-field" style="margin-top:10px"><label>Текущий пароль владельца · подтверждение изменения секрета</label><input id="telegramCurrentPassword" type="password" autocomplete="current-password" placeholder="Введите текущий пароль"></div>
+          <div class="smartpay-help-note"><b>Важно:</b> после установки этой версии перевыпустите токен Telegram-бота через BotFather, потому что старый токен раньше находился в исходном Code.gs. Новый токен вводится здесь один раз и обратно полностью не показывается.</div>
+          <div class="smartpay-settings-actions"><button id="telegramSettingsSaveBtn" class="add-debt-btn" type="button" onclick="saveTelegramSecuritySettings_()">Сохранить Telegram</button><button class="user-mini-btn" type="button" onclick="testTelegramSecuritySettings_()">Отправить тест</button></div>
+          <div id="telegramSettingsMessage" class="notification-settings-status"></div>
         </div>
 
         <div id="accountSecurityCard" style="display:none!important" data-settings-card="security" data-settings-keywords="security center пароль сессии устройства 2fa двухфакторная защита безопасность" class="card settings-card security-center-card settings-wide-card">
@@ -5108,6 +5127,7 @@ function applyPermissions_(){
   const moreSmartPay=document.getElementById("moreSmartPayBtn");if(moreSmartPay)moreSmartPay.style.display=smartPayAllowed?"":"none";
   const ownerIntegrations=currentUser?.role==="owner";
   const smartPaySettingsCard=document.getElementById("smartPaySettingsCard");if(smartPaySettingsCard)smartPaySettingsCard.style.display=ownerIntegrations?"":"none";
+  const telegramSecurityCard=document.getElementById("telegramSecurityCard");if(telegramSecurityCard)telegramSecurityCard.style.display=ownerIntegrations?"":"none";
   const smartPaySettingsCat=document.getElementById("smartPaySettingsCategoryBtn");if(smartPaySettingsCat)smartPaySettingsCat.style.display=ownerIntegrations?"":"none";
   const smartPayGeneralCard=document.getElementById("smartPayGeneralCreateCard");if(smartPayGeneralCard)smartPayGeneralCard.style.display=canPermission("smartpayGeneral")?"":"none";
   syncMobileSmartPayFabVisibilityV510_();
@@ -6673,12 +6693,38 @@ async function createSmartPayDebtInvoice_(){const d=smartPayDebtContext_;if(!d)r
 function closeSmartPayDebtInvoice_(){const m=document.getElementById("smartPayDebtInvoiceModal");if(m)m.style.display="none";document.body.style.overflow="";}
 function smartPayDebtBackdropClose_(e){if(e?.target?.id==="smartPayDebtInvoiceModal")closeSmartPayDebtInvoice_();}
 async function loadSmartPaySettings_(){if(currentUser?.role!=="owner")return;const msg=document.getElementById("smartPaySettingsMessage");if(msg)msg.textContent=securityText_("Загрузка…","Боркунӣ…");try{const r=await apiPost("smartpay.settings.get",{});if(!r.success)throw new Error(r.message||"SmartPay");document.getElementById("smartPayDebtKeyStatus").textContent=r.debt.configured?`${securityText_("Настроен","Танзим шуд")} · ${r.debt.keyMask}`:securityText_("Не настроен","Танзим нашуд");document.getElementById("smartPayGeneralKeyStatus").textContent=r.general.configured?`${securityText_("Настроен","Танзим шуд")} · ${r.general.keyMask}`:securityText_("Не настроен","Танзим нашуд");document.getElementById("smartPayDebtEnv").value=r.debt.environment||"sandbox";document.getElementById("smartPayGeneralEnv").value=r.general.environment||"sandbox";document.getElementById("smartPayDebtSms").checked=!!r.debt.sms;document.getElementById("smartPayGeneralSms").checked=!!r.general.sms;document.getElementById("smartPayLifetimeMinutes").value=Number(r.lifetimeMinutes||30);document.getElementById("smartPayReturnUrl").value=r.returnUrl||"";document.getElementById("smartPayDebtKeyInput").value="";document.getElementById("smartPayGeneralKeyInput").value="";const w=r.webhook||{};document.getElementById("smartPayWebhookUrl").value=w.url||"";document.getElementById("smartPayDebtWebhookStatus").textContent=w.debtConfigured?`${securityText_("Настроен","Танзим шуд")} · ${w.debtMask||""}`:securityText_("Не настроен","Танзим нашуд");document.getElementById("smartPayGeneralWebhookStatus").textContent=w.generalConfigured?`${securityText_("Настроен","Танзим шуд")} · ${w.generalMask||""}`:securityText_("Не настроен","Танзим нашуд");document.getElementById("smartPayDebtWebhookSecret").value="";document.getElementById("smartPayGeneralWebhookSecret").value="";document.getElementById("smartPayAutoDebtPayment").checked=w.autoDebtPayment!==false;const state=document.getElementById("smartPayWebhookState");if(state){const last=w.last;if(last){state.className=`smartpay-webhook-state ${String(last.status||"")==="PROCESSED"?"ok":"warn"}`;state.textContent=`Последнее событие: ${last.receivedAt||"—"} · ${last.orderId||""} · ${last.amountSomoni||0} сомони · ${last.result||last.status||""}${last.bank?" · "+last.bank:""}`;}else{state.className="smartpay-webhook-state";state.textContent="Webhook еще не получал событий.";}}if(msg)msg.textContent="";}catch(e){if(msg)msg.textContent=e.message||String(e);}}
-async function saveSmartPaySettings_(){if(currentUser?.role!=="owner")return;const btn=document.getElementById("smartPaySettingsSaveBtn"),msg=document.getElementById("smartPaySettingsMessage");if(btn)btn.disabled=true;if(msg)msg.textContent=securityText_("Сохранение…","Захира…");try{const payload={debtKey:String(document.getElementById("smartPayDebtKeyInput")?.value||"").trim(),generalKey:String(document.getElementById("smartPayGeneralKeyInput")?.value||"").trim(),debtWebhookSecret:String(document.getElementById("smartPayDebtWebhookSecret")?.value||"").trim(),generalWebhookSecret:String(document.getElementById("smartPayGeneralWebhookSecret")?.value||"").trim(),autoDebtPayment:!!document.getElementById("smartPayAutoDebtPayment")?.checked,debtEnv:document.getElementById("smartPayDebtEnv")?.value||"sandbox",generalEnv:document.getElementById("smartPayGeneralEnv")?.value||"sandbox",debtSms:!!document.getElementById("smartPayDebtSms")?.checked,generalSms:!!document.getElementById("smartPayGeneralSms")?.checked,lifetimeMinutes:Number(document.getElementById("smartPayLifetimeMinutes")?.value||30),returnUrl:String(document.getElementById("smartPayReturnUrl")?.value||"").trim()};const r=await apiPost("smartpay.settings.save",payload);if(!r.success)throw new Error(r.message||"SmartPay");if(msg)msg.textContent=securityText_("Настройки SmartPay сохранены","Танзимоти SmartPay захира шуд");showToast(`✅ <b>${securityText_("SmartPay сохранен","SmartPay захира шуд")}</b>`,"success");await loadSmartPaySettings_();await loadSmartPayInfo_();}catch(e){if(msg)msg.textContent=e.message||String(e);}finally{if(btn)btn.disabled=false;}}
+async function saveSmartPaySettings_(){if(currentUser?.role!=="owner")return;const btn=document.getElementById("smartPaySettingsSaveBtn"),msg=document.getElementById("smartPaySettingsMessage");if(btn)btn.disabled=true;if(msg)msg.textContent=securityText_("Сохранение…","Захира…");try{const payload={debtKey:String(document.getElementById("smartPayDebtKeyInput")?.value||"").trim(),generalKey:String(document.getElementById("smartPayGeneralKeyInput")?.value||"").trim(),debtWebhookSecret:String(document.getElementById("smartPayDebtWebhookSecret")?.value||"").trim(),generalWebhookSecret:String(document.getElementById("smartPayGeneralWebhookSecret")?.value||"").trim(),autoDebtPayment:!!document.getElementById("smartPayAutoDebtPayment")?.checked,debtEnv:document.getElementById("smartPayDebtEnv")?.value||"sandbox",generalEnv:document.getElementById("smartPayGeneralEnv")?.value||"sandbox",debtSms:!!document.getElementById("smartPayDebtSms")?.checked,generalSms:!!document.getElementById("smartPayGeneralSms")?.checked,lifetimeMinutes:Number(document.getElementById("smartPayLifetimeMinutes")?.value||30),returnUrl:String(document.getElementById("smartPayReturnUrl")?.value||"").trim(),currentPassword:String(document.getElementById("smartPayCurrentPassword")?.value||"")};const r=await apiPost("smartpay.settings.save",payload);if(!r.success)throw new Error(r.message||"SmartPay");if(msg)msg.textContent=securityText_("Настройки SmartPay сохранены","Танзимоти SmartPay захира шуд");showToast(`✅ <b>${securityText_("SmartPay сохранен","SmartPay захира шуд")}</b>`,"success");const cp=document.getElementById("smartPayCurrentPassword");if(cp)cp.value="";await loadSmartPaySettings_();await loadSmartPayInfo_();}catch(e){if(msg)msg.textContent=e.message||String(e);}finally{if(btn)btn.disabled=false;}}
 async function copySmartPayWebhookUrl_(){const url=String(document.getElementById("smartPayWebhookUrl")?.value||"").trim();if(!url){showToast("❌ Webhook URL пока недоступен","error");return;}try{await navigator.clipboard.writeText(url);showToast("✅ <b>Webhook URL скопирован</b>","success");}catch(e){const el=document.getElementById("smartPayWebhookUrl");el?.select();document.execCommand("copy");showToast("✅ <b>Webhook URL скопирован</b>","success");}}
 async function testSmartPayProfile_(profile){if(currentUser?.role!=="owner")return;const id=profile==="general"?"smartPayGeneralTestStatus":"smartPayDebtTestStatus",box=document.getElementById(id);if(box)box.textContent=securityText_("Проверяем…","Санҷиш…");try{const r=await apiPost("smartpay.settings.test",{profile},{timeoutMs:30000});if(!r.success)throw new Error(r.message||"SmartPay");if(box)box.textContent=`✅ ${securityText_("Подключено","Пайваст шуд")}${r.merchantUnitUuid?" · "+r.merchantUnitUuid:""}`;}catch(e){if(box)box.textContent=`❌ ${e.message||String(e)}`;}}
 
 
 const MOBILE_SMARTPAY_FAB_POS_KEY_V594="fsl_mobile_smartpay_fab_pos_v594";
+async function loadTelegramSecuritySettings_(){
+  if(currentUser?.role!=="owner")return;
+  const msg=document.getElementById("telegramSettingsMessage");if(msg)msg.textContent=securityText_("Загрузка…","Боркунӣ…");
+  try{
+    const r=await apiPost("security.telegram.get",{});if(!r.success)throw new Error(r.message||"Telegram");
+    const tokenSt=document.getElementById("telegramTokenStatus"),chatSt=document.getElementById("telegramChatStatus"),chat=document.getElementById("telegramChatIdInput"),token=document.getElementById("telegramBotTokenInput"),pwd=document.getElementById("telegramCurrentPassword");
+    if(tokenSt)tokenSt.textContent=r.configured?`${securityText_("Настроен","Танзим шуд")} · ${r.tokenMask||""}`:(r.tokenMask?`${securityText_("Токен сохранён","Токен захира шуд")} · ${r.tokenMask}`:securityText_("Не настроен","Танзим нашуд"));
+    if(chatSt)chatSt.textContent=r.chatId?`${securityText_("Chat ID","Chat ID")}: ${r.chatId}`:securityText_("Chat ID не настроен","Chat ID танзим нашуд");
+    if(chat)chat.value=r.chatId||"";if(token)token.value="";if(pwd)pwd.value="";if(msg)msg.textContent="";
+  }catch(e){if(msg)msg.textContent=e.message||String(e);}
+}
+async function saveTelegramSecuritySettings_(){
+  if(currentUser?.role!=="owner")return;
+  const btn=document.getElementById("telegramSettingsSaveBtn"),msg=document.getElementById("telegramSettingsMessage");if(btn)btn.disabled=true;if(msg)msg.textContent=securityText_("Сохранение…","Захира…");
+  try{
+    const payload={token:String(document.getElementById("telegramBotTokenInput")?.value||"").trim(),chatId:String(document.getElementById("telegramChatIdInput")?.value||"").trim(),currentPassword:String(document.getElementById("telegramCurrentPassword")?.value||"")};
+    const r=await apiPost("security.telegram.save",payload);if(!r.success)throw new Error(r.message||"Telegram");
+    showToast(`✅ <b>${securityText_("Telegram сохранён безопасно","Telegram бехатар захира шуд")}</b>`,"success");if(msg)msg.textContent=securityText_("Настройки Telegram сохранены","Танзимоти Telegram захира шуд");await loadTelegramSecuritySettings_();
+  }catch(e){if(msg)msg.textContent=e.message||String(e);}finally{if(btn)btn.disabled=false;}
+}
+async function testTelegramSecuritySettings_(){
+  if(currentUser?.role!=="owner")return;
+  const msg=document.getElementById("telegramSettingsMessage");if(msg)msg.textContent=securityText_("Отправляем тест…","Санҷиш фиристода мешавад…");
+  try{const r=await apiPost("security.telegram.test",{});if(!r.success)throw new Error(r.message||"Telegram");if(msg)msg.textContent=securityText_("Тестовое сообщение отправлено","Паёми санҷишӣ фиристода шуд");showToast(`✅ <b>${securityText_("Telegram работает","Telegram кор мекунад")}</b>`,"success");}catch(e){if(msg)msg.textContent=e.message||String(e);}
+}
+
 let mobileSmartPayFabDraggedV594_=false;
 function mobileSmartPayFabClick_(e){
   if(mobileSmartPayFabDraggedV594_){e?.preventDefault?.();e?.stopPropagation?.();mobileSmartPayFabDraggedV594_=false;return;}
@@ -6822,7 +6868,7 @@ function showView(view){
     if(canPermission("security"))loadSecurityCenter();
     if(canPermission("viewUsers"))loadUsers();
     if(canPermission("security"))loadSecurityEvents();
-    if(currentUser?.role==="owner")loadSmartPaySettings_();
+    if(currentUser?.role==="owner"){loadSmartPaySettings_();loadTelegramSecuritySettings_();}
   }
 }
 
