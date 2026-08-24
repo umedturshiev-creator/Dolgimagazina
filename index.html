@@ -2865,6 +2865,11 @@ html[data-theme="dark"] .debt-details-comment-v513,html[data-theme="dark"] .debt
 .security-lockdown-v517{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding:10px 11px;border-radius:14px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.13)}.security-lockdown-v517.on{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.18)}.security-lockdown-copy-v517 b{display:block;font-size:11px}.security-lockdown-copy-v517 small{display:block;margin-top:3px;font-size:9px;color:var(--text-3);line-height:1.4}.security-lockdown-btn-v517{width:auto!important;min-width:150px!important;margin:0!important;padding:8px 10px!important;border-radius:11px!important;font-size:10px!important;font-weight:900!important}.security-lockdown-btn-v517.enable{background:#b91c1c!important;color:#fff!important}.security-lockdown-btn-v517.disable{background:#15803d!important;color:#fff!important}
 html[data-theme="dark"] .security-protection-v517{background:rgba(15,23,42,.42);border-color:rgba(148,163,184,.12)}html[data-theme="dark"] .security-protection-metric-v517{background:rgba(30,41,59,.70)}
 @media(max-width:640px){.security-protection-grid-v517{grid-template-columns:1fr 1fr}.security-protection-metric-v517:last-child{grid-column:1/-1}.security-lockdown-v517{align-items:stretch;flex-direction:column}.security-lockdown-btn-v517{width:100%!important}}
+.security-data-v518{margin:10px 0 13px;padding:12px 13px;border-radius:17px;background:linear-gradient(135deg,rgba(37,99,235,.055),rgba(16,185,129,.035));border:1px solid rgba(96,165,250,.16)}
+.security-data-head-v518{display:flex;align-items:center;justify-content:space-between;gap:10px}.security-data-head-v518 b{display:block;font-size:12px}.security-data-head-v518 small{display:block;margin-top:3px;font-size:9px;line-height:1.4;color:var(--text-3)}.security-data-badge-v518{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;background:rgba(34,197,94,.10);color:#15803d;font-size:9px;font-weight:950;white-space:nowrap}
+.security-data-grid-v518{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:10px}.security-data-item-v518{min-width:0;padding:9px 10px;border-radius:13px;background:rgba(255,255,255,.66);border:1px solid rgba(148,163,184,.11)}.security-data-item-v518 span{display:block;font-size:8px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);font-weight:900}.security-data-item-v518 b{display:block;margin-top:4px;font-size:11px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.security-data-item-v518.good b{color:#15803d}.security-data-item-v518.warn b{color:#b45309}
+html[data-theme="dark"] .security-data-v518{background:linear-gradient(135deg,rgba(37,99,235,.10),rgba(16,185,129,.055));border-color:rgba(96,165,250,.14)}html[data-theme="dark"] .security-data-item-v518{background:rgba(30,41,59,.70);border-color:rgba(148,163,184,.10)}html[data-theme="dark"] .security-data-badge-v518{color:#86efac;background:rgba(34,197,94,.12)}
+@media(max-width:900px){.security-data-grid-v518{grid-template-columns:repeat(2,minmax(0,1fr))}.security-data-item-v518:last-child{grid-column:1/-1}}@media(max-width:480px){.security-data-head-v518{align-items:flex-start;flex-direction:column}.security-data-grid-v518{grid-template-columns:1fr 1fr}}
 
 </style>
 </head>
@@ -3414,6 +3419,16 @@ html[data-theme="dark"] .security-protection-v517{background:rgba(15,23,42,.42);
             <div class="security-protection-grid-v517"><div class="security-protection-metric-v517"><span>Уровень риска</span><b id="securityRiskLevelV517">—</b></div><div class="security-protection-metric-v517"><span>Индекс угроз</span><b id="securityThreatScoreV517">0 / 100</b></div><div class="security-protection-metric-v517"><span>Сигналы за 24 ч</span><b id="securityThreatSignalsV517">0</b></div></div>
             <div id="securityLockdownBoxV517" class="security-lockdown-v517"><div class="security-lockdown-copy-v517"><b id="securityLockdownTitleV517">Аварийная защита выключена</b><small id="securityLockdownHintV517">При подозрении на взлом владелец может одним действием завершить сессии сотрудников и временно запретить им вход.</small></div><button id="securityLockdownBtnV517" class="security-lockdown-btn-v517 enable" type="button" onclick="toggleSecurityLockdownV517_(true)">Включить защиту</button></div>
           </div>
+          <div id="securityDataProtectionV518" class="security-data-v518">
+            <div class="security-data-head-v518"><div><b>🔒 Защита данных и операций</b><small>Сервер проверяет содержимое запросов, финансовую целостность долга и повторное выполнение операций.</small></div><span id="securityDataBadgeV518" class="security-data-badge-v518">Активна</span></div>
+            <div class="security-data-grid-v518">
+              <div class="security-data-item-v518 good"><span>Проверка запросов</span><b id="securityStrictValidationV518">Включена</b></div>
+              <div class="security-data-item-v518 good"><span>Повтор операций</span><b id="securityAntiReplayV518">Защищён</b></div>
+              <div class="security-data-item-v518 good"><span>Формулы / инъекции</span><b id="securityFormulaGuardV518">Защищено</b></div>
+              <div class="security-data-item-v518 good"><span>Целостность долга</span><b id="securityDebtIntegrityV518">Проверяется</b></div>
+              <div class="security-data-item-v518"><span>Блокировок за 24 ч</span><b id="securityDataBlockedV518">0</b></div>
+            </div>
+          </div>
           <div class="security-account-line"><div id="accountSecurityInfo" class="security-account-main"></div><button id="changePasswordBtn" class="add-debt-btn" type="button" onclick="openChangePasswordModal()">Изменить пароль</button></div>
           <div class="two-factor-box" id="twoFactorBox">
             <div class="two-factor-main"><div class="two-factor-title"><span id="twoFactorTitle">🛡 Двухфакторная защита</span><span id="twoFactorStatus" class="two-factor-status off">Выключена</span></div><div id="twoFactorHint" class="two-factor-sub">Дополнительный код из Google/Microsoft Authenticator или Authy. По умолчанию выключена.</div></div>
@@ -3836,7 +3851,7 @@ html[data-theme="dark"] .security-protection-v517{background:rgba(15,23,42,.42);
 </div>
 
 <script>
-const VERSION="5.17.1";
+const VERSION="5.18.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -3948,6 +3963,7 @@ let paidDebts=[];
 let currentView="active";
 let currentRow=null;
 let currentRemainder=0;
+let currentDebtIdV518_="";
 let fullCloseModeV124_="pay";
 let fullCloseClientV124_="";
 let toastTimer=null;
@@ -3955,10 +3971,12 @@ let mergeDebtResolver=null;
 let addDebtTargetRow = null;
 let addDebtTargetClient = "";
 let addDebtTargetPhone = "";
+let addDebtTargetIdV518_ = "";
 let reduceDebtTargetRow = null;
 let reduceDebtTargetClient = "";
 let reduceDebtTargetPhone = "";
 let reduceDebtTargetRemainder = 0;
+let reduceDebtTargetIdV518_ = "";
 let statsDetailCurrentAction = "";
 let statsDetailCurrentLabel = "";
 
@@ -5281,6 +5299,16 @@ async function toggleSecurityLockdownV517_(enabled){
   try{const r=await apiPost("security.protection.set",{enabled:!!enabled});if(!r.success)throw new Error(r.message||"Error");securityCenterData={...(securityCenterData||{}),protection:{emergency:r.emergency,threat:r.threat}};renderSecurityProtectionV517_();showToast(`✅ <b>${enabled?securityText_("Аварийная защита включена","Ҳифзи фаврӣ фаъол шуд"):securityText_("Аварийная защита выключена","Ҳифзи фаврӣ хомӯш шуд")}</b>`,"success");await loadSecurityCenter();}
   catch(e){showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
 }
+function renderSecurityDataProtectionV518_(){
+  const d=securityCenterData?.dataProtection;if(!d)return;
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+  set("securityStrictValidationV518",d.strictValidation?securityText_("Включена","Фаъол"):securityText_("Выключена","Хомӯш"));
+  set("securityAntiReplayV518",d.antiReplayBinding?securityText_("Защищён","Ҳифзшуда"):securityText_("Нет","Не"));
+  set("securityFormulaGuardV518",d.formulaInjectionProtection?securityText_("Защищено","Ҳифзшуда"):securityText_("Нет","Не"));
+  set("securityDebtIntegrityV518",d.debtRecordIntegrity?securityText_("Проверяется","Санҷида мешавад"):securityText_("Нет","Не"));
+  set("securityDataBlockedV518",String(Number(d.blocked24h||0)));
+  const badge=document.getElementById("securityDataBadgeV518");if(badge)badge.textContent=securityText_("Активна · v"+String(d.version||"5.18.0"),"Фаъол · v"+String(d.version||"5.18.0"));
+}
 function renderSecurityCenter_(){
   const summary=document.getElementById("securityCenterSummary"), sessions=document.getElementById("securitySessionsList"), events=document.getElementById("securityOwnEvents"), allBox=document.getElementById("securityAllSessionsList");
   renderAccountSecurity_();
@@ -5293,6 +5321,7 @@ function renderSecurityCenter_(){
   const all=Array.isArray(securityCenterData.allSessions)?securityCenterData.allSessions:[];
   if(allBox)allBox.innerHTML=all.length?all.map(s=>securitySessionHtml_(s,true)).join(""):`<div class="security-empty">${securityText_("Активных сессий пользователей нет","Сессияи фаъоли истифодабарандагон нест")}</div>`;
   renderSecurityProtectionV517_();
+  renderSecurityDataProtectionV518_();
   renderTwoFactorStatus_();
   renderProfileViewV510_();
 }
@@ -5410,7 +5439,7 @@ async function saveDebtEditV510_(){
   const row=Number(document.getElementById("debtEditRowV510")?.value||0),client=String(document.getElementById("debtEditClientV510")?.value||"").trim(),phone=String(document.getElementById("debtEditPhoneV510")?.value||"").trim(),dueDate=String(document.getElementById("debtEditDueV510")?.value||""),total=Number(document.getElementById("debtEditTotalV510")?.value||0),responsibleUserId=String(document.getElementById("debtEditResponsibleV510")?.value||"");const msg=document.getElementById("debtEditMessageV510");
   if(!row||!client||normalizePhone(phone).length!==9||!dueDate||!Number.isFinite(total)||total<=0){if(msg)msg.textContent=securityText_("Проверьте имя, телефон, сумму и дату","Ном, телефон, маблағ ва санаро санҷед");return;}
   const current=(allDebts||[]).find(x=>Number(x.row||0)===row);if(current&&total<Number(current.paid||0)){if(msg)msg.textContent=securityText_("Сумма долга не может быть меньше уже оплаченной суммы","Маблағи қарз аз маблағи пардохтшуда кам буда наметавонад");return;}
-  const payload={row,client,phone,dueDate,total};if(canPermission("assignDebts"))payload.responsibleUserId=responsibleUserId;
+  const payload={row,client,phone,dueDate,total,debtId:String(current?.id||"")};if(canPermission("assignDebts"))payload.responsibleUserId=responsibleUserId;
   closeDebtEditV510_();enqueueBackgroundSyncV511_("debt.update",payload,{row,label:client});showToast(`⏳ <b>${securityText_("Изменения сохраняются в фоне","Тағйирот дар замина захира мешавад")}</b>`,"success");
 }
 /* ---------- RESPONSIBLE STAFF v5.10.3 ---------- */
@@ -5544,13 +5573,13 @@ async function openAssignDebtModal(row,currentResponsibleId=""){
 }
 function closeAssignDebtModal(){document.getElementById("assignDebtModal").style.display="none";assigningDebtRow=null;}
 async function saveDebtAssignment(){
-  if(!assigningDebtRow)return;const row=Number(assigningDebtRow),select=document.getElementById("assignDebtUserSelect"),userId=String(select?.value||"");closeAssignDebtModal();enqueueBackgroundSyncV511_("debt.assign",{row,userId},{row,label:securityText_("Ответственный","Масъул")});showToast(`⏳ <b>${securityText_("Ответственный сохраняется в фоне","Масъул дар замина захира мешавад")}</b>`,"success");
+  if(!assigningDebtRow)return;const row=Number(assigningDebtRow),select=document.getElementById("assignDebtUserSelect"),userId=String(select?.value||""),debtId=String((allDebts||[]).find(x=>Number(x.row||0)===row)?.id||"");closeAssignDebtModal();enqueueBackgroundSyncV511_("debt.assign",{row,userId,debtId},{row,label:securityText_("Ответственный","Масъул")});showToast(`⏳ <b>${securityText_("Ответственный сохраняется в фоне","Масъул дар замина захира мешавад")}</b>`,"success");
 }
 async function clearDebtAssignment(){
-  if(!assigningDebtRow)return;const row=Number(assigningDebtRow);closeAssignDebtModal();enqueueBackgroundSyncV511_("debt.assign",{row,userId:""},{row,label:securityText_("Ответственный","Масъул")});showToast(`⏳ <b>${securityText_("Изменение сохраняется в фоне","Тағйирот дар замина захира мешавад")}</b>`,"success");
+  if(!assigningDebtRow)return;const row=Number(assigningDebtRow),debtId=String((allDebts||[]).find(x=>Number(x.row||0)===row)?.id||"");closeAssignDebtModal();enqueueBackgroundSyncV511_("debt.assign",{row,userId:"",debtId},{row,label:securityText_("Ответственный","Масъул")});showToast(`⏳ <b>${securityText_("Изменение сохраняется в фоне","Тағйирот дар замина захира мешавад")}</b>`,"success");
 }
 async function claimDebt(row){
-  row=Number(row||0);if(!row)return;enqueueBackgroundSyncV511_("debt.claim",{row},{row,label:securityText_("Назначение долга","Таъини қарз")});showToast(`⏳ <b>${securityText_("Назначение сохраняется в фоне","Таъин дар замина захира мешавад")}</b>`,"success");
+  row=Number(row||0);if(!row)return;const debtId=String((allDebts||[]).find(x=>Number(x.row||0)===row)?.id||"");enqueueBackgroundSyncV511_("debt.claim",{row,debtId},{row,label:securityText_("Назначение долга","Таъини қарз")});showToast(`⏳ <b>${securityText_("Назначение сохраняется в фоне","Таъин дар замина захира мешавад")}</b>`,"success");
 }
 
 
@@ -5716,8 +5745,8 @@ async function openNotificationItem(id){
   else if(n.entityType==="security") {if(canPermission("security")){showView("settings");setTimeout(()=>document.getElementById("securityEventsCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}else showView("profile");}
 }
 function securityEventLabel_(event){
-  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",SESSION_REVOKED:"Сессия завершена",OTHER_SESSIONS_REVOKED:"Другие сессии завершены",ALL_SESSIONS_REVOKED:"Все сессии завершены",TWO_FACTOR_SETUP_STARTED:"Настройка 2FA",TWO_FACTOR_ENABLED:"2FA включена",TWO_FACTOR_DISABLED:"2FA отключена",TWO_FACTOR_BACKUP_REGENERATED:"Резервные коды 2FA",LOGIN_2FA_REQUIRED:"Ожидание 2FA",LOGIN_2FA_SUCCESS:"2FA подтверждена",LOGIN_2FA_FAILED:"Ошибка 2FA",PASSKEY_ADDED:"Passkey подключён",PASSKEY_REMOVED:"Passkey удалён",PASSKEY_LOGIN:"Вход по Passkey",PASSKEY_LOGIN_FAILED:"Ошибка Passkey",PASSKEY_COUNTER_WARNING:"Проверка Passkey",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений",NEW_DEVICE_LOGIN:"Вход с нового устройства",SESSION_LIMIT_ENFORCED:"Лимит сессий",REAUTH_REQUIRED:"Повторное подтверждение",REAUTH_SUCCESS:"Подтверждение личности",REAUTH_FAILED:"Ошибка подтверждения",REAUTH_RATE_LIMIT:"Подтверждение заблокировано",EMERGENCY_MODE_ENABLED:"Аварийная защита включена",EMERGENCY_MODE_DISABLED:"Аварийная защита выключена",EMERGENCY_LOGIN_BLOCKED:"Вход заблокирован аварийной защитой",SECURITY_HIGH_RISK:"Подозрительная активность"};
-  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Дастури дастрасӣ фиристода шуд",LOGOUT:"Баромад",SESSION_REVOKED:"Сессия баста шуд",OTHER_SESSIONS_REVOKED:"Сессияҳои дигар баста шуданд",ALL_SESSIONS_REVOKED:"Ҳама сессияҳо баста шуданд",TWO_FACTOR_SETUP_STARTED:"Танзими 2FA",TWO_FACTOR_ENABLED:"2FA фаъол шуд",TWO_FACTOR_DISABLED:"2FA хомӯш шуд",TWO_FACTOR_BACKUP_REGENERATED:"Рамзҳои эҳтиётии 2FA",LOGIN_2FA_REQUIRED:"Интизории 2FA",LOGIN_2FA_SUCCESS:"2FA тасдиқ шуд",LOGIN_2FA_FAILED:"Хатои 2FA",PASSKEY_ADDED:"Passkey пайваст шуд",PASSKEY_REMOVED:"Passkey нест шуд",PASSKEY_LOGIN:"Вуруд бо Passkey",PASSKEY_LOGIN_FAILED:"Хатои Passkey",PASSKEY_COUNTER_WARNING:"Санҷиши Passkey",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома",NEW_DEVICE_LOGIN:"Вуруд аз дастгоҳи нав",SESSION_LIMIT_ENFORCED:"Маҳдудияти сессияҳо",REAUTH_REQUIRED:"Тасдиқи такрорӣ",REAUTH_SUCCESS:"Тасдиқи шахсият",REAUTH_FAILED:"Хатои тасдиқ",REAUTH_RATE_LIMIT:"Тасдиқ баста шуд",EMERGENCY_MODE_ENABLED:"Ҳифзи фаврӣ фаъол шуд",EMERGENCY_MODE_DISABLED:"Ҳифзи фаврӣ хомӯш шуд",EMERGENCY_LOGIN_BLOCKED:"Вуруд бо ҳифзи фаврӣ баста шуд",SECURITY_HIGH_RISK:"Фаъолияти шубҳанок"};return (currentLanguage==="tj"?tj:ru)[event]||event;
+  const ru={LOGIN:"Вход",LOGIN_FAILED:"Неудачный вход",LOGIN_BLOCKED:"Вход заблокирован",PASSWORD_RESET_REQUEST:"Запрос восстановления",PASSWORD_RESET:"Восстановление пароля",PASSWORD_RESET_FAILED:"Ошибка восстановления",PASSWORD_CHANGE:"Смена пароля",ACCOUNT_ACTIVATED:"Активация аккаунта",ACTIVATION_FAILED:"Ошибка активации",USER_CREATED:"Создан пользователь",USER_UPDATED:"Изменён пользователь",INVITE_RESENT:"Инструкция доступа отправлена",LOGOUT:"Выход",SESSION_REVOKED:"Сессия завершена",OTHER_SESSIONS_REVOKED:"Другие сессии завершены",ALL_SESSIONS_REVOKED:"Все сессии завершены",TWO_FACTOR_SETUP_STARTED:"Настройка 2FA",TWO_FACTOR_ENABLED:"2FA включена",TWO_FACTOR_DISABLED:"2FA отключена",TWO_FACTOR_BACKUP_REGENERATED:"Резервные коды 2FA",LOGIN_2FA_REQUIRED:"Ожидание 2FA",LOGIN_2FA_SUCCESS:"2FA подтверждена",LOGIN_2FA_FAILED:"Ошибка 2FA",PASSKEY_ADDED:"Passkey подключён",PASSKEY_REMOVED:"Passkey удалён",PASSKEY_LOGIN:"Вход по Passkey",PASSKEY_LOGIN_FAILED:"Ошибка Passkey",PASSKEY_COUNTER_WARNING:"Проверка Passkey",NOTIFICATION_PREFS_UPDATED:"Настройки уведомлений",NEW_DEVICE_LOGIN:"Вход с нового устройства",SESSION_LIMIT_ENFORCED:"Лимит сессий",REAUTH_REQUIRED:"Повторное подтверждение",REAUTH_SUCCESS:"Подтверждение личности",REAUTH_FAILED:"Ошибка подтверждения",REAUTH_RATE_LIMIT:"Подтверждение заблокировано",EMERGENCY_MODE_ENABLED:"Аварийная защита включена",EMERGENCY_MODE_DISABLED:"Аварийная защита выключена",EMERGENCY_LOGIN_BLOCKED:"Вход заблокирован аварийной защитой",SECURITY_HIGH_RISK:"Подозрительная активность",PAYLOAD_REJECTED:"Опасный запрос заблокирован",OPERATION_ID_REUSE_BLOCKED:"Повтор операции заблокирован",DEBT_INTEGRITY_BLOCKED:"Нарушение целостности долга"};
+  const tj={LOGIN:"Вуруд",LOGIN_FAILED:"Вуруди номуваффақ",LOGIN_BLOCKED:"Вуруд баста шуд",PASSWORD_RESET_REQUEST:"Дархости барқарорсозӣ",PASSWORD_RESET:"Барқарорсозии парол",PASSWORD_RESET_FAILED:"Хатои барқарорсозӣ",PASSWORD_CHANGE:"Иваз кардани парол",ACCOUNT_ACTIVATED:"Фаъолсозии ҳисоб",ACTIVATION_FAILED:"Хатои фаъолсозӣ",USER_CREATED:"Истифодабаранда эҷод шуд",USER_UPDATED:"Истифодабаранда тағйир ёфт",INVITE_RESENT:"Дастури дастрасӣ фиристода шуд",LOGOUT:"Баромад",SESSION_REVOKED:"Сессия баста шуд",OTHER_SESSIONS_REVOKED:"Сессияҳои дигар баста шуданд",ALL_SESSIONS_REVOKED:"Ҳама сессияҳо баста шуданд",TWO_FACTOR_SETUP_STARTED:"Танзими 2FA",TWO_FACTOR_ENABLED:"2FA фаъол шуд",TWO_FACTOR_DISABLED:"2FA хомӯш шуд",TWO_FACTOR_BACKUP_REGENERATED:"Рамзҳои эҳтиётии 2FA",LOGIN_2FA_REQUIRED:"Интизории 2FA",LOGIN_2FA_SUCCESS:"2FA тасдиқ шуд",LOGIN_2FA_FAILED:"Хатои 2FA",PASSKEY_ADDED:"Passkey пайваст шуд",PASSKEY_REMOVED:"Passkey нест шуд",PASSKEY_LOGIN:"Вуруд бо Passkey",PASSKEY_LOGIN_FAILED:"Хатои Passkey",PASSKEY_COUNTER_WARNING:"Санҷиши Passkey",NOTIFICATION_PREFS_UPDATED:"Танзимоти огоҳинома",NEW_DEVICE_LOGIN:"Вуруд аз дастгоҳи нав",SESSION_LIMIT_ENFORCED:"Маҳдудияти сессияҳо",REAUTH_REQUIRED:"Тасдиқи такрорӣ",REAUTH_SUCCESS:"Тасдиқи шахсият",REAUTH_FAILED:"Хатои тасдиқ",REAUTH_RATE_LIMIT:"Тасдиқ баста шуд",EMERGENCY_MODE_ENABLED:"Ҳифзи фаврӣ фаъол шуд",EMERGENCY_MODE_DISABLED:"Ҳифзи фаврӣ хомӯш шуд",EMERGENCY_LOGIN_BLOCKED:"Вуруд бо ҳифзи фаврӣ баста шуд",SECURITY_HIGH_RISK:"Фаъолияти шубҳанок",PAYLOAD_REJECTED:"Дархости хатарнок баста шуд",OPERATION_ID_REUSE_BLOCKED:"Такрори амалиёт баста шуд",DEBT_INTEGRITY_BLOCKED:"Беайбии қарз вайрон шуд"};return (currentLanguage==="tj"?tj:ru)[event]||event;
 }
 async function loadSecurityEvents(){
   if(!canPermission("security"))return;const box=document.getElementById("securityEventsList");if(box)box.innerHTML=`<div class="settings-hint">${securityText_("Загрузка...","Боркунӣ...")}</div>`;
@@ -6482,9 +6511,10 @@ function statsDebtActionsHtml_(d){
   const phoneFull=phone?`992${phone}`:"";
   const safeClient=escapeHtml(String(d.client||"")).replace(/'/g,"&#39;");
   const safePhone=escapeHtml(phone).replace(/'/g,"&#39;");
+  const safeDebtId=escapeHtml(String(d.id||"")).replace(/'/g,"&#39;");
   const actions=[];
-  if(remainder>0&&canPermission("appendDebt"))actions.push(`<button class="stats-debt-action add" onclick="openAddToDebtModal(${row},'${safeClient}','${safePhone}',${remainder})">➕ ${t('addToDebtBtn')}</button>`);
-  if(remainder>0&&canPermission("payDebt"))actions.push(`<button class="stats-debt-action pay" onclick="openPayment(${row},${remainder})">💵 ${t('payBtn')}</button>`);
+  if(remainder>0&&canPermission("appendDebt"))actions.push(`<button class="stats-debt-action add" onclick="openAddToDebtModal(${row},'${safeClient}','${safePhone}',${remainder},'${safeDebtId}')">➕ ${t('addToDebtBtn')}</button>`);
+  if(remainder>0&&canPermission("payDebt"))actions.push(`<button class="stats-debt-action pay" onclick="openPayment(${row},${remainder},'${safeDebtId}')">💵 ${t('payBtn')}</button>`);
   actions.push(`<button class="stats-debt-action history" onclick="showHistory('${safeClient}')">📂 ${t('historyBtn')}</button>`);
   return `<div class="stats-debt-actions">${actions.join("")}</div>`;
 }
@@ -6627,10 +6657,10 @@ function buildDebtCardHtml(d){
   const responsibleName=String(d.responsibleName||"").trim();
   const responsibleDisplay=responsibleName||"—";
   let responsibleAction="";
-  const payBtn=canPermission("payDebt")?`<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder})">💵 ${t("payBtn")}</button>`:"";
-  const appendBtn=canPermission("appendDebt")?`<button class="add-debt-btn" onclick="openAddToDebtModal(${d.row},'${safeClientJs}','${safePhoneJs}',${d.remainder})">➕ ${t("addToDebtBtn")}</button>`:"";
+  const payBtn=canPermission("payDebt")?`<button class="pay-btn" onclick="openPayment(${d.row},${d.remainder},'${safeDebtIdJs}')">💵 ${t("payBtn")}</button>`:"";
+  const appendBtn=canPermission("appendDebt")?`<button class="add-debt-btn" onclick="openAddToDebtModal(${d.row},'${safeClientJs}','${safePhoneJs}',${d.remainder},'${safeDebtIdJs}')">➕ ${t("addToDebtBtn")}</button>`:"";
   const smartPayBtn=canPermission("smartpayInvoices")?`<button class="smartpay-debt-btn" type="button" onclick="openSmartPayDebtInvoice_(${Number(d.row||0)})">🔗 ${securityText_("Счет SmartPay","Ҳисоби SmartPay")}</button>`:"";
-  const closeDebtBtn=(Number(d.remainder||0)>0&&canPermission("payDebt"))?`<button class="close-debt-btn-v124" type="button" onclick="openCloseDebtConfirmV124_(${Number(d.row||0)},${Number(d.remainder||0)},'${safeClientJs}')"><span class="close-icon">⛔</span><span class="close-label">${t("closeDebtBtn")}</span></button>`:"";
+  const closeDebtBtn=(Number(d.remainder||0)>0&&canPermission("payDebt"))?`<button class="close-debt-btn-v124" type="button" onclick="openCloseDebtConfirmV124_(${Number(d.row||0)},${Number(d.remainder||0)},'${safeClientJs}','${safeDebtIdJs}')"><span class="close-icon">⛔</span><span class="close-label">${t("closeDebtBtn")}</span></button>`:"";
   const syncBadgeV511_=syncFailedV511_?`<span class="debt-sync-badge-v511 failed">${securityText_("Не синхр.","Ҳамоҳанг нашуд")}</span>`:syncActiveV511_?`<span class="debt-sync-badge-v511">${securityText_("Синхр…","Ҳамоҳанг…")}</span>`:"";
   const status=(state.label?`<span class="debt-status-v2 status-${state.kind}">${escapeHtml(state.label)}</span>`:"")+syncBadgeV511_;
   return `<div class="${rowClass}" data-debt-id="${escapeAttr_(String(d.id||d.row||''))}">
@@ -7039,9 +7069,10 @@ if (paidSearchInputEl) paidSearchInputEl.addEventListener("input", applyPaidSear
 
 /* ---------- ОПЛАТА ---------- */
 
-function openPayment(row,remainder){
+function openPayment(row,remainder,debtId){
   currentRow = row;
   currentRemainder = remainder;
+  currentDebtIdV518_ = String(debtId||"");
   fullCloseModeV124_ = "pay";
   fullCloseClientV124_ = "";
   paymentAmount.value = "";
@@ -7060,7 +7091,7 @@ function closePayment(){
 }
 
 function confirmPayment(){
-  const amount=Number(paymentAmount.value);if(!amount||amount<=0){alert(t("invalidAmount"));return;}if(amount>currentRemainder){alert(t("amountTooBig"));return;}const row=Number(currentRow||0);paymentModal.style.display="none";paymentLoader.style.display="none";enqueueBackgroundSyncV511_("debt.pay",{row,amount},{row,label:securityText_("Оплата","Пардохт")});showToast(`⏳ <b>${securityText_("Оплата сохраняется в фоне","Пардохт дар замина захира мешавад")}</b>`,"success");
+  const amount=Number(paymentAmount.value);if(!amount||amount<=0){alert(t("invalidAmount"));return;}if(amount>currentRemainder){alert(t("amountTooBig"));return;}const row=Number(currentRow||0);paymentModal.style.display="none";paymentLoader.style.display="none";enqueueBackgroundSyncV511_("debt.pay",{row,amount,debtId:currentDebtIdV518_},{row,label:securityText_("Оплата","Пардохт")});showToast(`⏳ <b>${securityText_("Оплата сохраняется в фоне","Пардохт дар замина захира мешавад")}</b>`,"success");
 }
 /* ---------- ПОЛНОЕ ПОГАШЕНИЕ ---------- */
 
@@ -7072,9 +7103,10 @@ function statsOpenFullClose_(row,remainder){
   if(!currentRow||currentRemainder<=0)return;
   openFullCloseConfirm();
 }
-function openCloseDebtConfirmV124_(row,remainder,client){
+function openCloseDebtConfirmV124_(row,remainder,client,debtId){
   currentRow=Number(row||0);
   currentRemainder=Number(remainder||0);
+  currentDebtIdV518_=String(debtId||"");
   fullCloseModeV124_="close";
   fullCloseClientV124_=String(client||"");
   if(!currentRow||currentRemainder<=0)return;
@@ -7119,14 +7151,16 @@ function closeFullCloseModal(){
   document.getElementById("fullCloseConfirmModal").style.display = "none";
   fullCloseModeV124_="pay";
   fullCloseClientV124_="";
+  currentDebtIdV518_="";
 }
 
 function confirmFullClose(){
-  const row=Number(currentRow||0),amount=Number(currentRemainder||0),isCloseMode=fullCloseModeV124_==="close";if(!row||amount<=0)return;document.getElementById("fullCloseConfirmModal").style.display="none";paymentModal.style.display="none";paymentLoader.style.display="none";if(isCloseMode){enqueueBackgroundSyncV511_("debt.closeManual",{row,remainder:amount},{row,label:securityText_("Закрытие долга","Бастани қарз")});showToast(`⏳ <b>${t("closeDebtSaving")}</b>`,"success");}else{enqueueBackgroundSyncV511_("debt.pay",{row,amount},{row,label:securityText_("Полное погашение","Пардохти пурра")});showToast(`⏳ <b>${securityText_("Погашение сохраняется в фоне","Пардохт дар замина захира мешавад")}</b>`,"success");}fullCloseModeV124_="pay";fullCloseClientV124_="";
+  const row=Number(currentRow||0),amount=Number(currentRemainder||0),isCloseMode=fullCloseModeV124_==="close";if(!row||amount<=0)return;document.getElementById("fullCloseConfirmModal").style.display="none";paymentModal.style.display="none";paymentLoader.style.display="none";if(isCloseMode){enqueueBackgroundSyncV511_("debt.closeManual",{row,remainder:amount,debtId:currentDebtIdV518_},{row,label:securityText_("Закрытие долга","Бастани қарз")});showToast(`⏳ <b>${t("closeDebtSaving")}</b>`,"success");}else{enqueueBackgroundSyncV511_("debt.pay",{row,amount,debtId:currentDebtIdV518_},{row,label:securityText_("Полное погашение","Пардохти пурра")});showToast(`⏳ <b>${securityText_("Погашение сохраняется в фоне","Пардохт дар замина захира мешавад")}</b>`,"success");}fullCloseModeV124_="pay";fullCloseClientV124_="";currentDebtIdV518_="";
 }
 
-function openAddToDebtModal(row, clientName, phone, remainder){
+function openAddToDebtModal(row, clientName, phone, remainder, debtId){
   addDebtTargetRow = row;
+  addDebtTargetIdV518_ = String(debtId||"");
   addDebtTargetClient = clientName;
   addDebtTargetPhone = phone;
 
@@ -7155,14 +7189,16 @@ function closeAddToDebtModal(){
   addDebtTargetRow = null;
   addDebtTargetClient = "";
   addDebtTargetPhone = "";
+  addDebtTargetIdV518_ = "";
 }
 
 async function confirmAddToDebt(){
-  const amount=Number(document.getElementById("addToDebtAmountInput")?.value||0);if(!amount||amount<=0){alert(t("invalidAmount"));return;}const row=Number(addDebtTargetRow||0),clientName=String(addDebtTargetClient||""),phoneValue=String(addDebtTargetPhone||"");const details=collectDebtDetailsV513_("appendDebt"),detailSummary=debtDetailsSummaryLocalV513_(details);const now=new Date(),formattedDate=String(now.getDate()).padStart(2,"0")+"."+String(now.getMonth()+1).padStart(2,"0")+"."+now.getFullYear()+" "+String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");closeAddToDebtModal();enqueueBackgroundSyncV511_("debt.mutate",{client:clientName,phone:phoneValue,amount,seller:currentSeller,mode:"append",targetRow:row,noteText:`Долг суммирован: +${amount} (${formattedDate})`,debtDetails:details,detailSummary},{row,label:clientName});showToast(`⏳ <b>${securityText_("Увеличение долга сохраняется в фоне","Зиёдшавии қарз дар замина захира мешавад")}</b><br>💰 +${amount} ${t("somoni")}`,"append");
+  const amount=Number(document.getElementById("addToDebtAmountInput")?.value||0);if(!amount||amount<=0){alert(t("invalidAmount"));return;}const row=Number(addDebtTargetRow||0),clientName=String(addDebtTargetClient||""),phoneValue=String(addDebtTargetPhone||""),debtId=String(addDebtTargetIdV518_||"");const details=collectDebtDetailsV513_("appendDebt"),detailSummary=debtDetailsSummaryLocalV513_(details);const now=new Date(),formattedDate=String(now.getDate()).padStart(2,"0")+"."+String(now.getMonth()+1).padStart(2,"0")+"."+now.getFullYear()+" "+String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");closeAddToDebtModal();enqueueBackgroundSyncV511_("debt.mutate",{client:clientName,phone:phoneValue,amount,seller:currentSeller,mode:"append",targetRow:row,debtId,noteText:`Долг суммирован: +${amount} (${formattedDate})`,debtDetails:details,detailSummary},{row,label:clientName});showToast(`⏳ <b>${securityText_("Увеличение долга сохраняется в фоне","Зиёдшавии қарз дар замина захира мешавад")}</b><br>💰 +${amount} ${t("somoni")}`,"append");
 }
 /* ---------- УМЕНЬШЕНИЕ / КОРРЕКТИРОВКА ДОЛГА ---------- */
-function openReduceDebtModal(row,clientName,phone,remainder){
+function openReduceDebtModal(row,clientName,phone,remainder,debtId){
   reduceDebtTargetRow=Number(row||0);
+  reduceDebtTargetIdV518_=String(debtId||"");
   reduceDebtTargetClient=String(clientName||'');
   reduceDebtTargetPhone=normalizePhone(phone);
   reduceDebtTargetRemainder=Number(remainder||0);
@@ -7175,10 +7211,10 @@ function openReduceDebtModal(row,clientName,phone,remainder){
 }
 function closeReduceDebtModal(){
   const modal=document.getElementById('reduceDebtModal');if(modal)modal.style.display='none';
-  reduceDebtTargetRow=null;reduceDebtTargetClient='';reduceDebtTargetPhone='';reduceDebtTargetRemainder=0;
+  reduceDebtTargetRow=null;reduceDebtTargetClient='';reduceDebtTargetPhone='';reduceDebtTargetRemainder=0;reduceDebtTargetIdV518_='';
 }
 async function confirmReduceDebt(){
-  const amount=Number(String(document.getElementById("reduceDebtAmountInput")?.value||"").replace(",","."));if(!amount||amount<=0){alert(t("invalidAmount"));return;}if(amount>=reduceDebtTargetRemainder){alert(statsLocale_("Сумма уменьшения должна быть меньше текущего остатка. Для полного закрытия используйте «Погасить».","Маблағи камкунӣ бояд аз бақияи ҷорӣ камтар бошад. Барои бастани пурра «Пурра пардохт»-ро истифода баред."));return;}const row=Number(reduceDebtTargetRow||0),clientName=String(reduceDebtTargetClient||""),phoneValue=String(reduceDebtTargetPhone||"");closeReduceDebtModal();enqueueBackgroundSyncV511_("debt.mutate",{client:clientName,phone:phoneValue,amount,mode:"reduce",targetRow:row,noteText:`Долг уменьшен: -${amount}`},{row,label:clientName});showToast(`⏳ <b>${statsLocale_("Уменьшение долга сохраняется в фоне","Камкунии қарз дар замина захира мешавад")}</b><br>➖ ${statsMoney_(amount)} ${t("somoni")}`,"success");
+  const amount=Number(String(document.getElementById("reduceDebtAmountInput")?.value||"").replace(",","."));if(!amount||amount<=0){alert(t("invalidAmount"));return;}if(amount>=reduceDebtTargetRemainder){alert(statsLocale_("Сумма уменьшения должна быть меньше текущего остатка. Для полного закрытия используйте «Погасить».","Маблағи камкунӣ бояд аз бақияи ҷорӣ камтар бошад. Барои бастани пурра «Пурра пардохт»-ро истифода баред."));return;}const row=Number(reduceDebtTargetRow||0),clientName=String(reduceDebtTargetClient||""),phoneValue=String(reduceDebtTargetPhone||""),debtId=String(reduceDebtTargetIdV518_||"");closeReduceDebtModal();enqueueBackgroundSyncV511_("debt.mutate",{client:clientName,phone:phoneValue,amount,mode:"reduce",targetRow:row,debtId,noteText:`Долг уменьшен: -${amount}`},{row,label:clientName});showToast(`⏳ <b>${statsLocale_("Уменьшение долга сохраняется в фоне","Камкунии қарз дар замина захира мешавад")}</b><br>➖ ${statsMoney_(amount)} ${t("somoni")}`,"success");
 }
 /* ---------- ИСТОРИЯ ---------- */
 
