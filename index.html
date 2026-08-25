@@ -2754,9 +2754,10 @@ html[data-theme="dark"] .profile-field-v510 input{background:rgba(15,23,42,.78);
 .background-sync-bar-v511.show{display:flex}.background-sync-bar-v511.failed{background:rgba(127,29,29,.96);border-color:rgba(248,113,113,.35)}
 .background-sync-main-v511{min-width:0;flex:1}.background-sync-title-v511{font-size:12px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.background-sync-sub-v511{margin-top:2px;font-size:10px;color:rgba(248,250,252,.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .background-sync-retry-v511{display:none!important;flex:0 0 auto;min-height:34px!important;padding:7px 11px!important;margin:0!important;border-radius:11px!important;border:1px solid rgba(255,255,255,.22)!important;background:#fff!important;color:#991b1b!important;font-size:11px!important;font-weight:900!important;box-shadow:none!important}.background-sync-bar-v511.failed .background-sync-retry-v511{display:inline-flex!important;align-items:center;justify-content:center}
+.background-sync-close-v511{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;font-size:18px;line-height:1;font-weight:900;cursor:pointer}.background-sync-close-v511:hover{background:rgba(255,255,255,.18)}
 .debt-row-v2.sync-pending-v511{box-shadow:0 0 0 2px rgba(59,130,246,.12),0 8px 22px rgba(15,23,42,.055)!important}.debt-row-v2.sync-failed-v511{box-shadow:0 0 0 2px rgba(245,158,11,.22),0 8px 22px rgba(15,23,42,.055)!important}.debt-sync-badge-v511{display:inline-flex;align-items:center;padding:3px 7px;border-radius:999px;background:#dbeafe;color:#1d4ed8;font-size:8px;font-weight:950;white-space:nowrap;flex:0 0 auto}.debt-sync-badge-v511.failed{background:#fef3c7;color:#b45309}
 html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94);color:#fff}
-@media(max-width:760px){.background-sync-bar-v511{left:10px;right:10px;bottom:calc(86px + env(safe-area-inset-bottom));max-width:none;padding:9px 10px;border-radius:14px}.background-sync-title-v511{font-size:11px}.background-sync-sub-v511{font-size:9px}.background-sync-retry-v511{min-height:32px!important;padding:6px 9px!important}.debt-sync-badge-v511{font-size:7px;padding:3px 6px}}
+@media(max-width:760px){.background-sync-bar-v511{left:10px;right:10px;bottom:calc(86px + env(safe-area-inset-bottom));max-width:none;padding:9px 10px;border-radius:14px}.background-sync-title-v511{font-size:11px}.background-sync-sub-v511{font-size:9px}.background-sync-retry-v511{min-height:32px!important;padding:6px 9px!important}.background-sync-close-v511{width:32px;height:32px;border-radius:10px}.debt-sync-badge-v511{font-size:7px;padding:3px 6px}}
 
 
 /* ===== WEB DESKTOP FULLWIDTH v5.12.5 ===== */
@@ -3609,6 +3610,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 <div id="backgroundSyncBarV511" class="background-sync-bar-v511" role="status" aria-live="polite">
   <div class="background-sync-main-v511"><div id="backgroundSyncTitleV511" class="background-sync-title-v511">Сохраняем в фоне…</div><div id="backgroundSyncSubV511" class="background-sync-sub-v511"></div></div>
   <button id="backgroundSyncRetryV511" class="background-sync-retry-v511" type="button" onclick="retryBackgroundSyncV511_()">Повторить</button>
+  <button id="backgroundSyncCloseV511" class="background-sync-close-v511" type="button" aria-label="Закрыть" title="Закрыть" onclick="dismissBackgroundSyncBarV511_()">×</button>
 </div>
 
 <button id="mobileSmartPayFab" class="mobile-smartpay-fab" type="button" onclick="mobileSmartPayFabClick_(event)" aria-label="Создать счет SmartPay" title="Создать счет SmartPay">🔗<span>+</span></button>
@@ -4114,6 +4116,8 @@ let backgroundSyncBusyV511_=false;
 let backgroundSyncLoadedForV511_="";
 let backgroundSyncRefreshTimerV511_=null;
 let backgroundSyncRetryTimerV511_=null;
+let backgroundSyncDismissedV511_=false;
+let backgroundSyncDismissKeyV511_="";
 function backgroundSyncQueueKeyV511_(){return BACKGROUND_SYNC_QUEUE_PREFIX_V511+String(currentUser?.id||currentUser?.email||"unknown");}
 function backgroundSyncMakeIdV511_(){return "bg-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);}
 function loadBackgroundSyncQueueV511_(){
@@ -4126,9 +4130,14 @@ function backgroundSyncFailedV511_(){return backgroundSyncQueueV511_.filter(op=>
 function backgroundSyncActiveV511_(){return backgroundSyncQueueV511_.filter(op=>op.status==="pending"||op.status==="sending");}
 function backgroundSyncRowsV511_(status){return new Set(backgroundSyncQueueV511_.filter(op=>{if(status==="failed")return op.status==="failed";if(status==="active")return op.status==="pending"||op.status==="sending";return op.status!=="done";}).map(op=>Number(op?.meta?.row||op?.payload?.row||op?.payload?.targetRow||0)).filter(Boolean));}
 function backgroundSyncNextRetryTextV511_(active){const now=Date.now(),future=(active||[]).filter(op=>op.status==="pending"&&Number(op.nextRetryAt||0)>now).sort((a,b)=>Number(a.nextRetryAt||0)-Number(b.nextRetryAt||0));if(!future.length)return "";const sec=Math.max(1,Math.ceil((Number(future[0].nextRetryAt||0)-now)/1000));return currentLanguage==="tj"?`Такрори худкор пас аз ${sec} сония`:`Автоповтор через ${sec} сек.`;}
+function backgroundSyncStateKeyV511_(){return (backgroundSyncQueueV511_||[]).filter(op=>op.status==="failed"||op.status==="pending"||op.status==="sending").map(op=>[String(op.id||""),String(op.status||""),String(op.retryCount||0),String(op.error||""),String(op.nextRetryAt||0)].join(":" )).join("|");}
+function dismissBackgroundSyncBarV511_(){const bar=document.getElementById("backgroundSyncBarV511");backgroundSyncDismissedV511_=true;backgroundSyncDismissKeyV511_=backgroundSyncStateKeyV511_();if(bar)bar.classList.remove("show");}
 function renderBackgroundSyncStateV511_(){
   const bar=document.getElementById("backgroundSyncBarV511"),title=document.getElementById("backgroundSyncTitleV511"),sub=document.getElementById("backgroundSyncSubV511");if(!bar)return;
-  const failed=backgroundSyncFailedV511_(),active=backgroundSyncActiveV511_();bar.classList.toggle("failed",failed.length>0);
+  const failed=backgroundSyncFailedV511_(),active=backgroundSyncActiveV511_(),stateKey=backgroundSyncStateKeyV511_();bar.classList.toggle("failed",failed.length>0);
+  if(!failed.length&&!active.length){backgroundSyncDismissedV511_=false;backgroundSyncDismissKeyV511_="";bar.classList.remove("show","failed");if(sub)sub.textContent="";return;}
+  if(backgroundSyncDismissedV511_&&backgroundSyncDismissKeyV511_===stateKey){bar.classList.remove("show");return;}
+  if(backgroundSyncDismissedV511_&&backgroundSyncDismissKeyV511_!==stateKey){backgroundSyncDismissedV511_=false;backgroundSyncDismissKeyV511_="";}
   if(failed.length){bar.classList.add("show");if(title)title.textContent=currentLanguage==="tj"?`⚠️ ${failed.length} тағйирот захира нашуд`:`⚠️ Не сохранено: ${failed.length}`;if(sub)sub.textContent=String(failed[0].error||securityText_("Нажмите «Повторить» после проверки связи.","Пас аз санҷиши пайвастшавӣ «Такрор»-ро пахш кунед."));return;}
   if(active.length){bar.classList.add("show");if(title)title.textContent=securityText_("⏳ Синхронизация…","⏳ Ҳамоҳангсозӣ…");if(sub){const retryText=backgroundSyncNextRetryTextV511_(active);sub.textContent=retryText||(currentLanguage==="tj"?`Дар навбат: ${active.length}`:`В очереди: ${active.length}`);}return;}
   bar.classList.remove("show","failed");if(sub)sub.textContent="";
@@ -4187,7 +4196,7 @@ async function processBackgroundSyncQueueV511_(){
     op.status="failed";op.error=error;op.nextRetryAt=0;saveBackgroundSyncQueueV511_();backgroundSyncBusyV511_=false;renderBackgroundSyncStateV511_();rerenderDebtDataV511_();showToast(`⚠️ <b>${securityText_("Изменение не удалось сохранить после 3 повторов","Тағйирот пас аз 3 такрор захира нашуд")}</b><br>${escapeHtml(op.error)}<br>${securityText_("Проверьте связь и нажмите «Повторить». Данные на экране не откатились.","Пайвастшавиро санҷида «Такрор»-ро пахш кунед. Маълумоти экран барнагашт.")}`,"error");scheduleBackgroundSyncRetryV511_();
   }
 }
-function retryBackgroundSyncV511_(){loadBackgroundSyncQueueV511_();const failed=backgroundSyncFailedV511_();if(!failed.length)return;failed.forEach(op=>{op.status="pending";op.error="";op.retryCount=0;op.nextRetryAt=0;});saveBackgroundSyncQueueV511_();renderBackgroundSyncStateV511_();rerenderDebtDataV511_();processBackgroundSyncQueueV511_();}
+function retryBackgroundSyncV511_(){loadBackgroundSyncQueueV511_();const failed=backgroundSyncFailedV511_();if(!failed.length)return;backgroundSyncDismissedV511_=false;backgroundSyncDismissKeyV511_="";failed.forEach(op=>{op.status="pending";op.error="";op.retryCount=0;op.nextRetryAt=0;});saveBackgroundSyncQueueV511_();renderBackgroundSyncStateV511_();rerenderDebtDataV511_();processBackgroundSyncQueueV511_();}
 
 const translations = {
   ru: {
