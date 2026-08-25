@@ -2750,15 +2750,16 @@ html[data-theme="dark"] .profile-field-v510 input{background:rgba(15,23,42,.78);
 
 
 /* ===== BACKGROUND SAVE v5.11.0 ===== */
-.background-sync-bar-v511{position:fixed;right:18px;bottom:18px;z-index:1450;display:none;align-items:center;gap:10px;max-width:min(520px,calc(100vw - 28px));padding:10px 12px;border-radius:16px;background:rgba(15,23,42,.94);border:1px solid rgba(148,163,184,.22);box-shadow:0 16px 42px rgba(15,23,42,.26);color:#f8fafc;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-.background-sync-bar-v511.show{display:flex}.background-sync-bar-v511.failed{background:rgba(127,29,29,.96);border-color:rgba(248,113,113,.35)}
-.background-sync-main-v511{min-width:0;flex:1}.background-sync-title-v511{font-size:12px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.background-sync-sub-v511{margin-top:2px;font-size:10px;color:rgba(248,250,252,.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.background-sync-retry-v511{display:none!important;flex:0 0 auto;min-height:34px!important;padding:7px 11px!important;margin:0!important;border-radius:11px!important;border:1px solid rgba(255,255,255,.22)!important;background:#fff!important;color:#991b1b!important;font-size:11px!important;font-weight:900!important;box-shadow:none!important}.background-sync-bar-v511.failed .background-sync-retry-v511{display:inline-flex!important;align-items:center;justify-content:center}
-.background-sync-cancel-v511{display:none!important;flex:0 0 auto;min-height:34px!important;padding:7px 11px!important;margin:0!important;border-radius:11px!important;border:1px solid rgba(254,202,202,.34)!important;background:rgba(255,255,255,.08)!important;color:#fff!important;font-size:11px!important;font-weight:900!important;box-shadow:none!important;cursor:pointer}.background-sync-bar-v511.failed .background-sync-cancel-v511{display:inline-flex!important;align-items:center;justify-content:center}.background-sync-cancel-v511:hover{background:rgba(255,255,255,.15)!important}
+.background-sync-bar-v511{position:fixed;right:18px;bottom:18px;z-index:1450;display:none;align-items:center;gap:10px;max-width:min(620px,calc(100vw - 28px));padding:10px 12px;border-radius:16px;background:rgba(15,23,42,.96);border:1px solid rgba(148,163,184,.22);box-shadow:0 16px 42px rgba(15,23,42,.26);color:#f8fafc;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.background-sync-bar-v511.show{display:flex}.background-sync-bar-v511.failed{background:rgba(31,41,55,.98);border-color:rgba(248,113,113,.32)}
+.background-sync-main-v511{min-width:0;flex:1 1 220px;padding-right:2px}.background-sync-title-v511{font-size:12px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.background-sync-sub-v511{margin-top:2px;font-size:10px;color:rgba(248,250,252,.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.background-sync-actions-v5223{display:none;flex:0 0 auto;align-items:center;gap:7px}.background-sync-bar-v511.failed .background-sync-actions-v5223{display:flex}
+.background-sync-retry-v511,.background-sync-cancel-v511{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;width:auto!important;min-width:92px!important;min-height:36px!important;padding:7px 12px!important;margin:0!important;border-radius:11px!important;font-size:11px!important;font-weight:900!important;box-shadow:none!important;cursor:pointer!important}
+.background-sync-retry-v511{border:1px solid rgba(255,255,255,.22)!important;background:#fff!important;color:#991b1b!important}.background-sync-cancel-v511{border:1px solid rgba(254,202,202,.34)!important;background:rgba(239,68,68,.16)!important;color:#fff!important}.background-sync-cancel-v511:hover{background:rgba(239,68,68,.28)!important}.background-sync-retry-v511:hover{background:#fff7f7!important}
 .background-sync-close-v511{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;font-size:18px;line-height:1;font-weight:900;cursor:pointer}.background-sync-close-v511:hover{background:rgba(255,255,255,.18)}
 .debt-row-v2.sync-pending-v511{box-shadow:0 0 0 2px rgba(59,130,246,.12),0 8px 22px rgba(15,23,42,.055)!important}.debt-row-v2.sync-failed-v511{box-shadow:0 0 0 2px rgba(245,158,11,.22),0 8px 22px rgba(15,23,42,.055)!important}.debt-sync-badge-v511{display:inline-flex;align-items:center;padding:3px 7px;border-radius:999px;background:#dbeafe;color:#1d4ed8;font-size:8px;font-weight:950;white-space:nowrap;flex:0 0 auto}.debt-sync-badge-v511.failed{background:#fef3c7;color:#b45309}
-html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.94);color:#fff}
-@media(max-width:760px){.background-sync-bar-v511{left:10px;right:10px;bottom:calc(86px + env(safe-area-inset-bottom));max-width:none;padding:9px 10px;border-radius:14px}.background-sync-title-v511{font-size:11px}.background-sync-sub-v511{font-size:9px}.background-sync-retry-v511,.background-sync-cancel-v511{min-height:32px!important;padding:6px 9px!important}.background-sync-close-v511{width:32px;height:32px;border-radius:10px}.debt-sync-badge-v511{font-size:7px;padding:3px 6px}}
+html[data-theme="light"] .background-sync-bar-v511{background:rgba(15,23,42,.96);color:#fff}
+@media(max-width:760px){.background-sync-bar-v511{left:10px;right:10px;bottom:calc(86px + env(safe-area-inset-bottom));max-width:none;padding:11px;border-radius:16px;display:none;flex-wrap:wrap;align-items:stretch;gap:8px}.background-sync-bar-v511.show{display:flex}.background-sync-main-v511{flex:1 0 calc(100% - 42px);min-width:0;padding-right:0}.background-sync-title-v511{font-size:11px;padding-right:4px}.background-sync-sub-v511{font-size:9px;white-space:normal;line-height:1.35}.background-sync-actions-v5223{order:3;flex:1 0 100%;width:100%;display:none;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}.background-sync-bar-v511.failed .background-sync-actions-v5223{display:grid}.background-sync-retry-v511,.background-sync-cancel-v511{width:100%!important;min-width:0!important;min-height:42px!important;padding:8px 10px!important;font-size:12px!important}.background-sync-close-v511{width:34px;height:34px;border-radius:10px;align-self:flex-start}.debt-sync-badge-v511{font-size:7px;padding:3px 6px}}
 
 
 /* ===== WEB DESKTOP FULLWIDTH v5.12.5 ===== */
@@ -3603,9 +3604,11 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 
 <div id="backgroundSyncBarV511" class="background-sync-bar-v511" role="status" aria-live="polite">
   <div class="background-sync-main-v511"><div id="backgroundSyncTitleV511" class="background-sync-title-v511">Сохраняем в фоне…</div><div id="backgroundSyncSubV511" class="background-sync-sub-v511"></div></div>
-  <button id="backgroundSyncRetryV511" class="background-sync-retry-v511" type="button" onclick="retryBackgroundSyncV511_()">Повторить</button>
-  <button id="backgroundSyncCancelV511" class="background-sync-cancel-v511" type="button" onclick="cancelFailedBackgroundSyncV5215_()">Отменить</button>
-  <button id="backgroundSyncCloseV511" class="background-sync-close-v511" type="button" aria-label="Закрыть" title="Закрыть" onclick="dismissBackgroundSyncBarV511_()">×</button>
+  <div id="backgroundSyncActionsV5223" class="background-sync-actions-v5223">
+    <button id="backgroundSyncCancelV511" class="background-sync-cancel-v511" type="button" onclick="cancelFailedBackgroundSyncV5215_()">Отменить</button>
+    <button id="backgroundSyncRetryV511" class="background-sync-retry-v511" type="button" onclick="retryBackgroundSyncV511_()">Повторить</button>
+  </div>
+  <button id="backgroundSyncCloseV511" class="background-sync-close-v511" type="button" aria-label="Скрыть" title="Скрыть" onclick="dismissBackgroundSyncBarV511_()">×</button>
 </div>
 
 <button id="mobileSmartPayFab" class="mobile-smartpay-fab" type="button" onclick="mobileSmartPayFabClick_(event)" aria-label="Создать счет SmartPay" title="Создать счет SmartPay">🔗<span>+</span></button>
@@ -3961,7 +3964,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 </div>
 
 <script>
-const VERSION="5.22.2";
+const VERSION="5.22.3";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4128,12 +4131,13 @@ function backgroundSyncNextRetryTextV511_(active){const now=Date.now(),future=(a
 function backgroundSyncStateKeyV511_(){return (backgroundSyncQueueV511_||[]).filter(op=>op.status==="failed"||op.status==="pending"||op.status==="sending").map(op=>[String(op.id||""),String(op.status||""),String(op.retryCount||0),String(op.error||""),String(op.nextRetryAt||0)].join(":" )).join("|");}
 function dismissBackgroundSyncBarV511_(){const bar=document.getElementById("backgroundSyncBarV511");backgroundSyncDismissedV511_=true;backgroundSyncDismissKeyV511_=backgroundSyncStateKeyV511_();if(bar)bar.classList.remove("show");}
 function renderBackgroundSyncStateV511_(){
-  const bar=document.getElementById("backgroundSyncBarV511"),title=document.getElementById("backgroundSyncTitleV511"),sub=document.getElementById("backgroundSyncSubV511");if(!bar)return;
+  const bar=document.getElementById("backgroundSyncBarV511"),title=document.getElementById("backgroundSyncTitleV511"),sub=document.getElementById("backgroundSyncSubV511"),retryBtn=document.getElementById("backgroundSyncRetryV511"),cancelBtn=document.getElementById("backgroundSyncCancelV511");if(!bar)return;
+  if(retryBtn)retryBtn.textContent=securityText_("Повторить","Такрор");if(cancelBtn)cancelBtn.textContent=securityText_("Отменить","Бекор кардан");
   const failed=backgroundSyncFailedV511_(),active=backgroundSyncActiveV511_(),stateKey=backgroundSyncStateKeyV511_();bar.classList.toggle("failed",failed.length>0);
   if(!failed.length&&!active.length){backgroundSyncDismissedV511_=false;backgroundSyncDismissKeyV511_="";bar.classList.remove("show","failed");if(sub)sub.textContent="";return;}
   if(backgroundSyncDismissedV511_&&backgroundSyncDismissKeyV511_===stateKey){bar.classList.remove("show");return;}
   if(backgroundSyncDismissedV511_&&backgroundSyncDismissKeyV511_!==stateKey){backgroundSyncDismissedV511_=false;backgroundSyncDismissKeyV511_="";}
-  if(failed.length){bar.classList.add("show");if(title)title.textContent=currentLanguage==="tj"?`⚠️ ${failed.length} тағйирот захира нашуд`:`⚠️ Не сохранено: ${failed.length}`;if(sub)sub.textContent=String(failed[0].error||securityText_("Повторите отправку или отмените ненужное действие.","Ирсолро такрор кунед ё амали нолозимро бекор кунед."));return;}
+  if(failed.length){bar.classList.add("show");if(title)title.textContent=currentLanguage==="tj"?`⚠️ ${failed.length} тағйирот захира нашуд`:`⚠️ Не сохранено: ${failed.length}`;if(sub)sub.textContent=securityText_("Выберите: повторить отправку или отменить ненужное действие.","Интихоб кунед: ирсолро такрор кунед ё амали нолозимро бекор кунед.");return;}
   if(active.length){bar.classList.add("show");if(title)title.textContent=securityText_("⏳ Синхронизация…","⏳ Ҳамоҳангсозӣ…");if(sub){const retryText=backgroundSyncNextRetryTextV511_(active);sub.textContent=retryText||(currentLanguage==="tj"?`Дар навбат: ${active.length}`:`В очереди: ${active.length}`);}return;}
   bar.classList.remove("show","failed");if(sub)sub.textContent="";
 }
@@ -4194,23 +4198,24 @@ async function processBackgroundSyncQueueV511_(){
 function retryBackgroundSyncV511_(){loadBackgroundSyncQueueV511_();const failed=backgroundSyncFailedV511_();if(!failed.length)return;backgroundSyncDismissedV511_=false;backgroundSyncDismissKeyV511_="";failed.forEach(op=>{op.status="pending";op.error="";op.retryCount=0;op.nextRetryAt=0;});saveBackgroundSyncQueueV511_();renderBackgroundSyncStateV511_();rerenderDebtDataV511_();processBackgroundSyncQueueV511_();}
 async function cancelFailedBackgroundSyncV5215_(){
   loadBackgroundSyncQueueV511_();
-  const failed=backgroundSyncFailedV511_();
-  if(!failed.length)return;
-  const count=failed.length;
+  const cancellable=backgroundSyncQueueV511_.filter(op=>op&&["failed","pending"].includes(String(op.status||"")));
+  if(!cancellable.length){showToast(`ℹ️ ${securityText_("Сейчас нет действия, которое можно отменить.","Ҳоло амале нест, ки бекор карда шавад.")}`,"info");return;}
+  const count=cancellable.length;
   const msg=count===1
-    ? securityText_("Отменить это несохранённое действие? Система больше не будет пытаться отправить его. Данные на экране будут обновлены с сервера.","Ин амали захиранашударо бекор мекунед? Система дигар кӯшиши фиристодани онро намекунад. Маълумоти экран аз сервер нав мешавад.")
-    : securityText_(`Отменить ${count} несохранённых действия? Они будут удалены из очереди, а данные на экране обновятся с сервера.`,`${count} амали захиранашуда бекор карда шавад? Онҳо аз навбат ҳазф мешаванд ва маълумоти экран аз сервер нав мешавад.`);
+    ? securityText_("Отменить это несохранённое действие? Оно будет удалено из очереди повторной отправки. После этого данные обновятся с сервера.","Ин амали захиранашударо бекор мекунед? Он аз навбати ирсоли такрорӣ ҳазф мешавад. Баъд маълумот аз сервер нав мешавад.")
+    : securityText_(`Отменить ${count} несохранённых действия? Они будут удалены из очереди повторной отправки, после чего данные обновятся с сервера.`,`${count} амали захиранашуда бекор карда шавад? Онҳо аз навбати ирсоли такрорӣ ҳазф мешаванд ва баъд маълумот аз сервер нав мешавад.`);
   if(!window.confirm(msg))return;
-  const failedIds=new Set(failed.map(op=>String(op.id||"")));
-  backgroundSyncQueueV511_=backgroundSyncQueueV511_.filter(op=>!failedIds.has(String(op.id||"")));
+  const ids=new Set(cancellable.map(op=>String(op.id||"")));
+  const labels=cancellable.map(op=>String(op?.meta?.label||op?.payload?.client||op?.action||"")).filter(Boolean);
+  backgroundSyncQueueV511_=backgroundSyncQueueV511_.filter(op=>!ids.has(String(op.id||"")));
+  clearTimeout(backgroundSyncRetryTimerV511_);backgroundSyncRetryTimerV511_=null;
   backgroundSyncDismissedV511_=false;backgroundSyncDismissKeyV511_="";
   saveBackgroundSyncQueueV511_();renderBackgroundSyncStateV511_();rerenderDebtDataV511_();
-  showToast(`✅ <b>${securityText_(count===1?"Несохранённое действие отменено":`Отменено действий: ${count}`,count===1?"Амали захиранашуда бекор шуд":`Амалҳои бекоршуда: ${count}`)}</b>`,"success");
-  if(authToken){try{
-    await loadDebts({forceFresh:true});
-    const labels=failed.map(op=>String(op?.meta?.label||op?.payload?.client||op?.action||"")).filter(Boolean);
+  showToast(`✅ <b>${securityText_(count===1?"Действие отменено":`Отменено действий: ${count}`,count===1?"Амал бекор шуд":`Амалҳои бекоршуда: ${count}`)}</b>`,"success");
+  if(authToken){
+    try{await loadDebts({forceFresh:true});}catch(e){showToast(`⚠️ ${securityText_("Действие отменено, но данные с сервера не удалось обновить сразу. Нажмите «Обновить».","Амал бекор шуд, аммо маълумот аз сервер фавран нав нашуд. «Нав кардан»-ро пахш кунед.")}`,"warning");}
     apiPost("audit.clientAction",{action:"PENDING_SYNC_CANCELLED",count,labels}).catch(()=>{});
-  }catch(e){showToast(`⚠️ ${securityText_("Действие отменено, но не удалось сразу обновить данные с сервера. Нажмите «Обновить данные».","Амал бекор шуд, аммо маълумот аз сервер фавран нав нашуд. «Нав кардани маълумот»-ро пахш кунед.")}`,"warning");}}
+  }
 }
 
 const translations = {
