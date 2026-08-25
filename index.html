@@ -3079,7 +3079,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
   <button class="nav-btn" id="trashNavBtnV521" data-view="trash" onclick="showView('trash')" style="display:none"><span class="nav-icon">🗑️</span><span data-nav-label="trash">Удалённые записи</span></button>
   <button class="nav-btn" id="smartPayNavBtn" data-view="smartpay" onclick="showView('smartpay')"><span class="nav-icon">🔗</span><span id="smartPayNavLabel">Счета SmartPay</span></button>
   <button class="nav-btn" data-view="stats" onclick="showView('stats')"><span class="nav-icon">📊</span><span data-nav-label="stats">Статистика</span></button>
-  <button class="nav-btn" id="auditNavBtn" data-view="audit" onclick="showView('audit')"><span class="nav-icon">🧾</span><span id="auditNavLabel">История</span></button>
+  <button class="nav-btn" id="auditNavBtn" data-view="audit" onclick="showView('audit')"><span class="nav-icon">🧾</span><span id="auditNavLabel">Журнал</span></button>
   <button class="nav-btn" data-view="guide" onclick="showView('guide')"><span class="nav-icon">📘</span><span>Инструкция</span></button>
   <button class="nav-btn" data-view="profile" onclick="showView('profile')"><span class="nav-icon">👤</span><span>Профиль</span></button>
   <button class="nav-btn" data-view="settings" onclick="showView('settings')"><span class="nav-icon">⚙️</span><span data-nav-label="settings">Настройки</span></button>
@@ -3196,11 +3196,11 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 
 
   <section id="view-audit" class="app-view audit-view">
-    <h3 id="auditPageTitle" class="view-title">История</h3>
+    <h3 id="auditPageTitle" class="view-title">Журнал действий</h3>
     <div class="card history-info-card-v522"><b>Единая история системы.</b> Здесь собраны изменения долгов, оплаты, удаление и восстановление записей, входы и выходы пользователей, действия с доступом, SmartPay, события безопасности и отправленные оповещения. Старые отдельные журналы из настроек убраны, чтобы информация не дублировалась.</div>
     <div class="card audit-toolbar-card">
       <div class="audit-toolbar-head">
-        <div><div id="auditToolbarTitle" class="audit-toolbar-title">🕘 История всех событий</div><div id="auditToolbarHint" class="audit-toolbar-sub">Кто, когда и что сделал, а также какие системные оповещения были сформированы.</div></div>
+        <div><div id="auditToolbarTitle" class="audit-toolbar-title">🕘 Журнал действий</div><div id="auditToolbarHint" class="audit-toolbar-sub">Кто, когда и что сделал, а также какие системные оповещения были сформированы.</div></div>
         <button id="auditExportBtn" class="user-mini-btn audit-export-btn" type="button" onclick="exportAuditCsv()">⬇ CSV</button>
       </div>
       <div class="audit-toolbar-grid">
@@ -3215,7 +3215,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
     </div>
     <div class="card" style="padding:14px">
       <div class="audit-summary-bar"><span id="auditResultCount">0 событий</span><span id="auditScopeText"></span></div>
-      <div id="auditList" class="audit-list"><div class="audit-empty">История загружается…</div></div>
+      <div id="auditList" class="audit-list"><div class="audit-empty">Журнал загружается…</div></div>
     </div>
   </section>
 
@@ -3269,7 +3269,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
             <li>Не отправляйте пароль другим сотрудникам.</li>
             <li>При необходимости включите 2FA.</li>
             <li>Чистите лишние сессии в Security Center.</li>
-            <li>Используйте вкладку «История» для контроля изменений.</li>
+            <li>Используйте вкладку «Журнал действий» для контроля изменений.</li>
           </ul>
         </div>
       </aside>
@@ -3521,7 +3521,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 
         <div id="accountSecurityCard" data-settings-card="security" data-settings-keywords="security center пароль сессии устройства 2fa двухфакторная защита безопасность" class="card settings-card security-center-card settings-wide-card">
           <div class="security-center-head">
-            <div><b id="accountSecurityTitle">🔐 Security Center</b><div id="securityCenterHint" class="settings-hint">Общее состояние аккаунта: активные сессии, известные устройства, ошибки входа и уровень защиты. Полная хронология находится во вкладке «История».</div></div>
+            <div><b id="accountSecurityTitle">🔐 Security Center</b><div id="securityCenterHint" class="settings-hint">Общее состояние аккаунта: активные сессии, известные устройства, ошибки входа и уровень защиты. Полная хронология находится во вкладке «Журнал действий».</div></div>
             <div class="security-center-head-actions"><button class="security-help-link-v519" type="button" onclick="openSecurityGuideV519_('security-center')">Подробнее</button><button id="securityCenterRefreshBtn" class="user-mini-btn" type="button" onclick="loadSecurityCenter()">Обновить</button></div>
           </div>
           <div id="securityCenterSummary" class="security-center-summary"><div class="security-empty">Загрузка…</div></div>
@@ -3624,7 +3624,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
     <div class="mobile-more-head-v593"><div><b id="mobileMoreTitle">Ещё</b><span id="mobileMoreSubtitle">Дополнительные разделы</span></div><button type="button" onclick="closeMobileMore_()">×</button></div>
     <div class="mobile-more-grid-v593">
       <button id="moreSmartPayBtn" type="button" onclick="mobileMoreGo_('smartpay')"><span>🔗</span><b id="moreSmartPayLabel">Счета SmartPay</b></button>
-      <button id="moreAuditBtn" type="button" onclick="mobileMoreGo_('audit')"><span>🕘</span><b id="moreAuditLabel">История</b></button>
+      <button id="moreAuditBtn" type="button" onclick="mobileMoreGo_('audit')"><span>🕘</span><b id="moreAuditLabel">Журнал</b></button>
       <button id="moreTrashBtnV521" type="button" onclick="mobileMoreGo_('trash')" style="display:none"><span>🗑️</span><b id="moreTrashLabelV521">Удалённые записи</b></button>
       <button type="button" onclick="mobileMoreGo_('guide')"><span>📘</span><b id="moreGuideLabel">Инструкция</b></button>
       <button type="button" onclick="mobileMoreGo_('profile')"><span>👤</span><b id="moreProfileLabel">Профиль</b></button>
@@ -3674,6 +3674,15 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
   Отмена
 </button>
     <div id="paymentLoader" class="loader" style="display:none;">⏳ Обработка...</div>
+  </div>
+</div>
+
+<div class="modal" id="historyModal">
+  <div class="modal-content">
+    <h3>История оплат</h3>
+    <div id="historyLoader" class="loader" style="display:none;">⏳ Загрузка истории...</div>
+    <div id="historyContent"></div>
+    <button onclick="closeHistory()">Закрыть</button>
   </div>
 </div>
 
@@ -3952,7 +3961,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 </div>
 
 <script>
-const VERSION="5.22.0";
+const VERSION="5.22.1";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4197,7 +4206,11 @@ async function cancelFailedBackgroundSyncV5215_(){
   backgroundSyncDismissedV511_=false;backgroundSyncDismissKeyV511_="";
   saveBackgroundSyncQueueV511_();renderBackgroundSyncStateV511_();rerenderDebtDataV511_();
   showToast(`✅ <b>${securityText_(count===1?"Несохранённое действие отменено":`Отменено действий: ${count}`,count===1?"Амали захиранашуда бекор шуд":`Амалҳои бекоршуда: ${count}`)}</b>`,"success");
-  if(authToken){try{await loadDebts({forceFresh:true});}catch(e){showToast(`⚠️ ${securityText_("Действие отменено, но не удалось сразу обновить данные с сервера. Нажмите «Обновить данные».","Амал бекор шуд, аммо маълумот аз сервер фавран нав нашуд. «Нав кардани маълумот»-ро пахш кунед.")}`,"warning");}}
+  if(authToken){try{
+    await loadDebts({forceFresh:true});
+    const labels=failed.map(op=>String(op?.meta?.label||op?.payload?.client||op?.action||"")).filter(Boolean);
+    apiPost("audit.clientAction",{action:"PENDING_SYNC_CANCELLED",count,labels}).catch(()=>{});
+  }catch(e){showToast(`⚠️ ${securityText_("Действие отменено, но не удалось сразу обновить данные с сервера. Нажмите «Обновить данные».","Амал бекор шуд, аммо маълумот аз сервер фавран нав нашуд. «Нав кардани маълумот»-ро пахш кунед.")}`,"warning");}}
 }
 
 const translations = {
@@ -4232,7 +4245,7 @@ const translations = {
     navStats: "Статистика",
     navSettings: "Настройки",
     mobileNavMore: "Ещё",
-    navAudit: "История",
+    navAudit: "Журнал",
     navGuide: "Инструкция",
     navActions: "Действия",
     moreSubtitle: "Дополнительные разделы",
@@ -4304,7 +4317,7 @@ const translations = {
     payBtn: "Оплатить",
     callBtn: "Позвонить",
     whatsappBtn: "WhatsApp",
-    historyBtn: "История",
+    historyBtn: "История оплат",
     debtDetailsToggle: "Добавить описание / товары",
     debtDetailsOptional: "необязательно",
     debtDetailsOrItems: "или список товаров",
@@ -4451,7 +4464,7 @@ const translations = {
     navStats: "Омор",
     navSettings: "Танзимот",
     mobileNavMore: "Бештар",
-    navAudit: "Таърих",
+    navAudit: "Журнал",
     navGuide: "Дастур",
     navActions: "Амалҳо",
     moreSubtitle: "Бахшҳои иловагӣ",
@@ -4523,7 +4536,7 @@ const translations = {
     payBtn: "Пардохт кардан",
     callBtn: "Занг задан",
     whatsappBtn: "WhatsApp",
-    historyBtn: "Таърих",
+    historyBtn: "Таърихи пардохтҳо",
     debtDetailsToggle: "Иловаи шарҳ / молҳо",
     debtDetailsOptional: "ихтиёрӣ",
     debtDetailsOrItems: "ё рӯйхати молҳо",
@@ -5163,7 +5176,7 @@ function applySecurityTranslations_(){
     notificationPrefUsersLabel:["Пользователи","Истифодабарандагон"],notificationPrefUsersHint:["Создание и изменение доступа","Эҷод ва тағйири дастрасӣ"],notificationPrefSecurityLabel:["Безопасность","Амният"],notificationPrefSecurityHint:["Входы, блокировки и изменение пароля","Вурудҳо, басташавӣ ва иваз кардани парол"],
     notificationPrefSoundLabel:["Звук","Садо"],notificationPrefSoundHint:["Короткий сигнал при новых событиях","Сигнали кӯтоҳ ҳангоми рӯйдоди нав"],notificationPrefBrowserLabel:["Уведомления браузера","Огоҳиномаҳои браузер"],notificationPrefBrowserHint:["Показывать, пока приложение открыто","Ҳангоми кушода будани барнома нишон дода шавад"],
     securityEventsTitle:["🛡 События безопасности","🛡 Рӯйдодҳои амниятӣ"],securityEventsHint:["Последние события. Список прокручивается.","Рӯйдодҳои охирин. Рӯйхат ҳаракат мекунад."],securityEventsRefreshBtn:["Обновить","Навсозӣ"],
-    auditPageTitle:["История","Таърих"],auditToolbarTitle:["🕘 История всех событий","🕘 Таърихи ҳамаи рӯйдодҳо"],auditToolbarHint:["Изменения, входы, безопасность и оповещения в одном месте.","Тағйирот, вурудҳо, амният ва огоҳиҳо дар як ҷо."],auditSearchLabel:["Поиск","Ҷустуҷӯ"],auditCategoryLabel:["Категория","Категория"],auditUserLabel:["Пользователь","Истифодабаранда"],auditFromLabel:["С даты","Аз сана"],auditToLabel:["По дату","То сана"],auditRefreshBtn:["Обновить","Навсозӣ"],settingsAuditBtn:["История","Таърих"],auditNavLabel:["История","Таърих"],
+    auditPageTitle:["Журнал действий","Журнали амалҳо"],auditToolbarTitle:["🕘 Журнал действий","🕘 Журнали амалҳо"],auditToolbarHint:["Изменения, входы, безопасность и оповещения в одном месте.","Тағйирот, вурудҳо, амният ва огоҳиҳо дар як ҷо."],auditSearchLabel:["Поиск","Ҷустуҷӯ"],auditCategoryLabel:["Категория","Категория"],auditUserLabel:["Пользователь","Истифодабаранда"],auditFromLabel:["С даты","Аз сана"],auditToLabel:["По дату","То сана"],auditRefreshBtn:["Обновить","Навсозӣ"],settingsAuditBtn:["Журнал действий","Журнали амалҳо"],auditNavLabel:["Журнал","Журнал"],
     settingsAppearanceTitle:["✨ Интерфейс","✨ Интерфейс"],settingsAppearanceHint:["Язык, тема и читаемость собраны в одном месте.","Забон, мавзӯъ ва хондашавӣ дар як ҷой ҷамъ шудаанд."],
     notificationCenterTitle:["Уведомления","Огоҳиномаҳо"],notificationCenterSubtitle:["События по долгам, оплатам и безопасности","Рӯйдодҳои қарзҳо, пардохтҳо ва амният"],notificationMarkAllBtn:["Прочитать все","Ҳамаро хондан"],notificationDeleteAllBtn:["🗑 Очистить","🗑 Тоза кардан"],
     notificationFilterAll:["Все","Ҳама"],notificationFilterUnread:["Новые","Нав"],notificationFilterDebts:["Долги","Қарзҳо"],notificationFilterPayments:["Оплаты","Пардохтҳо"],notificationFilterSecurity:["Безопасность","Амният"],notificationFilterUsers:["Пользователи","Истифодабарандагон"],
@@ -6766,7 +6779,7 @@ function statsDebtActionsHtml_(d){
   const actions=[];
   if(remainder>0&&canPermission("appendDebt"))actions.push(`<button class="stats-debt-action add" onclick="openAddToDebtModal(${row},'${safeClient}','${safePhone}',${remainder},'${safeDebtId}')">➕ ${t('addToDebtBtn')}</button>`);
   if(remainder>0&&canPermission("payDebt"))actions.push(`<button class="stats-debt-action pay" onclick="openPayment(${row},${remainder},'${safeDebtId}')">💵 ${t('payBtn')}</button>`);
-  actions.push(`<button class="stats-debt-action history" onclick="showHistory('${safeClient}')">📂 ${t('historyBtn')}</button>`);
+  actions.push(`<button class="stats-debt-action history" onclick="showHistory('${safeClient}','${safeDebtId}')">📂 ${t('historyBtn')}</button>`);
   return `<div class="stats-debt-actions">${actions.join("")}</div>`;
 }
 function statsDebtItemsHtml_(list){
@@ -6936,7 +6949,7 @@ function buildDebtCardHtml(d){
     </div>
     <div class="debt-responsible-v2"><div class="debt-responsible-title-v2">👥 ${t("responsibleLabel")}</div><div class="debt-responsible-name-v2">${escapeHtml(responsibleDisplay)}</div>${responsibleAction}</div>
     <div>
-      <div class="debt-actions-v2 ${canPermission("smartpayInvoices")?"has-smartpay":""} ${closeDebtBtn?"has-close-debt-v124":""}"><div class="debt-actions-main-v124">${payBtn}${appendBtn}${smartPayBtn}<button class="history-action-btn" onclick="showHistory('${safeClientJs}')">📂 ${t("historyBtn")}</button></div>${closeDebtBtn}</div>
+      <div class="debt-actions-v2 ${canPermission("smartpayInvoices")?"has-smartpay":""} ${closeDebtBtn?"has-close-debt-v124":""}"><div class="debt-actions-main-v124">${payBtn}${appendBtn}${smartPayBtn}<button class="history-action-btn" onclick="showHistory('${safeClientJs}','${safeDebtIdJs}')">📂 ${t("historyBtn")}</button></div>${closeDebtBtn}</div>
     </div>
   </div>`;
 }
@@ -6972,7 +6985,7 @@ function buildPaidDebtCardHtml(d){
       ${d.responsibleName ? `👥 ${t("responsibleLabel")}: ${escapeHtml(String(d.responsibleName))}<br>` : ""}
       ${d.debtDetailSummary?`<button type="button" class="debt-detail-chip-v513" onclick="openDebtDetailsV513_('${escapeInlineJs_(String(d.id||''))}','${escapeInlineJs_(String(d.client||''))}')">🛍 ${escapeHtml(String(d.debtDetailSummary))}</button><br>`:""}
       <span class="paid-status">${manualClosed?"⛔":"✅"} ${escapeHtml(closeBadge)}</span>
-      <button class="history-action-btn" onclick="showHistory('${escapeInlineJs_(String(d.client||''))}')">📂 ${t("historyBtn")}</button>
+      <button class="history-action-btn" onclick="showHistory('${escapeInlineJs_(String(d.client||''))}','${escapeInlineJs_(String(d.id||''))}')">📂 ${t("historyBtn")}</button>
       ${currentUser?.role==="owner"?`<button class="trash-paid-btn-v521" type="button" onclick="openTrashDeleteV521_(${Number(d.row||0)},'${escapeInlineJs_(String(d.id||''))}','${escapeInlineJs_(String(d.client||''))}',${Number(d.total||0)},${Number(d.paid||0)},${Number(d.remainder||0)},'${escapeInlineJs_(String(d.status||''))}')">🗑 ${securityText_("Удалить запись","Ҳазфи сабт")}</button>`:""}
     </div>`;
 }
@@ -7005,7 +7018,7 @@ function auditCategoryLabel_(v){
 }
 function auditSourceLabel_(v){const m={change:["Изменение","Тағйирот"],security:["Безопасность","Амният"],notification:["Оповещение","Огоҳӣ"]};const x=m[String(v||"change")]||m.change;return currentLanguage==="tj"?x[1]:x[0];}
 function auditActionLabel_(a){
-  const m={DEBT_NEW:["Добавлен долг","Қарз илова шуд"],DEBT_APPEND:["Долг увеличен","Қарз зиёд шуд"],DEBT_REDUCE:["Долг уменьшен","Қарз кам шуд"],DEBT_MANUAL_CLOSE:["Долг закрыт вручную","Қарз дастӣ баста шуд"],DEBT_TRASHED:["Долг удалён","Қарз ҳазф шуд"],DEBT_RESTORED:["Долг восстановлен","Қарз барқарор шуд"],DEBT_DETAILS_UPDATED:["Карточка долга изменена","Корти қарз тағйир ёфт"],PAYMENT_PARTIAL:["Частичная оплата","Пардохти қисман"],PAYMENT_FULL:["Полная оплата","Пардохти пурра"],DEBT_ASSIGN:["Назначен ответственный","Масъул таъин шуд"],DEBT_UNASSIGN:["Ответственный снят","Масъул хориҷ шуд"],DEBT_CLAIM:["Долг взят в работу","Қарз ба кор гирифта шуд"],USER_CREATED:["Создан пользователь","Истифодабаранда сохта шуд"],USER_UPDATED:["Изменён пользователь","Истифодабаранда тағйир ёфт"],ACCESS_INSTRUCTION_SENT:["Отправлена инструкция доступа","Дастури дастрасӣ фиристода шуд"],PASSWORD_CHANGE:["Изменён пароль","Парол иваз шуд"],LOGIN_SUCCESS:["Вход в систему","Вуруд ба система"],LOGOUT:["Выход из системы","Баромад аз система"],SESSION_REVOKED:["Завершена сессия","Сессия баста шуд"],OTHER_SESSIONS_REVOKED:["Завершены другие сессии","Сессияҳои дигар баста шуданд"],ALL_SESSIONS_REVOKED:["Завершены все сессии","Ҳама сессияҳо баста шуданд"],EXPORT_REPORT:["Экспорт отчёта","Содироти ҳисобот"],SMARTPAY_INVOICE_CREATED:["Создан счёт SmartPay","Ҳисоби SmartPay сохта шуд"],SMARTPAY_DEBT_PAYMENT_APPLIED:["Оплата SmartPay применена","Пардохти SmartPay татбиқ шуд"],SMARTPAY_DEBT_PAYMENT_RECONCILED:["Оплата SmartPay сверена","Пардохти SmartPay санҷида шуд"],SMARTPAY_GENERAL_PAID:["Счёт SmartPay оплачен","Ҳисоби SmartPay пардохт шуд"],BACKUP_CREATED:["Создана резервная копия","Нусхаи эҳтиётӣ сохта шуд"],BACKUP_RESTORED:["Восстановлено из резервной копии","Аз нусхаи эҳтиётӣ барқарор шуд"],NOTIFICATION_PREFS_UPDATED:["Изменены настройки уведомлений","Танзимоти огоҳиҳо тағйир ёфт"]};
+  const m={DEBT_NEW:["Добавлен долг","Қарз илова шуд"],DEBT_APPEND:["Долг увеличен","Қарз зиёд шуд"],DEBT_REDUCE:["Долг уменьшен","Қарз кам шуд"],DEBT_MANUAL_CLOSE:["Долг закрыт вручную","Қарз дастӣ баста шуд"],DEBT_TRASHED:["Долг удалён","Қарз ҳазф шуд"],DEBT_RESTORED:["Долг восстановлен","Қарз барқарор шуд"],DEBT_DETAILS_UPDATED:["Карточка долга изменена","Корти қарз тағйир ёфт"],PAYMENT_PARTIAL:["Частичная оплата","Пардохти қисман"],PAYMENT_FULL:["Полная оплата","Пардохти пурра"],DEBT_ASSIGN:["Назначен ответственный","Масъул таъин шуд"],DEBT_UNASSIGN:["Ответственный снят","Масъул хориҷ шуд"],DEBT_CLAIM:["Долг взят в работу","Қарз ба кор гирифта шуд"],USER_CREATED:["Создан пользователь","Истифодабаранда сохта шуд"],USER_UPDATED:["Изменён пользователь","Истифодабаранда тағйир ёфт"],ACCESS_INSTRUCTION_SENT:["Отправлена инструкция доступа","Дастури дастрасӣ фиристода шуд"],PASSWORD_CHANGE:["Изменён пароль","Парол иваз шуд"],LOGIN_SUCCESS:["Вход в систему","Вуруд ба система"],LOGOUT:["Выход из системы","Баромад аз система"],SESSION_REVOKED:["Завершена сессия","Сессия баста шуд"],OTHER_SESSIONS_REVOKED:["Завершены другие сессии","Сессияҳои дигар баста шуданд"],ALL_SESSIONS_REVOKED:["Завершены все сессии","Ҳама сессияҳо баста шуданд"],EXPORT_REPORT:["Экспорт отчёта","Содироти ҳисобот"],SMARTPAY_INVOICE_CREATED:["Создан счёт SmartPay","Ҳисоби SmartPay сохта шуд"],SMARTPAY_DEBT_PAYMENT_APPLIED:["Оплата SmartPay применена","Пардохти SmartPay татбиқ шуд"],SMARTPAY_DEBT_PAYMENT_RECONCILED:["Оплата SmartPay сверена","Пардохти SmartPay санҷида шуд"],SMARTPAY_GENERAL_PAID:["Счёт SmartPay оплачен","Ҳисоби SmartPay пардохт шуд"],BACKUP_CREATED:["Создана резервная копия","Нусхаи эҳтиётӣ сохта шуд"],BACKUP_RESTORED:["Восстановлено из резервной копии","Аз нусхаи эҳтиётӣ барқарор шуд"],NOTIFICATION_PREFS_UPDATED:["Изменены настройки уведомлений","Танзимоти огоҳиҳо тағйир ёфт"],PENDING_SYNC_CANCELLED:["Отменена несохранённая операция","Амали захиранашуда бекор шуд"]};
   const key=String(a||"");if(key.startsWith("NOTIFICATION_"))return key.replace(/^NOTIFICATION_/,"").replaceAll("_"," ");const x=m[key];return x?(currentLanguage==="tj"?x[1]:x[0]):key.replaceAll("_"," ");
 }
 function auditIcon_(e){
@@ -7049,7 +7062,7 @@ function renderAuditLog_(){
   const box=document.getElementById("auditList"),count=document.getElementById("auditResultCount"),scope=document.getElementById("auditScopeText");if(!box)return;
   renderAuditFilterOptions_();renderAuditActors_();
   if(count)count.textContent=`${auditEntries.length} ${securityText_("событий","рӯйдод")}`;
-  if(scope)scope.textContent=["owner","admin"].includes(String(currentUser?.role||""))?securityText_("История доступных пользователей","Таърихи истифодабарандагони дастрас"):securityText_("Моя история","Таърихи ман");
+  if(scope)scope.textContent=["owner","admin"].includes(String(currentUser?.role||""))?securityText_("Журнал доступных пользователей","Журнали истифодабарандагони дастрас"):securityText_("Мой журнал","Журнали ман");
   if(!auditEntries.length){box.innerHTML=`<div class="audit-empty">${securityText_("По выбранным фильтрам событий нет","Аз рӯи филтрҳо рӯйдод нест")}</div>`;return;}
   box.innerHTML=auditEntries.map(e=>{
     const actor=e.userName||e.email||securityText_("Система","Система"),target=e.entityLabel||e.entityId||"",title=e.title||auditActionLabel_(e.action);
@@ -7061,7 +7074,7 @@ function renderAuditLog_(){
 }
 async function loadAuditLog(){
   if(!canPermission("viewAudit")||auditLoading)return;auditLoading=true;
-  const box=document.getElementById("auditList"),btn=document.getElementById("auditRefreshBtn");setButtonBusyV5211_(btn,true,securityText_("Загружаем…","Бор мешавад…"));if(box&&!auditEntries.length)box.innerHTML=`<div class="audit-empty">${securityText_("Загрузка истории…","Боркунии таърих…")}</div>`;
+  const box=document.getElementById("auditList"),btn=document.getElementById("auditRefreshBtn");setButtonBusyV5211_(btn,true,securityText_("Загружаем…","Бор мешавад…"));if(box&&!auditEntries.length)box.innerHTML=`<div class="audit-empty">${securityText_("Загрузка журнала…","Боркунии журнал…")}</div>`;
   const payload={source:document.getElementById("auditSourceFilter")?.value||"all",category:document.getElementById("auditCategoryFilter")?.value||"all",userId:document.getElementById("auditUserFilter")?.value||"",dateFrom:document.getElementById("auditDateFrom")?.value||"",dateTo:document.getElementById("auditDateTo")?.value||"",query:String(document.getElementById("auditSearchInput")?.value||"").trim(),limit:500};
   try{const r=await apiPost("audit.list",payload);if(!r.success)throw new Error(r.message||"Error");auditEntries=Array.isArray(r.entries)?r.entries:[];auditActors=Array.isArray(r.actors)?r.actors:[];renderAuditLog_();}
   catch(e){if(box)box.innerHTML=`<div class="audit-empty">❌ ${escapeHtml(e.message||String(e))}</div>`;}
@@ -7072,7 +7085,7 @@ function exportAuditCsv(){
   const cols=[securityText_("Дата и время","Сана ва вақт"),securityText_("Тип события","Навъи рӯйдод"),securityText_("Пользователь","Истифодабаранда"),"Email",securityText_("Категория","Категория"),securityText_("Действие","Амал"),securityText_("Объект","Объект"),securityText_("Описание","Тавсиф"),securityText_("Результат","Натиҷа")];
   const esc=v=>`"${String(v??"").replaceAll('"','""')}"`;
   const rows=auditEntries.map(e=>[e.date,auditSourceLabel_(e.source),e.userName,e.email,auditCategoryLabel_(e.category),e.title||auditActionLabel_(e.action),e.entityLabel||e.entityId,e.summary,e.result||""].map(esc).join(";"));
-  const blob=new Blob(["\ufeff"+cols.map(esc).join(";")+"\n"+rows.join("\n")],{type:"text/csv;charset=utf-8"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`history_${new Date().toISOString().slice(0,10)}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+  const blob=new Blob(["\ufeff"+cols.map(esc).join(";")+"\n"+rows.join("\n")],{type:"text/csv;charset=utf-8"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`action_log_${new Date().toISOString().slice(0,10)}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
 }
 
 
@@ -7486,10 +7499,19 @@ async function confirmReduceDebt(){
 }
 /* ---------- ИСТОРИЯ ---------- */
 
-function showHistory(name){
-  if(!canPermission("viewAudit")){showToast(`ℹ️ ${securityText_("История доступна пользователям с правом просмотра системной истории","Таърих барои истифодабарандагони дорои ҳуқуқи дидани таърихи система дастрас аст")}`);return;}
-  showView("audit");
-  setTimeout(()=>{const q=document.getElementById("auditSearchInput"),src=document.getElementById("auditSourceFilter"),cat=document.getElementById("auditCategoryFilter");if(q)q.value=String(name||"");if(src)src.value="all";if(cat)cat.value="all";loadAuditLog();},60);
+function showHistory(name,debtId=""){
+  if(!canPermission("viewDebts")){showToast(`❌ ${securityText_("Недостаточно прав для просмотра оплат","Барои дидани пардохтҳо ҳуқуқ кофӣ нест")}`,"error");return;}
+  const modal=document.getElementById("historyModal"),content=document.getElementById("historyContent"),loader=document.getElementById("historyLoader");
+  if(!modal||!content||!loader)return;
+  modal.style.display="flex";content.innerHTML="";loader.style.display="block";
+  apiPost("debt.history",{clientName:String(name||""),debtId:String(debtId||"")})
+    .then(data=>{
+      loader.style.display="none";
+      const rows=Array.isArray(data?.history)?data.history:[];
+      if(!rows.length){content.innerHTML=t("noPayments");return;}
+      content.innerHTML=rows.map(h=>`📅 ${escapeHtml(h.date||"")}<br>💰 ${escapeHtml(h.amount)} ${t("somoni")}${h.seller?`<br>👤 ${escapeHtml(h.seller)}`:""}<hr>`).join("");
+    })
+    .catch(e=>{loader.style.display="none";content.innerHTML=`❌ ${escapeHtml(e?.message||String(e))}`;});
 }
 function closeHistory(){const m=document.getElementById("historyModal");if(m)m.style.display="none";}
 
