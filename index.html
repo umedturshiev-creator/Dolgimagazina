@@ -2311,7 +2311,7 @@ html[data-theme="light"] .settings-mini-panel{background:#f8fafc;border-color:#e
 html[data-theme="light"] .notification-clear-all{color:#b91c1c!important;background:#fff1f2!important;border-color:#fecdd3!important;}
 
 /* ===== AUDIT LOG v5.5.0 ===== */
-#auditNavBtn{display:none}
+/* auditNavBtn visibility is controlled by permissions in JS */
 .audit-view{max-width:1180px}
 .audit-toolbar-card{padding:15px!important;margin-bottom:14px!important}
 .audit-toolbar-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
@@ -3079,7 +3079,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
   <button class="nav-btn" id="trashNavBtnV521" data-view="trash" onclick="showView('trash')" style="display:none"><span class="nav-icon">🗑️</span><span data-nav-label="trash">Удалённые записи</span></button>
   <button class="nav-btn" id="smartPayNavBtn" data-view="smartpay" onclick="showView('smartpay')"><span class="nav-icon">🔗</span><span id="smartPayNavLabel">Счета SmartPay</span></button>
   <button class="nav-btn" data-view="stats" onclick="showView('stats')"><span class="nav-icon">📊</span><span data-nav-label="stats">Статистика</span></button>
-  <button class="nav-btn" id="auditNavBtn" data-view="audit" onclick="showView('audit')"><span class="nav-icon">🧾</span><span id="auditNavLabel">Журнал</span></button>
+  <button class="nav-btn" id="auditNavBtn" data-view="audit" onclick="showView('audit')"><span class="nav-icon">🧾</span><span id="auditNavLabel">Журнал действий</span></button>
   <button class="nav-btn" data-view="guide" onclick="showView('guide')"><span class="nav-icon">📘</span><span>Инструкция</span></button>
   <button class="nav-btn" data-view="profile" onclick="showView('profile')"><span class="nav-icon">👤</span><span>Профиль</span></button>
   <button class="nav-btn" data-view="settings" onclick="showView('settings')"><span class="nav-icon">⚙️</span><span data-nav-label="settings">Настройки</span></button>
@@ -3624,7 +3624,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
     <div class="mobile-more-head-v593"><div><b id="mobileMoreTitle">Ещё</b><span id="mobileMoreSubtitle">Дополнительные разделы</span></div><button type="button" onclick="closeMobileMore_()">×</button></div>
     <div class="mobile-more-grid-v593">
       <button id="moreSmartPayBtn" type="button" onclick="mobileMoreGo_('smartpay')"><span>🔗</span><b id="moreSmartPayLabel">Счета SmartPay</b></button>
-      <button id="moreAuditBtn" type="button" onclick="mobileMoreGo_('audit')"><span>🕘</span><b id="moreAuditLabel">Журнал</b></button>
+      <button id="moreAuditBtn" type="button" onclick="mobileMoreGo_('audit')"><span>🕘</span><b id="moreAuditLabel">Журнал действий</b></button>
       <button id="moreTrashBtnV521" type="button" onclick="mobileMoreGo_('trash')" style="display:none"><span>🗑️</span><b id="moreTrashLabelV521">Удалённые записи</b></button>
       <button type="button" onclick="mobileMoreGo_('guide')"><span>📘</span><b id="moreGuideLabel">Инструкция</b></button>
       <button type="button" onclick="mobileMoreGo_('profile')"><span>👤</span><b id="moreProfileLabel">Профиль</b></button>
@@ -3961,7 +3961,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 </div>
 
 <script>
-const VERSION="5.22.1";
+const VERSION="5.22.2";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4245,7 +4245,7 @@ const translations = {
     navStats: "Статистика",
     navSettings: "Настройки",
     mobileNavMore: "Ещё",
-    navAudit: "Журнал",
+    navAudit: "Журнал действий",
     navGuide: "Инструкция",
     navActions: "Действия",
     moreSubtitle: "Дополнительные разделы",
@@ -4464,7 +4464,7 @@ const translations = {
     navStats: "Омор",
     navSettings: "Танзимот",
     mobileNavMore: "Бештар",
-    navAudit: "Журнал",
+    navAudit: "Журнал действий",
     navGuide: "Дастур",
     navActions: "Амалҳо",
     moreSubtitle: "Бахшҳои иловагӣ",
@@ -5176,7 +5176,7 @@ function applySecurityTranslations_(){
     notificationPrefUsersLabel:["Пользователи","Истифодабарандагон"],notificationPrefUsersHint:["Создание и изменение доступа","Эҷод ва тағйири дастрасӣ"],notificationPrefSecurityLabel:["Безопасность","Амният"],notificationPrefSecurityHint:["Входы, блокировки и изменение пароля","Вурудҳо, басташавӣ ва иваз кардани парол"],
     notificationPrefSoundLabel:["Звук","Садо"],notificationPrefSoundHint:["Короткий сигнал при новых событиях","Сигнали кӯтоҳ ҳангоми рӯйдоди нав"],notificationPrefBrowserLabel:["Уведомления браузера","Огоҳиномаҳои браузер"],notificationPrefBrowserHint:["Показывать, пока приложение открыто","Ҳангоми кушода будани барнома нишон дода шавад"],
     securityEventsTitle:["🛡 События безопасности","🛡 Рӯйдодҳои амниятӣ"],securityEventsHint:["Последние события. Список прокручивается.","Рӯйдодҳои охирин. Рӯйхат ҳаракат мекунад."],securityEventsRefreshBtn:["Обновить","Навсозӣ"],
-    auditPageTitle:["Журнал действий","Журнали амалҳо"],auditToolbarTitle:["🕘 Журнал действий","🕘 Журнали амалҳо"],auditToolbarHint:["Изменения, входы, безопасность и оповещения в одном месте.","Тағйирот, вурудҳо, амният ва огоҳиҳо дар як ҷо."],auditSearchLabel:["Поиск","Ҷустуҷӯ"],auditCategoryLabel:["Категория","Категория"],auditUserLabel:["Пользователь","Истифодабаранда"],auditFromLabel:["С даты","Аз сана"],auditToLabel:["По дату","То сана"],auditRefreshBtn:["Обновить","Навсозӣ"],settingsAuditBtn:["Журнал действий","Журнали амалҳо"],auditNavLabel:["Журнал","Журнал"],
+    auditPageTitle:["Журнал действий","Журнали амалҳо"],auditToolbarTitle:["🕘 Журнал действий","🕘 Журнали амалҳо"],auditToolbarHint:["Изменения, входы, безопасность и оповещения в одном месте.","Тағйирот, вурудҳо, амният ва огоҳиҳо дар як ҷо."],auditSearchLabel:["Поиск","Ҷустуҷӯ"],auditCategoryLabel:["Категория","Категория"],auditUserLabel:["Пользователь","Истифодабаранда"],auditFromLabel:["С даты","Аз сана"],auditToLabel:["По дату","То сана"],auditRefreshBtn:["Обновить","Навсозӣ"],settingsAuditBtn:["Журнал действий","Журнали амалҳо"],auditNavLabel:["Журнал действий","Журнали амалҳо"],
     settingsAppearanceTitle:["✨ Интерфейс","✨ Интерфейс"],settingsAppearanceHint:["Язык, тема и читаемость собраны в одном месте.","Забон, мавзӯъ ва хондашавӣ дар як ҷой ҷамъ шудаанд."],
     notificationCenterTitle:["Уведомления","Огоҳиномаҳо"],notificationCenterSubtitle:["События по долгам, оплатам и безопасности","Рӯйдодҳои қарзҳо, пардохтҳо ва амният"],notificationMarkAllBtn:["Прочитать все","Ҳамаро хондан"],notificationDeleteAllBtn:["🗑 Очистить","🗑 Тоза кардан"],
     notificationFilterAll:["Все","Ҳама"],notificationFilterUnread:["Новые","Нав"],notificationFilterDebts:["Долги","Қарзҳо"],notificationFilterPayments:["Оплаты","Пардохтҳо"],notificationFilterSecurity:["Безопасность","Амният"],notificationFilterUsers:["Пользователи","Истифодабарандагон"],
@@ -5934,7 +5934,7 @@ const GUIDE_LIBRARY=[
 {id:'security-backups',cat:'security',tag:'Безопасность',time:'5 мин',title:'Резервные копии и восстановление',desc:'Что сохраняется, как работает автобэкап и когда восстанавливать данные.',steps:[['Автоматическая копия создаётся по расписанию в Google Drive.','Срок хранения определяет, сколько старых копий система оставляет.'],['Перед аварийным восстановлением создаётся дополнительная защитная копия.','Это даёт возможность вернуться к состоянию непосредственно перед восстановлением.'],['Аккаунты и секреты намеренно не откатываются вместе с рабочими данными.','Пароли, Passkey, 2FA, активные сессии и секретные API-ключи не должны случайно возвращаться к старому состоянию.']],tip:'Восстановление — крайняя мера. Для обычной ошибки сначала проверьте историю и конкретную запись.'},
 {id:'users',cat:'users',tag:'Пользователи',time:'2 мин',title:'Управление пользователями',desc:'Добавление сотрудников, роли и доступ.',steps:[['Откройте «Настройки → Пользователи».','Раздел доступен владельцу и тем, у кого есть право работы с пользователями.'],['Создайте пользователя, указав email и роль.','Почта используется как логин.'],['При необходимости измените права и статус.','Все изменения фиксируются во вкладке «История».']],tip:'Пароли сотрудников не задаются вручную владельцем — доступ восстанавливается и настраивается через email.'},
 {id:'smartpay-invoices',cat:'payments',tag:'SmartPay',time:'3 мин',title:'Счета и платежные ссылки SmartPay',desc:'Как создать ссылку должнику или отдельный счет клиенту.',steps:[['Для должника нажмите «Счет SmartPay» в его карточке.','Имя, телефон и остаток долга подставятся автоматически.'],['Для отдельного счета откройте «Счета SmartPay».','Введите имя, телефон, сумму и назначение платежа.'],['После создания скопируйте ссылку или отправьте ее в WhatsApp.','После оплаты подписанный webhook SmartPay автоматически обновит статус счета; для счета должника оплата также уменьшит остаток.']],tip:'API-ключи находятся только в Script Properties и не отображаются пользователям полностью.'},
-{id:'audit-export',cat:'control',tag:'Контроль',time:'2 мин',title:'История системы и экспорт',desc:'Единая хронология изменений, входов, безопасности и оповещений.',steps:[['Откройте вкладку «История».','Там собраны действия с долгами, оплаты, удаление/восстановление, входы/выходы и системные события.'],['Используйте фильтр «Тип события».','Можно отдельно показать изменения, безопасность или оповещения.'],['Используйте пользователя, даты и поиск.','Так можно быстро восстановить последовательность действий по спорной операции.']],tip:'Колокольчик показывает текущие непрочитанные уведомления, а «История» служит постоянной хронологией событий.'}
+{id:'audit-export',cat:'control',tag:'Контроль',time:'2 мин',title:'История системы и экспорт',desc:'Единая хронология изменений, входов, безопасности и оповещений.',steps:[['Откройте вкладку «Журнал действий».','Там собраны действия с долгами, оплаты, удаление/восстановление, входы/выходы и системные события.'],['Используйте фильтр «Тип события».','Можно отдельно показать изменения, безопасность или оповещения.'],['Используйте пользователя, даты и поиск.','Так можно быстро восстановить последовательность действий по спорной операции.']],tip:'Колокольчик показывает текущие непрочитанные уведомления, а «Журнал действий» служит постоянной хронологией событий.'}
 ];
 let guideCategoryFilter_='all';
 function guideCategories_(){return [{id:'all',label:'Все темы'},{id:'start',label:'Быстрый старт'},{id:'debts',label:'Долги'},{id:'payments',label:'Оплаты'},{id:'stats',label:'Статистика'},{id:'team',label:'Команда'},{id:'notifications',label:'Уведомления'},{id:'security',label:'Безопасность'},{id:'users',label:'Пользователи'},{id:'control',label:'Контроль'}];}
