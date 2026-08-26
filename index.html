@@ -2486,8 +2486,8 @@ html[data-theme="light"] .settings-search-input,html[data-theme="light"] .help-s
 @media(max-width:1180px){.main-view-container{max-width:none!important;width:auto!important}#debtList,#paidDebtList{grid-template-columns:1fr}.settings-shell-v2{grid-template-columns:200px minmax(0,1fr)!important}.guide-layout{grid-template-columns:190px minmax(0,1fr)!important}.guide-right-col{grid-column:1/-1;position:static!important;grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){
   .app-sidebar{display:none!important}.main-view-container{margin:0!important;max-width:none!important;padding:8px 10px 92px!important}
-  .header{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important;margin:7px 7px 10px!important;padding:10px 11px!important;border-radius:22px!important}
-  .header-left{display:none!important}.header-center{min-width:0!important;text-align:left!important}.header-center h2{font-size:16px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;margin:0!important}.user-meta{justify-content:flex-start!important;gap:6px!important;margin-top:5px!important;flex-wrap:nowrap!important}.header-right{min-width:auto!important;display:flex!important;align-items:center!important;gap:5px!important;margin:0!important}.notification-bell-btn,.logout-btn{width:36px!important;height:36px!important;min-width:36px!important;border-radius:12px!important;padding:0!important}.logout-btn{font-size:15px!important}#headerExportBtn{display:none!important}#refreshBtn{height:29px!important;min-height:29px!important;padding:0 10px!important;font-size:11px!important;border-radius:10px!important}#userInfo{font-size:10px!important;white-space:nowrap}
+  .header{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"main actions" "meta actions"!important;align-items:start!important;gap:6px 8px!important;margin:7px 7px 10px!important;padding:calc(10px + env(safe-area-inset-top,0px)) 11px 10px!important;border-radius:22px!important}
+  .header-left{display:none!important}.header-center{grid-column:1!important;grid-row:1 / span 2!important;min-width:0!important;text-align:left!important;display:grid!important;gap:5px!important}.header-center h2{font-size:16px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;margin:0!important;max-width:100%}.user-meta{justify-content:flex-start!important;gap:6px!important;margin-top:0!important;flex-wrap:wrap!important;align-items:center!important}.header-right{grid-column:2!important;grid-row:1 / span 2!important;position:static!important;transform:none!important;min-width:auto!important;display:flex!important;align-items:center!important;gap:5px!important;margin:0!important;align-self:start!important}.notification-bell-btn,.logout-btn{width:36px!important;height:36px!important;min-width:36px!important;border-radius:12px!important;padding:0!important}.logout-btn{font-size:15px!important}#headerExportBtn{display:none!important}#refreshBtn{height:30px!important;min-height:30px!important;padding:0 10px!important;font-size:11px!important;border-radius:10px!important;white-space:nowrap!important}#userInfo{font-size:10px!important;white-space:nowrap;max-width:calc(100vw - 165px);overflow:hidden;text-overflow:ellipsis}
   .view-title{font-size:22px!important;margin:8px 4px 12px!important}.debt-scope-bar{padding:0 2px}.debt-scope-count{width:100%;margin-left:0}.search-box{margin:0 0 11px!important;padding:8px!important;border-radius:18px!important}.search-box input{font-size:15px!important;padding:11px 12px!important}
   #debtList,#paidDebtList{display:flex!important;flex-direction:column!important;gap:11px!important}#debtList>.card,#paidDebtList>.card{padding:14px!important;font-size:14px!important;border-radius:20px!important}
   .stats-top-actions{padding:11px!important;border-radius:20px!important}.stats-top-actions-head{display:block!important}.stats-top-actions-btns{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%!important;margin-top:10px!important}.stats-top-actions-btns button{width:100%!important;min-width:0!important;padding:8px 5px!important;font-size:10px!important;white-space:nowrap!important}.stats-dashboard{gap:10px!important}.stats-hero-grid{gap:8px!important}.stats-kpi{min-height:100px!important;padding:11px!important}.stats-kpi-value{font-size:18px!important}
@@ -2571,9 +2571,9 @@ html[data-theme="dark"] .smartpay-field input,html[data-theme="dark"] .smartpay-
 .mobile-actions-view{max-width:760px!important;}
 .mobile-actions-card-v593{padding:16px;}
 .mobile-actions-head-v593{display:grid;gap:4px;margin-bottom:12px}.mobile-actions-head-v593 b{font-size:18px}.mobile-actions-head-v593 span{font-size:12px;color:var(--text-3)}
-.mobile-actions-grid-v593{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.mobile-actions-grid-v593{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
 .mobile-action-tile-v593{margin:0!important;min-height:120px!important;padding:16px!important;border-radius:18px!important;background:rgba(59,130,246,.09)!important;border:1px solid rgba(59,130,246,.15)!important;color:var(--text-1)!important;box-shadow:none!important;display:flex!important;flex-direction:column;align-items:flex-start!important;justify-content:center!important;gap:5px!important;text-align:left!important}
-.mobile-action-tile-v593>span{font-size:25px}.mobile-action-tile-v593>b{font-size:14px}.mobile-action-tile-v593>small{font-size:10px;line-height:1.35;color:var(--text-3)}.mobile-action-tile-v593.danger{background:rgba(239,68,68,.08)!important;border-color:rgba(239,68,68,.16)!important;color:#dc2626!important}
+.mobile-action-tile-v593>span{font-size:25px}.mobile-action-tile-v593>b{font-size:14px}.mobile-action-tile-v593>small{font-size:10px;line-height:1.35;color:var(--text-3)}.mobile-action-tile-v593.danger{background:rgba(239,68,68,.08)!important;border-color:rgba(239,68,68,.16)!important;color:#dc2626!important}.mobile-action-tile-v593.info{background:rgba(148,163,184,.07)!important;border-color:rgba(148,163,184,.14)!important}
 @media(max-width:760px){
   .debt-phone-link-v593{display:inline-flex!important;align-items:center;gap:2px;color:#334155!important;font-weight:900!important;text-decoration:none!important;-webkit-tap-highlight-color:transparent}
   html[data-theme="dark"] .debt-phone-link-v593{color:#e2e8f0!important}
@@ -3630,8 +3630,10 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
       </div>
       <div class="mobile-actions-grid-v593">
         <button id="mobileActionRefreshBtn" class="mobile-action-tile-v593" type="button" onclick="forceAppUpdate()"><span>↻</span><b id="mobileActionRefreshLabel">Обновить данные</b><small id="mobileActionRefreshSub">Получить свежие долги и оплаты</small></button>
+        <button id="mobileActionNotifyBtn" class="mobile-action-tile-v593" type="button" onclick="openNotificationCenter()"><span>🔔</span><b id="mobileActionNotifyLabel">Уведомления</b><small id="mobileActionNotifySub">Открыть центр уведомлений</small></button>
         <button id="mobileActionExportBtn" class="mobile-action-tile-v593" type="button" onclick="openExportMenu()"><span>📤</span><b id="mobileActionExportLabel">Экспорт</b><small id="mobileActionExportSub">Excel / PDF отчёты</small></button>
         <button id="mobileActionLogoutBtn" class="mobile-action-tile-v593 danger" type="button" onclick="logout()"><span>🚪</span><b id="mobileActionLogoutLabel">Выйти</b><small id="mobileActionLogoutSub">Завершить текущую сессию</small></button>
+        <div id="mobileActionVersionCard" class="mobile-action-tile-v593 info"><span>🏷️</span><b id="mobileActionVersionLabel">Версия программы</b><small id="mobileActionVersionSub">v5.22.9 · Текущая установленная сборка</small></div>
       </div>
     </div>
   </section>
@@ -4021,7 +4023,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 </div>
 
 <script>
-const VERSION="5.22.4";
+const VERSION="5.22.9";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4845,10 +4847,14 @@ function applyTranslations(){
   const mobileActionsQuickSub=document.getElementById("mobileActionsQuickSub");if(mobileActionsQuickSub)mobileActionsQuickSub.textContent=t("actionsQuickSub");
   const mobileActionRefreshLabel=document.getElementById("mobileActionRefreshLabel");if(mobileActionRefreshLabel)mobileActionRefreshLabel.textContent=t("settingsRefresh");
   const mobileActionRefreshSub=document.getElementById("mobileActionRefreshSub");if(mobileActionRefreshSub)mobileActionRefreshSub.textContent=t("actionRefreshSub");
+  const mobileActionNotifyLabel=document.getElementById("mobileActionNotifyLabel");if(mobileActionNotifyLabel)mobileActionNotifyLabel.textContent=t("notificationCenterTitle");
+  const mobileActionNotifySub=document.getElementById("mobileActionNotifySub");if(mobileActionNotifySub)mobileActionNotifySub.textContent=currentLanguage==="tj"?"Кушодани маркази огоҳиномаҳо":"Открыть центр уведомлений";
   const mobileActionExportLabel=document.getElementById("mobileActionExportLabel");if(mobileActionExportLabel)mobileActionExportLabel.textContent=t("exportBtn");
   const mobileActionExportSub=document.getElementById("mobileActionExportSub");if(mobileActionExportSub)mobileActionExportSub.textContent=t("actionExportSub");
   const mobileActionLogoutLabel=document.getElementById("mobileActionLogoutLabel");if(mobileActionLogoutLabel)mobileActionLogoutLabel.textContent=t("settingsLogout");
   const mobileActionLogoutSub=document.getElementById("mobileActionLogoutSub");if(mobileActionLogoutSub)mobileActionLogoutSub.textContent=t("actionLogoutSub");
+  const mobileActionVersionLabel=document.getElementById("mobileActionVersionLabel");if(mobileActionVersionLabel)mobileActionVersionLabel.textContent=currentLanguage==="tj"?"Версияи барнома":"Версия программы";
+  const mobileActionVersionSub=document.getElementById("mobileActionVersionSub");if(mobileActionVersionSub)mobileActionVersionSub.textContent=`v${VERSION} · ${currentLanguage==="tj"?"Сохти ҷорӣ насб шудааст":"Текущая установленная сборка"}`;
 
   const settingsLanguageTitle = document.getElementById("settingsLanguageTitle");
   const settingsThemeTitle = document.getElementById("settingsThemeTitle");
