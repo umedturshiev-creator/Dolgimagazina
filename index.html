@@ -2969,6 +2969,90 @@ html[data-theme="dark"] .trash-card-v521{background:linear-gradient(145deg,rgba(
 .action-loader-copy-v5211{min-width:0}.action-loader-copy-v5211 b{display:block;font-size:13px}.action-loader-copy-v5211 small{display:block;margin-top:3px;font-size:10px;font-weight:650;color:#64748b;line-height:1.35}
 html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);border-color:rgba(148,163,184,.18);color:#f8fafc}html[data-theme="dark"] .action-loader-copy-v5211 small{color:#94a3b8}
 
+
+
+/* ===== MOBILE COMPACT / POLISH v5.23.0 ===== */
+.audit-mobile-filter-btn-v523{display:none!important}.audit-toolbar-actions-mobile-v523{display:flex;align-items:center;gap:7px}
+@media(max-width:760px){
+  /* App shell + header */
+  .mobile-smartpay-fab{display:none!important}
+  #appContent.main-view-container,.main-view-container{padding:7px 8px calc(82px + env(safe-area-inset-bottom,0px))!important}
+  #mainHeader.header,.header{margin:5px 5px 7px!important;padding:calc(7px + env(safe-area-inset-top,0px)) 8px 7px!important;min-height:58px!important;border-radius:19px!important;gap:4px 7px!important}
+  .header-center{gap:3px!important}.header-center h2{font-size:15px!important;line-height:1.05!important}
+  .user-meta{gap:5px!important}.header-right{gap:4px!important;padding:2px!important;border-radius:13px!important}
+  #userInfo{font-size:9px!important;padding:3px 6px!important;max-width:calc(100vw - 154px)!important}
+  #refreshBtn{height:27px!important;min-height:27px!important;padding:0 8px!important;font-size:10px!important;border-radius:9px!important}
+  .notification-bell-btn,.logout-btn{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;border-radius:11px!important}
+
+  /* Page titles and cards */
+  .view-title{font-size:20px!important;margin:5px 3px 8px!important}
+  .card{border-radius:18px!important}
+
+  /* Active debts header / metrics / filters */
+  .debt-page-head-v2{margin:0 0 7px!important}.debt-head-metrics-v2{gap:5px!important;margin-top:7px!important}
+  .debt-head-metric-v2{min-height:52px!important;padding:6px 7px!important;border-radius:12px!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+  .debt-head-metric-v2 span{font-size:7.5px!important;line-height:1.05!important}.debt-head-metric-v2 b{font-size:12.5px!important;margin-top:3px!important}
+  .debt-workbar-v2{padding:9px!important;border-radius:18px!important;margin-bottom:8px!important}
+  .debt-scope-bar{gap:5px!important;margin-bottom:7px!important;flex-wrap:wrap!important}.debt-scope-btn{min-height:36px!important;padding:7px 10px!important;font-size:11px!important;border-radius:12px!important}.debt-scope-count{width:auto!important;margin-left:auto!important;font-size:10px!important;white-space:nowrap!important}
+  .debt-workbar-tools-v2{display:grid!important;grid-template-columns:1fr!important;gap:6px!important}
+  .search-box{padding:3px!important;border-radius:14px!important;margin-bottom:7px!important}.search-box input{min-height:44px!important;height:44px!important;padding:9px 10px!important;border-radius:11px!important;font-size:16px!important;line-height:1.2!important}
+  .debt-sort-wrap-v2{gap:3px!important}.debt-sort-wrap-v2 span{font-size:9px!important;margin-left:2px!important}.debt-sort-wrap-v2 select{min-height:44px!important;height:44px!important;padding:8px 10px!important;border-radius:12px!important;font-size:13px!important}
+
+  /* Debt cards */
+  #debtList.debt-list-v2{gap:8px!important}
+  #debtList.debt-list-v2>.debt-row-v2,.debt-row-v2{padding:10px 10px 10px!important;border-radius:18px!important}
+  .debt-client-v2{padding-right:98px!important;min-height:50px!important}.debt-client-name-v2{font-size:15px!important;gap:5px!important}.debt-status-v2{font-size:9px!important;padding:4px 6px!important;max-width:100px!important}
+  .debt-client-meta-v2{margin-top:5px!important;font-size:11px!important;gap:5px 7px!important;line-height:1.2!important}.debt-latest-change-v2{margin-top:4px!important;font-size:9.5px!important;line-height:1.25!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .debt-responsible-v2{top:9px!important;right:9px!important;width:90px!important;min-height:40px!important;padding:6px 7px!important;border-radius:11px!important}.debt-responsible-name-v2{font-size:10px!important;line-height:1.15!important}
+  .debt-finance-v2{margin-top:7px!important;gap:5px!important}.debt-finance-cell-v2{min-height:59px!important;padding:6px 7px!important;border-radius:11px!important}.debt-finance-cell-v2 span{font-size:8.5px!important}.debt-finance-cell-v2 b{font-size:12px!important;margin-top:3px!important}
+  .debt-detail-chip-v513{margin-top:5px!important;padding:4px 7px!important;font-size:9.5px!important;max-width:100%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .debt-actions-v2{margin-top:7px!important}.debt-actions-v2.has-close-debt-v124{grid-template-columns:minmax(0,1fr) 60px!important;gap:6px!important}.debt-actions-main-v124{gap:6px!important}.debt-actions-main-v124 button,.debt-actions-main-v124 a{min-height:44px!important;padding:7px 7px!important;font-size:11.5px!important;border-radius:12px!important;line-height:1.12!important}.debt-actions-v2 .close-debt-btn-v124{min-width:60px!important;padding:7px 3px!important;border-radius:13px!important;font-size:10px!important}.debt-actions-v2 .close-debt-btn-v124 .close-icon{font-size:14px!important;margin-bottom:2px!important}
+
+  /* Paid / deleted lists */
+  #view-paid .search-box,#view-active .search-box{margin-bottom:7px!important}.paid-card,.trash-card-v521{padding:10px!important;border-radius:17px!important}.trash-metrics-v521{gap:5px!important}.trash-metric-v521{padding:7px!important}
+
+  /* New debt form and common form controls */
+  .add-debt-form-card{padding:12px!important}.form-field-label{font-size:10.5px!important;margin-top:7px!important;margin-bottom:2px!important}.add-debt-form-card input,#view-add .export-select,.profile-field-v510 input,.smartpay-field input,.smartpay-field select,.audit-field input,.audit-field select{box-sizing:border-box!important;min-height:48px!important;height:48px!important;padding:9px 11px!important;font-size:16px!important;border-radius:12px!important;margin-top:3px!important}
+  .date-picker-wrap{margin-top:8px!important}.date-picker-display{box-sizing:border-box!important;min-height:48px!important;height:48px!important;padding:10px 11px!important;border-radius:12px!important;font-size:14px!important}
+  .responsible-form-field{margin-top:8px!important}.responsible-form-field label{font-size:10.5px!important;margin-bottom:4px!important}.assign-debt-user-meta{font-size:9.5px!important;line-height:1.3!important;margin-top:4px!important}
+  .debt-details-editor-v513{margin-top:8px!important;border-radius:13px!important}.debt-details-toggle-v513{min-height:42px!important;padding:8px 10px!important;font-size:11.5px!important}.debt-details-panel-v513{padding:0 9px 9px!important}.debt-details-comment-v513{min-height:64px!important;padding:9px 10px!important;border-radius:11px!important;font-size:14px!important}.debt-item-row-v513{gap:4px!important}.debt-item-row-v513 input{min-height:42px!important;height:42px!important;font-size:12px!important}
+  #saveBtn,.save-btn{min-height:46px!important;margin-top:9px!important;border-radius:12px!important}
+
+  /* SmartPay */
+  .smartpay-hero{padding:12px!important;margin-bottom:8px!important;border-radius:18px!important}.smartpay-hero h3{font-size:19px!important}.smartpay-hero p{font-size:11px!important;line-height:1.4!important}
+  .smartpay-profile-grid{gap:5px!important;margin-bottom:8px!important}.smartpay-profile-card{padding:8px!important}.smartpay-profile-name{font-size:11px!important}.smartpay-profile-meta{font-size:8.5px!important;margin-top:4px!important}
+  .smartpay-create-card,.smartpay-history-card{padding:10px!important;margin-bottom:8px!important}.smartpay-section-title{font-size:16px!important}.smartpay-section-sub{font-size:10px!important;margin-bottom:8px!important}.smartpay-form-grid{gap:6px!important}
+  .smartpay-field{gap:3px!important}.smartpay-field label{font-size:9px!important}.smartpay-field textarea{min-height:64px!important;padding:9px 10px!important;font-size:14px!important;border-radius:11px!important}.smartpay-primary{min-height:46px!important;margin-top:7px!important;border-radius:12px!important}
+  .smartpay-history-toolbar{gap:5px!important;margin-bottom:7px!important}.smartpay-history-toolbar input{min-height:44px!important;height:44px!important;padding:9px 10px!important;font-size:16px!important;border-radius:11px!important}.smartpay-history-toolbar button{min-height:44px!important;padding:8px 9px!important}
+  .smartpay-list{gap:6px!important}.smartpay-invoice-row{padding:9px!important;border-radius:13px!important;gap:5px!important}.smartpay-invoice-client{font-size:12px!important}.smartpay-invoice-meta{font-size:8.5px!important}.smartpay-invoice-amount{font-size:12px!important}.smartpay-row-actions{gap:5px!important}.smartpay-row-actions button,.smartpay-row-actions a{min-height:44px!important;padding:7px 9px!important;font-size:10px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+  .smartpay-link-qr-wrap{margin:9px 0!important;padding:10px!important}.smartpay-link-qr-img{width:min(100%,285px)!important;padding:7px!important;border-radius:14px!important}.smartpay-link-url-box{margin-top:7px!important}.smartpay-link-url-box textarea{min-height:68px!important;height:68px!important;padding:9px 10px!important;font-size:15px!important}.smartpay-link-modal-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;margin-top:8px!important}.smartpay-link-modal-actions>*{min-height:46px!important}.smartpay-link-modal-actions>*:last-child{grid-column:1/-1!important}
+
+  /* Audit: search first, advanced filters on demand */
+  #view-audit .history-info-card-v522{display:none!important}.audit-toolbar-card{padding:10px!important;margin-bottom:8px!important}.audit-toolbar-head{flex-direction:row!important;align-items:center!important;margin-bottom:7px!important}.audit-toolbar-title{font-size:13px!important}.audit-toolbar-sub{display:none!important}.audit-toolbar-actions-mobile-v523{gap:5px!important}.audit-mobile-filter-btn-v523{display:inline-flex!important;width:auto!important;min-height:38px!important;padding:7px 9px!important;font-size:10px!important}.audit-export-btn{width:auto!important;min-height:38px!important;padding:7px 9px!important;font-size:10px!important}
+  .audit-toolbar-grid{display:grid!important;grid-template-columns:1fr!important;gap:6px!important}.audit-search-field{grid-column:auto!important}.audit-advanced-filter-v523{display:none!important}.audit-toolbar-card.filters-open-v523 .audit-advanced-filter-v523{display:block!important}.audit-toolbar-card.filters-open-v523 .audit-refresh-btn{display:flex!important;width:100%!important;min-height:44px!important;align-items:center!important;justify-content:center!important}.audit-field label{font-size:9.5px!important;margin-bottom:3px!important}.audit-item{padding:9px 10px!important;border-radius:13px!important}.audit-list{gap:6px!important}.audit-icon{width:30px!important;height:30px!important;flex-basis:30px!important}.audit-title{font-size:11.5px!important}.audit-summary{font-size:10.5px!important}.audit-meta{font-size:9px!important;margin-top:4px!important}.audit-details{margin-top:7px!important}
+
+  /* Notifications */
+  .notification-drawer{height:90%!important;padding:12px 11px calc(14px + env(safe-area-inset-bottom,0px))!important;border-radius:22px 22px 0 0!important}.notification-head{padding:2px 1px 8px!important}.notification-title{font-size:17px!important}.notification-subtitle{font-size:10px!important}.notification-toolbar{padding-bottom:7px!important;gap:5px!important}.notification-filter{padding:6px 8px!important;font-size:10px!important}.notification-item{padding:9px 9px 8px 11px!important;border-radius:14px!important}.notification-item-title{font-size:12px!important}.notification-message{font-size:11px!important;line-height:1.35!important}.notification-meta{margin-top:5px!important}.notification-list{gap:6px!important;padding-bottom:10px!important}
+
+  /* More menu, actions, profile/settings */
+  .mobile-more-sheet-v593{padding:6px 10px 12px!important;border-radius:22px 22px 18px 18px!important}.mobile-more-handle-v593{margin-bottom:7px!important}.mobile-more-head-v593{margin-bottom:8px!important}.mobile-more-head-v593 b{font-size:19px!important}.mobile-more-head-v593 button{width:36px!important;height:36px!important;min-width:36px!important}.mobile-more-grid-v593{gap:6px!important}.mobile-more-grid-v593 button{min-height:62px!important;padding:8px 10px!important;border-radius:14px!important;gap:8px!important}.mobile-more-grid-v593 button>span{font-size:19px!important}.mobile-more-grid-v593 button>b{font-size:12px!important}
+  .mobile-actions-card-v593{padding:10px!important}.mobile-actions-head-v593{margin-bottom:8px!important}.mobile-actions-head-v593 b{font-size:16px!important}.mobile-actions-head-v593 span{font-size:10px!important}.mobile-actions-grid-v593{gap:6px!important}.mobile-action-tile-v593{min-height:72px!important;padding:10px 11px!important;grid-template-columns:32px minmax(0,1fr)!important;column-gap:8px!important;border-radius:14px!important}.mobile-action-tile-v593>span{font-size:22px!important}.mobile-action-tile-v593>b{font-size:13px!important}.mobile-action-tile-v593>small{font-size:9.5px!important}.mobile-action-tile-v593.info{min-height:52px!important;grid-template-rows:1fr!important}.mobile-action-tile-v593.info>span{grid-row:1!important}.mobile-action-tile-v593.info>b,.mobile-action-tile-v593.info>small{align-self:center!important}
+  .profile-hero-v510{padding:11px!important;gap:9px!important}.profile-avatar-v510{width:48px!important;height:48px!important;border-radius:15px!important}.profile-grid-v510{gap:8px!important}.profile-card-v510{padding:10px!important}.profile-card-title-v510{font-size:14px!important;margin-bottom:8px!important}.profile-field-v510{gap:3px!important;margin-bottom:7px!important}.profile-security-row-v510{padding:8px 0!important}.profile-security-row-v510 b{font-size:12px!important}.profile-security-row-v510 small{font-size:9.5px!important}
+  .settings-main-v2{gap:8px!important}.settings-main-v2>.card,.settings-side-panel-v2{padding:10px!important}.settings-hero-card-v2{padding:10px!important}.settings-side-nav{gap:5px!important}.settings-side-btn{padding:7px 9px!important;font-size:10.5px!important}.notification-pref{padding:8px 9px!important}
+
+  /* Bottom nav + add menu */
+  .mobile-bottom-nav{left:6px!important;right:6px!important;bottom:max(5px,env(safe-area-inset-bottom,0px))!important;padding:4px!important;gap:3px!important;border-radius:18px!important}.mobile-nav-btn{min-height:52px!important;padding:5px 2px!important;border-radius:12px!important;font-size:9.5px!important;gap:2px!important}.mobile-nav-btn .nav-icon{font-size:18px!important}
+  .mobile-add-popover-v5224{bottom:calc(66px + env(safe-area-inset-bottom,0px))!important;gap:6px!important}.mobile-add-action-v5224{min-height:52px!important;padding:8px 9px!important;border-radius:14px!important}.mobile-add-action-icon-v5224{width:36px!important;height:36px!important;min-width:36px!important;border-radius:11px!important;font-size:18px!important}.mobile-add-action-copy-v5224 b{font-size:12px!important}.mobile-add-action-copy-v5224 small{font-size:9px!important}
+
+  /* Modal safety / consistent mobile behavior */
+  .modal:not(.notification-center-modal):not(.smartpay-link-modal){padding:calc(10px + env(safe-area-inset-top,0px)) 8px calc(10px + env(safe-area-inset-bottom,0px))!important}
+  .modal:not(.notification-center-modal):not(.smartpay-link-modal)>.modal-content{max-height:calc(100dvh - 20px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;overflow:auto!important}
+  .auth-close-btn{width:36px!important;height:36px!important;min-width:36px!important;position:relative!important;z-index:5!important}
+}
+@media(max-width:390px){
+  .debt-client-v2{padding-right:92px!important}.debt-responsible-v2{width:84px!important;right:8px!important}.debt-actions-v2.has-close-debt-v124{grid-template-columns:minmax(0,1fr) 56px!important}.debt-actions-v2 .close-debt-btn-v124{min-width:56px!important}.debt-scope-btn{padding-left:8px!important;padding-right:8px!important;font-size:10.5px!important}.debt-scope-count{font-size:9px!important}
+}
+
 </style>
 </head>
 <body>
@@ -3173,6 +3257,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
       <div id="phoneLookupBox" class="phone-lookup-box"></div>
       <div class="form-field-label" id="clientFieldLabel">Имя клиента</div>
       <input id="client" placeholder="Имя клиента" autocomplete="name">
+      <div class="form-field-label" id="amountFieldLabel">Сумма долга</div>
       <input id="amount" type="tel" inputmode="numeric" placeholder="Сумма">
       <div class="debt-details-editor-v513" id="newDebtDetailsEditorV513">
         <button class="debt-details-toggle-v513" type="button" onclick="toggleDebtDetailsEditorV513_('newDebt')"><span>📝 <span id="newDebtDetailsToggleTextV513">Добавить описание / товары</span> <small id="newDebtDetailsOptionalV513">необязательно</small></span><span class="debt-details-chevron-v513">⌄</span></button>
@@ -3238,16 +3323,16 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
     <div class="card audit-toolbar-card">
       <div class="audit-toolbar-head">
         <div><div id="auditToolbarTitle" class="audit-toolbar-title">🕘 Журнал действий</div><div id="auditToolbarHint" class="audit-toolbar-sub">Кто, когда и что сделал, а также какие системные оповещения были сформированы.</div></div>
-        <button id="auditExportBtn" class="user-mini-btn audit-export-btn" type="button" onclick="exportAuditCsv()">⬇ CSV</button>
+        <div class="audit-toolbar-actions-mobile-v523"><button id="auditMobileFiltersBtn" class="user-mini-btn audit-mobile-filter-btn-v523" type="button" onclick="toggleAuditMobileFiltersV523_()" aria-expanded="false">⚙ Фильтры</button><button id="auditExportBtn" class="user-mini-btn audit-export-btn" type="button" onclick="exportAuditCsv()">⬇ CSV</button></div>
       </div>
       <div class="audit-toolbar-grid">
         <div class="audit-field audit-search-field"><label id="auditSearchLabel">Поиск</label><input id="auditSearchInput" placeholder="Клиент, пользователь, действие, уведомление…" oninput="scheduleAuditReload_()"></div>
-        <div class="audit-field"><label>Тип события</label><select id="auditSourceFilter" onchange="loadAuditLog()"><option value="all">Все события</option><option value="change">Изменения</option><option value="security">Безопасность / входы</option><option value="notification">Оповещения</option></select></div>
-        <div class="audit-field"><label id="auditCategoryLabel">Категория</label><select id="auditCategoryFilter" onchange="loadAuditLog()"><option value="all">Все</option></select></div>
-        <div class="audit-field" id="auditUserField"><label id="auditUserLabel">Пользователь</label><select id="auditUserFilter" onchange="loadAuditLog()"><option value="">Все пользователи</option></select></div>
-        <div class="audit-field"><label id="auditFromLabel">С даты</label><input id="auditDateFrom" type="date" onchange="loadAuditLog()"></div>
-        <div class="audit-field"><label id="auditToLabel">По дату</label><input id="auditDateTo" type="date" onchange="loadAuditLog()"></div>
-        <button id="auditRefreshBtn" class="add-debt-btn audit-refresh-btn" type="button" onclick="loadAuditLog()">Обновить</button>
+        <div class="audit-field audit-advanced-filter-v523"><label>Тип события</label><select id="auditSourceFilter" onchange="loadAuditLog()"><option value="all">Все события</option><option value="change">Изменения</option><option value="security">Безопасность / входы</option><option value="notification">Оповещения</option></select></div>
+        <div class="audit-field audit-advanced-filter-v523"><label id="auditCategoryLabel">Категория</label><select id="auditCategoryFilter" onchange="loadAuditLog()"><option value="all">Все</option></select></div>
+        <div class="audit-field audit-advanced-filter-v523" id="auditUserField"><label id="auditUserLabel">Пользователь</label><select id="auditUserFilter" onchange="loadAuditLog()"><option value="">Все пользователи</option></select></div>
+        <div class="audit-field audit-advanced-filter-v523"><label id="auditFromLabel">С даты</label><input id="auditDateFrom" type="date" onchange="loadAuditLog()"></div>
+        <div class="audit-field audit-advanced-filter-v523"><label id="auditToLabel">По дату</label><input id="auditDateTo" type="date" onchange="loadAuditLog()"></div>
+        <button id="auditRefreshBtn" class="add-debt-btn audit-refresh-btn audit-advanced-filter-v523" type="button" onclick="loadAuditLog()">Обновить</button>
       </div>
     </div>
     <div class="card" style="padding:14px">
@@ -3261,7 +3346,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
     <h3 class="view-title">Инструкция</h3>
     <div class="guide-hero card">
       <div class="guide-hero-main">
-        <div class="guide-badge">Fashion&StyleLife · v5.8.6</div>
+        <div class="guide-badge" id="guideVersionBadge">Fashion&StyleLife · v5.23.0</div>
         <div class="guide-title">База знаний и обучение</div>
         <div class="guide-sub">Понятные инструкции по каждой ключевой функции системы долгов. Выберите тему — и откроется отдельный пошаговый урок.</div>
       </div>
@@ -3633,7 +3718,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
         <button id="mobileActionNotifyBtn" class="mobile-action-tile-v593" type="button" onclick="openNotificationCenter()"><span>🔔</span><b id="mobileActionNotifyLabel">Уведомления</b><small id="mobileActionNotifySub">Открыть центр уведомлений</small></button>
         <button id="mobileActionExportBtn" class="mobile-action-tile-v593" type="button" onclick="openExportMenu()"><span>📤</span><b id="mobileActionExportLabel">Экспорт</b><small id="mobileActionExportSub">Excel / PDF отчёты</small></button>
         <button id="mobileActionLogoutBtn" class="mobile-action-tile-v593 danger" type="button" onclick="logout()"><span>🚪</span><b id="mobileActionLogoutLabel">Выйти</b><small id="mobileActionLogoutSub">Завершить текущую сессию</small></button>
-        <div id="mobileActionVersionCard" class="mobile-action-tile-v593 info"><span>🏷️</span><b id="mobileActionVersionLabel">Версия программы</b><small id="mobileActionVersionSub">v5.22.9 · Текущая установленная сборка</small></div>
+        <div id="mobileActionVersionCard" class="mobile-action-tile-v593 info"><span>🏷️</span><b id="mobileActionVersionLabel">Версия программы</b><small id="mobileActionVersionSub">v5.23.0 · Текущая установленная сборка</small></div>
       </div>
     </div>
   </section>
@@ -4023,7 +4108,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 </div>
 
 <script>
-const VERSION="5.22.9";
+const VERSION="5.23.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4810,6 +4895,7 @@ function applyTranslations(){
   if(scopeAll)scopeAll.textContent=t("debtScopeAll");
   if(scopeMine)scopeMine.textContent=t("debtScopeMine");
   if(scopeUnassigned)scopeUnassigned.textContent=t("debtScopeUnassigned");
+  const amountFieldLabel=document.getElementById("amountFieldLabel");if(amountFieldLabel)amountFieldLabel.textContent=currentLanguage==="tj"?"Маблағи қарз":"Сумма долга";
   const responsibleFieldLabel=document.getElementById("responsibleFieldLabel");
   if(responsibleFieldLabel)responsibleFieldLabel.textContent=t("responsibleLabel");
   if (addTitleEl) addTitleEl.textContent = t("addDebt");
@@ -4855,6 +4941,8 @@ function applyTranslations(){
   const mobileActionLogoutSub=document.getElementById("mobileActionLogoutSub");if(mobileActionLogoutSub)mobileActionLogoutSub.textContent=t("actionLogoutSub");
   const mobileActionVersionLabel=document.getElementById("mobileActionVersionLabel");if(mobileActionVersionLabel)mobileActionVersionLabel.textContent=currentLanguage==="tj"?"Версияи барнома":"Версия программы";
   const mobileActionVersionSub=document.getElementById("mobileActionVersionSub");if(mobileActionVersionSub)mobileActionVersionSub.textContent=`v${VERSION} · ${currentLanguage==="tj"?"Сохти ҷорӣ насб шудааст":"Текущая установленная сборка"}`;
+  const guideVersionBadge=document.getElementById("guideVersionBadge");if(guideVersionBadge)guideVersionBadge.textContent=`Fashion&StyleLife · v${VERSION}`;
+  const auditMobileFiltersBtn=document.getElementById("auditMobileFiltersBtn");if(auditMobileFiltersBtn&&!auditMobileFiltersBtn.dataset.customLabel)auditMobileFiltersBtn.textContent=currentLanguage==="tj"?"⚙ Филтрҳо":"⚙ Фильтры";
 
   const settingsLanguageTitle = document.getElementById("settingsLanguageTitle");
   const settingsThemeTitle = document.getElementById("settingsThemeTitle");
@@ -7167,6 +7255,18 @@ async function loadAuditLog(){
   catch(e){if(box)box.innerHTML=`<div class="audit-empty">❌ ${escapeHtml(e.message||String(e))}</div>`;}
   finally{auditLoading=false;setButtonBusyV5211_(btn,false);}
 }
+function toggleAuditMobileFiltersV523_(){
+  const card=document.querySelector("#view-audit .audit-toolbar-card"),btn=document.getElementById("auditMobileFiltersBtn");
+  if(!card)return;
+  const open=card.classList.toggle("filters-open-v523");
+  if(btn){btn.setAttribute("aria-expanded",open?"true":"false");btn.dataset.customLabel="1";btn.textContent=open?(currentLanguage==="tj"?"✕ Пӯшидан":"✕ Скрыть"):(currentLanguage==="tj"?"⚙ Филтрҳо":"⚙ Фильтры");}
+}
+function resetAuditMobileFiltersV523_(){
+  const card=document.querySelector("#view-audit .audit-toolbar-card"),btn=document.getElementById("auditMobileFiltersBtn");
+  if(window.innerWidth>640&&card)card.classList.remove("filters-open-v523");
+  if(btn&&!card?.classList.contains("filters-open-v523")){btn.setAttribute("aria-expanded","false");btn.dataset.customLabel="";btn.textContent=currentLanguage==="tj"?"⚙ Филтрҳо":"⚙ Фильтры";}
+}
+window.addEventListener("resize",()=>resetAuditMobileFiltersV523_(),{passive:true});
 function exportAuditCsv(){
   if(!auditEntries.length){showToast(`ℹ️ <b>${securityText_("Нет данных для экспорта","Барои содирот маълумот нест")}</b>`);return;}
   const cols=[securityText_("Дата и время","Сана ва вақт"),securityText_("Тип события","Навъи рӯйдод"),securityText_("Пользователь","Истифодабаранда"),"Email",securityText_("Категория","Категория"),securityText_("Действие","Амал"),securityText_("Объект","Объект"),securityText_("Описание","Тавсиф"),securityText_("Результат","Натиҷа")];
