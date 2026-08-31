@@ -241,18 +241,27 @@ body{
   font-family:Arial,sans-serif;
   box-sizing:border-box;
   border-radius:18px;
+  border:1px solid #e2e8f0;
 }
 
 .pdf-report h1{
-  margin:0 0 10px 0;
-  font-size:20px;
+  margin:0 0 12px 0;
+  padding:14px 16px;
+  border-radius:12px;
+  background:#0f274f;
+  color:#fff;
+  font-size:22px;
+  letter-spacing:-.01em;
 }
 
 .pdf-meta{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
   margin-bottom:14px;
-  font-size:12px;
-  line-height:1.5;
-}
+  font-size:11px;
+  line-height:1.45;
+}.pdf-meta>div{padding:8px 10px;border-radius:9px;background:#f8fafc;border:1px solid #e2e8f0}.pdf-report h2{margin:16px 0 8px;padding-bottom:6px;border-bottom:2px solid #dbeafe;color:#0f274f;font-size:16px}
 
 .pdf-table{
   width:100%;
@@ -272,7 +281,9 @@ body{
 }
 
 .pdf-table th{
-  background:#f3f4f6;
+  background:#1d4ed8;
+  color:#fff;
+  font-weight:700;
 }
 
 .pdf-table th:nth-child(1),
@@ -293,7 +304,7 @@ body{
 .pdf-table td:nth-child(8){width:13%;}
 
 .pdf-table thead{display:table-header-group;}
-.pdf-table tr{page-break-inside:avoid;}
+.pdf-table tr{page-break-inside:avoid}.pdf-table tbody tr:nth-child(even){background:#f8fafc}
 
 .pdf-status-overdue{color:#b91c1c;font-weight:bold;}
 .pdf-status-partial{color:#15803d;font-weight:bold;}
@@ -1442,6 +1453,9 @@ html[data-theme="light"] .export-choice-btn{background:#f1f5f9!important;color:#
 html[data-theme="light"] .export-choice-btn.active{background:linear-gradient(135deg,#2563eb,#7c3aed)!important;color:#fff!important;}
 html[data-theme="light"] .export-info-box{background:#eff6ff;color:#334155;border-color:#bfdbfe;}
 @media(max-width:640px){.export-modal-content{max-height:88vh}.export-format-switch{grid-template-columns:1fr 1fr}.export-select{font-size:16px}}
+/* ===== REPORTS PRO v5.24.0 ===== */
+.smartpay-export-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.smartpay-export-head h3{margin:0}.smartpay-export-filter-grid,.smartpay-export-date-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.smartpay-export-date-grid{margin-top:9px}.smartpay-export-date-grid label{display:block;margin:0 0 5px;font-size:11px;font-weight:850;color:var(--text-3)}.smartpay-export-date-grid input{width:100%;min-height:46px;margin:0!important;box-sizing:border-box}.smartpay-history-toolbar{flex-wrap:wrap}.smartpay-history-toolbar #smartPayInvoiceSearch{min-width:180px}.smartpay-history-toolbar #smartPayHistoryExportBtn{background:rgba(34,197,94,.10)!important;border-color:rgba(34,197,94,.18)!important;color:#16a34a!important;font-weight:850!important}.smartpay-export-modal-content{max-width:560px!important}.report-pro-note{font-size:10px;color:var(--text-3);line-height:1.45}
+@media(max-width:640px){.smartpay-export-filter-grid,.smartpay-export-date-grid{grid-template-columns:1fr}.smartpay-export-modal-content{max-height:92vh!important;overflow:auto}.smartpay-history-toolbar #smartPayInvoiceSearch{flex:1 0 100%!important}.smartpay-history-toolbar button{flex:1 1 0!important;justify-content:center}}
 
 
 /* ===== v4.8 LIQUID GLASS / READABILITY ===== */
@@ -3456,7 +3470,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
       <div class="card smartpay-history-card">
         <div class="smartpay-section-title">История счетов</div>
         <div class="smartpay-section-sub">Счета, созданные из этой программы. Webhook остаётся основным способом подтверждения оплаты, а резервная автопроверка Order Status API сама проверяет ожидающие счета и применяет подтверждённую оплату к долгу.</div><div id="smartPayAutoCheckStatusV5213" class="smartpay-auto-check-v5213">⏱ Автопроверка запускается…</div>
-        <div class="smartpay-history-toolbar"><input id="smartPayInvoiceSearch" type="search" placeholder="Имя, телефон, order ID, статус…" oninput="renderSmartPayInvoiceList_()"><button class="user-mini-btn" type="button" onclick="loadSmartPayInvoices_(true)">↻ Обновить</button></div>
+        <div class="smartpay-history-toolbar"><input id="smartPayInvoiceSearch" type="search" placeholder="Имя, телефон, order ID, статус…" oninput="renderSmartPayInvoiceList_()"><button id="smartPayHistoryExportBtn" class="user-mini-btn" type="button" onclick="openSmartPayExportModal_()">📗 Экспорт</button><button class="user-mini-btn" type="button" onclick="loadSmartPayInvoices_(true)">↻ Обновить</button></div>
         <div id="smartPayInvoiceList" class="smartpay-list"><div class="smartpay-empty">Откройте раздел, чтобы загрузить счета.</div></div>
       </div>
     </div>
@@ -3895,6 +3909,27 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
   </div>
 </div>
 
+<div class="modal" id="smartPayExportModal" onclick="smartPayExportBackdropClose_(event)">
+  <div class="modal-content export-modal-content smartpay-export-modal-content" onclick="event.stopPropagation()">
+    <div class="smartpay-export-head"><div><h3 id="smartPayExportTitle">📗 Экспорт счетов SmartPay</h3><div id="smartPayExportSub" class="export-hint">Выберите период и состав отчета. Excel будет сформирован с фильтрами, итогами и отдельной сводкой.</div></div><button type="button" class="auth-close-btn" onclick="closeSmartPayExportModal_()">×</button></div>
+    <div class="export-block">
+      <label class="export-block-title" for="smartPayExportPeriod">Период</label>
+      <select id="smartPayExportPeriod" class="export-select" onchange="syncSmartPayExportUi_()">
+        <option value="all">За всё время</option><option value="today">Сегодня</option><option value="month" selected>Выбрать месяц</option><option value="custom">Произвольный период</option>
+      </select>
+      <div id="smartPayExportMonthWrap" class="export-month-wrap"><input type="month" id="smartPayExportMonth" onchange="syncSmartPayExportUi_()"></div>
+      <div id="smartPayExportCustomWrap" class="smartpay-export-date-grid" style="display:none;"><div><label>С даты</label><input type="date" id="smartPayExportFrom" onchange="syncSmartPayExportUi_()"></div><div><label>По дату</label><input type="date" id="smartPayExportTo" onchange="syncSmartPayExportUi_()"></div></div>
+    </div>
+    <div class="smartpay-export-filter-grid">
+      <div><label class="export-block-title" for="smartPayExportType">Тип счета</label><select id="smartPayExportType" class="export-select" onchange="syncSmartPayExportUi_()"><option value="all">Все типы</option><option value="debt">Оплата долга</option><option value="general">Обычный счет</option><option value="qr">QR-оплата</option></select></div>
+      <div><label class="export-block-title" for="smartPayExportStatus">Статус</label><select id="smartPayExportStatus" class="export-select" onchange="syncSmartPayExportUi_()"><option value="all">Все статусы</option><option value="paid">Оплаченные</option><option value="open">Ожидают оплаты</option><option value="other">Другие статусы</option></select></div>
+    </div>
+    <div id="smartPayExportInfo" class="export-info-box"></div>
+    <button id="smartPayExportDownloadBtn" class="export-download-btn" type="button" onclick="runSmartPayInvoiceExport_()">📗 Скачать Excel</button>
+    <button class="export-cancel-btn" type="button" onclick="closeSmartPayExportModal_()">Отмена</button>
+  </div>
+</div>
+
 <div class="modal" id="mergeDebtModal">
   <div class="modal-content merge-modal">
     <h3 id="mergeDebtTitle">Найден существующий долг</h3>
@@ -4162,7 +4197,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 </div>
 
 <script>
-const VERSION="5.23.3";
+const VERSION="5.24.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -4178,7 +4213,10 @@ function loadExternalScript_(key,url,ready){
   });
   return externalScriptPromises_[key];
 }
-function ensureXlsxLibrary_(){return loadExternalScript_("xlsx","https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js",()=>typeof window.XLSX!=="undefined");}
+function ensureXlsxLibrary_(){
+  if(window.__FSL_XLSX_STYLE_READY__&&typeof window.XLSX!=="undefined")return Promise.resolve(true);
+  return loadExternalScript_("xlsx-style","https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js",()=>window.__FSL_XLSX_STYLE_READY__&&typeof window.XLSX!=="undefined").then(()=>{window.__FSL_XLSX_STYLE_READY__=true;return true;});
+}
 function ensurePdfLibrary_(){return loadExternalScript_("html2pdf","https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js",()=>typeof window.html2pdf!=="undefined");}
 function ensureQrLibrary_(){return loadExternalScript_("qrcode","https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",()=>typeof window.QRCode!=="undefined");}
 
@@ -5623,7 +5661,7 @@ function applyPermissions_(){
   document.querySelectorAll('[data-view="stats"]').forEach(el=>el.style.display=stats?"":"none");
   const addView=document.getElementById("view-add");if(addView)addView.style.display=create?"":"none";
   const statsView=document.getElementById("view-stats");if(statsView)statsView.style.display=stats?"":"none";
-  ["headerExportBtn","statsExportBtn","settingsExportBtn"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=exp?"":"none";});
+  ["headerExportBtn","statsExportBtn","settingsExportBtn","smartPayHistoryExportBtn"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=exp?"":"none";});
   const uc=document.getElementById("usersSettingsCard");if(uc)uc.style.display=users?"":"none";
   const addUser=document.getElementById("addUserBtn");if(addUser)addUser.style.display=canPermission("manageUsers")?"":"none";
   const hasSecurityPermission=canPermission("security");
@@ -7335,6 +7373,44 @@ function exportAuditCsv(){
 /* ---------- SMARTPAY BILLING + WEBHOOK v5.9.2 ---------- */
 let smartPayInfo_=null;
 let smartPayInvoices_=[];
+function smartPayYmd_(d){const x=d instanceof Date?d:new Date(d);if(Number.isNaN(x.getTime()))return "";return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`;}
+function smartPayCurrentMonth_(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;}
+function openSmartPayExportModal_(){
+  if(!canPermission("exportData")){showToast(`❌ ${securityText_("Недостаточно прав для экспорта","Барои экспорт ҳуқуқ кофӣ нест")}`,"error");return;}
+  const modal=document.getElementById("smartPayExportModal"),month=document.getElementById("smartPayExportMonth");if(!modal)return;if(month&&!month.value)month.value=smartPayCurrentMonth_();modal.style.display="flex";syncSmartPayExportUi_();
+}
+function closeSmartPayExportModal_(){const modal=document.getElementById("smartPayExportModal");if(modal)modal.style.display="none";}
+function smartPayExportBackdropClose_(e){if(e?.target?.id==="smartPayExportModal")closeSmartPayExportModal_();}
+function smartPayExportBounds_(){
+  const period=document.getElementById("smartPayExportPeriod")?.value||"all";
+  if(period==="all")return {period,from:"",to:"",label:securityText_("За всё время","Барои тамоми вақт")};
+  if(period==="today"){const d=smartPayYmd_(new Date());return {period,from:d,to:d,label:securityText_("Сегодня","Имрӯз")+` · ${d}`};}
+  if(period==="month"){
+    const m=document.getElementById("smartPayExportMonth")?.value||"";if(!/^\d{4}-\d{2}$/.test(m))return null;const [y,mo]=m.split("-").map(Number),last=new Date(y,mo,0).getDate();return {period,from:`${m}-01`,to:`${m}-${String(last).padStart(2,"0")}`,label:m};
+  }
+  const from=document.getElementById("smartPayExportFrom")?.value||"",to=document.getElementById("smartPayExportTo")?.value||"";if(!from||!to||from>to)return null;return {period,from,to,label:`${from} — ${to}`};
+}
+function syncSmartPayExportUi_(){
+  const period=document.getElementById("smartPayExportPeriod")?.value||"all",monthWrap=document.getElementById("smartPayExportMonthWrap"),customWrap=document.getElementById("smartPayExportCustomWrap"),info=document.getElementById("smartPayExportInfo");
+  if(monthWrap)monthWrap.style.display=period==="month"?"block":"none";if(customWrap)customWrap.style.display=period==="custom"?"grid":"none";
+  const bounds=smartPayExportBounds_(),type=document.getElementById("smartPayExportType")?.value||"all",status=document.getElementById("smartPayExportStatus")?.value||"all";
+  const typeNames={all:securityText_("Все типы","Ҳама намудҳо"),debt:securityText_("Оплата долга","Пардохти қарз"),general:securityText_("Обычный счет","Ҳисоби оддӣ"),qr:securityText_("QR-оплата","QR-пардохт")};
+  const statusNames={all:securityText_("Все статусы","Ҳама ҳолатҳо"),paid:securityText_("Оплаченные","Пардохтшуда"),open:securityText_("Ожидают оплаты","Интизори пардохт"),other:securityText_("Другие статусы","Ҳолатҳои дигар")};
+  if(info)info.innerHTML=bounds?`<b>${securityText_("Период","Давра")}:</b> ${escapeHtml(bounds.label)}<br><b>${securityText_("Тип","Намуд")}:</b> ${escapeHtml(typeNames[type]||type)} · <b>${securityText_("Статус","Ҳолат")}:</b> ${escapeHtml(statusNames[status]||status)}<br><span class="report-pro-note">${securityText_("В Excel будут отдельная сводка, общие итоги и таблица счетов с фильтрами по каждому столбцу.","Дар Excel ҷамъбаст, натиҷаҳои умумӣ ва ҷадвали ҳисобҳо бо филтрҳо сохта мешавад.")}</span>`:`<b style="color:#dc2626">${securityText_("Проверьте выбранный период","Давраи интихобшударо санҷед")}</b>`;
+}
+async function runSmartPayInvoiceExport_(){
+  const bounds=smartPayExportBounds_();if(!bounds){showToast(`❌ ${securityText_("Проверьте период экспорта","Давраи содиротро санҷед")}`,"error");return;}
+  const btn=document.getElementById("smartPayExportDownloadBtn"),old=btn?.textContent||"";setButtonBusyV5211_(btn,true,securityText_("Готовим Excel…","Excel омода мешавад…"));
+  try{
+    const type=document.getElementById("smartPayExportType")?.value||"all",status=document.getElementById("smartPayExportStatus")?.value||"all";
+    const r=await apiPost("smartpay.invoice.export",{from:bounds.from,to:bounds.to,type,status},{timeoutMs:60000});if(!r.success)throw new Error(r.message||securityText_("Не удалось получить счета","Ҳисобҳоро гирифтан нашуд"));
+    const rows=Array.isArray(r.invoices)?r.invoices:[];if(!rows.length){showToast(`ℹ️ ${securityText_("За выбранный период счетов нет","Дар давраи интихобшуда ҳисоб нест")}`);return;}
+    await exportSmartPayInvoicesExcel_(rows,{...bounds,type,status,totalMatched:Number(r.totalMatched||rows.length),limited:!!r.limited});
+    closeSmartPayExportModal_();if(r.limited)showToast(`⚠️ ${securityText_("Выгружены первые 5000 счетов. Уменьшите период для полной выгрузки.","5000 ҳисоби аввал содир шуд. Барои содироти пурра давраро кам кунед.")}`,"error");else showToast(`✅ ${securityText_("Отчет SmartPay готов","Ҳисоботи SmartPay омода аст")}`,"success");
+  }catch(e){console.error(e);showToast(`❌ ${escapeHtml(e.message||String(e))}`,"error");}
+  finally{setButtonBusyV5211_(btn,false);if(btn&&old)btn.textContent=old;}
+}
+
 let smartPayDebtContext_=null;
 let smartPayDebtRequestId_="";
 let smartPayGeneralRequestId_="";
@@ -8092,61 +8168,62 @@ function trendAoA(){
   return [["Дата","Выдано","Возвращено"],...list.map(x=>[formatReportDate(x.date),money(x.issued),money(x.returned)])];
 }
 
-function setSheetWidths(ws,widths){ ws['!cols']=widths.map(w=>({wch:w})); }
-function addAutofilter(ws,rows){ if(rows>1 && ws['!ref']) ws['!autofilter']={ref:ws['!ref']}; }
-
-function appendJsonSheet(wb,name,rows,widths){
-  const safeRows=rows.length?rows:[{"Нет данных":""}];
-  const ws=XLSX.utils.json_to_sheet(safeRows);
-  setSheetWidths(ws,widths||[6,12,20,20,14,16,16,16,16,14,18,18]);
-  addAutofilter(ws,safeRows.length+1);
-  XLSX.utils.book_append_sheet(wb,ws,name.slice(0,31));
+const EXCEL_THEME_V524_={navy:"0F274F",blue:"2563EB",blue2:"1D4ED8",lightBlue:"EFF6FF",green:"16A34A",lightGreen:"DCFCE7",amber:"D97706",lightAmber:"FEF3C7",red:"DC2626",lightRed:"FEE2E2",text:"0F172A",muted:"64748B",line:"CBD5E1",soft:"F8FAFC",white:"FFFFFF"};
+function excelBorderV524_(){const c={style:"thin",color:{rgb:EXCEL_THEME_V524_.line}};return {top:c,bottom:c,left:c,right:c};}
+function excelBaseStyleV524_(fill="FFFFFF"){return {font:{name:"Aptos",sz:10,color:{rgb:EXCEL_THEME_V524_.text}},fill:{patternType:"solid",fgColor:{rgb:fill}},alignment:{vertical:"center",wrapText:true},border:excelBorderV524_()};}
+function excelMergeStyleV524_(ws,range,style){const r=XLSX.utils.decode_range(range);for(let R=r.s.r;R<=r.e.r;R++)for(let C=r.s.c;C<=r.e.c;C++){const a=XLSX.utils.encode_cell({r:R,c:C});if(!ws[a])ws[a]={t:"s",v:""};ws[a].s=style;}}
+function excelColV524_(idx){return XLSX.utils.encode_col(idx);}
+function excelDateV524_(value){if(!value)return "";if(value instanceof Date)return value;const raw=String(value).trim();let d;if(/^\d{4}-\d{2}-\d{2}(?:\s|T)/.test(raw))d=new Date(raw.replace(" ","T"));else if(/^\d{4}-\d{2}-\d{2}$/.test(raw)){const [y,m,day]=raw.split("-").map(Number);d=new Date(y,m-1,day);}else d=new Date(raw);return Number.isNaN(d.getTime())?raw:d;}
+function excelPhoneV524_(value){let d=String(value||"").replace(/\D/g,"");if(d.startsWith("992")&&d.length>=12)d=d.slice(-9);if(d.length===9)return `+992 ${d.slice(0,3)} ${d.slice(3,6)} ${d.slice(6)}`;return d||"";}
+function excelStatusStyleV524_(value){const s=String(value||"").toLowerCase();let fill=EXCEL_THEME_V524_.lightBlue,color=EXCEL_THEME_V524_.blue2;if(/charged|paid|success|successful|completed|оплачен|погаш|закрыт/.test(s)){fill=EXCEL_THEME_V524_.lightGreen;color="166534";}else if(/overdue|просроч/.test(s)){fill=EXCEL_THEME_V524_.lightRed;color="991B1B";}else if(/open|pending|ожида|частич/.test(s)){fill=EXCEL_THEME_V524_.lightAmber;color="92400E";}return {font:{name:"Aptos",sz:10,bold:true,color:{rgb:color}},fill:{patternType:"solid",fgColor:{rgb:fill}},alignment:{vertical:"center",horizontal:"center",wrapText:true},border:excelBorderV524_()};}
+function debtRowsForExcelV524_(list){return (list||[]).map((d,i)=>({"№":i+1,"ID":d.id||"","Дата создания":excelDateV524_(d.createdAt||""),"Клиент":d.client||"","Телефон":excelPhoneV524_(d.phone||""),"Сумма долга":money(d.total),"Оплачено":money(d.paid),"Остаток":money(d.remainder),"Дата оплаты по договоренности":excelDateV524_(d.dueDate||""),"Просрочка, дней":Number(d.daysOverdue||0),"Кто выдал":d.seller||"","Ответственный":d.responsibleName||"","Статус":t(getDebtStatusKey(d))}));}
+function paymentRowsForExcelV524_(list){return (list||[]).map((p,i)=>({"№":i+1,"Дата оплаты":excelDateV524_(p.paidAt||""),"ID долга":p.debtId||"","Клиент":p.client||"","Телефон":excelPhoneV524_(p.phone||""),"Сумма платежа":money(p.amount),"Общая сумма долга":money(p.total),"Остаток после платежа":money(p.remainder),"Кто выдал":p.issuer||"","Кто принял оплату":p.collector||"","Статус после платежа":p.status||""}));}
+function smartPayRowsForExcelV524_(list){return (list||[]).map((inv,i)=>{const rawType=String(inv.type||inv.profile||"debt").toLowerCase(),kind=rawType==="qr"?securityText_("QR-оплата","QR-пардохт"):(String(inv.profile||"")==="debt"?securityText_("Оплата долга","Пардохти қарз"):securityText_("Обычный счет","Ҳисоби оддӣ"));return {"№":i+1,"Создан":excelDateV524_(inv.createdAt||""),"Оплачен":excelDateV524_(inv.paidAt||""),"Тип счета":kind,"Клиент":inv.client||"","Телефон":excelPhoneV524_(inv.phone||""),"Сумма счета":money(inv.amount),"Оплачено":money(inv.paidAmount),"Статус":smartPayStatusLabel_(inv.status||"open"),"Order ID":inv.orderId||"","Invoice UUID":inv.invoiceUuid||"","SmartPay ID":inv.smartpayId||"","Назначение":inv.description||"","Создал":inv.createdByName||"","Банк":inv.bank||"","Payment ID":inv.paymentId||"","ID долга":inv.debtId||"","Результат webhook":inv.webhookResult||"","Ссылка на оплату":inv.paymentLink||""};});}
+function appendStyledDataSheetV524_(wb,name,title,subtitle,rows,cfg={}){
+  const headers=cfg.headers||Object.keys(rows?.[0]||{});const safeHeaders=headers.length?headers:["Данные"];const data=(rows||[]).map(r=>safeHeaders.map(h=>r?.[h]??""));
+  const headerRow=5,dataStart=6,dataEnd=dataStart+data.length-1,totalRow=data.length?dataEnd+1:0,lastCol=safeHeaders.length-1,lastColLetter=excelColV524_(lastCol);
+  const sheetHint=securityText_("Фильтры включены в заголовках; строка ИТОГО автоматически пересчитывается по видимым строкам","Филтрҳо дар сарлавҳаҳо фаъоланд; сатри ҶАМЪ аз рӯи сатрҳои намоён худкор ҳисоб мешавад");
+  const aoa=[[title],[`${subtitle||""}${subtitle?" · ":""}${sheetHint}`],[`${securityText_("Сформировано","Сохта шуд")}: ${getTodayFormatted()} · ${securityText_("Пользователь","Истифодабаранда")}: ${currentSeller||"—"}`],[],safeHeaders,...data];if(data.length)aoa.push(new Array(safeHeaders.length).fill(""));else aoa.push([securityText_("Нет данных за выбранный период","Дар давраи интихобшуда маълумот нест")]);
+  const ws=XLSX.utils.aoa_to_sheet(aoa,{cellDates:true});ws["!merges"]=[XLSX.utils.decode_range(`A1:${lastColLetter}1`),XLSX.utils.decode_range(`A2:${lastColLetter}2`),XLSX.utils.decode_range(`A3:${lastColLetter}3`)];
+  const titleStyle={font:{name:"Aptos Display",sz:17,bold:true,color:{rgb:EXCEL_THEME_V524_.white}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.navy}},alignment:{vertical:"center",horizontal:"left"}};excelMergeStyleV524_(ws,`A1:${lastColLetter}1`,titleStyle);
+  excelMergeStyleV524_(ws,`A2:${lastColLetter}2`,{font:{name:"Aptos",sz:10,bold:true,color:{rgb:EXCEL_THEME_V524_.blue2}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.lightBlue}},alignment:{vertical:"center",horizontal:"left"}});
+  excelMergeStyleV524_(ws,`A3:${lastColLetter}3`,{font:{name:"Aptos",sz:9,color:{rgb:EXCEL_THEME_V524_.muted}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.white}},alignment:{vertical:"center",horizontal:"left"}});
+  for(let c=0;c<safeHeaders.length;c++){const a=XLSX.utils.encode_cell({r:headerRow-1,c});ws[a].s={font:{name:"Aptos",sz:10,bold:true,color:{rgb:EXCEL_THEME_V524_.white}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.blue2}},alignment:{vertical:"center",horizontal:"center",wrapText:true},border:excelBorderV524_()};}
+  const moneyCols=new Set(cfg.moneyColumns||[]),dateCols=new Set(cfg.dateColumns||[]),dateOnlyCols=new Set(cfg.dateOnlyColumns||[]);let statusIdx=safeHeaders.indexOf(cfg.statusColumn||"Статус");
+  for(let r=0;r<data.length;r++)for(let c=0;c<safeHeaders.length;c++){const addr=XLSX.utils.encode_cell({r:dataStart-1+r,c}),cell=ws[addr]||(ws[addr]={t:"s",v:""}),h=safeHeaders[c],base=excelBaseStyleV524_(r%2?EXCEL_THEME_V524_.soft:EXCEL_THEME_V524_.white);if(moneyCols.has(h)){base.numFmt='#,##0.00';base.alignment.horizontal="right";}else if(dateCols.has(h)){base.numFmt="dd.mm.yyyy hh:mm";base.alignment.horizontal="center";}else if(dateOnlyCols.has(h)){base.numFmt="dd.mm.yyyy";base.alignment.horizontal="center";}else if(h==="№"||/дней$/.test(h)){base.alignment.horizontal="center";}cell.s=(c===statusIdx)?excelStatusStyleV524_(cell.v):base;}
+  if(data.length){ws["!autofilter"]={ref:`A${headerRow}:${lastColLetter}${dataEnd}`};const a=XLSX.utils.encode_cell({r:totalRow-1,c:0});ws[a]={t:"s",v:securityText_("ИТОГО","ҶАМЪ"),f:`"${securityText_("ИТОГО","ҶАМЪ")}: "&SUBTOTAL(103,A${dataStart}:A${dataEnd})&" ${securityText_("строк","сатр")}"`};for(let c=0;c<safeHeaders.length;c++){const addr=XLSX.utils.encode_cell({r:totalRow-1,c}),cell=ws[addr]||(ws[addr]={t:"s",v:""});if((cfg.sumColumns||[]).includes(safeHeaders[c])){const col=excelColV524_(c);cell.t="n";cell.f=`SUBTOTAL(109,${col}${dataStart}:${col}${dataEnd})`;cell.v=0;cell.z="#,##0.00";}cell.s={font:{name:"Aptos",sz:10,bold:true,color:{rgb:EXCEL_THEME_V524_.navy}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.lightBlue}},alignment:{vertical:"center",wrapText:true,horizontal:c===0?"left":"right"},border:excelBorderV524_(),numFmt:(cfg.sumColumns||[]).includes(safeHeaders[c])?'#,##0.00':undefined};}}
+  else{ws["!merges"].push(XLSX.utils.decode_range(`A6:${lastColLetter}6`));excelMergeStyleV524_(ws,`A6:${lastColLetter}6`,{font:{name:"Aptos",sz:10,italic:true,color:{rgb:EXCEL_THEME_V524_.muted}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.soft}},alignment:{vertical:"center",horizontal:"center"},border:excelBorderV524_()});}
+  ws["!cols"]=(cfg.widths||safeHeaders.map(h=>Math.min(34,Math.max(10,String(h).length+4)))).map(w=>({wch:w}));ws["!rows"]=[{hpt:28},{hpt:20},{hpt:18},{hpt:8},{hpt:30}];ws["!freeze"]={xSplit:0,ySplit:5,topLeftCell:"A6",activePane:"bottomLeft",state:"frozen"};ws["!margins"]={left:.3,right:.3,top:.5,bottom:.5,header:.2,footer:.2};XLSX.utils.book_append_sheet(wb,ws,name.slice(0,31));return ws;
 }
-
-function appendAoASheet(wb,name,rows,widths){
-  const ws=XLSX.utils.aoa_to_sheet(rows||[[""]]);
-  setSheetWidths(ws,widths||[30,18,16,16]);
-  XLSX.utils.book_append_sheet(wb,ws,name.slice(0,31));
+function appendSummarySheetV524_(wb,name,title,periodLabel,metrics,sections=[]){
+  const rows=[[title],["Fashion&StyleLife · Долги"],[securityText_("Период","Давра"),periodLabel||securityText_("За всё время","Барои тамоми вақт"),securityText_("Сформировано","Сохта шуд"),getTodayFormatted()],[securityText_("Пользователь","Истифодабаранда"),currentSeller||"—",securityText_("Версия","Версия"),`v${VERSION}`],[],[securityText_("Ключевые показатели","Нишондодҳои асосӣ")]];
+  for(let i=0;i<(metrics||[]).length;i+=2){const a=metrics[i]||{},b=metrics[i+1]||{};rows.push([a.label||"",a.value??"",b.label||"",b.value??""]);}
+  const sectionStarts=[];for(const sec of sections||[]){rows.push([]);sectionStarts.push(rows.length+1);rows.push([sec.title||""]);rows.push(sec.headers||[]);for(const rr of sec.rows||[])rows.push(rr);}
+  const ws=XLSX.utils.aoa_to_sheet(rows,{cellDates:true});ws["!merges"]=[XLSX.utils.decode_range("A1:D1"),XLSX.utils.decode_range("A2:D2"),XLSX.utils.decode_range("A6:D6")];
+  excelMergeStyleV524_(ws,"A1:D1",{font:{name:"Aptos Display",sz:18,bold:true,color:{rgb:EXCEL_THEME_V524_.white}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.navy}},alignment:{vertical:"center",horizontal:"left"}});excelMergeStyleV524_(ws,"A2:D2",{font:{name:"Aptos",sz:10,bold:true,color:{rgb:EXCEL_THEME_V524_.blue2}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.lightBlue}},alignment:{vertical:"center"}});excelMergeStyleV524_(ws,"A6:D6",{font:{name:"Aptos",sz:11,bold:true,color:{rgb:EXCEL_THEME_V524_.white}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.blue2}},alignment:{vertical:"center"}});
+  for(let r=2;r<=3;r++)for(let c=0;c<4;c++){const a=XLSX.utils.encode_cell({r,c});if(ws[a])ws[a].s=excelBaseStyleV524_(r%2?EXCEL_THEME_V524_.soft:EXCEL_THEME_V524_.white);}
+  const metricStart=7,metricEnd=metricStart+Math.ceil((metrics||[]).length/2)-1;for(let r=metricStart;r<=metricEnd;r++){for(let c=0;c<4;c++){const a=XLSX.utils.encode_cell({r:r-1,c}),cell=ws[a]||(ws[a]={t:"s",v:""});if(c%2===0)cell.s={font:{name:"Aptos",sz:9,bold:true,color:{rgb:EXCEL_THEME_V524_.muted}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.soft}},alignment:{vertical:"center",wrapText:true},border:excelBorderV524_()};else{const label=String(ws[XLSX.utils.encode_cell({r:r-1,c:c-1})]?.v||"").toLowerCase(),isCount=/колич|запис|клиент|всего счетов|оплачено счетов|ожидают оплаты|платежей за/.test(label);cell.s={font:{name:"Aptos Display",sz:13,bold:true,color:{rgb:EXCEL_THEME_V524_.navy}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.white}},alignment:{vertical:"center",horizontal:"right"},border:excelBorderV524_(),numFmt:typeof cell.v==="number"?(isCount?'0':'#,##0.00'):undefined};}}}
+  let scan=metricEnd+1;for(const sec of sections||[]){scan++;const titleRow=scan;ws["!merges"].push(XLSX.utils.decode_range(`A${titleRow}:D${titleRow}`));excelMergeStyleV524_(ws,`A${titleRow}:D${titleRow}`,{font:{name:"Aptos",sz:11,bold:true,color:{rgb:EXCEL_THEME_V524_.navy}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.lightBlue}},alignment:{vertical:"center"}});scan++;const headers=sec.headers||[];for(let c=0;c<Math.min(4,headers.length);c++){const a=XLSX.utils.encode_cell({r:scan-1,c});if(ws[a])ws[a].s={font:{name:"Aptos",sz:9,bold:true,color:{rgb:EXCEL_THEME_V524_.white}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.blue2}},alignment:{vertical:"center",horizontal:"center",wrapText:true},border:excelBorderV524_()};}for(let rr=0;rr<(sec.rows||[]).length;rr++){scan++;for(let c=0;c<Math.min(4,(sec.rows[rr]||[]).length);c++){const a=XLSX.utils.encode_cell({r:scan-1,c});if(ws[a])ws[a].s=excelBaseStyleV524_(rr%2?EXCEL_THEME_V524_.soft:EXCEL_THEME_V524_.white);}}}
+  ws["!cols"]=[{wch:31},{wch:19},{wch:31},{wch:19}];ws["!rows"]=[{hpt:30},{hpt:20},{hpt:22},{hpt:22},{hpt:8},{hpt:24}];ws["!margins"]={left:.4,right:.4,top:.5,bottom:.5,header:.2,footer:.2};XLSX.utils.book_append_sheet(wb,ws,name.slice(0,31));return ws;
 }
-
-function excelFileName(dataset,month){
-  const suffix=month?`-${month}`:"";
-  return `debts-${dataset}${suffix}.xlsx`;
-}
-
+function appendStyledStatsSheetV524_(wb,name,rows,widths){const ws=XLSX.utils.aoa_to_sheet(rows||[[""]],{cellDates:true});const ref=XLSX.utils.decode_range(ws["!ref"]||"A1:C1");for(let r=ref.s.r;r<=ref.e.r;r++)for(let c=ref.s.c;c<=ref.e.c;c++){const a=XLSX.utils.encode_cell({r,c});if(!ws[a])continue;let st=excelBaseStyleV524_(r%2?EXCEL_THEME_V524_.soft:EXCEL_THEME_V524_.white);if(r===0)st={font:{name:"Aptos Display",sz:16,bold:true,color:{rgb:EXCEL_THEME_V524_.white}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.navy}},alignment:{vertical:"center"}};else{const first=String(ws[XLSX.utils.encode_cell({r,c:0})]?.v||"");const second=String(ws[XLSX.utils.encode_cell({r,c:1})]?.v||"");if(second==="Значение"||first==="Сроки оплаты"||first==="Просрочка по возрасту"||/^Показатели за/.test(first))st={font:{name:"Aptos",sz:10,bold:true,color:{rgb:EXCEL_THEME_V524_.white}},fill:{patternType:"solid",fgColor:{rgb:EXCEL_THEME_V524_.blue2}},alignment:{vertical:"center",wrapText:true},border:excelBorderV524_()};}ws[a].s=st;}ws["!cols"]=(widths||[34,20,16]).map(w=>({wch:w}));ws["!margins"]={left:.4,right:.4,top:.5,bottom:.5,header:.2,footer:.2};XLSX.utils.book_append_sheet(wb,ws,name.slice(0,31));}
+function appendStyledSimpleTableV524_(wb,name,title,rows,widths){const arr=rows||[[""]],headers=arr[0]||[],data=arr.slice(1).map(r=>Object.fromEntries(headers.map((h,i)=>[String(h||`Колонка ${i+1}`),r?.[i]??""])));appendStyledDataSheetV524_(wb,name,title,securityText_("Таблица подготовлена для сортировки и фильтрации","Ҷадвал барои ҷудокунӣ ва филтр омода аст"),data,{headers:headers.map(String),widths:widths||headers.map(()=>18),moneyColumns:headers.filter(h=>/Сумма|Остаток|Выдано|Возвращено|оплат/i.test(String(h))),sumColumns:headers.filter(h=>/Сумма|Остаток|Выдано|Возвращено|оплат/i.test(String(h)))});}
+function excelPeriodLabelV524_(month){return month?month:securityText_("За всё время","Барои тамоми вақт");}
+function mainSummaryMetricsV524_(records,payments){const list=records||[],p=payments||[];const total=list.reduce((s,x)=>s+money(x.total),0),paid=list.reduce((s,x)=>s+money(x.paid),0),rem=list.reduce((s,x)=>s+money(x.remainder),0),ov=list.filter(x=>x.isOverdue&&money(x.remainder)>0),unique=new Set(list.map(x=>normalizePhone(x.phone||"")||String(x.client||"").trim().toLowerCase()).filter(Boolean)).size;const out=[{label:securityText_("Количество записей","Шумораи сабтҳо"),value:list.length},{label:securityText_("Сумма долгов","Маблағи қарзҳо"),value:total},{label:securityText_("Оплачено","Пардохтшуда"),value:paid},{label:securityText_("Остаток","Бақия"),value:rem},{label:securityText_("Просрочено записей","Сабтҳои муҳлатгузашта"),value:ov.length},{label:securityText_("Просроченная сумма","Маблағи муҳлатгузашта"),value:ov.reduce((s,x)=>s+money(x.remainder),0)},{label:securityText_("Средний долг","Қарзи миёна"),value:list.length?total/list.length:0},{label:securityText_("Уникальных клиентов","Мизоҷони нодир"),value:unique}];if(p.length){out.push({label:securityText_("Платежей за период","Пардохтҳо дар давра"),value:p.length},{label:securityText_("Получено платежей","Пардохтҳои гирифташуда"),value:p.reduce((s,x)=>s+money(x.amount),0)});}return out;}
+function excelFileName(dataset,month){return `FSL-${dataset}${month?'-'+month:''}.xlsx`;}
 async function exportExcel(dataset,month){
-  await ensureXlsxLibrary_();
-  if(typeof XLSX==="undefined") throw new Error("XLSX library unavailable");
-  const wb=XLSX.utils.book_new();
-  let payments=[];
-  if(dataset==="payments" || dataset==="stats" || dataset==="full") payments=await loadExportPayments();
-
+  await ensureXlsxLibrary_();if(typeof XLSX==="undefined")throw new Error("XLSX library unavailable");const wb=XLSX.utils.book_new();wb.Workbook=wb.Workbook||{};wb.Workbook.CalcPr={calcMode:"auto",fullCalcOnLoad:true,forceFullCalc:true};let payments=[];if(dataset==="payments"||dataset==="stats"||dataset==="full")payments=await loadExportPayments();const filteredPayments=filterPaymentsByMonth(payments,month);let summaryRecords=[];if(dataset!=="payments")summaryRecords=dataset==="full"||dataset==="stats"?filterRecordsBySelectedPeriod(getAllDebtRecords(),month):await getDebtDatasetAsync(dataset,month);
+  if(dataset==="payments"){const sum=filteredPayments.reduce((s,x)=>s+money(x.amount),0),uniq=new Set(filteredPayments.map(x=>normalizePhone(x.phone||"")||String(x.client||"").toLowerCase()).filter(Boolean)).size;appendSummarySheetV524_(wb,"Сводка",reportDatasetTitle(dataset),excelPeriodLabelV524_(month),[{label:"Количество платежей",value:filteredPayments.length},{label:"Сумма платежей",value:sum},{label:"Средний платеж",value:filteredPayments.length?sum/filteredPayments.length:0},{label:"Уникальных клиентов",value:uniq}],[]);}else appendSummarySheetV524_(wb,"Сводка",reportDatasetTitle(dataset),excelPeriodLabelV524_(month),mainSummaryMetricsV524_(summaryRecords,filteredPayments),[]);
   if(dataset==="full"){
-    const all=getDebtDataset("allRecords",month);
-    appendAoASheet(wb,"Статистика",buildStatsAoA(month,payments),[34,20,16]);
-    appendJsonSheet(wb,"Активные",debtRowsForExport(filterRecordsBySelectedPeriod(allDebts,month)));
-    appendJsonSheet(wb,"Просроченные",debtRowsForExport(filterRecordsBySelectedPeriod(allDebts.filter(d=>d.isOverdue),month)));
-    appendJsonSheet(wb,"Оплаченные",debtRowsForExport(filterRecordsBySelectedPeriod(paidDebts,month)));
-    appendJsonSheet(wb,"С оплатой",debtRowsForExport(all.filter(d=>money(d.paid)>0)));
-    appendJsonSheet(wb,"Без оплаты",debtRowsForExport(all.filter(d=>money(d.remainder)>0&&money(d.paid)<=0)));
-    appendJsonSheet(wb,"Платежи",paymentRowsForExport(filterPaymentsByMonth(payments,month)),[6,20,12,24,14,16,18,18,18,20,20]);
-    appendAoASheet(wb,"ТОП должников",topDebtorsAoA(),[30,18,18,16]);
-    appendAoASheet(wb,"Сотрудники",staffAoA(),[24,18,18]);
-    appendAoASheet(wb,"Динамика 14 дней",trendAoA(),[16,18,18]);
-  } else if(dataset==="stats"){
-    appendAoASheet(wb,"Статистика",buildStatsAoA(month,payments),[34,20,16]);
-    appendAoASheet(wb,"ТОП должников",topDebtorsAoA(),[30,18,18,16]);
-    appendAoASheet(wb,"Старые просрочки",oldestOverdueAoA(),[30,18,18,16]);
-    appendAoASheet(wb,"Сотрудники",staffAoA(),[24,18,18]);
-    appendAoASheet(wb,"Динамика 14 дней",trendAoA(),[16,18,18]);
-  } else if(dataset==="payments"){
-    appendJsonSheet(wb,"Платежи",paymentRowsForExport(filterPaymentsByMonth(payments,month)),[6,20,12,24,14,16,18,18,18,20,20]);
-  } else {
-    const rows=debtRowsForExport(await getDebtDatasetAsync(dataset,month));
-    appendJsonSheet(wb,"Отчет",rows);
-  }
-  XLSX.writeFile(wb,excelFileName(dataset,month),{compression:true});
+    const all=getDebtDataset("allRecords",month);appendStyledStatsSheetV524_(wb,"Статистика",buildStatsAoA(month,payments),[36,21,16]);appendStyledDataSheetV524_(wb,"Активные","Активные долги",excelPeriodLabelV524_(month),debtRowsForExcelV524_(filterRecordsBySelectedPeriod(allDebts,month)),{widths:[6,18,19,28,18,16,16,16,22,15,22,22,18],moneyColumns:["Сумма долга","Оплачено","Остаток"],dateColumns:["Дата создания"],dateOnlyColumns:["Дата оплаты по договоренности"],statusColumn:"Статус",sumColumns:["Сумма долга","Оплачено","Остаток"]});appendStyledDataSheetV524_(wb,"Просроченные","Просроченные долги",excelPeriodLabelV524_(month),debtRowsForExcelV524_(filterRecordsBySelectedPeriod(allDebts.filter(d=>d.isOverdue),month)),{widths:[6,18,19,28,18,16,16,16,22,15,22,22,18],moneyColumns:["Сумма долга","Оплачено","Остаток"],dateColumns:["Дата создания"],dateOnlyColumns:["Дата оплаты по договоренности"],statusColumn:"Статус",sumColumns:["Сумма долга","Оплачено","Остаток"]});appendStyledDataSheetV524_(wb,"Оплаченные","Полностью оплаченные долги",excelPeriodLabelV524_(month),debtRowsForExcelV524_(filterRecordsBySelectedPeriod(paidDebts,month)),{widths:[6,18,19,28,18,16,16,16,22,15,22,22,18],moneyColumns:["Сумма долга","Оплачено","Остаток"],dateColumns:["Дата создания"],dateOnlyColumns:["Дата оплаты по договоренности"],statusColumn:"Статус",sumColumns:["Сумма долга","Оплачено","Остаток"]});appendStyledDataSheetV524_(wb,"С оплатой","Клиенты, которые вносили оплату",excelPeriodLabelV524_(month),debtRowsForExcelV524_(all.filter(d=>money(d.paid)>0)),{widths:[6,18,19,28,18,16,16,16,22,15,22,22,18],moneyColumns:["Сумма долга","Оплачено","Остаток"],dateColumns:["Дата создания"],dateOnlyColumns:["Дата оплаты по договоренности"],statusColumn:"Статус",sumColumns:["Сумма долга","Оплачено","Остаток"]});appendStyledDataSheetV524_(wb,"Без оплаты","Долги без единой оплаты",excelPeriodLabelV524_(month),debtRowsForExcelV524_(all.filter(d=>money(d.remainder)>0&&money(d.paid)<=0)),{widths:[6,18,19,28,18,16,16,16,22,15,22,22,18],moneyColumns:["Сумма долга","Оплачено","Остаток"],dateColumns:["Дата создания"],dateOnlyColumns:["Дата оплаты по договоренности"],statusColumn:"Статус",sumColumns:["Сумма долга","Оплачено","Остаток"]});appendStyledDataSheetV524_(wb,"Платежи","История платежей",excelPeriodLabelV524_(month),paymentRowsForExcelV524_(filteredPayments),{widths:[6,20,18,28,18,17,17,20,22,22,20],moneyColumns:["Сумма платежа","Общая сумма долга","Остаток после платежа"],dateColumns:["Дата оплаты"],statusColumn:"Статус после платежа",sumColumns:["Сумма платежа"]});appendStyledSimpleTableV524_(wb,"ТОП должников","ТОП крупнейших должников",topDebtorsAoA(),[30,18,18,18]);appendStyledSimpleTableV524_(wb,"Сотрудники","Показатели сотрудников",staffAoA(),[26,20,20]);appendStyledSimpleTableV524_(wb,"Динамика 14 дней","Динамика за 14 дней",trendAoA(),[18,20,20]);
+  }else if(dataset==="stats"){appendStyledStatsSheetV524_(wb,"Статистика",buildStatsAoA(month,payments),[36,21,16]);appendStyledSimpleTableV524_(wb,"ТОП должников","ТОП крупнейших должников",topDebtorsAoA(),[30,18,18,18]);appendStyledSimpleTableV524_(wb,"Старые просрочки","Самые старые просрочки",oldestOverdueAoA(),[30,18,18,18]);appendStyledSimpleTableV524_(wb,"Сотрудники","Показатели сотрудников",staffAoA(),[26,20,20]);appendStyledSimpleTableV524_(wb,"Динамика 14 дней","Динамика за 14 дней",trendAoA(),[18,20,20]);
+  }else if(dataset==="payments")appendStyledDataSheetV524_(wb,"Платежи","История всех платежей",excelPeriodLabelV524_(month),paymentRowsForExcelV524_(filteredPayments),{widths:[6,20,18,28,18,17,17,20,22,22,20],moneyColumns:["Сумма платежа","Общая сумма долга","Остаток после платежа"],dateColumns:["Дата оплаты"],statusColumn:"Статус после платежа",sumColumns:["Сумма платежа"]});
+  else appendStyledDataSheetV524_(wb,"Отчет",reportDatasetTitle(dataset),excelPeriodLabelV524_(month),debtRowsForExcelV524_(summaryRecords),{widths:[6,18,19,28,18,16,16,16,22,15,22,22,18],moneyColumns:["Сумма долга","Оплачено","Остаток"],dateColumns:["Дата создания"],dateOnlyColumns:["Дата оплаты по договоренности"],statusColumn:"Статус",sumColumns:["Сумма долга","Оплачено","Остаток"]});
+  XLSX.writeFile(wb,excelFileName(dataset,month),{compression:true,cellStyles:true});
 }
+function smartPayClientPaidV524_(inv){const s=String(inv?.status||"").toLowerCase();return /charged|paid|success|successful|completed|complete|approved/.test(s);}
+function smartPayExportSectionsV524_(list){const types={},statuses={},banks={};for(const inv of list||[]){const raw=String(inv.type||inv.profile||"debt").toLowerCase(),type=raw==="qr"?"QR-оплата":(String(inv.profile||"")==="debt"?"Оплата долга":"Обычный счет"),status=smartPayStatusLabel_(inv.status||"open"),amt=money(inv.amount);types[type]=types[type]||{count:0,amount:0};types[type].count++;types[type].amount+=amt;statuses[status]=statuses[status]||{count:0,amount:0};statuses[status].count++;statuses[status].amount+=amt;if(inv.bank&&smartPayClientPaidV524_(inv)){const b=String(inv.bank);banks[b]=banks[b]||{count:0,amount:0};banks[b].count++;banks[b].amount+=money(inv.paidAmount||inv.amount);}}return [{title:"По типам счетов",headers:["Тип","Количество","Сумма",""],rows:Object.entries(types).map(([k,v])=>[k,v.count,v.amount,""])},{title:"По статусам",headers:["Статус","Количество","Сумма",""],rows:Object.entries(statuses).map(([k,v])=>[k,v.count,v.amount,""])},...(Object.keys(banks).length?[{title:"Оплаты по банкам",headers:["Банк","Платежей","Оплачено",""],rows:Object.entries(banks).sort((a,b)=>b[1].amount-a[1].amount).map(([k,v])=>[k,v.count,v.amount,""])}]:[])];}
+async function exportSmartPayInvoicesExcel_(list,filters){await ensureXlsxLibrary_();const wb=XLSX.utils.book_new();wb.Workbook=wb.Workbook||{};wb.Workbook.CalcPr={calcMode:"auto",fullCalcOnLoad:true,forceFullCalc:true};const paid=(list||[]).filter(smartPayClientPaidV524_),open=(list||[]).filter(x=>String(x.status||"").toLowerCase()==="open"),totalAmount=(list||[]).reduce((s,x)=>s+money(x.amount),0),paidAmount=paid.reduce((s,x)=>s+money(x.paidAmount||x.amount),0),openAmount=open.reduce((s,x)=>s+money(x.amount),0);appendSummarySheetV524_(wb,"Сводка","История счетов SmartPay",filters?.label||securityText_("За всё время","Барои тамоми вақт"),[{label:"Всего счетов",value:(list||[]).length},{label:"Сумма счетов",value:totalAmount},{label:"Оплачено счетов",value:paid.length},{label:"Оплаченная сумма",value:paidAmount},{label:"Ожидают оплаты",value:open.length},{label:"Сумма в ожидании",value:openAmount},{label:"Конверсия в оплату",value:(list||[]).length?`${Math.round(paid.length/(list||[]).length*1000)/10}%`:"0%"},{label:"Средний счет",value:(list||[]).length?totalAmount/(list||[]).length:0}],smartPayExportSectionsV524_(list));appendStyledDataSheetV524_(wb,"Счета SmartPay","История счетов SmartPay",`${filters?.label||""} · ${securityText_("Фильтры Excel включены для всех столбцов","Филтрҳои Excel барои ҳамаи сутунҳо фаъоланд")}`,smartPayRowsForExcelV524_(list),{widths:[6,20,20,18,28,18,17,17,18,24,38,20,34,22,22,24,20,24,45],moneyColumns:["Сумма счета","Оплачено"],dateColumns:["Создан","Оплачен"],statusColumn:"Статус",sumColumns:["Сумма счета","Оплачено"]});const suffix=filters?.period==="all"?"all":(filters?.period==="month"?(filters?.from||"").slice(0,7):(filters?.from&&filters?.to?`${filters.from}_${filters.to}`:smartPayYmd_(new Date())));XLSX.writeFile(wb,`FSL-SmartPay-${suffix}.xlsx`,{compression:true,cellStyles:true});}
 
 function reportDatasetTitle(dataset){
   const keys={full:"exportFull",active:"exportActive",overdue:"exportOverdue",paid:"exportPaid",anyPaid:"exportAnyPaid",noPayment:"exportNoPayment",payments:"exportPayments",stats:"exportStats",allRecords:"exportAllRecords"};
