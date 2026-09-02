@@ -4198,7 +4198,7 @@ html[data-theme="dark"] .action-loader-card-v5211{background:rgba(15,23,42,.97);
 </div>
 
 <script>
-const VERSION="5.24.9";
+const VERSION="5.25.0";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -6287,7 +6287,7 @@ function renderSecurityEvents_(){
   const box=document.getElementById("securityEventsList");if(!box)return;if(!canPermission("security")){box.innerHTML="";return;}if(!securityEvents.length){box.innerHTML=`<div class="settings-hint">${securityText_("Событий пока нет","Ҳоло рӯйдод нест")}</div>`;return;}
   box.innerHTML=securityEvents.slice(0,25).map(e=>`<div class="security-event"><div class="security-event-top"><div class="security-event-title">${escapeHtml(securityEventLabel_(e.event))} ${e.email?`· ${escapeHtml(e.email)}`:""}</div><div class="security-event-time">${escapeHtml(String(e.date||""))}</div></div><div class="security-event-detail">${escapeHtml(String(e.details||""))}</div><div class="notification-meta"><span class="security-result ${String(e.result).toUpperCase()==="SUCCESS"?"":"fail"}">${escapeHtml(String(e.result||""))}</span></div></div>`).join("");
 }
-function startNotificationPolling_(){if(notificationPollTimer)clearInterval(notificationPollTimer);notificationPollTimer=setInterval(()=>loadNotifications({silent:true}),60000);}
+function startNotificationPolling_(){if(notificationPollTimer)clearInterval(notificationPollTimer);notificationPollTimer=setInterval(()=>loadNotifications({silent:true}),30000);}
 function stopNotificationPolling_(){if(notificationPollTimer){clearInterval(notificationPollTimer);notificationPollTimer=null;}}
 
 /* ---------- LOGIN ---------- */
