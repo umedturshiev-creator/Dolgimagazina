@@ -2226,6 +2226,10 @@ html[data-theme="light"] .header{
 .password-field-wrap input{padding-right:48px!important;}
 #loginScreen .password-eye,.password-eye{position:absolute;right:7px;top:7px;width:36px!important;min-width:36px!important;height:36px!important;min-height:36px!important;margin:0!important;padding:0!important;border-radius:12px!important;background:rgba(148,163,184,.12)!important;color:var(--text-2)!important;border:1px solid rgba(148,163,184,.15)!important;box-shadow:none!important;}
 #loginScreen .login-primary-btn,.login-primary-btn{width:100%!important;max-width:none!important;margin:4px 0 0!important;background:linear-gradient(135deg,#2563eb,#6d28d9)!important;color:#fff!important;border:1px solid rgba(96,165,250,.35)!important;box-shadow:0 12px 28px rgba(37,99,235,.25)!important;font-weight:800!important;}
+.login-save-password-v5265{display:flex;align-items:flex-start;gap:9px;margin:1px 1px 10px;padding:9px 10px;border-radius:13px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.12);color:var(--text-2);cursor:pointer;user-select:none;-webkit-user-select:none}
+.login-save-password-v5265 input{width:18px!important;height:18px!important;min-height:18px!important;margin:1px 0 0!important;accent-color:#2563eb;flex:0 0 auto}
+.login-save-password-v5265-copy{min-width:0}.login-save-password-v5265-copy b{display:block;font-size:11.5px;line-height:1.25;color:var(--text-1)}.login-save-password-v5265-copy small{display:block;margin-top:3px;font-size:9.5px;line-height:1.4;color:var(--text-3)}
+html[data-theme="dark"] .login-save-password-v5265{background:rgba(30,41,59,.48);border-color:rgba(148,163,184,.12)}
 /* ===== PASSKEY / WEBAUTHN v5.12.0 ===== */
 .passkey-login-divider-v512{display:flex;align-items:center;gap:10px;margin:10px 0 8px;color:var(--text-3);font-size:10px;font-weight:800}.passkey-login-divider-v512:before,.passkey-login-divider-v512:after{content:"";height:1px;flex:1;background:rgba(148,163,184,.18)}
 .passkey-login-btn-v512{width:100%!important;min-height:48px!important;margin:0!important;border-radius:15px!important;border:1px solid rgba(37,99,235,.18)!important;background:linear-gradient(135deg,#eaf2ff,#eef2ff)!important;color:#1d4ed8!important;box-shadow:0 10px 24px rgba(37,99,235,.10)!important;font-weight:900!important;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -3194,13 +3198,19 @@ html[data-theme="light"] .header-mydebts-btn-v5261.owner-visible-v5261{backgroun
     <img src="logo.png" alt="Fashion&StyleLife">
     <h2 id="loginTitleText">Вход</h2>
     <div id="loginSubtitle" class="login-subtitle">Войдите по электронной почте</div>
-    <input type="email" inputmode="email" autocomplete="username" id="emailInput" placeholder="Email">
-    <div class="password-field-wrap">
-      <input type="password" autocomplete="current-password" id="passwordInput" placeholder="Пароль" onkeydown="if(event.key==='Enter')login()">
-      <button type="button" class="password-eye" onclick="togglePasswordField('passwordInput',this)" aria-label="Показать пароль">👁</button>
-    </div>
-    <button id="loginSubmitBtn" class="login-primary-btn" onclick="login()">Войти</button>
-    <div id="loginMessage" class="login-message" aria-live="polite"></div>
+    <form id="loginFormV5265" autocomplete="on" onsubmit="event.preventDefault();login()">
+      <input type="email" name="username" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" id="emailInput" placeholder="Email">
+      <div class="password-field-wrap">
+        <input type="password" name="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" id="passwordInput" placeholder="Пароль">
+        <button type="button" class="password-eye" onclick="togglePasswordField('passwordInput',this)" aria-label="Показать пароль">👁</button>
+      </div>
+      <label class="login-save-password-v5265" for="savePasswordCheckV5265">
+        <input id="savePasswordCheckV5265" type="checkbox" checked onchange="setPasswordSavePrefV5265_(this.checked)">
+        <span class="login-save-password-v5265-copy"><b id="savePasswordTitleV5265">Сохранить пароль на этом устройстве</b><small id="savePasswordHintV5265">Пароль сохраняется через менеджер паролей браузера, а не внутри FSL Долги.</small></span>
+      </label>
+      <button id="loginSubmitBtn" class="login-primary-btn" type="submit">Войти</button>
+      <div id="loginMessage" class="login-message" aria-live="polite"></div>
+    </form>
     <div class="login-links">
       <button id="forgotPasswordBtn" type="button" class="login-link-btn" onclick="openPasswordReset()">Забыли пароль?</button>
     </div>
@@ -4311,7 +4321,7 @@ html[data-theme="light"] .header-mydebts-btn-v5261.owner-visible-v5261{backgroun
 </div>
 
 <script>
-const VERSION="5.26.4";
+const VERSION="5.26.5";
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzbq4Q-LNtnI-oFVPPa-Hljq-Jpk77K1foJR2ru-pL9i6QwjALPUahRstC0fv0siL57wg/exec";
 
 const externalScriptPromises_={};
@@ -5076,7 +5086,7 @@ function applyTranslations(){
   document.documentElement.lang = currentLanguage;
 
   const loginTitle = document.querySelector("#loginScreen h2");
-  const loginBtn = document.querySelector('#loginScreen button[onclick="login()"]');
+  const loginBtn = document.getElementById("loginSubmitBtn");
   if (loginTitle) loginTitle.textContent = t("loginTitle");
   if (loginBtn) loginBtn.textContent = t("loginBtn");
 
@@ -5539,6 +5549,7 @@ function applySecurityTranslations_(){
   const pairs={
     loginTitleText:["Вход","Вуруд"],loginSubtitle:["Войдите по электронной почте","Бо почтаи электронӣ ворид шавед"],
     loginSubmitBtn:["Войти","Даромадан"],forgotPasswordBtn:["Забыли пароль?","Паролро фаромӯш кардед?"],
+    savePasswordTitleV5265:["Сохранить пароль на этом устройстве","Паролро дар ин дастгоҳ нигоҳ доред"],savePasswordHintV5265:["Пароль сохраняется через менеджер паролей браузера, а не внутри FSL Долги.","Парол тавассути мудири паролҳои браузер нигоҳ дошта мешавад, на дар дохили FSL Долги."],
     accountSecurityTitle:["🔐 Security Center","🔐 Маркази амният"],securityCenterHint:["Устройства, активные сессии и защита аккаунта.","Дастгоҳҳо, сессияҳои фаъол ва ҳифзи ҳисоб."],securityCenterRefreshBtn:["Обновить","Навсозӣ"],changePasswordBtn:["Изменить пароль","Иваз кардани парол"],
     securityDevicesTitle:["Активные устройства","Дастгоҳҳои фаъол"],securityDevicesHint:["Сессия действует максимум 12 часов.","Сессия то 12 соат амал мекунад."],securityRevokeOthersBtn:["Завершить другие сессии","Бастани сессияҳои дигар"],securityRevokeAllBtn:["Выйти со всех устройств","Баромадан аз ҳамаи дастгоҳҳо"],securityOwnEventsTitle:["Последняя активность безопасности","Фаъолияти охирини амният"],securityOwnEventsHint:["Входы, попытки входа и изменения доступа.","Вурудҳо, кӯшишҳои вуруд ва тағйири дастрасӣ."],
     securityAllSessionsTitle:["🖥 Активные сессии пользователей","🖥 Сессияҳои фаъоли истифодабарандагон"],securityAllSessionsHint:["Владелец может завершить отдельную сессию сотрудника.","Соҳиб метавонад сессияи алоҳидаи кормандро бандад."],securityAllSessionsRefreshBtn:["Обновить","Навсозӣ"],
@@ -5572,6 +5583,16 @@ function applySecurityTranslations_(){
   const filterNames={all:["Все","Ҳама"],unread:["Новые","Нав"],debts:["Долги","Қарзҳо"],payments:["Оплаты","Пардохтҳо"],security:["Безопасность","Амният"],users:["Пользователи","Истифодабарандагон"]};
   document.querySelectorAll("[data-notification-filter]").forEach(btn=>{const v=filterNames[btn.dataset.notificationFilter]||filterNames.all;btn.textContent=currentLanguage==="tj"?v[1]:v[0];});
 }
+// ===== BROWSER PASSWORD MANAGER v5.26.5 =====
+const PASSWORD_SAVE_PREF_KEY_V5265="fsl_password_manager_enabled_v5265";
+const PASSWORD_EMAIL_KEY_V5265="fsl_last_login_email_v5265";
+let pendingBrowserCredentialV5265_=null;
+function passwordSaveEnabledV5265_(){const el=document.getElementById("savePasswordCheckV5265");if(el)return !!el.checked;try{return localStorage.getItem(PASSWORD_SAVE_PREF_KEY_V5265)!=="0";}catch(e){return true;}}
+function setPasswordSavePrefV5265_(enabled){try{localStorage.setItem(PASSWORD_SAVE_PREF_KEY_V5265,enabled?"1":"0");}catch(e){}const el=document.getElementById("savePasswordCheckV5265");if(el)el.checked=!!enabled;}
+function initPasswordManagerV5265_(){let enabled=true;try{enabled=localStorage.getItem(PASSWORD_SAVE_PREF_KEY_V5265)!=="0";}catch(e){}const cb=document.getElementById("savePasswordCheckV5265");if(cb)cb.checked=enabled;const email=document.getElementById("emailInput");if(email&&!email.value){try{email.value=localStorage.getItem(PASSWORD_EMAIL_KEY_V5265)||"";}catch(e){}}if(enabled)setTimeout(()=>{try{prefillBrowserCredentialV5265_();}catch(e){}},250);}
+async function prefillBrowserCredentialV5265_(){if(!passwordSaveEnabledV5265_()||authToken||sessionStorage.getItem("authToken"))return false;const email=document.getElementById("emailInput"),pass=document.getElementById("passwordInput");if(!email||!pass||pass.value)return false;if(!(navigator.credentials&&window.PasswordCredential))return false;try{const cred=await navigator.credentials.get({password:true,mediation:"silent"});if(cred&&cred.type==="password"){if(!email.value)email.value=cred.id||"";pass.value=cred.password||"";return !!pass.value;}}catch(e){}return false;}
+async function storeBrowserPasswordV5265_(email,password,displayName=""){if(!passwordSaveEnabledV5265_()||!email||!password)return false;try{localStorage.setItem(PASSWORD_EMAIL_KEY_V5265,String(email));}catch(e){}if(!(navigator.credentials&&navigator.credentials.store&&window.PasswordCredential))return false;try{const credential=new PasswordCredential({id:String(email),password:String(password),name:String(displayName||email)});await navigator.credentials.store(credential);return true;}catch(e){return false;}}
+function clearPendingBrowserCredentialV5265_(){pendingBrowserCredentialV5265_=null;}
 // ===== PASSKEY / FACE ID / FINGERPRINT v5.12.0 =====
 let passkeyItemsV512_=[];
 const PASSKEY_AUTO_DEVICE_KEY_V5123="fsl_passkey_auto_device_v5123";
@@ -5666,6 +5687,7 @@ async function login(){
   const email=String(document.getElementById("emailInput")?.value||"").trim();
   const password=String(document.getElementById("passwordInput")?.value||"");
   if(!email||!password){setMessage_("loginMessage",securityText_("Введите email и пароль","Email ва паролро ворид кунед"),"error");return;}
+  const savePassword=passwordSaveEnabledV5265_();setPasswordSavePrefV5265_(savePassword);pendingBrowserCredentialV5265_=savePassword?{email,password}:null;
   const btn=document.getElementById("loginSubmitBtn"); setButtonBusyV5211_(btn,true,securityText_("Входим…","Вуруд…"));
   setMessage_("loginMessage",securityText_("Проверяем данные...","Санҷиши маълумот..."),"info");
   let loginSlowTimer=setTimeout(()=>{
@@ -5677,26 +5699,27 @@ async function login(){
     if(!result.success){
       let msg=result.message||securityText_("Не удалось войти","Вуруд имкон нашуд");
       if(result.code==="LOCKED"&&result.retryAfterSeconds){const min=Math.ceil(Number(result.retryAfterSeconds)/60);msg=securityText_(`Вход временно заблокирован. Повторите примерно через ${min} мин.`,`Вуруд муваққатан баста шуд. Тақрибан пас аз ${min} дақиқа такрор кунед.`);}
-      setMessage_("loginMessage",msg,"error"); return;
+      setMessage_("loginMessage",msg,"error"); clearPendingBrowserCredentialV5265_(); return;
     }
     if(result.requiresTwoFactor){
       twoFactorLoginChallenge=String(result.challengeToken||"");
       document.getElementById("passwordInput").value="";setMessage_("loginMessage","","");openTwoFactorLogin();return;
     }
     authToken=result.token||""; currentUser=result.user||null; currentSeller=currentUser?.name||""; sessionStorage.setItem("authToken",authToken); cacheAuthUser_(currentUser); setAuthSessionExpiryV510_(result.sessionExpiresAt,result.sessionExpiresHours||12);
+    if(pendingBrowserCredentialV5265_)await storeBrowserPasswordV5265_(pendingBrowserCredentialV5265_.email,pendingBrowserCredentialV5265_.password,currentUser?.name||"");clearPendingBrowserCredentialV5265_();
     document.getElementById("passwordInput").value=""; setMessage_("loginMessage","",""); hideSessionResume_(); openApp();
-  }catch(e){clearTimeout(loginSlowTimer);setMessage_("loginMessage",e.message||String(e),"error");}
+  }catch(e){clearTimeout(loginSlowTimer);clearPendingBrowserCredentialV5265_();setMessage_("loginMessage",e.message||String(e),"error");}
   finally{clearTimeout(loginSlowTimer);setButtonBusyV5211_(btn,false);}
 }
 
 function openTwoFactorLogin(){
   const m=document.getElementById("twoFactorLoginModal");if(!m)return;const input=document.getElementById("twoFactorLoginCode");if(input)input.value="";setMessage_("twoFactorLoginMessage","","");m.style.display="flex";setTimeout(()=>input?.focus(),80);
 }
-function closeTwoFactorLogin(){const m=document.getElementById("twoFactorLoginModal");if(m)m.style.display="none";twoFactorLoginChallenge="";setMessage_("twoFactorLoginMessage","","");}
+function closeTwoFactorLogin(){const m=document.getElementById("twoFactorLoginModal");if(m)m.style.display="none";twoFactorLoginChallenge="";clearPendingBrowserCredentialV5265_();setMessage_("twoFactorLoginMessage","","");}
 async function verifyTwoFactorLogin(){
   const code=String(document.getElementById("twoFactorLoginCode")?.value||"").trim();if(!code){setMessage_("twoFactorLoginMessage",securityText_("Введите код","Рамзро ворид кунед"),"error");return;}
   const btn=document.getElementById("twoFactorLoginSubmitBtn");setButtonBusyV5211_(btn,true,securityText_("Проверяем…","Санҷида мешавад…"));
-  try{const r=await apiPost("auth.verify2fa",{challengeToken:twoFactorLoginChallenge,code},{public:true});if(!r.success){setMessage_("twoFactorLoginMessage",r.message||securityText_("Неверный код","Рамзи нодуруст"),"error");return;}document.getElementById("twoFactorLoginModal").style.display="none";twoFactorLoginChallenge="";authToken=r.token||"";currentUser=r.user||null;currentSeller=currentUser?.name||"";sessionStorage.setItem("authToken",authToken);cacheAuthUser_(currentUser);setAuthSessionExpiryV510_(r.sessionExpiresAt,r.sessionExpiresHours||12);hideSessionResume_();openApp();}
+  try{const r=await apiPost("auth.verify2fa",{challengeToken:twoFactorLoginChallenge,code},{public:true});if(!r.success){setMessage_("twoFactorLoginMessage",r.message||securityText_("Неверный код","Рамзи нодуруст"),"error");return;}document.getElementById("twoFactorLoginModal").style.display="none";twoFactorLoginChallenge="";authToken=r.token||"";currentUser=r.user||null;currentSeller=currentUser?.name||"";sessionStorage.setItem("authToken",authToken);cacheAuthUser_(currentUser);setAuthSessionExpiryV510_(r.sessionExpiresAt,r.sessionExpiresHours||12);if(pendingBrowserCredentialV5265_)await storeBrowserPasswordV5265_(pendingBrowserCredentialV5265_.email,pendingBrowserCredentialV5265_.password,currentUser?.name||"");clearPendingBrowserCredentialV5265_();hideSessionResume_();openApp();}
   catch(e){setMessage_("twoFactorLoginMessage",e.message||String(e),"error");}finally{setButtonBusyV5211_(btn,false);}
 }
 function renderTwoFactorStatus_(){
@@ -8564,6 +8587,7 @@ if ("serviceWorker" in navigator) {
 
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
+  setTimeout(()=>{try{initPasswordManagerV5265_();}catch(e){}},0);
   setTimeout(()=>{try{initPasskeyUiV512_();}catch(e){}},0);
   setTimeout(()=>{try{maybeAutoPasskeyLoginV5123_();}catch(e){}},650);
 });
